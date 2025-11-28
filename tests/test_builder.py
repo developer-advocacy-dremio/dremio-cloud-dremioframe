@@ -114,3 +114,77 @@ def test_custom_quality_check(dremio_client):
     # Expect count < 3 (Fail)
     with pytest.raises(ValueError, match="Custom Quality Check Failed"):
         builder.quality.expect_row_count("age > 18", 3, "lt")
+
+def test_standard_sql_features(dremio_client):
+    dremio_client.pat = "mock_pat"
+    builder = dremio_client.table("dummy")
+    builder._execute_flight = lambda sql, lib: sql # Mock execution
+    
+    # Test Group By & Agg
+    sql = builder.group_by("state").agg(avg_pop="AVG(pop)")._compile_sql()
+    assert "GROUP BY state" in sql
+    assert "AVG(pop) AS avg_pop" in sql
+    
+    # Test Order By
+    builder = dremio_client.table("dummy")
+    sql = builder.order_by("pop", ascending=False)._compile_sql()
+    assert "ORDER BY pop DESC" in sql
+    
+    # Test Distinct
+    builder = dremio_client.table("dummy")
+    sql = builder.select("state").distinct()._compile_sql()
+    assert "SELECT DISTINCT state" in sql
+
+def test_joins(dremio_client):
+    dremio_client.pat = "mock_pat"
+    left = dremio_client.table("left_table")
+    left._execute_flight = lambda sql, lib: sql
+    
+    # Test Join with string
+    joined = left.join("right_table", on="left_tbl.id = right_tbl.id", how="left")
+    sql = joined._compile_sql()
+    # The join method creates a new builder with initial_sql set to the join query.
+    # _compile_sql on that new builder wraps it in "SELECT * FROM (...) AS sub"
+    assert "LEFT JOIN" in sql
+    assert "left_table" in sql
+    assert "right_table" in sql
+    
+    # Test Join with Builder
+    right = dremio_client.table("right_table").filter("active = true")
+    joined2 = left.join(right, on="left_tbl.id = right_tbl.id")
+    sql2 = joined2._compile_sql()
+    assert "INNER JOIN" in sql2
+    assert "WHERE active = true" in sql2
+
+def test_iceberg_features(dremio_client):
+    dremio_client.pat = "mock_pat"
+    builder = dremio_client.table("iceberg_table")
+    builder._execute_dml = lambda sql: sql
+    
+    # Time Travel
+    sql = builder.at_snapshot("12345")._compile_sql()
+    assert "FROM iceberg_table AT SNAPSHOT '12345'" in sql
+    
+    sql = builder.at_timestamp("2023-01-01")._compile_sql()
+    assert "FROM iceberg_table AT TIMESTAMP '2023-01-01'" in sql
+    
+    # Maintenance
+    sql = builder.optimize(min_input_files=5)
+    assert "OPTIMIZE TABLE iceberg_table REWRITE DATA (MIN_INPUT_FILES=5)" in sql
+    
+    sql = builder.vacuum(retain_last=10)
+    assert "VACUUM TABLE iceberg_table EXPIRE SNAPSHOTS RETAIN_LAST 10" in sql
+
+def test_external_query(dremio_client):
+    dremio_client.pat = "mock_pat"
+    
+    # Test basic external query
+    builder = dremio_client.external_query("Postgres", "SELECT * FROM users")
+    sql = builder._compile_sql()
+    # It wraps it in a subquery
+    assert "SELECT * FROM (SELECT * FROM TABLE(Postgres.EXTERNAL_QUERY('SELECT * FROM users'))) AS sub" in sql
+    
+    # Test escaping
+    builder = dremio_client.external_query("Postgres", "SELECT * FROM users WHERE name = 'Alice'")
+    sql = builder._compile_sql()
+    assert "name = ''Alice''" in sql

@@ -182,3 +182,34 @@ def test_custom_quality_check(client):
     
     # Check that we have 0 rows where tripduration < 0
     assert client.table(TABLE_NAME).quality.expect_row_count("tripduration < 0", 0, "eq")
+
+def test_enhancements(client):
+    """Test Group By, Order By, Distinct, Joins"""
+    print(f"Testing enhancements on {TABLE_NAME}...")
+    
+    # 1. Group By & Agg
+    # Group by usertype and count
+    df_agg = client.table(TABLE_NAME).group_by("usertype").agg(cnt="COUNT(*)").collect()
+    assert "usertype" in df_agg.columns
+    assert "cnt" in df_agg.columns
+    assert len(df_agg) > 0
+    
+    # 2. Order By
+    # Order by tripduration desc
+    df_sort = client.table(TABLE_NAME).order_by("tripduration", ascending=False).limit(5).collect()
+    # Check if sorted (roughly)
+    durations = df_sort["tripduration"].to_list()
+    assert durations[0] >= durations[-1]
+    
+    # 3. Distinct
+    df_dist = client.table(TABLE_NAME).select("usertype").distinct().collect()
+    assert len(df_dist) <= 2 # Customer, Subscriber
+    
+    # 4. Joins (Self Join for testing)
+    # Join table with itself on usertype
+    df_join = client.table(TABLE_NAME).join(
+        client.table(TABLE_NAME),
+        on='left_tbl."usertype" = right_tbl."usertype"',
+        how="inner"
+    ).limit(5).collect()
+    assert len(df_join) > 0

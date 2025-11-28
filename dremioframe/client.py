@@ -38,3 +38,16 @@ class DremioClient:
         # Or better, move _execute_flight to client or utils?
         # For now, just use a builder
         return DremioBuilder(self)._execute_flight(query, "polars")
+
+    def external_query(self, source: str, sql: str) -> 'DremioBuilder':
+        """
+        Create a builder from an external query.
+        
+        Args:
+            source: The name of the source (e.g., "Postgres").
+            sql: The native SQL query to run on the source.
+        """
+        # Escape single quotes in the SQL string
+        escaped_sql = sql.replace("'", "''")
+        query = f"SELECT * FROM TABLE({source}.EXTERNAL_QUERY('{escaped_sql}'))"
+        return DremioBuilder(self, sql=query)

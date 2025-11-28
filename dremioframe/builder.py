@@ -14,16 +14,93 @@ class DremioBuilder:
         self.mutations = {}
         self.filters = []
         self.limit_val = None
+        self.group_cols = []
+        self.aggregations = {}
+        self.order_cols = []
+        self.distinct_flag = False
         self._quality = None
+
+        self.time_travel_clause = ""
 
     @property
     def quality(self):
         if self._quality is None:
             self._quality = DataQuality(self)
         return self._quality
+
+    def at_snapshot(self, snapshot_id: str) -> 'DremioBuilder':
+        """Query at a specific snapshot ID"""
+        self.time_travel_clause = f"AT SNAPSHOT '{snapshot_id}'"
+        return self
+
+    def at_timestamp(self, timestamp: str) -> 'DremioBuilder':
+        """Query at a specific timestamp"""
+        self.time_travel_clause = f"AT TIMESTAMP '{timestamp}'"
+        return self
+
+    def at_branch(self, branch: str) -> 'DremioBuilder':
+        """Query at a specific branch"""
+        self.time_travel_clause = f"AT BRANCH {branch}"
+        return self
+
+    def optimize(self, rewrite_data: bool = True, min_input_files: int = None) -> Any:
+        """Run OPTIMIZE TABLE command"""
+        if not self.path:
+            raise ValueError("Optimize requires a table path")
+        
+        options = []
+        if rewrite_data:
+            options.append("REWRITE DATA")
+        if min_input_files:
+            options.append(f"(MIN_INPUT_FILES={min_input_files})")
+            
+        opt_sql = f"OPTIMIZE TABLE {self.path} {' '.join(options)}"
+        return self._execute_dml(opt_sql)
+
+    def vacuum(self, expire_snapshots: bool = True, retain_last: int = None) -> Any:
+        """Run VACUUM TABLE command"""
+        if not self.path:
+            raise ValueError("Vacuum requires a table path")
+            
+        options = []
+        if expire_snapshots:
+            options.append("EXPIRE SNAPSHOTS")
+        if retain_last:
+            options.append(f"RETAIN_LAST {retain_last}")
+            
+        vac_sql = f"VACUUM TABLE {self.path} {' '.join(options)}"
+        return self._execute_dml(vac_sql)
         
     def select(self, *columns: str) -> 'DremioBuilder':
         self.select_columns.extend(columns)
+        return self
+
+    def distinct(self) -> 'DremioBuilder':
+        """Select distinct rows"""
+        self.distinct_flag = True
+        return self
+
+    def group_by(self, *columns: str) -> 'DremioBuilder':
+        """Group by columns"""
+        self.group_cols.extend(columns)
+        return self
+
+    def agg(self, **kwargs) -> 'DremioBuilder':
+        """
+        Add aggregations.
+        Example: df.group_by("state").agg(avg_pop="AVG(pop)")
+        """
+        self.aggregations.update(kwargs)
+        return self
+
+    def order_by(self, *columns: str, ascending: bool = True) -> 'DremioBuilder':
+        """
+        Order by columns.
+        Example: df.order_by("col1", "col2", ascending=False)
+        """
+        direction = "ASC" if ascending else "DESC"
+        for col in columns:
+            self.order_cols.append(f"{col} {direction}")
         return self
 
     def mutate(self, **kwargs) -> 'DremioBuilder':
@@ -50,28 +127,87 @@ class DremioBuilder:
             # Quote the path components if needed, or assume user passed a valid path string
             # Dremio paths are usually "Space"."Folder"."Table"
             query = f"SELECT * FROM {self.path}"
+            if self.time_travel_clause:
+                query += f" {self.time_travel_clause}"
 
-        if self.select_columns or self.mutations:
-            cols = []
-            if self.select_columns:
-                cols.extend(self.select_columns)
+        # Handle SELECT clause
+        select_clause = "SELECT"
+        if self.distinct_flag:
+            select_clause += " DISTINCT"
+        
+        cols = []
+        if self.select_columns:
+            cols.extend(self.select_columns)
+        
+        if self.mutations:
+            for name, expr in self.mutations.items():
+                cols.append(f"{expr} AS {name}")
+        
+        if self.aggregations:
+            for name, expr in self.aggregations.items():
+                cols.append(f"{expr} AS {name}")
+                
+        # Implicitly add group columns to select if we are grouping
+        if self.group_cols:
+            for col in self.group_cols:
+                # Check if col is already in cols (simple check)
+                # This is imperfect but handles the common case
+                if col not in self.select_columns:
+                     cols.insert(0, col)
+
+        if not cols:
+            cols = ["*"]
             
-            if self.mutations:
-                for name, expr in self.mutations.items():
-                    cols.append(f"{expr} AS {name}")
-            
-            cols_str = ", ".join(cols)
-            # Replace * with specific columns
-            query = query.replace("SELECT *", f"SELECT {cols_str}", 1)
+        cols_str = ", ".join(cols)
+        query = query.replace("SELECT *", f"{select_clause} {cols_str}", 1)
 
         if self.filters:
             where_clause = " AND ".join(self.filters)
             query += f" WHERE {where_clause}"
+            
+        if self.group_cols:
+            group_clause = ", ".join(self.group_cols)
+            query += f" GROUP BY {group_clause}"
+            
+        if self.order_cols:
+            order_clause = ", ".join(self.order_cols)
+            query += f" ORDER BY {order_clause}"
 
         if self.limit_val is not None:
             query += f" LIMIT {self.limit_val}"
 
         return query
+
+    def join(self, other: Union[str, 'DremioBuilder'], on: str, how: str = "inner") -> 'DremioBuilder':
+        """
+        Join with another table or builder.
+        
+        Args:
+            other: Table name string or DremioBuilder instance.
+            on: Join condition (e.g., "t1.id = t2.id").
+            how: Join type ("inner", "left", "right", "full", "cross").
+        """
+        # Compile self
+        left_sql = self._compile_sql()
+        
+        # Compile other
+        if isinstance(other, DremioBuilder):
+            right_sql = other._compile_sql()
+        else:
+            right_sql = f"SELECT * FROM {other}"
+            
+        # Construct join
+        # We wrap both in subqueries to ensure isolation
+        # SELECT * FROM (left) AS left_tbl JOIN (right) AS right_tbl ON ...
+        
+        join_type = how.upper()
+        if join_type not in ["INNER", "LEFT", "RIGHT", "FULL", "CROSS"]:
+            raise ValueError(f"Invalid join type: {how}")
+            
+        join_sql = f"SELECT * FROM ({left_sql}) AS left_tbl {join_type} JOIN ({right_sql}) AS right_tbl ON {on}"
+        
+        # Return new builder with this SQL
+        return DremioBuilder(self.client, sql=join_sql)
 
     def collect(self, library: str = "polars") -> Union[pl.DataFrame, pd.DataFrame]:
         sql = self._compile_sql()

@@ -31,17 +31,30 @@ print(df)
 # Calculated Columns
 df.mutate(total_pop="pop * 2").show()
 
-# Insert with Batching
-df_large = pd.DataFrame(...)
-client.table("target").insert("target", data=df_large, batch_size=1000)
+# Aggregation
+df.group_by("state").agg(avg_pop="AVG(pop)").show()
+
+# Joins
+df.join("other_table", on="left_tbl.id = right_tbl.id").show()
+
+# Iceberg Time Travel
+df.at_snapshot("123456789").show()
+
+# External Queries
+client.external_query("Postgres", "SELECT * FROM users").show()
+
+# Insert Data (Batched)
+import pandas as pd
+data = pd.DataFrame({"id": [1, 2], "name": ["A", "B"]})
+client.table("my_table").insert("my_table", data=data, batch_size=1000)
 
 # Merge (Upsert)
 client.table("target").merge(
     target_table="target",
     on="id",
-    matched_update={"val": "source.val"},
+    matched_update={"name": "source.name"},
     not_matched_insert={"id": "source.id", "val": "source.val"},
-    data=df_upsert
+    data=data
 )
 
 # Data Quality

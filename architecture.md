@@ -14,14 +14,20 @@ Handles all metadata and administrative operations using the Dremio REST API.
 
 ### 3. DremioBuilder (`builder.py`)
 Provides a fluent interface for constructing queries.
-- **Lazy Evaluation**: Methods like `select`, `filter`, `mutate` build up a query representation.
-- **Execution**: `collect()` executes the query via Arrow Flight and returns a Polars/Pandas dataframe.
-- **DML**: `create`, `insert`, `update`, `delete`, `merge` execute immediate SQL commands.
-- **Batching**: `insert` and `merge` support `batch_size` for handling large datasets.
-- **Calculated Columns**: `mutate` adds expressions to the SELECT clause.
-- **Data Quality**: `quality` property exposes validation methods, including custom row count checks.
+- **DremioBuilder**: A fluent query builder that generates SQL.
+    - `select()`, `filter()`, `mutate()`: Basic operations.
+    - `group_by()`, `agg()`: Aggregation.
+    - `order_by()`, `distinct()`: Sorting and deduplication.
+    - `join()`: Joining tables.
+    - `insert()`, `merge()`: Data ingestion and upsert.
+    - `at_snapshot()`, `at_timestamp()`: Iceberg Time Travel.
+    - `optimize()`, `vacuum()`: Iceberg Maintenance.
+    - `quality`: Access to `DataQuality` checks.
 
 ### 4. DataQuality (`quality.py`)
+- **DataQuality**: A module for defining and running data validation checks.
+    - `expect_not_null`, `expect_unique`, `expect_values_in`.
+    - `expect_row_count`: Custom SQL-based checks.
 Provides methods to run validation queries against the data defined by the builder.
 - `expect_not_null`, `expect_unique`, `expect_values_in`, `expect_row_count`.
 
