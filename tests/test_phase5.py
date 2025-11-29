@@ -109,3 +109,9 @@ def test_ingest_api_merge(mock_client):
     assert mock_builder.create.called
     assert mock_builder.merge.called
     assert mock_client.execute.called # DROP TABLE
+
+def test_list_files(mock_client):
+    # Mock DremioBuilder
+    with patch("dremioframe.client.DremioBuilder") as MockBuilder:
+        mock_client.list_files("@source/folder")
+        MockBuilder.assert_called_with(mock_client, "TABLE(LIST_FILES('@source/folder'))")

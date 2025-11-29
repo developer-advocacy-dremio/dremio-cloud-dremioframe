@@ -141,11 +141,11 @@ class DremioBuilder:
         
         if self.mutations:
             for name, expr in self.mutations.items():
-                cols.append(f"{expr} AS {name}")
-        
+                cols.append(f'{expr} AS "{name}"')
+    
         if self.aggregations:
             for name, expr in self.aggregations.items():
-                cols.append(f"{expr} AS {name}")
+                cols.append(f'{expr} AS "{name}"')
                 
         # Implicitly add group columns to select if we are grouping
         if self.group_cols:

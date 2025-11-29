@@ -195,3 +195,10 @@ class DremioClient:
             finally:
                 # 3. Drop Staging
                 self.execute(f"DROP TABLE IF EXISTS {staging_table}")
+
+    def list_files(self, path: str) -> DremioBuilder:
+        """
+        Query the LIST_FILES table function for a given path.
+        Useful for accessing unstructured data.
+        """
+        return DremioBuilder(self, f"TABLE(LIST_FILES('{path}'))")

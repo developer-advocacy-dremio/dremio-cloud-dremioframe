@@ -48,3 +48,18 @@ def test_window():
     
     w2 = Window.order_by("time").rows_between("UNBOUNDED PRECEDING", "CURRENT ROW")
     assert str(sum("val").over(w2)) == "SUM(val) OVER (ORDER BY time ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)"
+
+def test_ai_functions():
+    # AI_CLASSIFY
+    assert str(ai_classify("Is this spam?", ["Yes", "No"])) == "AI_CLASSIFY('Is this spam?', ARRAY['Yes', 'No'])"
+    assert str(ai_classify("Spam?", ["Yes", "No"], "gpt4")) == "AI_CLASSIFY('gpt4', 'Spam?', ARRAY['Yes', 'No'])"
+    
+    # AI_COMPLETE
+    assert str(ai_complete("Write a poem")) == "AI_COMPLETE('Write a poem')"
+    assert str(ai_complete("Write a poem", "gpt4")) == "AI_COMPLETE('gpt4', 'Write a poem')"
+    
+    # AI_GENERATE
+    assert str(ai_generate("Extract info")) == "AI_GENERATE('Extract info')"
+    assert str(ai_generate("Extract info", "gpt4")) == "AI_GENERATE('gpt4', 'Extract info')"
+    assert str(ai_generate("Extract info", schema="ROW(name VARCHAR)")) == "AI_GENERATE('Extract info' WITH SCHEMA ROW(name VARCHAR))"
+    assert str(ai_generate("Extract info", "gpt4", "ROW(name VARCHAR)")) == "AI_GENERATE('gpt4', 'Extract info' WITH SCHEMA ROW(name VARCHAR))"

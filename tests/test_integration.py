@@ -213,3 +213,64 @@ def test_enhancements(client):
         how="inner"
     ).limit(5).collect()
     assert len(df_join) > 0
+    assert len(df_join) > 0
+
+def test_sql_functions(client):
+    """Test standard SQL functions and Window functions"""
+    from dremioframe import F
+    print(f"Testing SQL functions on {TABLE_NAME}...")
+    
+    # Use the simple table we created earlier
+    # It has 'id' and 'name'
+    
+    # 1. String functions
+    df = client.table(SIMPLE_TABLE).select(
+        F.upper(F.col("name")).alias("upper_name"),
+        F.length(F.col("name")).alias("name_len")
+    ).collect()
+    
+    assert "upper_name" in df.columns
+    row = df.to_dicts()[0]
+    # We inserted 'test' and 'inserted'
+    # Check one of them
+    if row["name_len"] == 4: # 'test'
+        assert row["upper_name"] == "TEST"
+        
+    # 2. Aggregates
+    df_agg = client.table(SIMPLE_TABLE).agg(
+        max_id=F.max("id"),
+        cnt=F.count("*")
+    ).collect()
+    
+    assert df_agg["max_id"][0] == 2
+    assert df_agg["cnt"][0] == 2
+    
+    # 3. Window Functions
+    # Add a rank column
+    df_window = client.table(SIMPLE_TABLE).select(
+        "id",
+        F.rank().over(F.Window.order_by("id")).alias("rnk")
+    ).collect()
+    
+    assert "rnk" in df_window.columns
+    # IDs are 1, 2. Rank should be 1, 2
+    ranks = sorted(df_window["rnk"].to_list())
+    assert ranks == [1, 2]
+
+def test_iceberg_maintenance(client):
+    """Test Optimize and Vacuum"""
+    print(f"Testing Iceberg maintenance on {TABLE_NAME}...")
+    
+    # Optimize
+    try:
+        client.table(TABLE_NAME).optimize()
+        print("Optimize successful")
+    except Exception as e:
+        pytest.fail(f"Optimize failed: {e}")
+        
+    # Vacuum
+    try:
+        client.table(TABLE_NAME).vacuum(retain_last=1)
+        print("Vacuum successful")
+    except Exception as e:
+        pytest.fail(f"Vacuum failed: {e}")

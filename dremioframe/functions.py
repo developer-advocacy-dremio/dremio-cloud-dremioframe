@@ -232,3 +232,42 @@ def lag(col, offset=1, default=None) -> Expr:
 def first_value(col) -> Expr: return Expr(f"FIRST_VALUE({col})")
 def last_value(col) -> Expr: return Expr(f"LAST_VALUE({col})")
 def ntile(n) -> Expr: return Expr(f"NTILE({n})")
+
+# AI Functions
+def ai_classify(prompt, categories: List[Any], model_name: str = None) -> Expr:
+    """
+    Classifies text into one of the provided categories.
+    """
+    cats = ", ".join([f"'{c}'" if isinstance(c, str) else str(c) for c in categories])
+    cats_array = f"ARRAY[{cats}]"
+    
+    if model_name:
+        return Expr(f"AI_CLASSIFY('{model_name}', '{prompt}', {cats_array})")
+    return Expr(f"AI_CLASSIFY('{prompt}', {cats_array})")
+
+def ai_complete(prompt, model_name: str = None) -> Expr:
+    """
+    Generates a text completion for the prompt.
+    """
+    if model_name:
+        return Expr(f"AI_COMPLETE('{model_name}', '{prompt}')")
+    return Expr(f"AI_COMPLETE('{prompt}')")
+
+def ai_generate(prompt, model_name: str = None, schema: str = None) -> Expr:
+    """
+    Generates structured data based on the prompt.
+    """
+    # Handle prompt tuple for file reference? For now assume prompt is string or Expr
+    # If schema is provided, append WITH SCHEMA
+    
+    base = ""
+    if model_name:
+        base = f"AI_GENERATE('{model_name}', '{prompt}'"
+    else:
+        base = f"AI_GENERATE('{prompt}'"
+        
+    if schema:
+        base += f" WITH SCHEMA {schema}"
+        
+    base += ")"
+    return Expr(base)

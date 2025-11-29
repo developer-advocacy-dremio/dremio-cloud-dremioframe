@@ -3,7 +3,7 @@ name = "dremioframe"
 version = "0.1.0"
 description = "A dataframe-like library for Dremio Cloud"
 authors = [
-    {name = "Alex Merced", email = "alexmerced@example.com"},
+    {name = "Alex Merced", email = "alexmerced@alexmerced.com"},
 ]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -23,8 +23,8 @@ dependencies = [
 requires-python = ">=3.9"
 
 [project.urls]
-Homepage = "https://github.com/alexmerced/dremioframe"
-Issues = "https://github.com/alexmerced/dremioframe/issues"
+Homepage = "https://github.com/developer-advocacy-dremio/dremio-cloud-dremioframe"
+Issues = "https://github.com/developer-advocacy-dremio/dremio-cloud-dremioframe/issues"
 
 [build-system]
 requires = ["flit_core >=3.2,<4"]

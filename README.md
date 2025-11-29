@@ -5,6 +5,7 @@ DremioFrame is a Python library that provides an Ibis-like dataframe builder int
 ## Documentation
 
 - [Architecture](architecture.md)
+- [Connection Guide](docs/connection.md)
 - [Catalog & Admin](docs/catalog.md)
 - [Dataframe Builder](docs/builder.md)
 - [Aggregation](docs/aggregation.md)
@@ -15,7 +16,16 @@ DremioFrame is a Python library that provides an Ibis-like dataframe builder int
 - [Charting](docs/charting.md)
 - [Data Export](docs/export.md)
 - [API Ingestion](docs/ingestion.md)
+- [Ingestion Patterns](docs/ingestion_patterns.md)
+- [Working with Files](docs/files.md)
 - [SQL Functions](docs/functions.md)
+    - [Aggregate](docs/functions/aggregate.md)
+    - [Math](docs/functions/math.md)
+    - [String](docs/functions/string.md)
+    - [Date](docs/functions/date.md)
+    - [Window](docs/functions/window.md)
+    - [Conditional](docs/functions/conditional.md)
+    - [AI](docs/functions/ai.md)
 
 ## Installation
 
