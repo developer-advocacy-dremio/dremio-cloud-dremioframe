@@ -90,6 +90,17 @@ import pandas as pd
 data = pd.DataFrame({"id": [1, 2], "name": ["A", "B"]})
 client.table("my_table").insert("my_table", data=data, batch_size=1000)
 
+# SQL Functions
+from dremioframe import F
+
+client.table("sales") \
+    .select(
+        F.col("dept"),
+        F.sum("amount").alias("total_sales"),
+        F.rank().over(F.Window.order_by("amount")).alias("rank")
+    ) \
+    .show()
+
 # Merge (Upsert)
 client.table("target").merge(
     target_table="target",

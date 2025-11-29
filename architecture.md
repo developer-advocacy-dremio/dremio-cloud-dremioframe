@@ -24,8 +24,10 @@ Provides a fluent interface for constructing queries.
     - `optimize()`, `vacuum()`: Iceberg Maintenance.
     - `chart()`, `to_csv()`, `to_parquet()`: Visualization and Export.
     - `quality`: Access to `DataQuality` checks.
-
-### 4. DataQuality (`quality.py`)
+- **Functions (`functions.py`)**: A module (`F`) providing SQL functions and Window API.
+    - `Expr`: Chainable SQL expressions.
+    - `Window`: Window specification builder.
+    - Standard functions: Aggregates, Math, String, Date, Conditional.
 - **DataQuality**: A module for defining and running data validation checks.
     - `expect_not_null`, `expect_unique`, `expect_values_in`.
     - `expect_row_count`: Custom SQL-based checks.
