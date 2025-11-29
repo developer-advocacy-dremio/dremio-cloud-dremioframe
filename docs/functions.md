@@ -14,6 +14,12 @@ DremioFrame provides a comprehensive set of SQL functions via `dremioframe.funct
 
 ## Usage
 
+You can use functions in two ways:
+
+### 1. Function Builder (Recommended)
+
+Import `F` and chain methods. This provides autocomplete and type safety.
+
 ```python
 from dremioframe import F
 
@@ -21,6 +27,24 @@ df.select(
     F.col("name"),
     F.upper(F.col("city")),
     F.sum("salary").over(F.Window.partition_by("dept"))
+)
+```
+
+### 2. Raw SQL Strings
+
+You can write raw SQL strings directly in `mutate` or `select`. This is useful for complex expressions or functions not yet wrapped in `dremioframe`.
+
+```python
+# In mutate
+df.mutate(
+    upper_city="UPPER(city)",
+    total_salary="SUM(salary) OVER (PARTITION BY dept)"
+)
+
+# In select
+df.select(
+    "name",
+    "UPPER(city) AS upper_city"
 )
 ```
 

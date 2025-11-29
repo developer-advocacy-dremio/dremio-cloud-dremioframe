@@ -5,7 +5,7 @@ DremioFrame is a Python library that provides an Ibis-like dataframe builder int
 ## Documentation
 
 - [Architecture](architecture.md)
-- [Architecture](architecture.md)
+
 - [Connection Guide](docs/connection.md)
 - [Administration](docs/admin.md)
 - [Catalog & Admin](docs/catalog.md)
@@ -88,8 +88,7 @@ df.join("other_table", on="left_tbl.id = right_tbl.id").show()
 # Iceberg Time Travel
 df.at_snapshot("123456789").show()
 
-# External Queries
-client.external_query("Postgres", "SELECT * FROM users").show()
+
 
 # API Ingestion
 client.ingest_api(

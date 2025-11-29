@@ -136,12 +136,27 @@ class DremioBuilder:
             select_clause += " DISTINCT"
         
         cols = []
+        mutations_applied = set()
+
         if self.select_columns:
-            cols.extend(self.select_columns)
+            for col in self.select_columns:
+                # Check if this column is being mutated
+                if col in self.mutations:
+                    cols.append(f'{self.mutations[col]} AS "{col}"')
+                    mutations_applied.add(col)
+                else:
+                    cols.append(col)
+        else:
+            # If no columns selected, start with *
+            # But only if we are not aggregating. If we are aggregating, we usually don't want * unless explicit.
+            if not self.aggregations:
+                cols.append("*")
         
+        # Add remaining mutations
         if self.mutations:
             for name, expr in self.mutations.items():
-                cols.append(f'{expr} AS "{name}"')
+                if name not in mutations_applied:
+                    cols.append(f'{expr} AS "{name}"')
     
         if self.aggregations:
             for name, expr in self.aggregations.items():
@@ -152,12 +167,16 @@ class DremioBuilder:
             for col in self.group_cols:
                 # Check if col is already in cols (simple check)
                 # This is imperfect but handles the common case
-                if col not in self.select_columns:
+                # We need to check if the column name or alias is present
+                is_present = False
+                for c in cols:
+                    if c == col or c.endswith(f'AS "{col}"'):
+                        is_present = True
+                        break
+                
+                if not is_present:
                      cols.insert(0, col)
 
-        if not cols:
-            cols = ["*"]
-            
         cols_str = ", ".join(cols)
         query = query.replace("SELECT *", f"{select_clause} {cols_str}", 1)
 

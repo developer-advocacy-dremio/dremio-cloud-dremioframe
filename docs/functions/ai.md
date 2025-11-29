@@ -26,6 +26,16 @@ df.select(
 )
 ```
 
+### Raw SQL Usage
+
+You can also use AI functions by writing the SQL string directly in `mutate` or `select`.
+
+```python
+df.mutate(
+    spice_level="AI_CLASSIFY('Identify the Spice Level:' || ARRAY_TO_STRING(ingredients, ','), ARRAY [ 'mild', 'medium', 'spicy' ])"
+)
+```
+
 ## Available Functions
 
 | Function | Description |

@@ -32,6 +32,8 @@ print(result)
 
 - `select(*cols)`: Select specific columns.
 - `mutate(**kwargs)`: Add calculated columns. Example: `.mutate(total="price * quantity")`
+    - **Conflict Resolution**: If a mutated column name matches a selected column, the mutation takes precedence.
+    - **Implicit Select**: If `select()` is not called, `mutate` preserves all existing columns (equivalent to `SELECT *, mutation AS alias`).
 - `filter(condition)`: Add a WHERE clause.
 - `limit(n)`: Limit the number of rows.
 - `collect(library='polars')`: Execute the query and return a DataFrame. Supported libraries: `polars` (default), `pandas`.
