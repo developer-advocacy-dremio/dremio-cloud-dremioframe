@@ -28,9 +28,7 @@ Provides a fluent interface for constructing queries.
     - `Expr`: Chainable SQL expressions.
     - `Window`: Window specification builder.
     - Standard functions: Aggregates, Math, String, Date, Conditional.
-- **DataQuality**: A module for defining and running data validation checks.
-    - `expect_not_null`, `expect_unique`, `expect_values_in`.
-    - `expect_row_count`: Custom SQL-based checks.
+### 4. DataQuality (`quality.py`)
 Provides methods to run validation queries against the data defined by the builder.
 - `expect_not_null`, `expect_unique`, `expect_values_in`, `expect_row_count`.
 
