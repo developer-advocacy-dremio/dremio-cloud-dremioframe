@@ -11,10 +11,37 @@ DremioFrame is a Python library that provides an Ibis-like dataframe builder int
 ## Installation
 
 ```bash
-pip install .
+pip install dremioframe
 ```
 
-## Usage
+## Quick Start
+
+### Dremio Cloud
+
+```python
+from dremioframe.client import DremioClient
+
+# Assumes DREMIO_PAT and DREMIO_PROJECT_ID are set in env
+client = DremioClient()
+
+# Query a table
+df = client.table("Samples.samples.dremio.com.zips.json").select("city", "state").limit(5).collect()
+print(df)
+```
+
+### Dremio Software
+
+```python
+client = DremioClient(
+    hostname="localhost",
+    port=32010,
+    username="admin",
+    password="password123",
+    tls=False
+)
+```
+
+## Features
 
 ```python
 from dremioframe.client import DremioClient

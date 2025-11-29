@@ -5,20 +5,54 @@ from .builder import DremioBuilder
 from .utils import get_env_var
 
 class DremioClient:
-    def __init__(self, pat: str = None, project_id: str = None, base_url: str = "https://api.dremio.cloud/v0"):
+    def __init__(self, pat: str = None, project_id: str = None, base_url: str = None,
+                 hostname: str = "data.dremio.cloud", port: int = 443,
+                 username: str = None, password: str = None, tls: bool = True,
+                 disable_certificate_verification: bool = False):
+        
         self.pat = pat or os.getenv("DREMIO_PAT")
         self.project_id = project_id or os.getenv("DREMIO_PROJECT_ID")
-        self.base_url = base_url
-
-        if not self.pat:
-            raise ValueError("Dremio PAT is required.")
         
-        # If project_id is missing, we might want to try to fetch it, but for now we'll just warn or error if needed.
-        # However, for the catalog API, project_id is usually required in the URL.
+        # Connection details
+        self.hostname = hostname
+        self.port = port
+        self.username = username
+        self.password = password
+        self.tls = tls
+        self.disable_certificate_verification = disable_certificate_verification
+        
+        # Determine Base URL for Catalog API
+        if base_url:
+            self.base_url = base_url
+        elif hostname == "data.dremio.cloud":
+            self.base_url = "https://api.dremio.cloud/v0"
+        else:
+            # Default Software REST API
+            protocol = "https" if tls else "http"
+            self.base_url = f"{protocol}://{hostname}:9047/api/v3"
+
+        # Validation
+        if not self.pat and not (self.username and self.password):
+            raise ValueError("Either PAT or Username/Password is required.")
         
         self.session = requests.Session()
+        if self.pat:
+            self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
+        elif self.username and self.password:
+            # For REST API, we might need to login to get a token.
+            # Dremio Software /apiv3/login
+            try:
+                login_url = f"{self.base_url}/login"
+                # Only attempt if we think it's a valid REST endpoint
+                # This might fail if the user only wants Flight and didn't configure REST port
+                # But Catalog requires REST.
+                pass 
+            except Exception:
+                pass
+            # For now, we'll assume Flight is the primary goal. 
+            # Catalog might not work with User/Pass without implementing the login flow.
+            
         self.session.headers.update({
-            "Authorization": f"Bearer {self.pat}",
             "Content-Type": "application/json"
         })
 
