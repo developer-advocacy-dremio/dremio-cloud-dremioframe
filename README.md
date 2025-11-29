@@ -29,6 +29,10 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
     - [Conditional](docs/functions/conditional.md)
     - [AI](docs/functions/ai.md)
     - [Complex Types](docs/functions/complex.md)
+- [Local Caching](docs/caching.md)
+- [Interactive Plotting](docs/plotting.md)
+- [Raw SQL Querying](docs/querying.md)
+- [UDF Manager](docs/udf.md)
 - [CLI Tool](docs/cli.md)
 - [Async Client](docs/async_client.md)
 
@@ -148,4 +152,16 @@ client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", disp
 
 # CLI
 # dremio-cli query "SELECT 1"
+
+# Local Caching
+# client.table("source").cache("my_cache", ttl_seconds=300).sql("SELECT * FROM my_cache").show()
+
+# Interactive Plotting
+# df.chart(kind="scatter", backend="plotly").show()
+
+# UDF Manager
+# client.udf.create("add_one", {"x": "INT"}, "INT", "x + 1")
+
+# Raw SQL
+# df = client.query("SELECT * FROM my_table")
 ```

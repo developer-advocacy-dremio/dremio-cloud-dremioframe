@@ -297,28 +297,104 @@ class DremioBuilder:
         df = self.collect("pandas")
         df.to_parquet(path, **kwargs)
 
-    def chart(self, kind: str = 'line', x: str = None, y: str = None, title: str = None, save_to: str = None, **kwargs):
+    def chart(self, kind: str = 'line', x: str = None, y: str = None, title: str = None, save_to: str = None, backend: str = 'matplotlib', **kwargs):
         """
-        Create a chart from the query results using Matplotlib/Pandas.
+        Create a chart from the query results.
         
         Args:
-            kind: The kind of plot to produce: 'line', 'bar', 'barh', 'hist', 'box', 'kde', 'density', 'area', 'pie', 'scatter', 'hexbin'.
+            kind: The kind of plot to produce.
+                  Matplotlib: 'line', 'bar', 'barh', 'hist', 'box', 'kde', 'density', 'area', 'pie', 'scatter', 'hexbin'.
+                  Plotly: 'line', 'bar', 'scatter', 'pie', 'histogram', 'box', 'violin', 'area'.
             x: Column name for x-axis.
             y: Column name(s) for y-axis.
             title: Chart title.
-            save_to: Path to save the chart image (e.g., "chart.png").
-            **kwargs: Additional arguments passed to df.plot().
+            save_to: Path to save the chart image (e.g., "chart.png" or "chart.html").
+            backend: 'matplotlib' (default) or 'plotly'.
+            **kwargs: Additional arguments passed to the plotting function.
         """
-        import matplotlib.pyplot as plt
-        
         df = self.collect("pandas")
         
-        ax = df.plot(kind=kind, x=x, y=y, title=title, **kwargs)
-        
-        if save_to:
-            plt.savefig(save_to)
+        if backend == 'matplotlib':
+            import matplotlib.pyplot as plt
+            ax = df.plot(kind=kind, x=x, y=y, title=title, **kwargs)
+            if save_to:
+                plt.savefig(save_to)
+            return ax
             
-        return ax
+        elif backend == 'plotly':
+            import plotly.express as px
+            
+            # Map kind to px function
+            plot_func = None
+            if kind == 'line': plot_func = px.line
+            elif kind == 'bar': plot_func = px.bar
+            elif kind == 'scatter': plot_func = px.scatter
+            elif kind == 'pie': plot_func = px.pie
+            elif kind == 'histogram': plot_func = px.histogram
+            elif kind == 'box': plot_func = px.box
+            elif kind == 'violin': plot_func = px.violin
+            elif kind == 'area': plot_func = px.area
+            else:
+                raise ValueError(f"Unsupported kind '{kind}' for plotly backend")
+                
+            fig = plot_func(df, x=x, y=y, title=title, **kwargs)
+            
+            if save_to:
+                if save_to.endswith(".html"):
+                    fig.write_html(save_to)
+                else:
+                    # Requires kaleido for static image export
+                    try:
+                        fig.write_image(save_to)
+                    except ImportError:
+                        print("Warning: 'kaleido' is required for static image export with Plotly. Saving as HTML instead.")
+                        fig.write_html(save_to + ".html")
+            
+            return fig
+        else:
+            raise ValueError(f"Unknown backend: {backend}")
+
+    def cache(self, name: str, ttl_seconds: int = None, folder: str = ".cache") -> 'LocalBuilder':
+        """
+        Cache the current query result to a local Feather file and return a LocalBuilder.
+        
+        Args:
+            name: Name of the cache (file will be {folder}/{name}.feather).
+            ttl_seconds: Time-to-live in seconds. If file exists and is younger than this, use it.
+            folder: Directory to store cache files.
+            
+        Returns:
+            LocalBuilder: A builder for querying the local cache.
+        """
+        import os
+        import time
+        from dremioframe.local_builder import LocalBuilder
+        import pyarrow.feather as feather
+        import pyarrow as pa # Added for type hinting and table object
+        
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+            
+        file_path = os.path.join(folder, f"{name}.feather")
+        
+        use_cache = False
+        if os.path.exists(file_path):
+            if ttl_seconds is None:
+                use_cache = True
+            else:
+                age = time.time() - os.path.getmtime(file_path)
+                if age < ttl_seconds:
+                    use_cache = True
+                    
+        if not use_cache:
+            # Execute query and save
+            table: pa.Table = self.collect("arrow") # Type hint for clarity
+            feather.write_feather(table, file_path)
+        else:
+            # Load from cache
+            table: pa.Table = feather.read_feather(file_path)
+            
+        return LocalBuilder(file_path, table_name=name)
 
     # DML Operations
     def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):

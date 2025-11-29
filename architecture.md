@@ -50,7 +50,15 @@ Command-line interface built with `typer`.
 - `dremio-cli catalog`: Browse catalog.
 - `dremio-cli reflections`: Manage reflections.
 
-### 8. Utils (`utils.py`)
+### 8. LocalBuilder (`local_builder.py`)
+Wraps DataFusion for local SQL execution on cached Arrow files.
+- Mimics `DremioBuilder` API (`select`, `filter`, `group_by`, `agg`, `sql`).
+
+### 9. UDFManager (`udf.py`)
+Manages SQL User Defined Functions.
+- `create`, `drop`, `list`.
+
+### 10. Utils (`utils.py`)
 Helper functions for configuration, logging, and common transformations.
 
 ## Data Flow

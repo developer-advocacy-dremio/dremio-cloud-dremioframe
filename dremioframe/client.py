@@ -3,6 +3,7 @@ import requests
 from .catalog import Catalog
 from .builder import DremioBuilder
 from .admin import Admin
+from .udf import UDFManager
 from .utils import get_env_var
 
 class DremioClient:
@@ -59,6 +60,7 @@ class DremioClient:
 
         self.catalog = Catalog(self)
         self.admin = Admin(self)
+        self.udf = UDFManager(self)
 
     def table(self, path: str) -> DremioBuilder:
         return DremioBuilder(self, path)
@@ -74,6 +76,19 @@ class DremioClient:
         # Or better, move _execute_flight to client or utils?
         # For now, just use a builder
         return DremioBuilder(self)._execute_flight(query, "polars")
+
+    def query(self, sql: str, format: str = "pandas"):
+        """
+        Execute a raw SQL query and return the result.
+        
+        Args:
+            sql: The SQL query to execute.
+            format: The return format ('pandas', 'arrow', 'polars').
+        
+        Returns:
+            DataFrame or Table in the requested format.
+        """
+        return DremioBuilder(self, sql=sql).collect(format)
 
     def ingest_api(self, url: str, table_name: str, headers: dict = None, json_path: str = None, 
                    mode: str = 'append', pk: str = None, batch_size: int = None):
