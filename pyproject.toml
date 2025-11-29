@@ -19,8 +19,14 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "polars>=0.20.0",
     "matplotlib",
+    "typer>=0.9.0",
+    "pydantic>=2.0.0",
+    "aiohttp>=3.8.0",
 ]
 requires-python = ">=3.9"
+
+[project.scripts]
+dremio-cli = "dremioframe.cli:app"
 
 [project.urls]
 Homepage = "https://github.com/developer-advocacy-dremio/dremio-cloud-dremioframe"

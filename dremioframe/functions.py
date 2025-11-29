@@ -34,6 +34,9 @@ class Expr(str):
         return Expr(f"({self} % {other})")
 
     # Comparison Operators
+    def __hash__(self):
+        return super().__hash__()
+
     def __eq__(self, other):
         return Expr(f"({self} = {self._fmt_val(other)})")
     
@@ -271,3 +274,22 @@ def ai_generate(prompt, model_name: str = None, schema: str = None) -> Expr:
         
     base += ")"
     return Expr(base)
+
+# Complex Types
+def flatten(col) -> Expr:
+    """
+    Explodes a list into multiple rows.
+    """
+    return Expr(f"FLATTEN({col})")
+
+def convert_from(col, type_: str) -> Expr:
+    """
+    Convert from a serialized format (e.g. JSON) to a complex type.
+    """
+    return Expr(f"CONVERT_FROM({col}, '{type_}')")
+
+def convert_to(col, type_: str) -> Expr:
+    """
+    Convert a complex type to a serialized format (e.g. JSON).
+    """
+    return Expr(f"CONVERT_TO({col}, '{type_}')")

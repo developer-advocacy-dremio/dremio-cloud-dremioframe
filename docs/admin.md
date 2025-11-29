@@ -90,7 +90,44 @@ client.admin.apply_masking_policy("employees", "ssn", "mask_ssn(ssn)")
 client.admin.drop_masking_policy("employees", "ssn")
 ```
 
-### Row Access Policies
+### Reflection Management
+
+You can manage Dremio reflections (Raw and Aggregation) using the `admin` interface.
+
+```python
+# List all reflections
+reflections = client.admin.list_reflections()
+
+# Create a Raw Reflection
+client.admin.create_reflection(
+    dataset_id="dataset-uuid",
+    name="my_raw_reflection",
+    type="RAW",
+    display_fields=["col1", "col2"],
+    distribution_fields=["col1"],
+    partition_fields=["col2"],
+    sort_fields=["col1"]
+)
+
+# Create an Aggregation Reflection
+client.admin.create_reflection(
+    dataset_id="dataset-uuid",
+    name="my_agg_reflection",
+    type="AGGREGATION",
+    dimension_fields=["dim1", "dim2"],
+    measure_fields=["measure1"],
+    distribution_fields=["dim1"]
+)
+
+# Enable/Disable Reflection
+client.admin.enable_reflection("reflection-id")
+client.admin.disable_reflection("reflection-id")
+
+# Delete Reflection
+client.admin.delete_reflection("reflection-id")
+```
+
+## Row Access Policies
 
 Row access policies filter rows based on user roles.
 

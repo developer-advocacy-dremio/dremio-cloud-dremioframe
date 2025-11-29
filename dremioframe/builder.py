@@ -273,6 +273,20 @@ class DremioBuilder:
     def show(self, n: int = 20):
         print(self.limit(n).collect())
 
+    def explain(self) -> str:
+        """
+        Return the query plan.
+        Executes: EXPLAIN PLAN FOR <query>
+        """
+        sql = self._compile_sql()
+        explain_sql = f"EXPLAIN PLAN FOR {sql}"
+        # Execute via Flight and return the plan text
+        # The result of EXPLAIN PLAN is usually a single column 'text' or similar
+        df = self._execute_flight(explain_sql, "pandas")
+        if not df.empty:
+            return df.iloc[0, 0]
+        return "No plan returned."
+
     def to_csv(self, path: str, **kwargs):
         """Export query results to CSV"""
         df = self.collect("pandas")
@@ -307,12 +321,22 @@ class DremioBuilder:
         return ax
 
     # DML Operations
-    def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None):
+    def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):
         """
         Create table as select (CTAS).
         If data is provided, it creates the table from the data (VALUES).
+        
+        Args:
+            name: Table name.
+            data: Data to insert (Pandas DataFrame, Arrow Table, or list of dicts).
+            batch_size: Batch size for insertion.
+            schema: Optional Pydantic model for validation.
         """
         if data is not None:
+            # Validate data if schema provided
+            if schema:
+                self._validate_data(data, schema)
+
             # Reuse insert logic to generate VALUES clause
             # But we need to wrap it in a SELECT * FROM (VALUES ...)
             # And we need to handle batching? CTAS usually is one shot.
@@ -367,7 +391,7 @@ class DremioBuilder:
         create_sql = f"CREATE TABLE {name} AS {sql}"
         return self._execute_dml(create_sql)
 
-    def insert(self, table_name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None):
+    def insert(self, table_name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):
         """
         Insert into table.
         If data is provided (Arrow Table or Pandas DataFrame), it generates a VALUES clause.
@@ -377,8 +401,13 @@ class DremioBuilder:
             table_name: Target table name.
             data: Optional PyArrow Table or Pandas DataFrame.
             batch_size: Optional integer to split data into batches.
+            schema: Optional Pydantic model for validation.
         """
         if data is not None:
+            # Validate data if schema provided
+            if schema:
+                self._validate_data(data, schema)
+
             # Handle Arrow Table or Pandas DataFrame
             import pyarrow as pa
             import math
@@ -425,6 +454,24 @@ class DremioBuilder:
         sql = self._compile_sql()
         insert_sql = f"INSERT INTO {table_name} {sql}"
         return self._execute_dml(insert_sql)
+
+    def _validate_data(self, data, schema):
+        """Validate data against Pydantic schema."""
+        import pandas as pd
+        import pyarrow as pa
+        
+        rows = []
+        if isinstance(data, pd.DataFrame):
+            rows = data.to_dict(orient="records")
+        elif isinstance(data, pa.Table):
+            rows = data.to_pylist()
+        elif isinstance(data, list):
+            rows = data
+        else:
+            raise ValueError("Unsupported data type for validation")
+            
+        for row in rows:
+            schema(**row)
 
     def merge(self, target_table: str, on: Union[str, List[str]], 
               matched_update: Optional[Dict[str, str]] = None, 

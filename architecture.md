@@ -32,7 +32,25 @@ Provides a fluent interface for constructing queries.
 Provides methods to run validation queries against the data defined by the builder.
 - `expect_not_null`, `expect_unique`, `expect_values_in`, `expect_row_count`.
 
-### 5. Utils (`utils.py`)
+### 5. Admin (`admin.py`)
+Handles administrative tasks via REST API.
+- User/Role management.
+- Grant/Revoke privileges.
+- Policy management (Row Access, Masking).
+- **Reflection Management**: Create, list, delete, enable/disable reflections.
+
+### 6. AsyncDremioClient (`async_client.py`)
+Asynchronous client using `aiohttp` for high-concurrency applications.
+- Async context manager support.
+- Non-blocking REST API calls (Catalog, SQL execution).
+
+### 7. CLI (`cli.py`)
+Command-line interface built with `typer`.
+- `dremio-cli query`: Run SQL queries.
+- `dremio-cli catalog`: Browse catalog.
+- `dremio-cli reflections`: Manage reflections.
+
+### 8. Utils (`utils.py`)
 Helper functions for configuration, logging, and common transformations.
 
 ## Data Flow

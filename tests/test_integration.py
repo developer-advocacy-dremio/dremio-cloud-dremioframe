@@ -20,6 +20,9 @@ READ_TABLE = '"dremio_samples"."nyc_citibike"."citibike"'
 
 @pytest.fixture(scope="module")
 def client():
+    import os
+    if not (os.getenv("DREMIO_PAT") and os.getenv("DREMIO_URL")):
+        pytest.skip("Dremio credentials not found")
     return DremioClient()
 
 @pytest.fixture(scope="module", autouse=True)

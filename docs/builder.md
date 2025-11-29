@@ -39,6 +39,15 @@ print(result)
 - `collect(library='polars')`: Execute the query and return a DataFrame. Supported libraries: `polars` (default), `pandas`.
 - `show(n=20)`: Print the first `n` rows.
 
+## Query Explanation
+
+You can view the execution plan for a query using the `explain()` method. This is useful for debugging performance issues.
+
+```python
+plan = df.filter("state = 'MA'").explain()
+print(plan)
+```
+
 ## DML Operations
 
 You can also perform Data Manipulation Language (DML) operations:
@@ -83,6 +92,30 @@ For `insert` and `merge` operations with in-memory data (Arrow Table or Pandas D
 ```python
 # Insert in batches of 1000 rows
 client.table("target").insert("target", data=large_df, batch_size=1000)
+```
+
+## Batching
+
+For `insert` and `merge` operations with in-memory data (Arrow Table or Pandas DataFrame), you can specify a `batch_size` to split the data into multiple chunks. This is useful for large datasets to avoid hitting query size limits.
+
+```python
+# Insert in batches of 1000 rows
+client.table("target").insert("target", data=large_df, batch_size=1000)
+```
+
+## Schema Validation
+
+You can validate data against a Pydantic schema before insertion.
+
+```python
+from pydantic import BaseModel
+
+class User(BaseModel):
+    id: int
+    name: str
+
+# Will raise ValidationError if data doesn't match
+client.table("users").insert("users", data=df, schema=User)
 ```
 
 ## Data Quality Checks

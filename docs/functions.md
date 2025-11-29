@@ -11,6 +11,7 @@ DremioFrame provides a comprehensive set of SQL functions via `dremioframe.funct
 - [Window Functions](functions/window.md)
 - [Conditional Functions](functions/conditional.md)
 - [AI Functions](functions/ai.md)
+- [Complex Type Functions](functions/complex.md)
 
 ## Usage
 

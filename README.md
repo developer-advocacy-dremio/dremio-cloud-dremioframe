@@ -1,6 +1,6 @@
-# DremioFrame
+# DremioFrame (currently in alpha)
 
-DremioFrame is a Python library that provides an Ibis-like dataframe builder interface for interacting with Dremio Cloud & Dremio Software. It allows you to list data, perform CRUD operations, and administer Dremio resources using a familiar API.
+DremioFrame is a Python library that provides a dataframe builder interface for interacting with Dremio Cloud & Dremio Software. It allows you to list data, perform CRUD operations, and administer Dremio resources using a familiar API.
 
 ## Documentation
 
@@ -28,6 +28,9 @@ DremioFrame is a Python library that provides an Ibis-like dataframe builder int
     - [Window](docs/functions/window.md)
     - [Conditional](docs/functions/conditional.md)
     - [AI](docs/functions/ai.md)
+    - [Complex Types](docs/functions/complex.md)
+- [CLI Tool](docs/cli.md)
+- [Async Client](docs/async_client.md)
 
 ## Installation
 
@@ -133,4 +136,16 @@ client.table("target").merge(
 # Data Quality
 df.quality.expect_not_null("city")
 df.quality.expect_row_count("pop > 1000000", 5, "ge") # Expect at least 5 cities with pop > 1M
+
+# Query Explanation
+print(df.explain())
+
+# Reflection Management
+client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", display_fields=["col1"])
+
+# Async Client
+# async with AsyncDremioClient(pat="...") as client: ...
+
+# CLI
+# dremio-cli query "SELECT 1"
 ```
