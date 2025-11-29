@@ -58,7 +58,15 @@ Wraps DataFusion for local SQL execution on cached Arrow files.
 Manages SQL User Defined Functions.
 - `create`, `drop`, `list`.
 
-### 10. Utils (`utils.py`)
+### 10. QueryProfile (`profile.py`)
+Parses and visualizes job profiles.
+- `summary`, `visualize`.
+
+### 11. DremioIcebergClient (`iceberg.py`)
+Wraps `pyiceberg` for direct catalog interaction.
+- `list_namespaces`, `list_tables`, `load_table`, `create_table`.
+
+### 12. Utils (`utils.py`)
 Helper functions for configuration, logging, and common transformations.
 
 ## Data Flow

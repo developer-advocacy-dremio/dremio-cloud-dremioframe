@@ -90,7 +90,48 @@ client.admin.apply_masking_policy("employees", "ssn", "mask_ssn(ssn)")
 client.admin.drop_masking_policy("employees", "ssn")
 ```
 
-### Reflection Management
+### Source Management
+
+Manage data sources (S3, Nessie, Postgres, etc.).
+
+### List Sources
+
+```python
+sources = client.admin.list_sources()
+```
+
+### Get Source
+
+```python
+source = client.admin.get_source("my_source")
+```
+
+### Create Source
+
+```python
+# Generic
+client.admin.create_source(
+    name="my_postgres",
+    type="POSTGRES",
+    config={"hostname": "...", "username": "..."}
+)
+
+# S3 Helper
+client.admin.create_source_s3(
+    name="my_datalake",
+    bucket_name="my-bucket",
+    access_key="...",
+    secret_key="..."
+)
+```
+
+### Delete Source
+
+```python
+client.admin.delete_source("source_id")
+```
+
+## Reflection Management
 
 You can manage Dremio reflections (Raw and Aggregation) using the `admin` interface.
 

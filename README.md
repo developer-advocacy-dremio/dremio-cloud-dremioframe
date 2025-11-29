@@ -5,7 +5,6 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 ## Documentation
 
 - [Architecture](architecture.md)
-
 - [Connection Guide](docs/connection.md)
 - [Administration](docs/admin.md)
 - [Catalog & Admin](docs/catalog.md)
@@ -32,6 +31,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Local Caching](docs/caching.md)
 - [Interactive Plotting](docs/plotting.md)
 - [Raw SQL Querying](docs/querying.md)
+- [Source Management](docs/admin.md#source-management)
+- [Query Profiling](docs/profiling.md)
+- [Iceberg Client](docs/iceberg.md)
 - [UDF Manager](docs/udf.md)
 - [CLI Tool](docs/cli.md)
 - [Async Client](docs/async_client.md)
@@ -164,4 +166,13 @@ client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", disp
 
 # Raw SQL
 # df = client.query("SELECT * FROM my_table")
+
+# Source Management
+# client.admin.create_source_s3("my_datalake", "bucket")
+
+# Query Profiling
+# client.admin.get_job_profile("job_123").visualize().show()
+
+# Iceberg Client
+# client.iceberg.list_tables("my_namespace")
 ```

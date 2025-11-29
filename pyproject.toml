@@ -1,6 +1,6 @@
 [project]
 name = "dremioframe"
-version = "0.2.1"
+version = "0.3.0"
 description = "A dataframe-like library for Dremio Cloud & Dremio Software"
 authors = [
     {name = "Alex Merced", email = "alexmerced@alexmerced.com"},
@@ -24,6 +24,7 @@ dependencies = [
     "aiohttp>=3.8.0",
     "datafusion>=33.0.0",
     "plotly>=5.0.0",
+    "pyiceberg>=0.5.0",
 ]
 requires-python = ">=3.9"
 

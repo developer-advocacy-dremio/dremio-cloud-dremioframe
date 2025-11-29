@@ -154,3 +154,108 @@ class Admin:
         response = self.client.session.put(f"{self.client.base_url}/reflection/{reflection_id}", json=payload)
         response.raise_for_status()
         return response.json()
+
+    # --- Sources ---
+    def list_sources(self):
+        """List all sources."""
+        response = self.client.session.get(f"{self.client.base_url}/source")
+        response.raise_for_status()
+        return response.json()
+
+    def get_source(self, id_or_path: str):
+        """Get a source by ID or Path."""
+        # Try as ID first
+        try:
+            response = self.client.session.get(f"{self.client.base_url}/source/{id_or_path}")
+            response.raise_for_status()
+            return response.json()
+        except Exception:
+            # Try as path (by listing and filtering? or catalog API?)
+            # Catalog API can get by path.
+            return self.client.catalog.get_entity(id_or_path)
+
+    def create_source(self, name: str, type: str, config: dict, 
+                      acceleration_grace_period: int = 21600000,
+                      acceleration_refresh_period: int = 3600000,
+                      acceleration_never_expire: bool = False,
+                      acceleration_never_refresh: bool = False):
+        """
+        Create a new source.
+        
+        Args:
+            name: Source name.
+            type: Source type (e.g., "S3", "NAS", "POSTGRES").
+            config: Configuration dictionary specific to the source type.
+            acceleration_*: Refresh policy settings.
+        """
+        payload = {
+            "name": name,
+            "type": type.upper(),
+            "config": config,
+            "accelerationGracePeriodMs": acceleration_grace_period,
+            "accelerationRefreshPeriodMs": acceleration_refresh_period,
+            "accelerationNeverExpire": acceleration_never_expire,
+            "accelerationNeverRefresh": acceleration_never_refresh
+        }
+        
+        response = self.client.session.post(f"{self.client.base_url}/source", json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def delete_source(self, id: str):
+        """Delete a source by ID."""
+        response = self.client.session.delete(f"{self.client.base_url}/source/{id}")
+        response.raise_for_status()
+        return True
+
+    def create_source_s3(self, name: str, bucket_name: str, 
+                         access_key: str = None, secret_key: str = None, 
+                         auth_type: str = "ACCESS_KEY",
+                         secure: bool = True):
+        """
+        Helper to create an S3 source.
+        
+        Args:
+            name: Source name.
+            bucket_name: S3 bucket name.
+            access_key: AWS Access Key.
+            secret_key: AWS Secret Key.
+            auth_type: "ACCESS_KEY", "EC2_METADATA", "NONE".
+            secure: Use HTTPS (True) or HTTP (False).
+        """
+        config = {
+            "bucketName": bucket_name,
+            "authenticationType": auth_type,
+            "secure": secure
+        }
+        
+        if auth_type == "ACCESS_KEY":
+            if not access_key or not secret_key:
+                raise ValueError("access_key and secret_key are required for ACCESS_KEY auth")
+            config["accessKey"] = access_key
+            config["accessSecret"] = secret_key
+            
+        return self.create_source(name, "S3", config)
+
+    # --- Profiling ---
+    def get_job_profile(self, job_id: str):
+        """
+        Get the profile for a job.
+        
+        Args:
+            job_id: The job ID.
+            
+        Returns:
+            QueryProfile object.
+        """
+        from dremioframe.profile import QueryProfile
+        
+        # Dremio API: GET /api/v3/job/{id} gives job details.
+        # But full profile might be different or require specific endpoint depending on version.
+        # Usually /api/v3/job/{id} contains enough info for basic profiling.
+        # For detailed profile (operator tree), it might be internal or different endpoint.
+        # Let's use the standard job endpoint for now.
+        
+        response = self.client.session.get(f"{self.client.base_url}/job/{job_id}")
+        response.raise_for_status()
+        return QueryProfile(response.json())

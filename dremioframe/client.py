@@ -58,9 +58,37 @@ class DremioClient:
             "Content-Type": "application/json"
         })
 
-        self.catalog = Catalog(self)
-        self.admin = Admin(self)
-        self.udf = UDFManager(self)
+        # Lazy-loaded properties
+        self._catalog = None
+        self._admin = None
+        self._udf = None
+        self._iceberg = None
+        self._iceberg = None
+
+    @property
+    def catalog(self):
+        if self._catalog is None:
+            self._catalog = Catalog(self)
+        return self._catalog
+
+    @property
+    def admin(self):
+        if self._admin is None:
+            self._admin = Admin(self)
+        return self._admin
+
+    @property
+    def udf(self):
+        if self._udf is None:
+            self._udf = UDFManager(self)
+        return self._udf
+
+    @property
+    def iceberg(self):
+        if self._iceberg is None:
+            from .iceberg import DremioIcebergClient
+            self._iceberg = DremioIcebergClient(self)
+        return self._iceberg
 
     def table(self, path: str) -> DremioBuilder:
         return DremioBuilder(self, path)
