@@ -2,6 +2,7 @@ import os
 import requests
 from .catalog import Catalog
 from .builder import DremioBuilder
+from .admin import Admin
 from .utils import get_env_var
 
 class DremioClient:
@@ -57,6 +58,7 @@ class DremioClient:
         })
 
         self.catalog = Catalog(self)
+        self.admin = Admin(self)
 
     def table(self, path: str) -> DremioBuilder:
         return DremioBuilder(self, path)

@@ -1,7 +1,7 @@
 [project]
 name = "dremioframe"
-version = "0.1.0"
-description = "A dataframe-like library for Dremio Cloud"
+version = "0.2.0"
+description = "A dataframe-like library for Dremio Cloud & Dremio Software"
 authors = [
     {name = "Alex Merced", email = "alexmerced@alexmerced.com"},
 ]

@@ -1,11 +1,13 @@
 # DremioFrame
 
-DremioFrame is a Python library that provides an Ibis-like dataframe builder interface for interacting with Dremio Cloud. It allows you to list data, perform CRUD operations, and administer Dremio resources using a familiar API.
+DremioFrame is a Python library that provides an Ibis-like dataframe builder interface for interacting with Dremio Cloud & Dremio Software. It allows you to list data, perform CRUD operations, and administer Dremio resources using a familiar API.
 
 ## Documentation
 
 - [Architecture](architecture.md)
+- [Architecture](architecture.md)
 - [Connection Guide](docs/connection.md)
+- [Administration](docs/admin.md)
 - [Catalog & Admin](docs/catalog.md)
 - [Dataframe Builder](docs/builder.md)
 - [Aggregation](docs/aggregation.md)
