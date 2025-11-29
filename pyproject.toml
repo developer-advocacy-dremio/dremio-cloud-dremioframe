@@ -18,6 +18,7 @@ dependencies = [
     "requests>=2.31.0",
     "python-dotenv>=1.0.0",
     "polars>=0.20.0",
+    "matplotlib",
 ]
 requires-python = ">=3.9"
 

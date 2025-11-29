@@ -73,15 +73,125 @@ class DremioClient:
         # For now, just use a builder
         return DremioBuilder(self)._execute_flight(query, "polars")
 
-    def external_query(self, source: str, sql: str) -> 'DremioBuilder':
+    def ingest_api(self, url: str, table_name: str, headers: dict = None, json_path: str = None, 
+                   mode: str = 'append', pk: str = None, batch_size: int = None):
         """
-        Create a builder from an external query.
+        Ingest data from an API endpoint into Dremio.
         
         Args:
-            source: The name of the source (e.g., "Postgres").
-            sql: The native SQL query to run on the source.
+            url: The API URL.
+            table_name: The target table name.
+            headers: Optional headers for the request.
+            json_path: Optional key to extract list of records from JSON response (e.g. "data.items").
+            mode: 'replace', 'append', or 'merge'.
+            pk: Primary key column for 'append' (incremental) or 'merge'.
+            batch_size: Batch size for insertion.
         """
-        # Escape single quotes in the SQL string
-        escaped_sql = sql.replace("'", "''")
-        query = f"SELECT * FROM TABLE({source}.EXTERNAL_QUERY('{escaped_sql}'))"
-        return DremioBuilder(self, sql=query)
+        import pandas as pd
+        
+        # 1. Fetch Data
+        response = self.session.get(url, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+        
+        # 2. Parse Data
+        if json_path:
+            keys = json_path.split('.')
+            for k in keys:
+                data = data.get(k, [])
+        
+        if not isinstance(data, list):
+            raise ValueError("API response (or extracted path) must be a list of records")
+            
+        df = pd.DataFrame(data)
+        if df.empty:
+            print("No data fetched from API.")
+            return
+            
+        # 3. Handle Modes
+        if mode == 'replace':
+            # Drop table if exists
+            try:
+                # We need a drop table command.
+                self.execute(f"DROP TABLE IF EXISTS {table_name}")
+            except Exception:
+                pass # Ignore if table doesn't exist
+            # Create/Insert
+            # Use create with data
+            try:
+                self.table(table_name).create(table_name, data=df, batch_size=batch_size)
+            except Exception as e:
+                # If create fails (e.g. table exists but delete failed?), try insert
+                # But we tried to delete rows/drop table.
+                raise e
+            
+        elif mode == 'append':
+            if pk:
+                # Get max PK
+                try:
+                    max_val_df = self.table(table_name).agg(m=f"MAX({pk})").collect()
+                    max_val = max_val_df['m'][0]
+                    if max_val is not None:
+                        df = df[df[pk] > max_val]
+                except Exception:
+                    # Table might not exist or empty
+                    pass
+            
+            if df.empty:
+                print("No new records to append.")
+                return
+            
+            # Insert
+            # If table doesn't exist, insert might fail.
+            # We should check existence or just try create if insert fails?
+            # For now, assume table exists for append mode, or user should use replace first.
+            # But if we want to be robust:
+            try:
+                self.table(table_name).insert(table_name, data=df, batch_size=batch_size)
+            except Exception:
+                # Try create if insert failed (maybe table doesn't exist)
+                self.table(table_name).create(table_name, data=df, batch_size=batch_size)
+
+        elif mode == 'merge':
+            if not pk:
+                raise ValueError("Merge mode requires a primary key (pk)")
+            
+            # 1. Create Staging Table
+            staging_table = f"{table_name}_staging_{pd.Timestamp.now().strftime('%Y%m%d%H%M%S')}"
+            
+            # Create staging table with data
+            self.table(staging_table).create(staging_table, data=df, batch_size=batch_size)
+            
+            # 2. Merge
+            # Check if target exists. If not, just rename staging to target?
+            # Or just create target from staging.
+            # Assuming target exists for merge.
+            
+            try:
+                self.table(table_name).merge(
+                    target_table=table_name,
+                    on=pk,
+                    matched_update={col: f"source.{col}" for col in df.columns if col != pk},
+                    not_matched_insert={col: f"source.{col}" for col in df.columns},
+                    data=None # We are using staging table as source
+                )
+                # Wait, merge takes `data` or uses `self` (builder).
+                # We need to create a builder for the staging table.
+                self.table(staging_table).merge(
+                    target_table=table_name,
+                    on=pk,
+                    matched_update={col: f"source.{col}" for col in df.columns if col != pk},
+                    not_matched_insert={col: f"source.{col}" for col in df.columns}
+                )
+            except Exception as e:
+                # If target doesn't exist, maybe we should have just created it?
+                # But merge implies existing data.
+                # If target missing, we can just CTAS from staging.
+                # Check if error is "Table not found"
+                if "not found" in str(e).lower():
+                     self.table(staging_table).create(table_name)
+                else:
+                    raise e
+            finally:
+                # 3. Drop Staging
+                self.execute(f"DROP TABLE IF EXISTS {staging_table}")

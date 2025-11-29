@@ -19,9 +19,10 @@ Provides a fluent interface for constructing queries.
     - `group_by()`, `agg()`: Aggregation.
     - `order_by()`, `distinct()`: Sorting and deduplication.
     - `join()`: Joining tables.
-    - `insert()`, `merge()`: Data ingestion and upsert.
+    - `insert()`, `merge()`, `create()`: Data ingestion, upsert, and CTAS.
     - `at_snapshot()`, `at_timestamp()`: Iceberg Time Travel.
     - `optimize()`, `vacuum()`: Iceberg Maintenance.
+    - `chart()`, `to_csv()`, `to_parquet()`: Visualization and Export.
     - `quality`: Access to `DataQuality` checks.
 
 ### 4. DataQuality (`quality.py`)

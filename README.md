@@ -70,6 +70,21 @@ df.at_snapshot("123456789").show()
 # External Queries
 client.external_query("Postgres", "SELECT * FROM users").show()
 
+# API Ingestion
+client.ingest_api(
+    url="https://api.example.com/users",
+    table_name="users",
+    mode="merge",
+    pk="id"
+)
+
+# Charting
+df.chart(kind="bar", x="category", y="sales", save_to="sales.png")
+
+# Export
+df.to_csv("data.csv")
+df.to_parquet("data.parquet")
+
 # Insert Data (Batched)
 import pandas as pd
 data = pd.DataFrame({"id": [1, 2], "name": ["A", "B"]})

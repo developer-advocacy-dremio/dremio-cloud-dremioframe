@@ -254,9 +254,96 @@ class DremioBuilder:
     def show(self, n: int = 20):
         print(self.limit(n).collect())
 
+    def to_csv(self, path: str, **kwargs):
+        """Export query results to CSV"""
+        df = self.collect("pandas")
+        df.to_csv(path, **kwargs)
+
+    def to_parquet(self, path: str, **kwargs):
+        """Export query results to Parquet"""
+        df = self.collect("pandas")
+        df.to_parquet(path, **kwargs)
+
+    def chart(self, kind: str = 'line', x: str = None, y: str = None, title: str = None, save_to: str = None, **kwargs):
+        """
+        Create a chart from the query results using Matplotlib/Pandas.
+        
+        Args:
+            kind: The kind of plot to produce: 'line', 'bar', 'barh', 'hist', 'box', 'kde', 'density', 'area', 'pie', 'scatter', 'hexbin'.
+            x: Column name for x-axis.
+            y: Column name(s) for y-axis.
+            title: Chart title.
+            save_to: Path to save the chart image (e.g., "chart.png").
+            **kwargs: Additional arguments passed to df.plot().
+        """
+        import matplotlib.pyplot as plt
+        
+        df = self.collect("pandas")
+        
+        ax = df.plot(kind=kind, x=x, y=y, title=title, **kwargs)
+        
+        if save_to:
+            plt.savefig(save_to)
+            
+        return ax
+
     # DML Operations
-    def create(self, name: str):
-        """Create table as select (CTAS)"""
+    def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None):
+        """
+        Create table as select (CTAS).
+        If data is provided, it creates the table from the data (VALUES).
+        """
+        if data is not None:
+            # Reuse insert logic to generate VALUES clause
+            # But we need to wrap it in a SELECT * FROM (VALUES ...)
+            # And we need to handle batching? CTAS usually is one shot.
+            # If batching is needed, we should CREATE with first batch, then INSERT rest.
+            
+            import pyarrow as pa
+            import math
+            
+            if isinstance(data, pd.DataFrame):
+                data = pa.Table.from_pandas(data)
+            
+            if not isinstance(data, pa.Table):
+                raise ValueError("Data must be a PyArrow Table or Pandas DataFrame")
+            
+            rows = data.to_pylist()
+            total_rows = len(rows)
+            
+            # If batch_size is set, we use the first batch for CTAS
+            first_batch_size = batch_size if batch_size else total_rows
+            first_batch_rows = rows[:first_batch_size]
+            
+            # Generate VALUES for first batch
+            values_list = []
+            for row in first_batch_rows:
+                row_vals = []
+                for val in row.values():
+                    if isinstance(val, str):
+                        row_vals.append(f"'{val}'")
+                    elif val is None:
+                        row_vals.append("NULL")
+                    else:
+                        row_vals.append(str(val))
+                values_list.append(f"({', '.join(row_vals)})")
+            
+            values_clause = ", ".join(values_list)
+            cols_def = ", ".join(data.column_names)
+            
+            # CTAS SQL
+            # CREATE TABLE name AS SELECT * FROM (VALUES ...) AS sub(col1, col2)
+            create_sql = f"CREATE TABLE {name} AS SELECT * FROM (VALUES {values_clause}) AS sub({cols_def})"
+            
+            result = self._execute_dml(create_sql)
+            
+            # If there are more batches, insert them
+            if batch_size and total_rows > batch_size:
+                remaining_data = data.slice(batch_size)
+                self.insert(name, data=remaining_data, batch_size=batch_size)
+                
+            return result
+
         sql = self._compile_sql()
         create_sql = f"CREATE TABLE {name} AS {sql}"
         return self._execute_dml(create_sql)
