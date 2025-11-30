@@ -3,6 +3,7 @@ import sqlite3
 import json
 import time
 from typing import Dict, Any, List, Optional
+import os
 from dataclasses import dataclass, asdict
 
 @dataclass
@@ -140,4 +141,274 @@ class SQLiteBackend(BaseBackend):
                     status=row[4],
                     tasks=json.loads(row[5]) if row[5] else {}
                 ))
+        return runs
+
+class PostgresBackend(BaseBackend):
+    """
+    PostgreSQL backend for persistent state.
+    Requires `psycopg2-binary` to be installed.
+    """
+    def __init__(self, dsn: str = None, table_name: str = "dremioframe_runs"):
+        try:
+            import psycopg2
+            from psycopg2.extras import Json
+        except ImportError:
+            raise ImportError("psycopg2-binary is required for PostgresBackend. Install with `pip install dremioframe[postgres]`")
+        
+        self.dsn = dsn or os.environ.get("DREMIOFRAME_PG_DSN")
+        if not self.dsn:
+            raise ValueError("Postgres DSN must be provided or set in DREMIOFRAME_PG_DSN env var.")
+        self.table_name = table_name
+        self._init_db()
+
+    def _get_conn(self):
+        import psycopg2
+        return psycopg2.connect(self.dsn)
+
+    def _init_db(self):
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f"""
+                    CREATE TABLE IF NOT EXISTS {self.table_name} (
+                        run_id TEXT PRIMARY KEY,
+                        pipeline_name TEXT,
+                        start_time DOUBLE PRECISION,
+                        end_time DOUBLE PRECISION,
+                        status TEXT,
+                        tasks JSONB
+                    )
+                """)
+                cur.execute(f"CREATE INDEX IF NOT EXISTS idx_{self.table_name}_pipeline ON {self.table_name} (pipeline_name)")
+                cur.execute(f"CREATE INDEX IF NOT EXISTS idx_{self.table_name}_start_time ON {self.table_name} (start_time DESC)")
+            conn.commit()
+        finally:
+            conn.close()
+
+    def save_run(self, run: PipelineRun):
+        from psycopg2.extras import Json
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f"""
+                    INSERT INTO {self.table_name} (run_id, pipeline_name, start_time, end_time, status, tasks)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (run_id) DO UPDATE SET
+                        pipeline_name = EXCLUDED.pipeline_name,
+                        start_time = EXCLUDED.start_time,
+                        end_time = EXCLUDED.end_time,
+                        status = EXCLUDED.status,
+                        tasks = EXCLUDED.tasks
+                """, (run.run_id, run.pipeline_name, run.start_time, run.end_time, run.status, Json(run.tasks or {})))
+            conn.commit()
+        finally:
+            conn.close()
+
+    def get_run(self, run_id: str) -> Optional[PipelineRun]:
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f"SELECT * FROM {self.table_name} WHERE run_id = %s", (run_id,))
+                row = cur.fetchone()
+                if row:
+                    # row: run_id, pipeline_name, start_time, end_time, status, tasks
+                    return PipelineRun(
+                        run_id=row[0],
+                        pipeline_name=row[1],
+                        start_time=row[2],
+                        end_time=row[3],
+                        status=row[4],
+                        tasks=row[5] if row[5] else {}
+                    )
+        finally:
+            conn.close()
+        return None
+
+    def update_task_status(self, run_id: str, task_name: str, status: str):
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                # Use jsonb_set to update a specific key in the JSONB column
+                # jsonb_set(target, path, new_value, create_missing)
+                cur.execute(f"""
+                    UPDATE {self.table_name}
+                    SET tasks = jsonb_set(COALESCE(tasks, '{{}}'::jsonb), %s, %s, true)
+                    WHERE run_id = %s
+                """, ([task_name], f'"{status}"', run_id))
+            conn.commit()
+        finally:
+            conn.close()
+
+    def list_runs(self, pipeline_name: str = None, limit: int = 10) -> List[PipelineRun]:
+        query = f"SELECT * FROM {self.table_name}"
+        params = []
+        if pipeline_name:
+            query += " WHERE pipeline_name = %s"
+            params.append(pipeline_name)
+        
+        query += " ORDER BY start_time DESC LIMIT %s"
+        params.append(limit)
+        
+        runs = []
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(query, tuple(params))
+                for row in cur:
+                    runs.append(PipelineRun(
+                        run_id=row[0],
+                        pipeline_name=row[1],
+                        start_time=row[2],
+                        end_time=row[3],
+                        status=row[4],
+                        tasks=row[5] if row[5] else {}
+                    ))
+        finally:
+            conn.close()
+        return runs
+
+class MySQLBackend(BaseBackend):
+    """
+    MySQL backend for persistent state.
+    Requires `mysql-connector-python` to be installed.
+    """
+    def __init__(self, config: Dict[str, Any] = None, table_name: str = "dremioframe_runs"):
+        try:
+            import mysql.connector
+        except ImportError:
+            raise ImportError("mysql-connector-python is required for MySQLBackend. Install with `pip install dremioframe[mysql]`")
+        
+        self.config = config or {}
+        # Fallback to env vars if config not provided
+        if not self.config:
+            self.config = {
+                "user": os.environ.get("DREMIOFRAME_MYSQL_USER"),
+                "password": os.environ.get("DREMIOFRAME_MYSQL_PASSWORD"),
+                "host": os.environ.get("DREMIOFRAME_MYSQL_HOST", "localhost"),
+                "database": os.environ.get("DREMIOFRAME_MYSQL_DB"),
+                "port": int(os.environ.get("DREMIOFRAME_MYSQL_PORT", 3306))
+            }
+        
+        if not self.config.get("user") or not self.config.get("database"):
+             raise ValueError("MySQL config (user, database) must be provided or set in env vars.")
+
+        self.table_name = table_name
+        self._init_db()
+
+    def _get_conn(self):
+        import mysql.connector
+        return mysql.connector.connect(**self.config)
+
+    def _init_db(self):
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f"""
+                    CREATE TABLE IF NOT EXISTS {self.table_name} (
+                        run_id VARCHAR(255) PRIMARY KEY,
+                        pipeline_name VARCHAR(255),
+                        start_time DOUBLE,
+                        end_time DOUBLE,
+                        status VARCHAR(50),
+                        tasks JSON
+                    )
+                """)
+                # Index creation might fail if exists in some mysql versions without IF NOT EXISTS procedure, 
+                # but let's try simple approach or ignore error
+                try:
+                    cur.execute(f"CREATE INDEX idx_{self.table_name}_pipeline ON {self.table_name} (pipeline_name)")
+                except Exception:
+                    pass # Index likely exists
+                
+                try:
+                    cur.execute(f"CREATE INDEX idx_{self.table_name}_start_time ON {self.table_name} (start_time DESC)")
+                except Exception:
+                    pass
+            conn.commit()
+        finally:
+            conn.close()
+
+    def save_run(self, run: PipelineRun):
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                tasks_json = json.dumps(run.tasks) if run.tasks else "{}"
+                cur.execute(f"""
+                    INSERT INTO {self.table_name} (run_id, pipeline_name, start_time, end_time, status, tasks)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    ON DUPLICATE KEY UPDATE
+                        pipeline_name = VALUES(pipeline_name),
+                        start_time = VALUES(start_time),
+                        end_time = VALUES(end_time),
+                        status = VALUES(status),
+                        tasks = VALUES(tasks)
+                """, (run.run_id, run.pipeline_name, run.start_time, run.end_time, run.status, tasks_json))
+            conn.commit()
+        finally:
+            conn.close()
+
+    def get_run(self, run_id: str) -> Optional[PipelineRun]:
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f"SELECT * FROM {self.table_name} WHERE run_id = %s", (run_id,))
+                row = cur.fetchone()
+                if row:
+                    # row: run_id, pipeline_name, start_time, end_time, status, tasks
+                    # MySQL connector returns tuples
+                    return PipelineRun(
+                        run_id=row[0],
+                        pipeline_name=row[1],
+                        start_time=row[2],
+                        end_time=row[3],
+                        status=row[4],
+                        tasks=json.loads(row[5]) if row[5] else {}
+                    )
+        finally:
+            conn.close()
+        return None
+
+    def update_task_status(self, run_id: str, task_name: str, status: str):
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                # MySQL 5.7+ supports JSON_SET
+                # JSON_SET(json_doc, path, val)
+                # Path must start with $
+                path = f'$."{task_name}"'
+                cur.execute(f"""
+                    UPDATE {self.table_name}
+                    SET tasks = JSON_SET(COALESCE(tasks, '{{}}'), %s, %s)
+                    WHERE run_id = %s
+                """, (path, status, run_id))
+            conn.commit()
+        finally:
+            conn.close()
+
+    def list_runs(self, pipeline_name: str = None, limit: int = 10) -> List[PipelineRun]:
+        query = f"SELECT * FROM {self.table_name}"
+        params = []
+        if pipeline_name:
+            query += " WHERE pipeline_name = %s"
+            params.append(pipeline_name)
+        
+        query += " ORDER BY start_time DESC LIMIT %s"
+        params.append(limit)
+        
+        runs = []
+        conn = self._get_conn()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(query, tuple(params))
+                for row in cur:
+                    runs.append(PipelineRun(
+                        run_id=row[0],
+                        pipeline_name=row[1],
+                        start_time=row[2],
+                        end_time=row[3],
+                        status=row[4],
+                        tasks=json.loads(row[5]) if row[5] else {}
+                    ))
+        finally:
+            conn.close()
         return runs

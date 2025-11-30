@@ -85,3 +85,44 @@ class MyRedisBackend(BaseBackend):
         # Scan keys or use a sorted set for time-based retrieval
         pass
 ```
+
+## Postgres Backend
+
+The `PostgresBackend` stores pipeline state in a PostgreSQL database.
+
+### Requirements
+```bash
+pip install "dremioframe[postgres]"
+```
+
+### Usage
+```python
+from dremioframe.orchestration.backend import PostgresBackend
+
+# Uses DREMIOFRAME_PG_DSN env var if dsn not provided
+backend = PostgresBackend(dsn="postgresql://user:password@localhost:5432/mydb")
+pipeline = Pipeline("my_pipeline", backend=backend)
+```
+
+## MySQL Backend
+
+The `MySQLBackend` stores pipeline state in a MySQL database.
+
+### Requirements
+```bash
+pip install "dremioframe[mysql]"
+```
+
+### Usage
+```python
+from dremioframe.orchestration.backend import MySQLBackend
+
+# Uses DREMIOFRAME_MYSQL_* env vars if config not provided
+backend = MySQLBackend(config={
+    "user": "myuser",
+    "password": "mypassword",
+    "host": "localhost",
+    "database": "mydb"
+})
+pipeline = Pipeline("my_pipeline", backend=backend)
+```

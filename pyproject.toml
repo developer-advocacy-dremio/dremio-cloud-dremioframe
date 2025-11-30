@@ -35,6 +35,10 @@ dev = [
     "pytest-asyncio",
     "requests-mock"
 ]
+postgres = ["psycopg2-binary"]
+mysql = ["mysql-connector-python"]
+celery = ["celery", "redis"]
+s3 = ["boto3"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

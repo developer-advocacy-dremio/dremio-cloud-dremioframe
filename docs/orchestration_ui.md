@@ -3,21 +3,40 @@
 `dremioframe` includes a lightweight Web UI to visualize pipeline runs and task statuses.
 
 ## Features
--   **Dashboard**: View a list of recent pipeline runs.
--   **Real-time Updates**: The UI polls for updates every 5 seconds.
--   **Task Status**: See the status (SUCCESS, FAILED, RUNNING, SKIPPED) of each task in a run.
 
-## Usage
+- **Dashboard**: View all pipelines and their recent runs.
+- **Real-time Updates**: Auto-refreshing status of tasks and runs.
+- **Manual Trigger**: Trigger pipeline runs directly from the UI.
+- **Task Status**: Visual indicators for task success, failure, and skipping.
 
-To use the UI, you must use a persistent backend (e.g., `SQLiteBackend`) so the UI server can read the state.
+## Starting the UI
+
+You can start the UI from your Python script:
 
 ```python
-import threading
-from dremioframe.orchestration import Pipeline
+from dremioframe.orchestration import start_ui, Pipeline
 from dremioframe.orchestration.backend import SQLiteBackend
-from dremioframe.orchestration.ui import start_ui
 
-# 1. Initialize Backend
+# Setup backend and pipelines
+backend = SQLiteBackend("history.db")
+pipeline1 = Pipeline("etl_job", backend=backend)
+pipeline2 = Pipeline("maintenance", backend=backend)
+
+# Start UI
+# Pass the pipelines dict to enable manual triggering
+start_ui(backend=backend, pipelines={"etl_job": pipeline1, "maintenance": pipeline2}, port=8080)
+```
+
+Visit `http://localhost:8080` in your browser.
+
+## Architecture
+
+The UI is a Single Page Application (SPA) built with **Vue.js** (loaded via CDN). It communicates with the Python backend via a simple REST API:
+
+- `GET /api/runs`: List recent pipeline runs.
+- `GET /api/pipelines`: List available pipelines.
+- `POST /api/pipelines/{name}/trigger`: Trigger a new run.
+nd
 backend = SQLiteBackend("pipeline.db")
 
 # 2. Start UI Server (in a separate thread or process)

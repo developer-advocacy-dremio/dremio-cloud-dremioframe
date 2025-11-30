@@ -74,9 +74,10 @@ Lightweight DAG runner for data pipelines.
 - **Orchestration**:
     - **Pipeline**: Manages task execution, dependencies, and context.
     - **Task**: Unit of work (supports retries, branching).
-    - **Backend**: Pluggable state persistence (`InMemory`, `SQLite`).
+    - **Backend**: Pluggable state persistence (`InMemory`, `SQLite`, `Postgres`, `MySQL`).
+    - **Executor**: Pluggable execution strategies (`Local`, `Celery`).
     - **Scheduler**: Interval and Cron-based scheduling.
-    - **UI**: Lightweight web dashboard.
+    - **UI**: Vue.js-based web dashboard for monitoring and triggering.
     - **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`.
 - `DataQualityTask`: Integrated quality checks.
 

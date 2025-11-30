@@ -1,17 +1,19 @@
 from typing import List, Dict, Set, Optional, Callable, Any
 from .task import Task
 from .backend import BaseBackend, InMemoryBackend, PipelineRun
+from .executors import BaseExecutor, LocalExecutor
 import uuid
 from collections import deque
 import concurrent.futures
 import time
 
 class Pipeline:
-    def __init__(self, name: str, max_workers: int = 1, backend: BaseBackend = None):
+    def __init__(self, name: str, max_workers: int = 1, backend: BaseBackend = None, executor: BaseExecutor = None):
         self.name = name
         self.tasks: Dict[str, Task] = {}
         self.max_workers = max_workers
         self.backend = backend or InMemoryBackend()
+        self.executor = executor or LocalExecutor(self.backend, max_workers)
 
     def add_task(self, task: Task):
         if task.name in self.tasks:
@@ -70,56 +72,62 @@ class Pipeline:
         # Tasks ready to run (in-degree 0)
         ready_tasks = deque([task for task in self.tasks.values() if in_degree[task.name] == 0])
         
-        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
-            future_to_task = {}
+        # Map of Future/AsyncResult -> Task
+        active_futures = {}
             
-            # Helper to submit or skip
-            def process_ready_task(task):
-                # Evaluate trigger rule
-                should_run = self._evaluate_trigger_rule(task, task_status)
+        # Helper to submit or skip
+        def process_ready_task(task):
+            # Evaluate trigger rule
+            should_run = self._evaluate_trigger_rule(task, task_status)
+            
+            if should_run:
+                print(f"Submitting task {task.name} (Rule: {task.trigger_rule})")
+                future = self.executor.submit_task(task, pipeline_context, run_id)
+                active_futures[future] = task
+                task_status[task.name] = "RUNNING"
+                self.backend.update_task_status(run_id, task.name, "RUNNING")
+            else:
+                print(f"Skipping task {task.name} (Rule: {task.trigger_rule} not met)")
+                task.status = "SKIPPED"
+                task_status[task.name] = "SKIPPED"
+                self.backend.update_task_status(run_id, task.name, "SKIPPED")
+                # If skipped, it's "done", so we process its children immediately
+                process_completed_task(task)
+
+        def process_completed_task(task):
+            for downstream in task.downstream_tasks:
+                in_degree[downstream.name] -= 1
+                if in_degree[downstream.name] == 0:
+                    process_ready_task(downstream)
+
+        # Initial submission
+        while ready_tasks:
+            task = ready_tasks.popleft()
+            process_ready_task(task)
+
+        # Wait for futures
+        while active_futures:
+            # wait_for_completion returns dict of {task_name: {status, result/error}}
+            # and removes done futures from active_futures (passed by ref? No, we passed keys?)
+            # My implementation of wait_for_completion modifies the dict if it pops?
+            # Let's check implementation. LocalExecutor pops.
+            
+            completed_info = self.executor.wait_for_completion(active_futures)
+            
+            for task_name, info in completed_info.items():
+                task = self.tasks[task_name]
+                status = info["status"]
                 
-                if should_run:
-                    print(f"Submitting task {task.name} (Rule: {task.trigger_rule})")
-                    future = executor.submit(task.run, context=pipeline_context)
-                    future_to_task[future] = task
-                    task_status[task.name] = "RUNNING"
-                    self.backend.update_task_status(run_id, task.name, "RUNNING")
+                if status == "SUCCESS":
+                    task_status[task.name] = "SUCCESS"
+                    self.backend.update_task_status(run_id, task.name, "SUCCESS")
+                    pipeline_context[task.name] = info["result"]
                 else:
-                    print(f"Skipping task {task.name} (Rule: {task.trigger_rule} not met)")
-                    task.status = "SKIPPED"
-                    task_status[task.name] = "SKIPPED"
-                    self.backend.update_task_status(run_id, task.name, "SKIPPED")
-                    # If skipped, it's "done", so we process its children immediately
-                    process_completed_task(task)
-
-            def process_completed_task(task):
-                for downstream in task.downstream_tasks:
-                    in_degree[downstream.name] -= 1
-                    if in_degree[downstream.name] == 0:
-                        process_ready_task(downstream)
-
-            # Initial submission
-            while ready_tasks:
-                task = ready_tasks.popleft()
-                process_ready_task(task)
-
-            # Wait for futures
-            while future_to_task:
-                done, _ = concurrent.futures.wait(future_to_task.keys(), return_when=concurrent.futures.FIRST_COMPLETED)
+                    print(f"Task {task.name} failed: {info.get('error')}")
+                    task_status[task.name] = "FAILED"
+                    self.backend.update_task_status(run_id, task.name, "FAILED")
                 
-                for future in done:
-                    task = future_to_task.pop(future)
-                    try:
-                        result = future.result()
-                        task_status[task.name] = "SUCCESS"
-                        self.backend.update_task_status(run_id, task.name, "SUCCESS")
-                        pipeline_context[task.name] = result
-                    except Exception as e:
-                        print(f"Task {task.name} failed: {e}")
-                        task_status[task.name] = "FAILED"
-                        self.backend.update_task_status(run_id, task.name, "FAILED")
-                    
-                    process_completed_task(task)
+                process_completed_task(task)
 
         print(f"Pipeline {self.name} finished.")
         

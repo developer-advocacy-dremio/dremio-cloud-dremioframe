@@ -38,13 +38,14 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [CLI Tool](docs/cli.md)
 - [Async Client](docs/async_client.md)
 - [Orchestration](docs/orchestration.md)
-- [Orchestration Best Practices](docs/orchestration_best_practices.md)
-- [Orchestration Backend](docs/orchestration_backend.md)
-- [Orchestration Scheduling](docs/orchestration_scheduling.md)
-- [Dremio Job Integration](docs/orchestration_dremio_jobs.md)
-- [Iceberg Maintenance](docs/orchestration_iceberg.md)
-- [Reflection Management](docs/orchestration_reflections.md)
-- [Web UI](docs/orchestration_ui.md)
+    - [Orchestration Best Practices](docs/orchestration_best_practices.md)
+    - [Orchestration Backend](docs/orchestration_backend.md)
+    - [Distributed Execution](docs/orchestration_distributed.md)
+    - [Orchestration Scheduling](docs/orchestration_scheduling.md)
+    - [Dremio Job Integration](docs/orchestration_dremio_jobs.md)
+    - [Iceberg Maintenance](docs/orchestration_iceberg.md)
+    - [Reflection Management](docs/orchestration_reflections.md)
+    - [Web UI](docs/orchestration_ui.md)
 
 ## Installation
 
