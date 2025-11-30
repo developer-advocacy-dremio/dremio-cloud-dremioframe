@@ -52,6 +52,11 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 pip install dremioframe
 ```
 
+To install with optional dependencies (e.g., for static image export):
+```bash
+pip install "dremioframe[image_export]"
+```
+
 ## Quick Start
 
 ### Dremio Cloud

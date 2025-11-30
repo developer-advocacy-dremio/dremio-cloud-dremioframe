@@ -1,6 +1,6 @@
 [project]
 name = "dremioframe"
-version = "0.4.0"
+version = "0.5.0"
 description = "A dataframe-like library for Dremio Cloud & Dremio Software"
 authors = [
     {name = "Alex Merced", email = "alexmerced@alexmerced.com"},
@@ -27,6 +27,14 @@ dependencies = [
     "pyiceberg>=0.5.0",
 ]
 requires-python = ">=3.9"
+
+[project.optional-dependencies]
+image_export = ["kaleido"]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio",
+    "requests-mock"
+]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"
