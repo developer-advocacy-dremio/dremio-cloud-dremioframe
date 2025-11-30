@@ -10,7 +10,8 @@ class DremioClient:
     def __init__(self, pat: str = None, project_id: str = None, base_url: str = None,
                  hostname: str = "data.dremio.cloud", port: int = 443,
                  username: str = None, password: str = None, tls: bool = True,
-                 disable_certificate_verification: bool = False):
+                 disable_certificate_verification: bool = False,
+                 flight_port: int = None, flight_endpoint: str = None):
         
         self.pat = pat or os.getenv("DREMIO_PAT")
         self.project_id = project_id or os.getenv("DREMIO_PROJECT_ID")
@@ -22,6 +23,10 @@ class DremioClient:
         self.password = password
         self.tls = tls
         self.disable_certificate_verification = disable_certificate_verification
+        
+        # Flight specific config
+        self.flight_port = flight_port
+        self.flight_endpoint = flight_endpoint
         
         # Determine Base URL for Catalog API
         if base_url:

@@ -10,6 +10,21 @@ The CLI is installed automatically with `dremioframe`.
 pip install dremioframe
 ```
 
+## Interactive Shell (REPL)
+
+DremioFrame provides an interactive shell with syntax highlighting and auto-completion.
+
+```bash
+dremio-cli repl
+```
+
+Commands:
+- `SELECT ...`: Execute SQL query and display results.
+- `tables`: List tables in the root catalog.
+- `exit` or `quit`: Exit the shell.
+
+Requires `rich` and `prompt_toolkit` (install with `pip install dremioframe[cli]`).
+
 ## Configuration
 
 Set the following environment variables:

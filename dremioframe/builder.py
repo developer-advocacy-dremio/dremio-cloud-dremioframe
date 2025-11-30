@@ -234,8 +234,10 @@ class DremioBuilder:
 
     def _execute_flight(self, sql: str, library: str) -> Union[pl.DataFrame, pd.DataFrame]:
         # Construct Flight Endpoint
+        hostname = self.client.flight_endpoint or self.client.hostname
+        port = self.client.flight_port or self.client.port
         protocol = "grpc+tls" if self.client.tls else "grpc+tcp"
-        location = f"{protocol}://{self.client.hostname}:{self.client.port}"
+        location = f"{protocol}://{hostname}:{port}"
         
         client = flight.FlightClient(location)
         
@@ -531,6 +533,55 @@ class DremioBuilder:
         insert_sql = f"INSERT INTO {table_name} {sql}"
         return self._execute_dml(insert_sql)
 
+    def validate(self, schema: Any, sample_size: int = 1000):
+        """
+        Validate existing data in Dremio against a Pydantic schema.
+        Fetches a sample of data and validates each row.
+        
+        Args:
+            schema: Pydantic model class.
+            sample_size: Number of rows to fetch for validation.
+        """
+        # Fetch data
+        df = self.limit(sample_size).collect("pandas")
+        self._validate_data(df, schema)
+        print(f"Successfully validated {len(df)} rows against schema {schema.__name__}")
+
+    def create_from_model(self, name: str, schema: Any):
+        """
+        Create an empty table based on a Pydantic model.
+        
+        Args:
+            name: Table name.
+            schema: Pydantic model class.
+        """
+        # Map Pydantic types to Dremio SQL types
+        type_map = {
+            'int': 'INTEGER',
+            'str': 'VARCHAR',
+            'float': 'DOUBLE',
+            'bool': 'BOOLEAN',
+            'datetime': 'TIMESTAMP',
+            'date': 'DATE'
+        }
+        
+        cols = []
+        for field_name, field in schema.model_fields.items():
+            # Get type annotation
+            py_type = field.annotation.__name__ if hasattr(field.annotation, '__name__') else str(field.annotation)
+            
+            # Handle Optional[T] or Union[T, None] - simplistic check
+            if "Optional" in str(field.annotation) or "NoneType" in str(field.annotation):
+                # Extract inner type if possible, or just assume string if complex
+                pass 
+            
+            sql_type = type_map.get(py_type, 'VARCHAR') # Default to VARCHAR
+            cols.append(f"{field_name} {sql_type}")
+            
+        cols_def = ", ".join(cols)
+        create_sql = f"CREATE TABLE {name} ({cols_def})"
+        return self._execute_dml(create_sql)
+
     def _validate_data(self, data, schema):
         """Validate data against Pydantic schema."""
         import pandas as pd
@@ -547,7 +598,10 @@ class DremioBuilder:
             raise ValueError("Unsupported data type for validation")
             
         for row in rows:
-            schema(**row)
+            try:
+                schema(**row)
+            except Exception as e:
+                raise ValueError(f"Validation failed for row {row}: {e}")
 
     def merge(self, target_table: str, on: Union[str, List[str]], 
               matched_update: Optional[Dict[str, str]] = None, 
@@ -617,6 +671,9 @@ class DremioBuilder:
             source_sql = f"({self._compile_sql()}) AS source"
             return self._compile_and_run_merge(target_table, source_sql, on, matched_update, not_matched_insert)
 
+        merge_sql = " ".join(parts)
+        return self._execute_dml(merge_sql)
+
     def _compile_and_run_merge(self, target_table, source_sql, on, matched_update, not_matched_insert):
         if isinstance(on, str):
             on = [on]
@@ -636,6 +693,101 @@ class DremioBuilder:
             
         merge_sql = " ".join(parts)
         return self._execute_dml(merge_sql)
+
+    def scd2(self, target_table: str, on: Union[str, List[str]], 
+             track_cols: List[str], 
+             valid_from_col: str = "valid_from", 
+             valid_to_col: str = "valid_to"):
+        """
+        Perform SCD2 update.
+        1. Closes old records (updates valid_to).
+        2. Inserts new records (valid_from = now, valid_to = NULL).
+        
+        Args:
+            target_table: Target table name.
+            on: Join key(s).
+            track_cols: Columns to check for changes.
+            valid_from_col: Name of valid_from column.
+            valid_to_col: Name of valid_to column.
+        """
+        if isinstance(on, str):
+            on = [on]
+            
+        source_sql = f"({self._compile_sql()}) AS source"
+        
+        # 1. Close Old Records
+        # UPDATE target SET valid_to = CURRENT_TIMESTAMP 
+        # WHERE EXISTS (SELECT 1 FROM source WHERE target.id = source.id AND (changes))
+        # AND target.valid_to IS NULL
+        
+        join_cond = " AND ".join([f"{target_table}.{k} = source.{k}" for k in on])
+        change_cond = " OR ".join([f"{target_table}.{c} <> source.{c}" for c in track_cols])
+        
+        # Dremio UPDATE with JOIN/FROM syntax
+        # UPDATE target SET ... FROM source WHERE ...
+        close_sql = f"""
+        UPDATE {target_table}
+        SET {valid_to_col} = CURRENT_TIMESTAMP
+        FROM {source_sql}
+        WHERE {join_cond}
+          AND {target_table}.{valid_to_col} IS NULL
+          AND ({change_cond})
+        """
+        
+        print("Executing SCD2 Close...")
+        self._execute_dml(close_sql)
+        
+        # 2. Insert New/Changed Records
+        # INSERT INTO target SELECT ..., CURRENT_TIMESTAMP, NULL FROM source
+        # LEFT JOIN target ON ... AND target.valid_to IS NULL
+        # WHERE target.id IS NULL OR (changes)
+        
+        # We need to list all columns to insert.
+        # We assume source has all columns except valid_from/valid_to?
+        # Or we assume source has same schema as target minus valid_from/valid_to.
+        # Let's assume we select * from source.
+        
+        # We need to construct the SELECT list.
+        # source.*, CURRENT_TIMESTAMP, NULL
+        
+        # We need to handle the WHERE clause for insert
+        # It's tricky because we just updated the old records in step 1!
+        # So `target.valid_to IS NULL` check might fail if we just closed them?
+        # No, we updated them to have a valid_to.
+        # So now `target.valid_to IS NULL` will return NOTHING for the changed records.
+        # So we can't easily detect "changed" records by joining against current target state 
+        # because we just mutated it.
+        
+        # Solution: We should have identified changes BEFORE updating.
+        # Or we use a temporary table for source?
+        # Or we rely on the fact that if it's NOT in target (active), it's either new or we just closed it?
+        # If we just closed it, it's not active anymore.
+        # So if we join source with target (active), and it's missing, it means it's new OR it was just closed.
+        # Wait, if we just closed it, it is NO LONGER active.
+        # So `LEFT JOIN target ON ... AND target.valid_to IS NULL` will return NULL for target side for both NEW and JUST-CLOSED records.
+        # So we can just insert ALL records from source where target is null?
+        # YES!
+        # If a record didn't change, it is still active in target, so join succeeds, we filter it out.
+        # If a record changed, we closed the old one. Now it's not active. Join fails. We insert new one.
+        # If a record is new, it's not active. Join fails. We insert new one.
+        
+        # So the logic holds!
+        
+        # Construct columns for INSERT
+        # We need to know target columns to be safe, but let's assume source columns + valid_from + valid_to match target.
+        # We'll select source.*, CURRENT_TIMESTAMP, NULL
+        
+        insert_sql = f"""
+        INSERT INTO {target_table}
+        SELECT source.*, CURRENT_TIMESTAMP, NULL
+        FROM {source_sql}
+        LEFT JOIN {target_table} 
+          ON {join_cond} AND {target_table}.{valid_to_col} IS NULL
+        WHERE {target_table}.{on[0]} IS NULL
+        """
+        
+        print("Executing SCD2 Insert...")
+        return self._execute_dml(insert_sql)
 
     def delete(self):
         """Delete from table based on filters"""

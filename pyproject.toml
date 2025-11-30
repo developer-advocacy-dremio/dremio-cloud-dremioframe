@@ -41,6 +41,7 @@ celery = ["celery", "redis"]
 s3 = ["boto3"]
 scheduler = ["apscheduler"]
 dq = ["pyyaml"]
+cli = ["rich", "prompt_toolkit"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

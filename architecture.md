@@ -71,16 +71,20 @@ Helper functions for configuration, logging, and common transformations.
 
 ### 13. Orchestration (`orchestration/`)
 Lightweight DAG runner for data pipelines.
-- **Orchestration**:
-    - **Pipeline**: Manages task execution, dependencies, and context.
-    - **Task**: Unit of work (supports retries, branching).
-    - **Backend**: Pluggable state persistence (`InMemory`, `SQLite`, `Postgres`, `MySQL`).
-    - **Executor**: Pluggable execution strategies (`Local`, `Celery`).
-    - **Scheduler**: Robust scheduling via `APScheduler` (Interval, Cron, Persistent Job Stores).
-    - **UI**: Vue.js-based web dashboard with Basic Auth security.
-    - **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`, `DataQualityTask`.
-    - **General Tasks**: `HttpTask`, `EmailTask`, `ShellTask`, `S3Task`.
-    - **Deployment**: Docker support (`Dockerfile`, `docker-compose.yml`).
+- **Orchestration**: `dremioframe.orchestration`
+  - **Pipeline**: Manages task execution and dependencies.
+  - **Tasks**: Units of work (`DremioQueryTask`, `DremioBuilderTask`, `DbtTask`, `DataQualityTask`, etc.).
+  - **Sensors**: Wait for conditions (`SqlSensor`, `FileSensor`).
+  - **Backends**: State storage (`SQLiteBackend`, `PostgresBackend`, etc.).
+  - **Executors**: Task execution strategies (`LocalExecutor`, `CeleryExecutor`).
+- **CLI**: `dremioframe.cli` (Typer-based CLI with Interactive REPL).
+- **Data Quality**: `dremioframe.dq` (YAML-based DQ framework).
+- **Pydantic**: Integration for schema validation and DDL generation.
+- **Scheduler**: Robust scheduling via `APScheduler` (Interval, Cron, Persistent Job Stores).
+- **UI**: Vue.js-based web dashboard with Basic Auth security.
+- **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`, `DataQualityTask`.
+- **General Tasks**: `HttpTask`, `EmailTask`, `ShellTask`, `S3Task`.
+- **Deployment**: Docker support (`Dockerfile`, `docker-compose.yml`).
 
 ### 14. Data Quality Framework (`dq/`)
 File-based data quality testing framework.

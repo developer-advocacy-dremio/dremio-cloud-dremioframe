@@ -51,9 +51,10 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
     - [General Tasks](docs/orchestration_tasks.md)
     - [CLI](docs/orchestration_cli.md)
     - [Deployment](docs/orchestration_deployment.md)
+    - [Extensions (dbt, Sensors)](docs/orchestration_extensions.md)
 - [Data Quality Framework](docs/data_quality.md)
-- [Future Recommendations](docs/recommendations.md)
-- [Docs Recommendations](docs/recommendations_docs.md)
+- [Pydantic Integration](docs/pydantic_integration.md)
+- [SCD2 Guide](docs/scd2_guide.md)
 
 ## Installation
 

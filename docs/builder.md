@@ -70,6 +70,24 @@ client.table("NewYorkZips").filter("city = 'New York'").update({"pop": 9000000})
 # Delete rows
 client.table("NewYorkZips").filter("pop < 1000").delete()
 
+## Slowly Changing Dimensions (SCD2)
+
+The `scd2` method automates the process of maintaining Type 2 Slowly Changing Dimensions. It closes old records (updates `valid_to`) and inserts new records (`valid_from`).
+
+```python
+builder.table("source_view").scd2(
+    target_table="target_dim",
+    on=["id"],
+    track_cols=["name", "status"],
+    valid_from_col="valid_from",
+    valid_to_col="valid_to"
+)
+```
+
+This executes two operations:
+1. **Close**: Updates `valid_to` to `CURRENT_TIMESTAMP` for records in `target_dim` that have changed in `source_view`.
+2. **Insert**: Inserts new versions of changed records and completely new records from `source_view` into `target_dim`.
+
 ## Merge (Upsert)
 
 You can perform `MERGE INTO` operations to upsert data.

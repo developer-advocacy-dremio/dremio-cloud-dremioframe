@@ -34,6 +34,18 @@ client = DremioClient(
 )
 ```
 
+### Flight Configuration
+
+You can specify a custom Flight endpoint and port if they differ from the main Dremio coordinator (e.g., when using a dedicated Flight executor).
+
+```python
+client = DremioClient(
+    pat="my_token",
+    flight_endpoint="flight.dremio.cloud",
+    flight_port=443
+)
+```
+
 ---
 
 ## 2. Dremio Software (Self-Managed)

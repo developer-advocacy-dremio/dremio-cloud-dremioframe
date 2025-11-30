@@ -170,5 +170,79 @@ def run_dq_tests(
         console.print(f"[red]Error running tests: {e}[/red]")
         raise typer.Exit(1)
 
+@app.command()
+def repl():
+    """Start an interactive Dremio shell."""
+    try:
+        from prompt_toolkit import PromptSession
+        from prompt_toolkit.history import FileHistory
+        from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+        from prompt_toolkit.lexers import PygmentsLexer
+        from pygments.lexers.sql import SqlLexer
+    except ImportError:
+        console.print("[red]REPL dependencies not installed. Run `pip install dremioframe[cli]`[/red]")
+        raise typer.Exit(1)
+        
+    client = get_client()
+    console.print("[green]Welcome to DremioFrame Shell![/green]")
+    console.print("Type 'exit' or 'quit' to leave.")
+    
+    session = PromptSession(
+        history=FileHistory('.dremio_history'),
+        auto_suggest=AutoSuggestFromHistory(),
+        lexer=PygmentsLexer(SqlLexer)
+    )
+    
+    while True:
+        try:
+            text = session.prompt('dremio> ')
+            text = text.strip()
+            
+            if not text:
+                continue
+                
+            if text.lower() in ['exit', 'quit']:
+                break
+                
+            if text.lower() == 'tables':
+                # Quick list of tables in current context or root
+                # We don't have a "current context" in client easily unless we track it.
+                # Just list root catalog
+                try:
+                    items = client.catalog.list_catalog()
+                    table = Table(title="Root Catalog")
+                    table.add_column("Name")
+                    table.add_column("Type")
+                    for item in items:
+                        table.add_row(item.get("path", [""])[-1], item.get("type"))
+                    console.print(table)
+                except Exception as e:
+                    console.print(f"[red]Error: {e}[/red]")
+                continue
+                
+            # Assume SQL
+            try:
+                # Detect if it's a SELECT or DML
+                # client.execute handles DML (returns affected rows)
+                # client.query handles SELECT (returns DataFrame)
+                # But client.execute works for SELECT too (returns Polars)
+                # Let's use client.query with pandas for display
+                
+                # If it doesn't start with SELECT, maybe use execute?
+                # But client.query uses Flight which handles both usually.
+                
+                df = client.query(text, format="pandas")
+                console.print(df.to_markdown(index=False))
+                
+            except Exception as e:
+                console.print(f"[red]Error: {e}[/red]")
+                
+        except KeyboardInterrupt:
+            continue
+        except EOFError:
+            break
+    
+    console.print("Goodbye!")
+
 if __name__ == "__main__":
     app()
