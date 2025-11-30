@@ -8,6 +8,7 @@ These tests cover the core logic and integration with Dremio Cloud. They should 
 **Requirements:**
 - `DREMIO_PAT`: Personal Access Token for Dremio Cloud.
 - `DREMIO_PROJECT_ID`: Project ID for Dremio Cloud.
+- `DREMIO_TEST_SPACE`: Writable space/folder for integration tests (e.g., "Scratch").
 
 **Command:**
 ```bash

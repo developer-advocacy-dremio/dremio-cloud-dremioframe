@@ -9,12 +9,13 @@ from .iceberg_tasks import OptimizeTask, VacuumTask, ExpireSnapshotsTask
 from .reflection_tasks import RefreshReflectionTask
 from .tasks.general import HttpTask, EmailTask, ShellTask, S3Task
 from .tasks.dq_task import DataQualityTask
+from .tasks.builder_task import DremioBuilderTask
 from .ui import start_ui
 
 __all__ = [
     "Task", "Pipeline", "BaseBackend", "InMemoryBackend", "SQLiteBackend", "PostgresBackend", "MySQLBackend",
     "BaseExecutor", "LocalExecutor", "CeleryExecutor",
     "DremioQueryTask", "OptimizeTask", "VacuumTask", "RefreshReflectionTask",
-    "HttpTask", "EmailTask", "ShellTask", "S3Task", "DataQualityTask",
+    "HttpTask", "EmailTask", "ShellTask", "S3Task", "DataQualityTask", "DremioBuilderTask",
     "start_ui", "schedule_pipeline"
 ]

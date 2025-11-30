@@ -98,12 +98,12 @@ class DremioClient:
         # For now, let's return a builder that can execute raw SQL.
         return DremioBuilder(self, sql=query)
 
-    def execute(self, query: str):
+    def execute(self, query: str, format: str = "pandas"):
         """Execute raw SQL query directly via Flight"""
         # Create a temporary builder just to access _execute_flight
         # Or better, move _execute_flight to client or utils?
         # For now, just use a builder
-        return DremioBuilder(self)._execute_flight(query, "polars")
+        return DremioBuilder(self)._execute_flight(query, format)
 
     def query(self, sql: str, format: str = "pandas"):
         """

@@ -71,6 +71,37 @@ pipeline.add_task(transform_task)
 transform_task.set_upstream(ingest_task)
 ```
 
+## Alternative: Using DataFrame API (DremioBuilderTask)
+
+Instead of raw SQL, you can use the Pythonic DataFrame API.
+
+```python
+from dremioframe.orchestration import DremioBuilderTask
+
+# Define transformation using Builder
+builder = client.table("Target.staging.sales") \
+    .group_by("sale_date", "region") \
+    .agg(total_revenue="SUM(amount)")
+
+# Create task to merge results into mart
+transform_task = DremioBuilderTask(
+    name="transform_sales_builder",
+    builder=builder,
+    command="merge",
+    target="Target.mart.daily_sales",
+    options={
+        "on": ["sale_date", "region"],
+        "matched_update": {"total_revenue": "source.total_revenue"},
+        "not_matched_insert": {
+            "sale_date": "source.sale_date",
+            "region": "source.region",
+            "total_revenue": "source.total_revenue"
+        }
+    }
+)
+pipeline.add_task(transform_task)
+```
+
 ## Step 5: Validate Data (Quality Check)
 
 Ensure the transformed data is valid. Create a test file `tests/dq/sales_checks.yaml`:
