@@ -6,7 +6,7 @@ We welcome contributions! Here's how to get started.
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/alexmerced/dremioframe.git
+    git clone https://github.com/developer-advocacy-dremio/dremio-cloud-dremioframe.git
     cd dremioframe
     ```
 
