@@ -11,17 +11,48 @@ import socketserver
 import json
 import threading
 import os
+import base64
 from typing import Optional
 from dataclasses import asdict
 from .backend import BaseBackend
 
 class OrchestrationHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, backend: BaseBackend, pipelines: dict, *args, **kwargs):
+    def __init__(self, backend: BaseBackend, pipelines: dict, username: str = None, password: str = None, *args, **kwargs):
         self.backend = backend
         self.pipelines = pipelines # dict of name -> Pipeline object
+        self.username = username
+        self.password = password
         super().__init__(*args, **kwargs)
 
+    def _check_auth(self):
+        if not self.username or not self.password:
+            return True
+            
+        auth_header = self.headers.get("Authorization")
+        if not auth_header:
+            return False
+            
+        try:
+            auth_type, encoded = auth_header.split(" ", 1)
+            if auth_type.lower() != "basic":
+                return False
+            decoded = base64.b64decode(encoded).decode("utf-8")
+            u, p = decoded.split(":", 1)
+            return u == self.username and p == self.password
+        except Exception:
+            return False
+
+    def _send_auth_challenge(self):
+        self.send_response(401)
+        self.send_header("WWW-Authenticate", 'Basic realm="DremioFrame Orchestration"')
+        self.end_headers()
+        self.wfile.write(b"Authentication required")
+
     def do_GET(self):
+        if not self._check_auth():
+            self._send_auth_challenge()
+            return
+
         if self.path == "/":
             self.send_response(200)
             self.send_header("Content-type", "text/html")
@@ -45,6 +76,10 @@ class OrchestrationHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, "File not found")
 
     def do_POST(self):
+        if not self._check_auth():
+            self._send_auth_challenge()
+            return
+
         if self.path.startswith("/api/pipelines/") and self.path.endswith("/trigger"):
             # /api/pipelines/{name}/trigger
             pipeline_name = self.path.split("/")[3]
@@ -234,7 +269,7 @@ class OrchestrationHandler(http.server.SimpleHTTPRequestHandler):
 </html>
         """
 
-def start_ui(backend: BaseBackend, pipelines: dict = None, port: int = 8080):
+def start_ui(backend: BaseBackend, pipelines: dict = None, port: int = 8080, username: str = None, password: str = None):
     """
     Starts the Orchestration UI server.
     
@@ -242,16 +277,20 @@ def start_ui(backend: BaseBackend, pipelines: dict = None, port: int = 8080):
         backend: The backend to read history from.
         pipelines: A dict of {name: PipelineObject} to allow manual triggering.
         port: Port to serve on.
+        username: Optional username for Basic Auth.
+        password: Optional password for Basic Auth.
     """
     from dataclasses import asdict # Import here to ensure availability
     
     # Factory to pass backend and pipelines to handler
     def handler_factory(*args, **kwargs):
-        return OrchestrationHandler(backend, pipelines or {}, *args, **kwargs)
+        return OrchestrationHandler(backend, pipelines or {}, username, password, *args, **kwargs)
 
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", port), handler_factory) as httpd:
         print(f"Serving UI at http://localhost:{port}")
+        if username and password:
+            print("Basic Authentication enabled.")
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

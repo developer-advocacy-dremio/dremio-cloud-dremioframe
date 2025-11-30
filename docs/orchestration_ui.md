@@ -29,6 +29,25 @@ start_ui(backend=backend, pipelines={"etl_job": pipeline1, "maintenance": pipeli
 
 Visit `http://localhost:8080` in your browser.
 
+## Security
+
+The UI supports Basic Authentication.
+
+### Enabling Authentication
+
+Pass `username` and `password` to `start_ui` or via the CLI.
+
+```python
+from dremioframe.orchestration.ui import start_ui
+
+start_ui(backend, port=8080, username="admin", password="secret_password")
+```
+
+### CLI Usage
+
+(CLI support for auth args is pending, currently only via python script or hardcoded in custom entrypoint)
+*Note: The `dremio-cli pipeline ui` command does not yet expose auth flags, but you can wrap `start_ui` in your own script.*
+
 ## Architecture
 
 The UI is a Single Page Application (SPA) built with **Vue.js** (loaded via CDN). It communicates with the Python backend via a simple REST API:

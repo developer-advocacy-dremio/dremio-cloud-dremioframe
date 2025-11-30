@@ -185,30 +185,4 @@ class Pipeline:
                 f.write(chart)
         return chart
 
-class DataQualityTask(Task):
-    """
-    Specialized task for data quality checks.
-    """
-    def __init__(self, name: str, action: Callable[..., Any], stop_on_failure: bool = True, **kwargs):
-        super().__init__(name, action, **kwargs)
-        self.stop_on_failure = stop_on_failure
 
-    def run(self, context: dict = None):
-        print(f"Running Data Quality Check: {self.name}")
-        # Execute the action (the check)
-        # We expect the action to return True (pass) or False (fail)
-        # or raise an exception.
-        try:
-            result = self.action(context) if self.action.__code__.co_argcount > 0 else self.action()
-        except TypeError:
-             # Fallback if introspection fails or varargs
-             result = self.action()
-
-        self.result = result
-        
-        if not result and self.stop_on_failure:
-             self.status = "FAILED"
-             raise Exception(f"Data Quality Check {self.name} failed.")
-        
-        self.status = "SUCCESS" if result else "FAILED"
-        return result

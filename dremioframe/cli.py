@@ -66,5 +66,109 @@ def reflections():
     except Exception as e:
         console.print(f"[red]Failed to list reflections: {e}[/red]")
 
+pipeline_app = typer.Typer()
+app.add_typer(pipeline_app, name="pipeline", help="Manage orchestration pipelines.")
+
+@pipeline_app.command("list")
+def list_pipelines(
+    backend_url: str = typer.Option("sqlite:///dremioframe.db", help="Backend connection string (e.g. sqlite:///path.db)"),
+):
+    """List all pipelines (requires connecting to backend)."""
+    # Note: This lists RUNS, not pipelines definitions, because definitions are in code.
+    # To list definitions, we'd need to import the user's code.
+    # So instead, let's list recent runs from the backend.
+    
+    # We need to instantiate the backend based on the URL.
+    # For simplicity in CLI, let's support SQLite and Postgres via DSN.
+    from dremioframe.orchestration.backend import SQLiteBackend, PostgresBackend, MySQLBackend
+    
+    backend = None
+    if backend_url.startswith("sqlite:///"):
+        path = backend_url.replace("sqlite:///", "")
+        backend = SQLiteBackend(path)
+    elif backend_url.startswith("postgresql://"):
+        backend = PostgresBackend(dsn=backend_url)
+    elif backend_url.startswith("mysql://"):
+        # Parsing mysql url is harder, let's assume env vars or basic support
+        console.print("[yellow]MySQL via CLI URL is experimental. Use env vars.[/yellow]")
+        # For now, just try to init if env vars are set, ignoring URL if it's just 'mysql://'
+        backend = MySQLBackend()
+    else:
+        console.print(f"[red]Unsupported backend URL: {backend_url}[/red]")
+        raise typer.Exit(1)
+        
+    try:
+        runs = backend.list_runs(limit=10)
+        table = Table(title="Recent Pipeline Runs")
+        table.add_column("Pipeline")
+        table.add_column("Run ID")
+        table.add_column("Status")
+        table.add_column("Start Time")
+        
+        for run in runs:
+            table.add_row(run.pipeline_name, run.run_id, run.status, str(run.start_time))
+            
+        console.print(table)
+    except Exception as e:
+        console.print(f"[red]Error listing runs: {e}[/red]")
+
+@pipeline_app.command("ui")
+def start_ui_cmd(
+    port: int = 8080,
+    backend_url: str = typer.Option("sqlite:///dremioframe.db", help="Backend connection string"),
+):
+    """Start the Orchestration UI."""
+    from dremioframe.orchestration.ui import start_ui
+    from dremioframe.orchestration.backend import SQLiteBackend, PostgresBackend, MySQLBackend
+    
+    backend = None
+    if backend_url.startswith("sqlite:///"):
+        path = backend_url.replace("sqlite:///", "")
+        backend = SQLiteBackend(path)
+    elif backend_url.startswith("postgresql://"):
+        backend = PostgresBackend(dsn=backend_url)
+    # ... (similar logic for others)
+    else:
+        # Default to SQLite if path provided without prefix? No, be strict.
+        if "://" not in backend_url:
+             backend = SQLiteBackend(backend_url)
+        else:
+             console.print(f"[red]Unsupported backend URL: {backend_url}[/red]")
+             raise typer.Exit(1)
+             
+    console.print(f"[green]Starting UI on port {port}...[/green]")
+    start_ui(backend, port=port)
+
+dq_app = typer.Typer()
+app.add_typer(dq_app, name="dq", help="Run Data Quality tests.")
+
+@dq_app.command("run")
+def run_dq_tests(
+    directory: str = typer.Argument(..., help="Directory containing YAML test files."),
+):
+    """Run data quality tests from YAML files."""
+    try:
+        from dremioframe.dq.runner import DQRunner
+    except ImportError:
+        console.print("[red]DQ dependencies not installed. Run `pip install dremioframe[dq]`[/red]")
+        raise typer.Exit(1)
+        
+    client = get_client()
+    runner = DQRunner(client)
+    
+    try:
+        tests = runner.load_tests(directory)
+        if not tests:
+            console.print(f"[yellow]No tests found in {directory}[/yellow]")
+            return
+            
+        success = runner.run_tests(tests)
+        if not success:
+            raise typer.Exit(1)
+            
+    except Exception as e:
+        console.print(f"[red]Error running tests: {e}[/red]")
+        raise typer.Exit(1)
+
 if __name__ == "__main__":
     app()

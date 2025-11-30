@@ -9,6 +9,7 @@ from dremioframe.orchestration.executors import LocalExecutor
 # Load env vars
 load_dotenv()
 
+@pytest.mark.cloud
 @pytest.mark.skipif(not os.environ.get("DREMIO_PAT") or not os.environ.get("DREMIO_PROJECT_ID"), 
                     reason="Dremio credentials not found in environment")
 def test_orchestration_live_dremio():

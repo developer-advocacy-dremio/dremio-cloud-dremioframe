@@ -76,10 +76,17 @@ Lightweight DAG runner for data pipelines.
     - **Task**: Unit of work (supports retries, branching).
     - **Backend**: Pluggable state persistence (`InMemory`, `SQLite`, `Postgres`, `MySQL`).
     - **Executor**: Pluggable execution strategies (`Local`, `Celery`).
-    - **Scheduler**: Interval and Cron-based scheduling.
-    - **UI**: Vue.js-based web dashboard for monitoring and triggering.
-    - **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`.
-- `DataQualityTask`: Integrated quality checks.
+    - **Scheduler**: Robust scheduling via `APScheduler` (Interval, Cron, Persistent Job Stores).
+    - **UI**: Vue.js-based web dashboard with Basic Auth security.
+    - **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`, `DataQualityTask`.
+    - **General Tasks**: `HttpTask`, `EmailTask`, `ShellTask`, `S3Task`.
+    - **Deployment**: Docker support (`Dockerfile`, `docker-compose.yml`).
+
+### 14. Data Quality Framework (`dq/`)
+File-based data quality testing framework.
+- **DQRunner**: Executes tests defined in YAML files.
+- **Checks**: `not_null`, `unique`, `values_in`, `row_count`, `custom_sql`.
+- **CLI**: `dremio-cli dq run` command.
 
 
 ## Data Flow
@@ -89,3 +96,12 @@ Lightweight DAG runner for data pipelines.
 3.  **User** calls `client.table("source.table")` -> Returns `DremioBuilder`.
 4.  **User** chains methods `builder.filter(...)` -> Updates internal state.
 5.  **User** calls `builder.collect()` -> Generates SQL -> **Arrow Flight** -> Arrow Table -> Dataframe.
+
+## Testing Strategy
+
+Tests are categorized by dependency:
+1.  **Unit/Cloud**: Core logic + Dremio Cloud integration.
+2.  **Software**: Dremio Software specific.
+3.  **Backends**: External DBs (Postgres/MySQL).
+
+See [Testing Guide](docs/testing.md) for details.

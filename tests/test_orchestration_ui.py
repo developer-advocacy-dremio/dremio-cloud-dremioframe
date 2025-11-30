@@ -25,7 +25,7 @@ def test_ui_api():
         s.bind(('', 0))
         port = s.getsockname()[1]
         
-    server_thread = threading.Thread(target=start_ui, args=(backend, port))
+    server_thread = threading.Thread(target=start_ui, args=(backend,), kwargs={"port": port})
     server_thread.daemon = True
     server_thread.start()
     

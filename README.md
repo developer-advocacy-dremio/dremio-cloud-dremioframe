@@ -8,6 +8,7 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Connection Guide](docs/connection.md)
 - [Administration](docs/admin.md)
 - [Catalog & Admin](docs/catalog.md)
+- [Testing Guide](docs/testing.md)
 - [Dataframe Builder](docs/builder.md)
 - [Aggregation](docs/aggregation.md)
 - [Sorting & Distinct](docs/sorting.md)
@@ -44,8 +45,13 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
     - [Orchestration Scheduling](docs/orchestration_scheduling.md)
     - [Dremio Job Integration](docs/orchestration_dremio_jobs.md)
     - [Iceberg Maintenance](docs/orchestration_iceberg.md)
+    - [Data Quality Task](docs/orchestration_dq_task.md)
     - [Reflection Management](docs/orchestration_reflections.md)
     - [Web UI](docs/orchestration_ui.md)
+    - [General Tasks](docs/orchestration_tasks.md)
+    - [CLI](docs/orchestration_cli.md)
+    - [Deployment](docs/orchestration_deployment.md)
+- [Data Quality Framework](docs/data_quality.md)
 
 ## Installation
 
@@ -189,4 +195,11 @@ client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", disp
 
 # Iceberg Client
 # client.iceberg.list_tables("my_namespace")
+
+# Orchestration CLI
+# dremio-cli pipeline list
+# dremio-cli pipeline ui --port 8080
+
+# Data Quality Framework
+# dremio-cli dq run tests/dq
 ```

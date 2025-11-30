@@ -1,4 +1,6 @@
 import pytest
+import time
+from unittest.mock import MagicMock, patch
 from dremioframe.orchestration import Task, Pipeline, DataQualityTask
 
 def test_task_execution():
@@ -58,24 +60,32 @@ def test_pipeline_cycle_detection():
     with pytest.raises(ValueError, match="Pipeline contains a cycle"):
         pipeline.run()
 
-def test_data_quality_task_success():
-    def check_pass():
-        return True
+@patch("dremioframe.dq.runner.DQRunner")
+def test_data_quality_task_success(MockRunner):
+    client = MagicMock()
+    # Mock sys.modules for DQRunner import
+    with patch.dict("sys.modules", {"dremioframe.dq.runner": MagicMock(DQRunner=MockRunner)}):
+        runner_instance = MockRunner.return_value
+        runner_instance.run_tests.return_value = True
         
-    dq = DataQualityTask("dq_pass", check_pass)
-    assert dq.run() is True
-    assert dq.status == "SUCCESS"
+        task = DataQualityTask("dq_task", client, tests=[{"name": "t1"}])
+        task.run({})
+        
+        assert task.status == "SUCCESS"
 
-def test_data_quality_task_failure():
-    def check_fail():
-        return False
+@patch("dremioframe.dq.runner.DQRunner")
+def test_data_quality_task_failure(MockRunner):
+    client = MagicMock()
+    with patch.dict("sys.modules", {"dremioframe.dq.runner": MagicMock(DQRunner=MockRunner)}):
+        runner_instance = MockRunner.return_value
+        runner_instance.run_tests.return_value = False
         
-    dq = DataQualityTask("dq_fail", check_fail, stop_on_failure=True)
+        task = DataQualityTask("dq_task", client, tests=[{"name": "t1"}])
+        
+        with pytest.raises(RuntimeError):
+            task.run({})
     
-    with pytest.raises(Exception, match="Data Quality Check dq_fail failed"):
-        dq.run()
-    
-    assert dq.status == "FAILED"
+    assert task.status == "FAILED"
 
 def test_pipeline_stop_on_failure():
     def fail():

@@ -1,11 +1,20 @@
 from .task import Task
 from .pipeline import Pipeline
-from .pipeline import DataQualityTask
 from .decorators import task
 from .scheduling import schedule_pipeline
+from .backend import BaseBackend, InMemoryBackend, SQLiteBackend, PostgresBackend, MySQLBackend
+from .executors import BaseExecutor, LocalExecutor, CeleryExecutor
 from .dremio_tasks import DremioQueryTask
 from .iceberg_tasks import OptimizeTask, VacuumTask, ExpireSnapshotsTask
 from .reflection_tasks import RefreshReflectionTask
+from .tasks.general import HttpTask, EmailTask, ShellTask, S3Task
+from .tasks.dq_task import DataQualityTask
 from .ui import start_ui
 
-__all__ = ["Task", "Pipeline", "DataQualityTask", "task", "schedule_pipeline", "DremioQueryTask", "OptimizeTask", "VacuumTask", "ExpireSnapshotsTask", "RefreshReflectionTask", "start_ui"]
+__all__ = [
+    "Task", "Pipeline", "BaseBackend", "InMemoryBackend", "SQLiteBackend", "PostgresBackend", "MySQLBackend",
+    "BaseExecutor", "LocalExecutor", "CeleryExecutor",
+    "DremioQueryTask", "OptimizeTask", "VacuumTask", "RefreshReflectionTask",
+    "HttpTask", "EmailTask", "ShellTask", "S3Task", "DataQualityTask",
+    "start_ui", "schedule_pipeline"
+]

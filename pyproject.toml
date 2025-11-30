@@ -39,6 +39,8 @@ postgres = ["psycopg2-binary"]
 mysql = ["mysql-connector-python"]
 celery = ["celery", "redis"]
 s3 = ["boto3"]
+scheduler = ["apscheduler"]
+dq = ["pyyaml"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"
@@ -52,5 +54,10 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.pytest.ini_options]
+markers = [
+    "cloud: Tests running against Dremio Cloud (requires DREMIO_PAT, DREMIO_PROJECT_ID)",
+    "software: Tests running against Dremio Software (requires DREMIO_SOFTWARE_HOST, etc.)",
+    "external_backend: Tests running against external backends like Postgres/MySQL (requires DREMIOFRAME_PG_DSN, etc.)"
+]
 testpaths = ["tests"]
 python_files = "test_*.py"
