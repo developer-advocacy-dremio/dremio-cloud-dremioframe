@@ -69,6 +69,18 @@ Wraps `pyiceberg` for direct catalog interaction.
 ### 12. Utils (`utils.py`)
 Helper functions for configuration, logging, and common transformations.
 
+### 13. Orchestration (`orchestration/`)
+Lightweight DAG runner for data pipelines.
+- **Orchestration**:
+    - **Pipeline**: Manages task execution, dependencies, and context.
+    - **Task**: Unit of work (supports retries, branching).
+    - **Backend**: Pluggable state persistence (`InMemory`, `SQLite`).
+    - **Scheduler**: Interval and Cron-based scheduling.
+    - **UI**: Lightweight web dashboard.
+    - **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`.
+- `DataQualityTask`: Integrated quality checks.
+
+
 ## Data Flow
 
 1.  **User** instantiates `DremioClient`.
