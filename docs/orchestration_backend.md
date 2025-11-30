@@ -24,25 +24,64 @@ pipeline.run()
 
 ### Custom Backends
 
-You can implement your own backend (e.g., Postgres, Redis) by extending `BaseBackend`.
+You can implement your own backend (e.g., Postgres, Redis, S3) by extending `BaseBackend`.
+
+#### The `PipelineRun` Object
+Your backend will need to store and retrieve `PipelineRun` objects.
+```python
+@dataclass
+class PipelineRun:
+    pipeline_name: str
+    run_id: str
+    start_time: float
+    status: str          # "RUNNING", "SUCCESS", "FAILED"
+    end_time: float      # Optional
+    tasks: Dict[str, str] # Map of task_name -> status
+```
+
+#### Required Methods
+
+You must implement the following 4 methods:
+
+1.  **`save_run(self, run: PipelineRun)`**:
+    *   Called when a pipeline starts and finishes.
+    *   Should upsert the run record in your storage.
+
+2.  **`get_run(self, run_id: str) -> Optional[PipelineRun]`**:
+    *   Called to retrieve a specific run.
+    *   Return `None` if not found.
+
+3.  **`update_task_status(self, run_id: str, task_name: str, status: str)`**:
+    *   Called every time a task changes state (RUNNING, SUCCESS, FAILED, SKIPPED).
+    *   Must be efficient and thread-safe if possible.
+
+4.  **`list_runs(self, pipeline_name: str = None, limit: int = 10) -> List[PipelineRun]`**:
+    *   Called by the UI to show history.
+    *   Should return the most recent runs, optionally filtered by pipeline name.
+
+#### Example Implementation Skeleton
 
 ```python
 from dremioframe.orchestration.backend import BaseBackend, PipelineRun
+from typing import List, Optional
 
-class MyCustomBackend(BaseBackend):
+class MyRedisBackend(BaseBackend):
+    def __init__(self, redis_client):
+        self.redis = redis_client
+
     def save_run(self, run: PipelineRun):
-        # Save to your DB
+        # Serialize run to JSON and save to Redis key `run:{run.run_id}`
         pass
         
-    def get_run(self, run_id: str):
-        # Retrieve from your DB
+    def get_run(self, run_id: str) -> Optional[PipelineRun]:
+        # Get JSON from Redis and deserialize to PipelineRun
         pass
         
     def update_task_status(self, run_id: str, task_name: str, status: str):
-        # Update status
+        # Update the specific field in the stored JSON or Hash
         pass
 
-    def list_runs(self, pipeline_name: str = None, limit: int = 10):
-        # List runs
+    def list_runs(self, pipeline_name: str = None, limit: int = 10) -> List[PipelineRun]:
+        # Scan keys or use a sorted set for time-based retrieval
         pass
 ```
