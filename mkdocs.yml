@@ -1,0 +1,79 @@
+site_name: DremioFrame Documentation
+site_description: A Pythonic interface for Dremio.
+site_author: Alex Merced
+repo_url: https://github.com/alexmerced/dremioframe
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: blue
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+
+nav:
+  - Home: README.md
+  - Architecture: architecture.md
+  - Getting Started:
+    - Installation: README.md#installation
+    - Connection: docs/connection.md
+    - Configuration: docs/configuration.md
+    - Quick Start: README.md#quick-start
+    - Tutorial: docs/tutorial_etl.md
+  - Core Features:
+    - Catalog & Admin: docs/catalog.md
+    - Dataframe Builder: docs/builder.md
+    - Aggregation: docs/aggregation.md
+    - Joins: docs/joins.md
+    - Iceberg: docs/iceberg.md
+    - Advanced: docs/advanced.md
+    - Charting: docs/charting.md
+    - Export: docs/export.md
+    - Ingestion: docs/ingestion.md
+    - Files: docs/files.md
+    - Caching: docs/caching.md
+    - Plotting: docs/plotting.md
+    - Querying: docs/querying.md
+    - UDFs: docs/udf.md
+    - Async Client: docs/async_client.md
+  - SQL Functions:
+    - Overview: docs/functions.md
+    - Aggregate: docs/functions/aggregate.md
+    - Math: docs/functions/math.md
+    - String: docs/functions/string.md
+    - Date: docs/functions/date.md
+    - Window: docs/functions/window.md
+    - Conditional: docs/functions/conditional.md
+    - AI: docs/functions/ai.md
+    - Complex: docs/functions/complex.md
+  - Orchestration:
+    - Overview: docs/orchestration.md
+    - Best Practices: docs/orchestration_best_practices.md
+    - Tasks: docs/orchestration_tasks.md
+    - Scheduling: docs/orchestration_scheduling.md
+    - Backend: docs/orchestration_backend.md
+    - Distributed: docs/orchestration_distributed.md
+    - UI: docs/orchestration_ui.md
+    - CLI: docs/orchestration_cli.md
+    - Deployment: docs/orchestration_deployment.md
+    - Data Quality Task: docs/orchestration_dq_task.md
+  - Data Quality Framework: docs/data_quality.md
+  - Guides:
+    - Testing: docs/testing.md
+    - Troubleshooting: docs/troubleshooting.md
+    - Contributing: CONTRIBUTING.md

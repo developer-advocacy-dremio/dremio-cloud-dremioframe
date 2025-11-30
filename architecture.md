@@ -91,6 +91,31 @@ File-based data quality testing framework.
 
 ## Data Flow
 
+### System Overview
+```mermaid
+graph LR
+    User[User Code] --> Client[DremioClient]
+    Client -->|Metadata| REST[Dremio REST API]
+    Client -->|Query| Flight[Arrow Flight SQL]
+    REST --> Dremio[Dremio Engine]
+    Flight --> Dremio
+    Dremio -->|JSON| REST
+    Dremio -->|Arrow Stream| Flight
+    Flight -->|PyArrow Table| Builder[DremioBuilder]
+    Builder -->|DataFrame| User
+```
+
+### Orchestration Flow
+```mermaid
+graph TD
+    Scheduler[APScheduler] -->|Trigger| Pipeline[Pipeline]
+    Pipeline -->|Submit| Task[Task]
+    Task -->|Execute| Executor[Executor (Local/Celery)]
+    Executor -->|Run| Action[Task Action]
+    Action -->|Result| Backend[State Backend]
+    Backend -->|Status Update| UI[Web UI]
+```
+
 1.  **User** instantiates `DremioClient`.
 2.  **User** calls `client.catalog.list_catalog()` -> **REST API** -> JSON response.
 3.  **User** calls `client.table("source.table")` -> Returns `DremioBuilder`.
