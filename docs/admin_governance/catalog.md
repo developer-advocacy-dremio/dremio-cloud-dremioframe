@@ -65,6 +65,7 @@ catalog.create_view(
 ```
 
 # Update a view (fetches latest version tag automatically)
+```python
 catalog.update_view(
     id="view-id-uuid",
     path=["Space", "MyView"],
