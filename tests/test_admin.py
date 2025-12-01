@@ -41,5 +41,5 @@ def test_policies(mock_client):
     mock_client.admin.apply_row_access_policy("t", "f(c)")
     mock_client.execute.assert_called_with("ALTER TABLE t ADD ROW ACCESS POLICY f(c)")
     
-    mock_client.admin.drop_row_access_policy("t")
-    mock_client.execute.assert_called_with("ALTER TABLE t DROP ROW ACCESS POLICY")
+    mock_client.admin.drop_row_access_policy("t", "p")
+    mock_client.execute.assert_called_with("ALTER TABLE t DROP ROW ACCESS POLICY p")

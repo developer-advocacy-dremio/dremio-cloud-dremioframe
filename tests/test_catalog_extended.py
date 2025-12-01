@@ -61,7 +61,7 @@ def test_create_view(catalog, mock_client):
         "http://localhost:9047/api/v3/projects/test-project/catalog",
         json={
             "entityType": "dataset",
-            "type": "VIRTUAL",
+            "type": "VIRTUAL_DATASET",
             "path": ["Space", "View"],
             "sql": "SELECT 1"
         }
@@ -85,7 +85,7 @@ def test_update_view_auto_tag(catalog, mock_client):
         "http://localhost:9047/api/v3/projects/test-project/catalog/view-id",
         json={
             "entityType": "dataset",
-            "type": "VIRTUAL",
+            "type": "VIRTUAL_DATASET",
             "id": "view-id",
             "path": ["Space", "View"],
             "sql": "SELECT 2",
@@ -107,7 +107,7 @@ def test_create_view_with_builder(catalog, mock_client):
         "http://localhost:9047/api/v3/projects/test-project/catalog",
         json={
             "entityType": "dataset",
-            "type": "VIRTUAL",
+            "type": "VIRTUAL_DATASET",
             "path": ["Space", "View"],
             "sql": "SELECT * FROM table"
         }

@@ -36,10 +36,14 @@ Handles administrative tasks via REST API.
 - User/Role management.
 - Grant/Revoke privileges.
 - Policy management (Row Access, Masking).
-- **Governance**: Create/Drop UDFs, Apply/Unset Policies.
+- **Governance**: Manage UDFs, Row Access Policies, and Column Masking Policies.
+
+### 6. AI Module (`ai/`)
+- **DremioAgent**: An AI-powered agent that uses LangChain to generate `dremioframe` scripts based on user prompts.
+- **Tools**: Provides tools for the agent to access library documentation.
 - **Reflection Management**: Create, list, delete, enable/disable reflections.
 
-### 6. AsyncDremioClient (`async_client.py`)
+### 7. AsyncDremioClient (`async_client.py`)
 Asynchronous client using `aiohttp` for high-concurrency applications.
 - Async context manager support.
 - Non-blocking REST API calls (Catalog, SQL execution).

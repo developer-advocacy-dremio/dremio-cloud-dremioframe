@@ -3,6 +3,11 @@ import os
 from rich.console import Console
 from rich.table import Table
 from dremioframe.client import DremioClient
+try:
+    from dremioframe.ai.agent import DremioAgent
+    AI_AVAILABLE = True
+except ImportError:
+    AI_AVAILABLE = False
 
 app = typer.Typer()
 console = Console()
@@ -243,6 +248,50 @@ def repl():
             break
     
     console.print("Goodbye!")
+
+@app.command()
+def generate(
+    prompt: str = typer.Argument(..., help="Prompt for script generation or path to file containing prompt"),
+    output: str = typer.Option(None, "--output", "-o", help="Output file path for the generated script"),
+    model: str = typer.Option("gpt-4o", "--model", "-m", help="Model to use (gpt-4o, claude-3-opus, gemini-pro)")
+):
+    """
+    Generate a dremioframe script using AI.
+    """
+    # Assuming AI_AVAILABLE, os, and DremioAgent are imported elsewhere or will be added by the user.
+    # For this change, I'm just inserting the command as provided.
+    try:
+        import os
+        from dremioframe.ai import AI_AVAILABLE, DremioAgent
+    except ImportError:
+        console.print("[red]AI dependencies not installed. Run `pip install dremioframe[ai]`[/red]")
+        raise typer.Exit(code=1)
+
+    if not AI_AVAILABLE:
+        console.print("[red]AI module not available. Please install with 'pip install dremioframe[ai]'[/red]")
+        raise typer.Exit(code=1)
+
+    # Check if prompt is a file
+    if os.path.exists(prompt):
+        with open(prompt, "r") as f:
+            prompt_text = f.read()
+    else:
+        prompt_text = prompt
+
+    console.print(f"[green]Generating script using {model}...[/green]")
+    
+    try:
+        agent = DremioAgent(model=model)
+        result = agent.generate_script(prompt_text, output)
+        
+        if output:
+            console.print(f"[bold green]Success![/bold green] Script saved to {output}")
+        else:
+            console.print(result)
+            
+    except Exception as e:
+        console.print(f"[red]Error generating script: {e}[/red]")
+        raise typer.Exit(code=1)
 
 if __name__ == "__main__":
     app()

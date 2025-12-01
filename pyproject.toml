@@ -43,6 +43,7 @@ scheduler = ["apscheduler"]
 dq = ["pyyaml"]
 cli = ["rich", "prompt_toolkit"]
 docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
+ai = ["langchain", "langchain-openai", "langchain-anthropic", "langchain-google-genai"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"
