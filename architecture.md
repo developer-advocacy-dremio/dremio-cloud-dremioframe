@@ -6,39 +6,38 @@ DremioFrame is designed to abstract the complexities of Dremio's REST API and Ar
 
 ### 1. DremioClient (`client.py`)
 The main entry point. It manages authentication and holds references to the `Catalog` and `Builder` factories.
+- **Authentication**: Supports PAT (Cloud/Software) and Username/Password (Software).
+- **Factories**: Access to `catalog`, `admin`, `iceberg`, `udf`, `quality`, and `orchestration` modules.
 
 ### 2. Catalog (`catalog.py`)
-Handles all metadata and administrative operations- **Catalog**: Manages Dremio catalog entities (sources, spaces, folders, datasets). Supports creating/updating views, managing tags, wiki content, data lineage, and access grants.
-- Create/Update/Delete sources and views.
+Handles all metadata and administrative operations.
+- **Entities**: Manages Sources, Spaces, Folders, Datasets, and Views.
+- **Governance**: Manages Tags, Wiki content, and Grants.
 
 ### 3. DremioBuilder (`builder.py`)
-Provides a fluent interface for constructing queries.
-- **DremioBuilder**: A fluent query builder that generates SQL.
-    - `select()`, `filter()`, `mutate()`: Basic operations.
-    - `group_by()`, `agg()`: Aggregation.
-    - `order_by()`, `distinct()`: Sorting and deduplication.
-    - `join()`: Joining tables.
-    - `insert()`, `merge()`, `create()`: Data ingestion, upsert, and CTAS.
-    - `at_snapshot()`, `at_timestamp()`: Iceberg Time Travel.
-    - `optimize()`, `vacuum()`: Iceberg Maintenance.
-    - `chart()`, `to_csv()`, `to_parquet()`: Visualization and Export.
-    - `quality`: Access to `DataQuality` checks.
-- **Functions (`functions.py`)**: A module (`F`) providing SQL functions and Window API.
-    - `Expr`: Chainable SQL expressions.
-    - `Window`: Window specification builder.
-    - Standard functions: Aggregates, Math, String, Date, Conditional.
-### 4. DataQuality (`quality.py`)
-Provides methods to run validation queries against the data defined by the builder.
-- `expect_not_null`, `expect_unique`, `expect_values_in`, `expect_row_count`.
+Provides a fluent interface for constructing queries and performing operations.
+- **Query Building**: `select`, `filter`, `mutate`, `group_by`, `agg`, `order_by`, `join`.
+- **Data Ingestion**: `insert`, `merge`, `create` (CTAS), `create_view`.
+- **Iceberg**: `at_snapshot`, `at_timestamp`, `optimize`, `vacuum`, `expire_snapshots`.
+- **Visualization**: `chart` (matplotlib/plotly integration).
+- **Export**: `to_csv`, `to_parquet`, `to_json`.
 
-### 5. Admin (`admin.py`)
+### 4. SQL Functions (`functions.py`)
+A module (`F`) providing a comprehensive suite of SQL functions and Window API.
+- **Expression Builder**: Chainable `Expr` objects.
+- **Window Spec**: `Window.partition_by(...).order_by(...)`.
+- **Categories**: Aggregates, Math, String, Date/Time, Conditional, Complex Types, AI Functions.
+
+### 5. Administration (`admin.py`)
 Handles administrative tasks via REST API.
-- User/Role management.
-- Grant/Revoke privileges.
-- Policy management (Row Access, Masking).
-- **Governance**: Manage UDFs, Row Access Policies, and Column Masking Policies.
+- **User/Role Management**: Create, update, delete users and roles.
+- **Privileges**: Grant/Revoke privileges on catalog entities.
+- **Governance**: Manage Row Access Policies and Column Masking Policies.
+- **Reflections**: Create, list, enable/disable reflections.
+- **Sources**: Create and manage sources (including S3 helper).
+- **Profiling**: Fetch and visualize job profiles.
 
-### AI Module (`dremioframe/ai`)
+### 6. AI Module (`ai/`)
 - **Agent**: `DremioAgent` uses LangGraph to orchestrate AI tasks.
 - **Tools**:
     - `list_documentation`, `read_documentation`: Access library docs.
@@ -49,58 +48,54 @@ Handles administrative tasks via REST API.
     - SQL Generation: Generates and validates SQL queries.
     - API Call Generation: Generates cURL commands for Dremio API.
 
-### 7. AsyncDremioClient (`async_client.py`)
-Asynchronous client using `aiohttp` for high-concurrency applications.
-- Async context manager support.
-- Non-blocking REST API calls (Catalog, SQL execution).
-
-### 7. CLI (`cli.py`)
-Command-line interface built with `typer`.
-- `dremio-cli query`: Run SQL queries.
-- `dremio-cli catalog`: Browse catalog.
-- `dremio-cli reflections`: Manage reflections.
-
-### 8. LocalBuilder (`local_builder.py`)
-Wraps DataFusion for local SQL execution on cached Arrow files.
-- Mimics `DremioBuilder` API (`select`, `filter`, `group_by`, `agg`, `sql`).
-
-### 9. UDFManager (`udf.py`)
-Manages SQL User Defined Functions.
-- `create`, `drop`, `list`.
-
-### 10. QueryProfile (`profile.py`)
-Parses and visualizes job profiles.
-- `summary`, `visualize`.
-
-### 11. DremioIcebergClient (`iceberg.py`)
-Wraps `pyiceberg` for direct catalog interaction.
-- `list_namespaces`, `list_tables`, `load_table`, `create_table`.
-
-### 12. Utils (`utils.py`)
-Helper functions for configuration, logging, and common transformations.
-
-### 13. Orchestration (`orchestration/`)
+### 7. Orchestration (`orchestration/`)
 Lightweight DAG runner for data pipelines.
-- **Orchestration**: `dremioframe.orchestration`
-  - **Pipeline**: Manages task execution and dependencies.
-  - **Tasks**: Units of work (`DremioQueryTask`, `DremioBuilderTask`, `DbtTask`, `DataQualityTask`, etc.).
-  - **Sensors**: Wait for conditions (`SqlSensor`, `FileSensor`).
-  - **Backends**: State storage (`SQLiteBackend`, `PostgresBackend`, etc.).
-  - **Executors**: Task execution strategies (`LocalExecutor`, `CeleryExecutor`).
-- **CLI**: `dremioframe.cli` (Typer-based CLI with Interactive REPL).
-- **Data Quality**: `dremioframe.dq` (YAML-based DQ framework).
-- **Pydantic**: Integration for schema validation and DDL generation.
-- **Scheduler**: Robust scheduling via `APScheduler` (Interval, Cron, Persistent Job Stores).
-- **UI**: Vue.js-based web dashboard with Basic Auth security.
-- **Specialized Tasks**: `DremioQueryTask`, `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`, `DataQualityTask`.
-- **General Tasks**: `HttpTask`, `EmailTask`, `ShellTask`, `S3Task`.
-- **Deployment**: Docker support (`Dockerfile`, `docker-compose.yml`).
+- **Pipeline**: Manages task execution and dependencies.
+- **Tasks**:
+    - `DremioQueryTask`, `DremioBuilderTask`: Execute SQL/Builder logic.
+    - `OptimizeTask`, `VacuumTask`, `RefreshReflectionTask`: Maintenance tasks.
+    - `DataQualityTask`: Run DQ checks.
+    - `HttpTask`, `EmailTask`, `ShellTask`, `S3Task`: Utility tasks.
+- **Sensors**: `SqlSensor`, `FileSensor`.
+- **Backends**: State storage (`SQLiteBackend`, `PostgresBackend`, `MySQLBackend`).
+- **Executors**: `LocalExecutor`, `CeleryExecutor`.
+- **Scheduler**: `APScheduler` integration for cron/interval scheduling.
+- **UI**: Vue.js-based web dashboard for monitoring pipelines.
 
-### 14. Data Quality Framework (`dq/`)
+### 8. Data Quality (`dq/`)
 File-based data quality testing framework.
 - **DQRunner**: Executes tests defined in YAML files.
 - **Checks**: `not_null`, `unique`, `values_in`, `row_count`, `custom_sql`.
-- **CLI**: `dremio-cli dq run` command.
+- **Integration**: Accessible via `dremio-cli dq run` or `DataQualityTask`.
+
+### 9. CLI (`cli.py`)
+Command-line interface built with `typer`.
+- `query`: Run SQL queries.
+- `catalog`: Browse catalog.
+- `reflections`: Manage reflections.
+- `pipeline`: Manage orchestration pipelines and UI.
+- `dq`: Run data quality tests.
+- `generate`: AI script generation.
+- `generate-sql`: AI SQL generation.
+- `generate-api`: AI API call generation.
+- `repl`: Interactive Dremio shell.
+
+### 10. AsyncDremioClient (`async_client.py`)
+Asynchronous client using `aiohttp` for high-concurrency applications.
+- Async context manager support.
+- Non-blocking REST API calls.
+
+### 11. LocalBuilder (`local_builder.py`)
+Wraps DataFusion for local SQL execution on cached Arrow files.
+- Mimics `DremioBuilder` API for local processing.
+
+### 12. UDFManager (`udf.py`)
+Manages SQL User Defined Functions.
+- `create`, `drop`, `list`.
+
+### 13. DremioIcebergClient (`iceberg.py`)
+Wraps `pyiceberg` for direct catalog interaction.
+- `list_namespaces`, `list_tables`, `load_table`, `create_table`.
 
 
 ## Data Flow
