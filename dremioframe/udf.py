@@ -1,21 +1,26 @@
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 
 class UDFManager:
     def __init__(self, client):
         self.client = client
 
-    def create(self, name: str, args: Dict[str, str], returns: str, body: str, replace: bool = False):
+    def create(self, name: str, args: Union[Dict[str, str], str], returns: str, body: str, replace: bool = False):
         """
         Create a SQL UDF.
         
         Args:
             name: Name of the function (e.g., "my_space.my_func").
-            args: Dictionary of argument names and types (e.g., {"x": "INT", "y": "INT"}).
+            args: Dictionary of argument names and types (e.g., {"x": "INT", "y": "INT"}) 
+                  OR a string definition (e.g., "x INT, y INT").
             returns: Return type (e.g., "INT").
             body: SQL expression body (e.g., "x + y").
             replace: If True, use CREATE OR REPLACE.
         """
-        arg_str = ", ".join([f"{k} {v}" for k, v in args.items()])
+        if isinstance(args, dict):
+            arg_str = ", ".join([f"{k} {v}" for k, v in args.items()])
+        else:
+            arg_str = args
+            
         create_cmd = "CREATE OR REPLACE" if replace else "CREATE"
         
         sql = f"{create_cmd} FUNCTION {name} ({arg_str}) RETURNS {returns} RETURN {body}"

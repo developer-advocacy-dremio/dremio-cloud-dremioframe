@@ -47,10 +47,56 @@ catalog.delete_catalog_item("source-id-uuid")
 
 ## Managing Views
 
-You can also manage views (virtual datasets) if you know their ID or path.
+You can create and update virtual datasets (views). The `sql` argument accepts either a raw SQL string or a `DremioBuilder` object (DataFrame).
 
 ```python
-# Get entity details
-view = catalog.get_entity("MySpace.MyView")
-print(view)
+# Create a view using SQL string
+catalog.create_view(
+    path=["Space", "MyView"],
+    sql="SELECT * FROM source.table"
+)
+
+# Create a view using a DataFrame (Builder)
+df = client.table("source.table").filter("id > 100")
+catalog.create_view(
+    path=["Space", "FilteredView"],
+    sql=df
+)
+```
+
+# Update a view (fetches latest version tag automatically)
+catalog.update_view(
+    id="view-id-uuid",
+    path=["Space", "MyView"],
+    sql="SELECT * FROM source.table WHERE id > 100"
+)
+```
+
+## Collaboration (Wikis & Tags)
+
+Manage documentation and tags for any catalog entity (dataset, source, space, folder).
+
+### Wikis
+
+```python
+# Get Wiki
+wiki = catalog.get_wiki("entity-id")
+print(wiki.get("text"))
+
+# Update Wiki
+catalog.update_wiki(
+    id="entity-id",
+    content="# My Dataset\n\nThis is a documented dataset."
+)
+```
+
+### Tags
+
+```python
+# Get Tags
+tags = catalog.get_tags("entity-id")
+print(tags)
+
+# Set Tags (Overwrites existing tags)
+catalog.set_tags("entity-id", ["production", "marketing"])
 ```

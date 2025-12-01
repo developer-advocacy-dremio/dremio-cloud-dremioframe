@@ -54,7 +54,28 @@ class Admin:
         Create a UDF to be used as a policy.
         Example: create_policy_function("mask_ssn", "ssn VARCHAR", "VARCHAR", "CASE WHEN is_member('admin') THEN ssn ELSE '***' END")
         """
-        return self.client.execute(f"CREATE FUNCTION {name} ({args}) RETURNS {return_type} RETURN {body}")
+        return self.create_udf(name, args, return_type, body)
+
+    def create_udf(self, name: str, args: str, return_type: str, body: str, replace: bool = False):
+        """
+        Create a User Defined Function.
+        Delegates to client.udf.create.
+        
+        Args:
+            name: Name of the function.
+            args: Arguments definition string (e.g., "x INT, y INT").
+            return_type: Return type string (e.g., "INT").
+            body: Function body SQL (e.g., "SELECT x + y").
+            replace: Whether to replace if exists.
+        """
+        return self.client.udf.create(name, args, return_type, body, replace)
+
+    def drop_udf(self, name: str, if_exists: bool = False):
+        """
+        Drop a User Defined Function.
+        Delegates to client.udf.drop.
+        """
+        return self.client.udf.drop(name, if_exists)
 
     def apply_masking_policy(self, table: str, column: str, policy: str):
         """
@@ -63,9 +84,18 @@ class Admin:
         """
         return self.client.execute(f"ALTER TABLE {table} MODIFY COLUMN {column} SET MASKING POLICY {policy}")
 
-    def drop_masking_policy(self, table: str, column: str):
-        """Remove a masking policy from a column."""
-        return self.client.execute(f"ALTER TABLE {table} MODIFY COLUMN {column} UNSET MASKING POLICY")
+    def drop_masking_policy(self, table: str, column: str, policy: str = None):
+        """
+        Remove a masking policy from a column.
+        
+        Args:
+            table: Table name.
+            column: Column name.
+            policy: Optional policy name to unset (syntax: UNSET MASKING POLICY policy_name).
+                    If not provided, just UNSET MASKING POLICY.
+        """
+        policy_clause = f" {policy}" if policy else ""
+        return self.client.execute(f"ALTER TABLE {table} MODIFY COLUMN {column} UNSET MASKING POLICY{policy_clause}")
 
     def apply_row_access_policy(self, table: str, policy: str):
         """
@@ -74,9 +104,15 @@ class Admin:
         """
         return self.client.execute(f"ALTER TABLE {table} ADD ROW ACCESS POLICY {policy}")
 
-    def drop_row_access_policy(self, table: str):
-        """Remove a row access policy."""
-        return self.client.execute(f"ALTER TABLE {table} DROP ROW ACCESS POLICY")
+    def drop_row_access_policy(self, table: str, policy: str):
+        """
+        Remove a row access policy.
+        
+        Args:
+            table: Table name.
+            policy: Policy name to drop (e.g. "country_filter(country)").
+        """
+        return self.client.execute(f"ALTER TABLE {table} DROP ROW ACCESS POLICY {policy}")
 
     # --- Reflections ---
     def list_reflections(self):

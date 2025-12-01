@@ -74,6 +74,24 @@ nav:
     - Data Quality Task: docs/orchestration_dq_task.md
   - Data Quality Framework: docs/data_quality.md
   - Guides:
+    - Cookbook: docs/cookbook.md
+    - Data Modeling:
+      - Medallion Architecture: docs/modeling/medallion.md
+      - Dimensional Modeling: docs/modeling/dimensional.md
+      - Slowly Changing Dimensions: docs/modeling/scd.md
+      - Semantic Views: docs/modeling/views.md
+      - Documenting Datasets: docs/modeling/documentation.md
+    - Governance:
+      - Row Access & Masking: docs/governance/masking_and_row_access.md
+    - Security Best Practices: docs/security.md
+    - Iceberg Management: docs/guide_iceberg_management.md
+    - Reflections Management: docs/guide_reflections.md
     - Testing: docs/testing.md
     - Troubleshooting: docs/troubleshooting.md
     - Contributing: CONTRIBUTING.md
+  - API Reference:
+    - Client: docs/reference/client.md
+    - Builder: docs/reference/builder.md
+    - Functions: docs/reference/functions.md
+    - Orchestration: docs/reference/orchestration.md
+    - Data Quality: docs/reference/dq.md

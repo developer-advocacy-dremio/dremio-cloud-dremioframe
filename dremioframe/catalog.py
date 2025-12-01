@@ -1,5 +1,5 @@
 import requests
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
 
 class Catalog:
     def __init__(self, client):
@@ -75,3 +75,115 @@ class Catalog:
         url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}"
         response = self.client.session.delete(url)
         response.raise_for_status()
+
+    def update_wiki(self, id: str, content: str):
+        """
+        Updates the wiki content for a catalog entity.
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/wiki"
+        payload = {"text": content}
+        response = self.client.session.post(url, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def get_wiki(self, id: str) -> Dict[str, Any]:
+        """
+        Retrieves the wiki content for a catalog entity.
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/wiki"
+        response = self.client.session.get(url)
+        # 404 means no wiki exists, return empty dict or None? Dremio API might return 404.
+        if response.status_code == 404:
+            return {}
+        response.raise_for_status()
+        return response.json()
+
+    def get_tags(self, id: str) -> List[str]:
+        """
+        Retrieves the tags for a catalog entity.
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
+        response = self.client.session.get(url)
+        if response.status_code == 404:
+            return []
+        response.raise_for_status()
+        data = response.json()
+        return data.get("tags", [])
+
+    def set_tags(self, id: str, tags: List[str]):
+        """
+        Sets the tags for a catalog entity (overwrites existing tags).
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
+        payload = {"tags": tags}
+        response = self.client.session.post(url, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def create_view(self, path: List[str], sql: Union[str, Any], context: Optional[List[str]] = None):
+        """
+        Creates a new virtual dataset (View).
+        Args:
+            path: List of path components (e.g. ["Space", "View"]).
+            sql: SQL string or DremioBuilder object.
+            context: Optional list of context path components.
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog"
+        
+        # Handle Builder object
+        if hasattr(sql, "_compile_sql"):
+            sql_str = sql._compile_sql()
+        else:
+            sql_str = str(sql)
+
+        payload = {
+            "entityType": "dataset",
+            "type": "VIRTUAL",
+            "path": path,
+            "sql": sql_str
+        }
+        if context:
+            payload["sqlContext"] = context
+            
+        response = self.client.session.post(url, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def update_view(self, id: str, path: List[str], sql: Union[str, Any], context: Optional[List[str]] = None, tag: Optional[str] = None):
+        """
+        Updates an existing virtual dataset (View).
+        If 'tag' (version) is not provided, it will be fetched automatically.
+        """
+        project_id = self._get_project_id()
+        
+        # Handle Builder object
+        if hasattr(sql, "_compile_sql"):
+            sql_str = sql._compile_sql()
+        else:
+            sql_str = str(sql)
+        
+        # If tag is missing, fetch current version
+        if not tag:
+            current = self.get_entity_by_id(id)
+            tag = current.get("tag")
+
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}"
+        payload = {
+            "entityType": "dataset",
+            "type": "VIRTUAL",
+            "id": id,
+            "path": path,
+            "sql": sql_str,
+            "tag": tag
+        }
+        if context:
+            payload["sqlContext"] = context
+
+        response = self.client.session.put(url, json=payload)
+        response.raise_for_status()
+        return response.json()

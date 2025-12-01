@@ -10,12 +10,23 @@ Access the UDF manager via `client.udf`.
 
 ```python
 # CREATE FUNCTION my_space.add_ints (x INT, y INT) RETURNS INT RETURN x + y
+
+# Option 1: Using a dictionary for arguments
 client.udf.create(
     name="my_space.add_ints",
     args={"x": "INT", "y": "INT"},
     returns="INT",
     body="x + y",
-    replace=True # Use CREATE OR REPLACE
+    replace=True
+)
+
+# Option 2: Using a string for arguments (useful for complex types)
+client.udf.create(
+    name="my_space.complex_func",
+    args="x INT, y STRUCT<a INT, b INT>",
+    returns="INT",
+    body="x + y.a",
+    replace=True
 )
 ```
 

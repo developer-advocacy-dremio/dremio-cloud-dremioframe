@@ -37,6 +37,7 @@ Handles administrative tasks via REST API.
 - User/Role management.
 - Grant/Revoke privileges.
 - Policy management (Row Access, Masking).
+- **Governance**: Create/Drop UDFs, Apply/Unset Policies.
 - **Reflection Management**: Create, list, delete, enable/disable reflections.
 
 ### 6. AsyncDremioClient (`async_client.py`)
