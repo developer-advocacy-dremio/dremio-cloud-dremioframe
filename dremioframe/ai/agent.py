@@ -1,7 +1,8 @@
 import os
 import glob
-from typing import Optional, List
+from typing import Optional, List, Union
 from langchain_core.tools import tool
+from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -52,12 +53,71 @@ def read_documentation(file_path: str) -> str:
     with open(full_path, "r") as f:
         return f.read()
 
+@tool
+def search_dremio_docs(query: str) -> List[str]:
+    """
+    Searches native Dremio documentation in the dremiodocs directory.
+    Returns a list of filenames that might be relevant.
+    """
+    possible_paths = [
+        os.path.join(os.getcwd(), "dremiodocs"),
+        os.path.join(os.path.dirname(__file__), "../../dremiodocs"),
+    ]
+    
+    docs_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            docs_path = p
+            break
+            
+    if not docs_path:
+        return ["Error: Dremio documentation directory not found."]
+        
+    # Simple search: find files containing the query string (case-insensitive)
+    matches = []
+    for root, _, files in os.walk(docs_path):
+        for file in files:
+            if file.endswith(".md"):
+                full_path = os.path.join(root, file)
+                try:
+                    with open(full_path, "r", errors="ignore") as f:
+                        content = f.read()
+                        if query.lower() in content.lower():
+                            matches.append(os.path.relpath(full_path, docs_path))
+                except Exception:
+                    continue
+    return matches[:5] # Return top 5 matches
+
+@tool
+def read_dremio_doc(file_path: str) -> str:
+    """Reads the content of a specific Dremio documentation file."""
+    possible_paths = [
+        os.path.join(os.getcwd(), "dremiodocs"),
+        os.path.join(os.path.dirname(__file__), "../../dremiodocs"),
+    ]
+    
+    docs_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            docs_path = p
+            break
+            
+    if not docs_path:
+        return "Error: Dremio documentation directory not found."
+
+    full_path = os.path.join(docs_path, file_path)
+    if not os.path.exists(full_path):
+        return f"Error: File {file_path} not found."
+        
+    with open(full_path, "r") as f:
+        return f.read()
+
 class DremioAgent:
-    def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None):
+    def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None):
         self.model_name = model
         self.api_key = api_key
-        self.llm = self._initialize_llm()
-        self.tools = [list_documentation, read_documentation]
+        self.llm = llm or self._initialize_llm()
+        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc]
         self.agent = self._initialize_agent()
 
     def _initialize_llm(self):
@@ -87,6 +147,7 @@ class DremioAgent:
             "You are an expert Dremio developer assistant. Your goal is to generate Python scripts using the `dremioframe` library based on user requests. "
             "You have access to the library's documentation via tools. "
             "Always check the documentation if you are unsure about specific API usage. "
+            "You also have access to native Dremio documentation via `search_dremio_docs` and `read_dremio_doc` if you need to understand underlying concepts or SQL functions. "
             "When generating code, ensure it is complete, runnable, and includes comments about required environment variables (DREMIO_PAT, DREMIO_PROJECT_ID). "
             "The output should be ONLY the python code block, or the code itself if saving to file."
         )

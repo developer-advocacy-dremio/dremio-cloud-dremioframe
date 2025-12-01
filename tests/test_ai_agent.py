@@ -1,7 +1,7 @@
 import pytest
 import os
 from unittest.mock import MagicMock, patch
-from dremioframe.ai.agent import DremioAgent, list_documentation
+from dremioframe.ai.agent import DremioAgent, list_documentation, search_dremio_docs
 
 # --- Unit Tests ---
 
@@ -21,6 +21,11 @@ def test_agent_initialization():
         assert agent.model_name == "gpt-4o"
         MockLLM.assert_called()
 
+def test_custom_llm_initialization():
+    mock_llm = MagicMock()
+    agent = DremioAgent(llm=mock_llm)
+    assert agent.llm == mock_llm
+
 def test_generate_script(mock_agent):
     agent, mock_executor = mock_agent
     # Mock response structure for langgraph: {"messages": [..., AIMessage(content="...")]}
@@ -37,6 +42,18 @@ def test_list_documentation():
          patch("os.path.exists", return_value=True):
         docs = list_documentation.invoke({})
         assert len(docs) > 0
+
+def test_search_dremio_docs():
+    with patch("os.walk", return_value=[("/path/to/dremiodocs", [], ["test.md"])]), \
+         patch("builtins.open", new_callable=MagicMock) as mock_open, \
+         patch("os.path.exists", return_value=True):
+        
+        mock_file = MagicMock()
+        mock_file.read.return_value = "This is a test document about SQL."
+        mock_open.return_value.__enter__.return_value = mock_file
+        
+        results = search_dremio_docs.invoke({"query": "SQL"})
+        assert len(results) > 0
 
 # --- Integration Tests ---
 
