@@ -252,3 +252,107 @@ class DremioClient:
         Useful for accessing unstructured data.
         """
         return DremioBuilder(self, f"TABLE(LIST_FILES('{path}'))")
+
+    def upload_file(self, file_path: str, table_name: str, file_format: str = None, **kwargs):
+        """
+        Upload a local file to Dremio as a new table.
+        
+        Args:
+            file_path: Path to the local file.
+            table_name: Destination table name (e.g., "space.folder.table").
+            file_format: 'csv', 'json', 'parquet', 'excel', 'html', 'avro', 'orc', 'lance', 'feather'. 
+                         If None, inferred from extension.
+            **kwargs: Additional arguments passed to the file reader.
+        """
+        import pyarrow as pa
+        import pyarrow.csv as csv
+        import pyarrow.json as json
+        import pyarrow.parquet as parquet
+        import os
+
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File not found: {file_path}")
+
+        if file_format is None:
+            ext = os.path.splitext(file_path)[1].lower()
+            if ext == '.csv':
+                file_format = 'csv'
+            elif ext == '.json':
+                file_format = 'json'
+            elif ext == '.parquet':
+                file_format = 'parquet'
+            elif ext in ['.xlsx', '.xls', '.ods']:
+                file_format = 'excel'
+            elif ext == '.html':
+                file_format = 'html'
+            elif ext == '.avro':
+                file_format = 'avro'
+            elif ext == '.orc':
+                file_format = 'orc'
+            elif ext == '.lance':
+                file_format = 'lance'
+            elif ext in ['.feather', '.arrow']:
+                file_format = 'feather'
+            else:
+                raise ValueError(f"Could not infer format from extension {ext}. Please specify file_format.")
+
+        table = None
+
+        if file_format == 'csv':
+            table = csv.read_csv(file_path, **kwargs)
+        elif file_format == 'json':
+            table = json.read_json(file_path, **kwargs)
+        elif file_format == 'parquet':
+            table = parquet.read_table(file_path, **kwargs)
+        elif file_format == 'excel':
+            try:
+                import pandas as pd
+                df = pd.read_excel(file_path, **kwargs)
+                table = pa.Table.from_pandas(df)
+            except ImportError:
+                raise ImportError("pandas and openpyxl are required for Excel files. Install with `pip install pandas openpyxl`.")
+        elif file_format == 'html':
+            try:
+                import pandas as pd
+                # read_html returns a list of DataFrames
+                dfs = pd.read_html(file_path, **kwargs)
+                if not dfs:
+                    raise ValueError("No tables found in HTML file.")
+                # Default to the first table, or user can pass 'match' in kwargs to filter
+                table = pa.Table.from_pandas(dfs[0])
+            except ImportError:
+                raise ImportError("pandas and lxml/html5lib are required for HTML files. Install with `pip install pandas lxml`.")
+        elif file_format == 'avro':
+            try:
+                import fastavro
+                with open(file_path, 'rb') as f:
+                    reader = fastavro.reader(f)
+                    records = list(reader)
+                    table = pa.Table.from_pylist(records)
+            except ImportError:
+                raise ImportError("fastavro is required for Avro files. Install with `pip install fastavro`.")
+        elif file_format == 'orc':
+            try:
+                import pyarrow.orc as orc
+                table = orc.read_table(file_path, **kwargs)
+            except ImportError:
+                raise ImportError("pyarrow.orc is required for ORC files.")
+        elif file_format == 'lance':
+            try:
+                import lance
+                ds = lance.dataset(file_path)
+                table = ds.to_table(**kwargs)
+            except ImportError:
+                raise ImportError("lance is required for Lance files. Install with `pip install pylance`.")
+        elif file_format == 'feather':
+            try:
+                import pyarrow.feather as feather
+                table = feather.read_table(file_path, **kwargs)
+            except ImportError:
+                raise ImportError("pyarrow is required for Feather files.")
+        else:
+            raise ValueError(f"Unsupported file format: {file_format}")
+
+        # Create table and insert data
+        self.table(table_name).create(table_name, data=table)
+        print(f"Successfully uploaded {file_path} to {table_name}")

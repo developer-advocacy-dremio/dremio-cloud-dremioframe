@@ -1,6 +1,6 @@
 [project]
 name = "dremioframe"
-version = "0.9.0"
+version = "0.10.0"
 description = "A dataframe-like library for Dremio Cloud & Dremio Software"
 authors = [
     {name = "Alex Merced", email = "alexmerced@alexmerced.com"},
@@ -44,6 +44,10 @@ dq = ["pyyaml"]
 cli = ["rich", "prompt_toolkit"]
 docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
 ai = ["langchain", "langchain-openai", "langchain-anthropic", "langchain-google-genai"]
+excel = ["openpyxl"]
+html = ["lxml", "html5lib"]
+avro = ["fastavro"]
+lance = ["pylance"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

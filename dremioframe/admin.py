@@ -210,6 +210,49 @@ class Admin:
             # Catalog API can get by path.
             return self.client.catalog.get_entity(id_or_path)
 
+    def create_folder(self, path: str):
+        """
+        Create a folder using SQL (Dremio Cloud / Iceberg Catalog).
+        
+        Syntax: CREATE FOLDER [IF NOT EXISTS] <folder_name>
+        
+        Args:
+            path: The path/name of the folder.
+        """
+        return self.client.execute(f"CREATE FOLDER IF NOT EXISTS {path}")
+
+    def create_space(self, name: str):
+        """
+        Create a Space using the REST API (Dremio Software).
+        
+        Args:
+            name: Name of the space.
+        """
+        payload = {
+            "entityType": "space",
+            "name": name
+        }
+        response = self.client.session.post(f"{self.client.base_url}/catalog", json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def create_space_folder(self, space: str, folder: str):
+        """
+        Create a folder in a Space using the REST API (Dremio Software).
+        
+        Args:
+            space: Name of the space.
+            folder: Name of the folder to create.
+        """
+        # Path is list: [space, folder]
+        payload = {
+            "entityType": "folder",
+            "path": [space, folder]
+        }
+        response = self.client.session.post(f"{self.client.base_url}/catalog", json=payload)
+        response.raise_for_status()
+        return response.json()
+
     def create_source(self, name: str, type: str, config: dict, 
                       acceleration_grace_period: int = 21600000,
                       acceleration_refresh_period: int = 3600000,
