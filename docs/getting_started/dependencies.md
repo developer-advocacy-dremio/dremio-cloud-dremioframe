@@ -22,11 +22,12 @@ pip install "dremioframe[group1,group2]"
 
 | Group | Dependencies | Features Enabled |
 | :--- | :--- | :--- |
-| `cli` | `rich`, `prompt_toolkit` | Enhanced CLI experience with rich text and interactive prompts. |
+| `cli` | `rich`, `prompt_toolkit` | Enhanced CLI experience with rich text and interactive prompts for working with Orchestration and AI features. |
 | `s3` | `boto3` | S3 integration for direct file operations and source management. |
 | `scheduler` | `apscheduler` | Built-in task scheduling capabilities. |
 | `dq` | `pyyaml` | Data Quality framework configuration parsing. |
-| `ai` | `langchain`, `langchain-openai`, `langchain-anthropic`, `langchain-google-genai` | AI-powered SQL functions and agents. |
+| `ai` | `langchain`, `langchain-openai`, `langchain-anthropic`, `langchain-google-genai` | AI-powered Agent for Generating Python Scripts, SQL and cURL commands and light admin work. |
+**note:** this libraries embdedded agent is primarily meant as a code generation assist tool, not meant as an alternative to the integrated Dremio agent for deeper administration and natural language analytics.
 
 ### File Formats & Export
 
