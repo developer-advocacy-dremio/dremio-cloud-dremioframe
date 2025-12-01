@@ -8,24 +8,35 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Configuration](docs/configuration.md)
+- [Connecting to Dremio](docs/connection.md)
 - [Tutorial: ETL Pipeline](docs/tutorial_etl.md)
 - [Cookbook / Recipes](docs/cookbook.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 ### 🛠️ Data Engineering
 - [Dataframe Builder API](docs/builder.md)
+- [Querying Data](docs/querying.md)
+- [Joins & Transformations](docs/joins.md)
+- [Aggregation](docs/aggregation.md)
+- [Sorting & Filtering](docs/sorting.md)
+- [Ingestion API](docs/ingestion.md)
 - [Ingestion Patterns](docs/ingestion_patterns.md)
-- [Iceberg Lakehouse Management](docs/guide_iceberg_management.md)
+- [Exporting Data](docs/export.md)
+- [Working with Files](docs/files.md)
+- [Caching](docs/caching.md)
 - [Pydantic Integration](docs/pydantic_integration.md)
-- [SQL Functions](docs/functions.md)
-    - [Aggregate](docs/functions/aggregate.md)
-    - [AI](docs/functions/ai.md)
-    - [Complex Types](docs/functions/complex.md)
-    - [Conditional](docs/functions/conditional.md)
-    - [Date & Time](docs/functions/date.md)
-    - [Math](docs/functions/math.md)
-    - [String](docs/functions/string.md)
-    - [Window](docs/functions/window.md)
+- [Iceberg Tables](docs/iceberg.md)
+- [Iceberg Lakehouse Management](docs/guide_iceberg_management.md)
+
+### 📊 Analysis & Visualization
+- [Charting & Plotting](docs/charting.md)
+- [Interactive Plotting](docs/plotting.md)
+- [Query Profiling](docs/profiling.md)
+
+### 🧠 AI Capabilities
+- [Script Generation](docs/ai_generation.md)
+- [SQL Generation](docs/ai_sql.md)
+- [API Call Generation](docs/ai_api.md)
 
 ### 📐 Data Modeling
 - [Medallion Architecture](docs/modeling/medallion.md)
@@ -36,36 +47,44 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 
 ### ⚙️ Orchestration
 - [Overview](docs/orchestration.md)
-- [Tasks & Sensors](docs/orchestration_extensions.md)
-- [Deployment](docs/orchestration_deployment.md)
+- [Tasks & Sensors](docs/orchestration_tasks.md)
+- [Extensions](docs/orchestration_extensions.md)
+- [Scheduling](docs/orchestration_scheduling.md)
+- [Dremio Jobs](docs/orchestration_dremio_jobs.md)
+- [Iceberg Tasks](docs/orchestration_iceberg.md)
+- [Reflection Tasks](docs/orchestration_reflections.md)
+- [Data Quality Task](docs/orchestration_dq_task.md)
 - [Distributed Execution](docs/orchestration_distributed.md)
+- [Deployment](docs/orchestration_deployment.md)
 - [CLI & UI](docs/orchestration_cli.md)
-- [Best Practices](docs/orchestration_best_practices.md)
+- [Web UI](docs/orchestration_ui.md)
 - [Backends](docs/orchestration_backend.md)
+- [Best Practices](docs/orchestration_best_practices.md)
 
 ### ✅ Data Quality
 - [DQ Framework](docs/data_quality.md)
-- [DQ Task](docs/orchestration_dq_task.md)
 
 ### 🔧 Administration & Governance
+- [Administration](docs/admin.md)
 - [Catalog Management](docs/catalog.md)
 - [Reflections Management](docs/guide_reflections.md)
+- [User Defined Functions (UDFs)](docs/udf.md)
 - [Security Best Practices](docs/security.md)
 - [Governance: Masking & Row Access](docs/governance/masking_and_row_access.md)
 - [Governance: Tags](docs/governance/tags.md)
 - [Governance: Lineage](docs/governance/lineage.md)
-- **Governance**: Manage UDFs, Row Access Policies, Column Masking, Tags, Lineage, and Grants.
-- **AI Script Generation**: Generate Python scripts from natural language prompts using OpenAI, Claude, or Gemini.
-- **AI SQL Generation**: Generate SQL queries using AI.
-- **AI API Generation**: Generate API calls using AI.
+- [Governance: Privileges](docs/governance/privileges.md)
 
 ### 📚 Reference
+- [Function Reference](docs/function_reference.md)
+- [SQL Functions Guide](docs/functions.md)
+- [CLI Reference](docs/cli.md)
 - [API Reference](docs/reference/client.md)
+- [Async Client](docs/async_client.md)
+- [Advanced Usage](docs/advanced.md)
 - [Architecture](architecture.md)
 - [Testing Guide](docs/testing.md)
 - [Contributing](CONTRIBUTING.md)
-- [Async Client](docs/async_client.md)
-- [CLI Reference](docs/cli.md)
 
 ## Installation
 
