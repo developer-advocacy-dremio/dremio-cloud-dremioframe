@@ -6,6 +6,7 @@ DremioFrame includes a powerful AI Agent powered by Large Language Models (LLMs)
 
 The AI Agent is designed to assist with:
 
+-   **[Generation](generation.md): Generate Python Scripts, SQL and cURL commands to interact with your Dremio instance
 -   **[Observability](observability.md)**: Analyze job failures and monitor system health.
 -   **[Reflections](reflections.md)**: Recommend and manage reflections for query acceleration.
 -   **[Governance](governance.md)**: Audit access and automate dataset documentation.
