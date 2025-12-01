@@ -38,10 +38,16 @@ Handles administrative tasks via REST API.
 - Policy management (Row Access, Masking).
 - **Governance**: Manage UDFs, Row Access Policies, and Column Masking Policies.
 
-### 6. AI Module (`ai/`)
-- **DremioAgent**: An AI-powered agent that uses LangChain to generate `dremioframe` scripts based on user prompts.
-- **Tools**: Provides tools for the agent to access library documentation.
-- **Reflection Management**: Create, list, delete, enable/disable reflections.
+### AI Module (`dremioframe/ai`)
+- **Agent**: `DremioAgent` uses LangGraph to orchestrate AI tasks.
+- **Tools**:
+    - `list_documentation`, `read_documentation`: Access library docs.
+    - `search_dremio_docs`, `read_dremio_doc`: Access Dremio docs.
+    - `list_catalog_items`, `get_table_schema`: Access Dremio catalog metadata.
+- **Capabilities**:
+    - Script Generation: Generates Python scripts using `dremioframe`.
+    - SQL Generation: Generates and validates SQL queries.
+    - API Call Generation: Generates cURL commands for Dremio API.
 
 ### 7. AsyncDremioClient (`async_client.py`)
 Asynchronous client using `aiohttp` for high-concurrency applications.

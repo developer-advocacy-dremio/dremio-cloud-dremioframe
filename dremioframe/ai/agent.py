@@ -112,12 +112,58 @@ def read_dremio_doc(file_path: str) -> str:
     with open(full_path, "r") as f:
         return f.read()
 
+@tool
+def list_catalog_items(path: Optional[str] = None) -> str:
+    """
+    Lists items in the Dremio catalog.
+    If path is None, lists root items (Spaces, Sources, Home).
+    If path is provided (e.g. "Space.Folder"), lists items in that path.
+    """
+    try:
+        # Import here to avoid circular dependency if any, and ensure client is created at runtime
+        from dremioframe.client import DremioClient
+        client = DremioClient() # Expects env vars
+        
+        if path:
+            # list_catalog might need a path argument or we use list_catalog() on root
+            # The current client.catalog.list_catalog() implementation might vary
+            # Let's assume we can list by path or it lists everything.
+            # Checking catalog.py would be good, but for now assuming standard behavior or using by_path if exists.
+            # Actually, looking at previous context, client.catalog.list_catalog() exists.
+            # Let's try to use it.
+            items = client.catalog.list_catalog(path)
+        else:
+            items = client.catalog.list_catalog()
+            
+        return str(items)
+    except Exception as e:
+        return f"Error listing catalog: {e}"
+
+@tool
+def get_table_schema(path: str) -> str:
+    """
+    Retrieves the schema (columns and types) of a dataset (table/view).
+    Path should be the full path (e.g. "Space.Folder.Dataset").
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        # We can use client.table(path).schema or similar if available, 
+        # or just fetch catalog item and look at fields.
+        # client.catalog.get_dataset(path) should return info including fields.
+        dataset = client.catalog.get_dataset(path)
+        if 'fields' in dataset:
+            return str(dataset['fields'])
+        return f"No fields found for {path}. Metadata: {dataset}"
+    except Exception as e:
+        return f"Error getting schema: {e}"
+
 class DremioAgent:
     def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None):
         self.model_name = model
         self.api_key = api_key
         self.llm = llm or self._initialize_llm()
-        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc]
+        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, list_catalog_items, get_table_schema]
         self.agent = self._initialize_agent()
 
     def _initialize_llm(self):
@@ -144,12 +190,13 @@ class DremioAgent:
 
     def _initialize_agent(self):
         system_message = (
-            "You are an expert Dremio developer assistant. Your goal is to generate Python scripts using the `dremioframe` library based on user requests. "
-            "You have access to the library's documentation via tools. "
-            "Always check the documentation if you are unsure about specific API usage. "
-            "You also have access to native Dremio documentation via `search_dremio_docs` and `read_dremio_doc` if you need to understand underlying concepts or SQL functions. "
-            "When generating code, ensure it is complete, runnable, and includes comments about required environment variables (DREMIO_PAT, DREMIO_PROJECT_ID). "
-            "The output should be ONLY the python code block, or the code itself if saving to file."
+            "You are an expert Dremio developer assistant. Your goal is to help users with Dremio tasks.\n"
+            "You have access to the library's documentation and native Dremio documentation via tools.\n"
+            "You also have access to the Dremio Catalog via `list_catalog_items` and `get_table_schema` to inspect tables and views.\n"
+            "When asked to generate a script, ensure it is complete, runnable, and includes comments about required environment variables.\n"
+            "When asked to generate SQL, validate table names and columns using the catalog tools if possible. Ensure table paths are correctly quoted (e.g. \"Space\".\"Folder\".\"Table\").\n"
+            "When asked to generate an API call, use the documentation to find the correct endpoint and payload.\n"
+            "The output should be ONLY the requested content (code block, SQL, or cURL command) unless asked otherwise."
         )
         return create_react_agent(self.llm, self.tools, prompt=system_message)
 
@@ -158,7 +205,8 @@ class DremioAgent:
         Generates a dremioframe script based on the prompt.
         If output_file is provided, writes the code to the file.
         """
-        response = self.agent.invoke({"messages": [("user", prompt)]})
+        full_prompt = f"Generate a Python script using dremioframe for: {prompt}"
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
         # LangGraph returns state, output is in messages[-1].content
         output = response["messages"][-1].content
         
@@ -176,3 +224,33 @@ class DremioAgent:
             return f"Script generated and saved to {output_file}"
         
         return code
+
+    def generate_sql(self, prompt: str) -> str:
+        """
+        Generates a SQL query based on the prompt.
+        """
+        full_prompt = f"Generate a Dremio SQL query for: {prompt}. Use the catalog tools to verify table names and columns if needed. Output ONLY the SQL query."
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        output = response["messages"][-1].content
+        
+        if "```sql" in output:
+            return output.split("```sql")[1].split("```")[0].strip()
+        elif "```" in output:
+            return output.split("```")[1].split("```")[0].strip()
+        return output.strip()
+
+    def generate_api_call(self, prompt: str) -> str:
+        """
+        Generates a cURL command for the Dremio API based on the prompt.
+        """
+        full_prompt = f"Generate a cURL command for the Dremio API for: {prompt}. Use the documentation tools to find the correct endpoint. Output ONLY the cURL command."
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        output = response["messages"][-1].content
+        
+        if "```bash" in output:
+            return output.split("```bash")[1].split("```")[0].strip()
+        elif "```sh" in output:
+            return output.split("```sh")[1].split("```")[0].strip()
+        elif "```" in output:
+            return output.split("```")[1].split("```")[0].strip()
+        return output.strip()

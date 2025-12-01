@@ -54,8 +54,10 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Governance: Masking & Row Access](docs/governance/masking_and_row_access.md)
 - [Governance: Tags](docs/governance/tags.md)
 - [Governance: Lineage](docs/governance/lineage.md)
-- [Governance: Privileges](docs/governance/privileges.md)
-- [AI Script Generation](docs/ai_generation.md)
+- **Governance**: Manage UDFs, Row Access Policies, Column Masking, Tags, Lineage, and Grants.
+- **AI Script Generation**: Generate Python scripts from natural language prompts using OpenAI, Claude, or Gemini.
+- **AI SQL Generation**: Generate SQL queries using AI.
+- **AI API Generation**: Generate API calls using AI.
 
 ### 📚 Reference
 - [API Reference](docs/reference/client.md)

@@ -293,5 +293,47 @@ def generate(
         console.print(f"[red]Error generating script: {e}[/red]")
         raise typer.Exit(code=1)
 
+@app.command(name="generate-sql")
+def generate_sql(
+    prompt: str = typer.Argument(..., help="Prompt for SQL generation"),
+    model: str = typer.Option("gpt-4o", "--model", "-m", help="Model to use")
+):
+    """
+    Generate a Dremio SQL query using AI.
+    """
+    if not AI_AVAILABLE:
+        console.print("[red]AI module not available. Please install with 'pip install dremioframe[ai]'[/red]")
+        raise typer.Exit(code=1)
+
+    console.print(f"[green]Generating SQL using {model}...[/green]")
+    try:
+        agent = DremioAgent(model=model)
+        sql = agent.generate_sql(prompt)
+        console.print(sql)
+    except Exception as e:
+        console.print(f"[red]Error generating SQL: {e}[/red]")
+        raise typer.Exit(code=1)
+
+@app.command(name="generate-api")
+def generate_api(
+    prompt: str = typer.Argument(..., help="Prompt for API call generation"),
+    model: str = typer.Option("gpt-4o", "--model", "-m", help="Model to use")
+):
+    """
+    Generate a Dremio API cURL command using AI.
+    """
+    if not AI_AVAILABLE:
+        console.print("[red]AI module not available. Please install with 'pip install dremioframe[ai]'[/red]")
+        raise typer.Exit(code=1)
+
+    console.print(f"[green]Generating API call using {model}...[/green]")
+    try:
+        agent = DremioAgent(model=model)
+        curl = agent.generate_api_call(prompt)
+        console.print(curl)
+    except Exception as e:
+        console.print(f"[red]Error generating API call: {e}[/red]")
+        raise typer.Exit(code=1)
+
 if __name__ == "__main__":
     app()
