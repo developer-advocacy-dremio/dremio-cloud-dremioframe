@@ -36,11 +36,18 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Interactive Plotting](docs/analysis/plotting.md)
 - [Query Profiling](docs/analysis/profiling.md)
 
-### 🧠 AI Capabilities
+### 🧠 AI Capabilities and AI Agent
+- [Overview](docs/ai/overview.md)
+- [DremioAgent Class](docs/ai/agent.md)
 - [Script Generation](docs/ai/generation.md)
 - [SQL Generation](docs/ai/sql.md)
 - [API Call Generation](docs/ai/api.md)
-- [DremioAgent Class](docs/ai/agent.md)
+- [Observability](docs/ai/observability.md)
+- [Reflections](docs/ai/reflections.md)
+- [Governance](docs/ai/governance.md)
+- [Data Quality](docs/ai/data_quality.md)
+- [SQL Optimization](docs/ai/optimization.md)
+- [CLI Chat](docs/ai/cli_chat.md)
 
 ### 📐 Data Modeling
 - [Medallion Architecture](docs/modeling/medallion.md)
@@ -69,15 +76,6 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [DQ Framework](docs/data_quality.md)
 - [YAML Syntax](docs/data_quality/yaml_syntax.md)
 - [Recipes](docs/data_quality/recipes.md)
-
-### 🤖 AI Agent
-- [Overview](docs/ai/overview.md)
-- [Observability](docs/ai/observability.md)
-- [Reflections](docs/ai/reflections.md)
-- [Governance](docs/ai/governance.md)
-- [Data Quality](docs/ai/data_quality.md)
-- [SQL Optimization](docs/ai/optimization.md)
-- [CLI Chat](docs/ai/cli_chat.md)
 
 ### 🔧 Administration & Governance
 - [Administration](docs/admin_governance/admin.md)

@@ -265,62 +265,12 @@ def show_grants(entity: str) -> str:
     except Exception as e:
         return f"Error showing grants: {e}"
 
-@tool
-def generate_dq_checks(table: str) -> str:
-    """
-    Generates a Data Quality YAML recipe for a table based on its schema.
-    """
-    try:
-        from dremioframe.client import DremioClient
-        client = DremioClient()
-        
-        # 1. Get Schema
-        try:
-            dataset = client.catalog.get_dataset(table)
-            fields = dataset.get("fields", [])
-        except Exception:
-            return f"Error: Could not find dataset {table}"
-
-        # 2. Generate YAML via simple heuristics or return schema for agent to process
-        # Since this is a tool, it should return information for the agent to use.
-        # The agent's system prompt or a specific method should handle the generation.
-        # But the user asked for a tool.
-        # Let's return the schema and a prompt for the agent to generate the YAML.
-        
-        schema_info = ", ".join([f"{f['name']} ({f['type']['name']})" for f in fields])
-        return f"Schema for {table}: {schema_info}. Please generate a YAML data quality recipe with checks like 'not_null' for IDs and 'unique' for primary keys."
-    except Exception as e:
-        return f"Error generating DQ checks: {e}"
-
-@tool
-def optimize_query(query: str) -> str:
-    """
-    Analyzes a SQL query using EXPLAIN PLAN and suggests optimizations.
-    """
-    try:
-        from dremioframe.client import DremioClient
-        client = DremioClient()
-        
-        # 1. Get Explain Plan
-        try:
-            # Use EXPLAIN PLAN FOR <query>
-            explain_query = f"EXPLAIN PLAN FOR {query}"
-            plan_df = client.sql(explain_query).collect()
-            plan_text = str(plan_df.to_dict(orient='records'))
-        except Exception as e:
-            return f"Error getting explain plan: {e}. Please check if the query is valid."
-
-        # 2. Return plan for agent to analyze
-        return f"Explain Plan: {plan_text}. Please analyze this plan and suggest optimizations (e.g. reflections, rewriting joins, filtering earlier)."
-    except Exception as e:
-        return f"Error optimizing query: {e}"
-
 class DremioAgent:
     def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None):
         self.model_name = model
         self.api_key = api_key
         self.llm = llm or self._initialize_llm()
-        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, list_catalog_items, get_table_schema, get_job_details, list_recent_jobs, list_reflections, create_reflection, show_grants, generate_dq_checks, optimize_query]
+        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, list_catalog_items, get_table_schema, get_job_details, list_recent_jobs, list_reflections, create_reflection, show_grants]
         self.agent = self._initialize_agent()
 
     def _initialize_llm(self):
@@ -353,8 +303,6 @@ class DremioAgent:
             "You can inspect job details using `get_job_details` and list recent jobs with `list_recent_jobs`.\n"
             "You can manage reflections using `list_reflections` and `create_reflection`.\n"
             "You can check privileges using `show_grants`.\n"
-            "You can generate Data Quality checks using `generate_dq_checks`.\n"
-            "You can optimize SQL queries using `optimize_query`.\n"
             "When asked to generate a script, ensure it is complete, runnable, and includes comments about required environment variables.\n"
             "When asked to generate SQL, validate table names and columns using the catalog tools if possible. Ensure table paths are correctly quoted (e.g. \"Space\".\"Folder\".\"Table\").\n"
             "When asked to generate an API call, use the documentation to find the correct endpoint and payload.\n"
@@ -438,27 +386,5 @@ class DremioAgent:
         Generates a Wiki description and Tags for a dataset based on its schema.
         """
         full_prompt = f"Generate a Wiki description (Markdown) and a list of 3-5 Tags for the Dremio dataset at '{path}'. Use `get_table_schema` to inspect the columns and types. The output should be a JSON object with 'wiki' and 'tags' keys."
-        response = self.agent.invoke({"messages": [("user", full_prompt)]})
-        return response["messages"][-1].content
-
-    def generate_dq_recipe(self, table: str) -> str:
-        """
-        Generates a Data Quality YAML recipe for a table.
-        """
-        full_prompt = f"Generate a Data Quality YAML recipe for the table '{table}'. Use `generate_dq_checks` to inspect the schema and get suggestions. Output ONLY the YAML content."
-        response = self.agent.invoke({"messages": [("user", full_prompt)]})
-        output = response["messages"][-1].content
-        
-        if "```yaml" in output:
-            return output.split("```yaml")[1].split("```")[0].strip()
-        elif "```" in output:
-            return output.split("```")[1].split("```")[0].strip()
-        return output.strip()
-
-    def optimize_sql(self, query: str) -> str:
-        """
-        Analyzes a SQL query and suggests optimizations.
-        """
-        full_prompt = f"Optimize this SQL query. Use `optimize_query` to get the EXPLAIN PLAN and analyze it. Suggest improvements.\n\nQuery: {query}"
         response = self.agent.invoke({"messages": [("user", full_prompt)]})
         return response["messages"][-1].content
