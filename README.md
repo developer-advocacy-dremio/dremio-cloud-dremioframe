@@ -6,6 +6,8 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 
 ### 🚀 Getting Started
 - [Installation](#installation)
+- [Optional Dependencies](docs/getting_started/dependencies.md)
+- [S3 Integration](docs/getting_started/s3_integration.md)
 - [Quick Start](#quick-start)
 - [Configuration](docs/getting_started/configuration.md)
 - [Connecting to Dremio](docs/getting_started/connection.md)
@@ -64,7 +66,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Best Practices](docs/orchestration/best_practices.md)
 
 ### ✅ Data Quality
-- [DQ Framework](docs/data_quality/framework.md)
+- [DQ Framework](docs/data_quality.md)
+- [YAML Syntax](docs/data_quality/yaml_syntax.md)
+- [Recipes](docs/data_quality/recipes.md)
 
 ### 🔧 Administration & Governance
 - [Administration](docs/admin_governance/admin.md)
@@ -95,7 +99,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Contributing](CONTRIBUTING.md)
 
 ## Installation
-
+ 
+> [!NOTE]
+> DremioFrame has many optional dependencies for advanced features like AI, Chart Exporting, and Distributed Orchestration. See [Optional Dependencies](docs/getting_started/dependencies.md) for a full list.
 ```bash
 pip install dremioframe
 ```

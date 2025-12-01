@@ -31,6 +31,8 @@ nav:
   - Architecture: architecture.md
   - Getting Started:
     - Installation: README.md#installation
+    - Dependencies: docs/getting_started/dependencies.md
+    - S3 Integration: docs/getting_started/s3_integration.md
     - Connection: docs/connection.md
     - Configuration: docs/configuration.md
     - Quick Start: README.md#quick-start
@@ -72,7 +74,10 @@ nav:
     - CLI: docs/orchestration_cli.md
     - Deployment: docs/orchestration_deployment.md
     - Data Quality Task: docs/orchestration_dq_task.md
-  - Data Quality Framework: docs/data_quality.md
+  - Data Quality Framework:
+    - Overview: docs/data_quality.md
+    - YAML Syntax: docs/data_quality/yaml_syntax.md
+    - Recipes: docs/data_quality/recipes.md
   - Guides:
     - Cookbook: docs/cookbook.md
     - Data Modeling:
