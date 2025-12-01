@@ -266,11 +266,36 @@ def show_grants(entity: str) -> str:
         return f"Error showing grants: {e}"
 
 class DremioAgent:
-    def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None):
+    def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None, 
+                 memory_path: Optional[str] = None, context_folder: Optional[str] = None):
+        """
+        Initialize the Dremio AI Agent.
+        
+        Args:
+            model: LLM model name (e.g., "gpt-4o", "claude-3-5-sonnet", "gemini-pro").
+            api_key: API key for the LLM provider.
+            llm: Pre-configured LLM instance (overrides model and api_key).
+            memory_path: Path to SQLite database for conversation persistence. If None, memory is not persisted.
+            context_folder: Path to a folder containing additional context files for the agent to reference.
+        """
         self.model_name = model
         self.api_key = api_key
         self.llm = llm or self._initialize_llm()
-        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, list_catalog_items, get_table_schema, get_job_details, list_recent_jobs, list_reflections, create_reflection, show_grants]
+        self.memory_path = memory_path
+        self.context_folder = context_folder
+        
+        # Build tools list
+        self.tools = [
+            list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, 
+            list_catalog_items, get_table_schema, get_job_details, list_recent_jobs, 
+            list_reflections, create_reflection, show_grants
+        ]
+        
+        # Add context folder tools if specified
+        if self.context_folder:
+            self.tools.extend([self._create_list_context_files_tool(), self._create_read_context_file_tool()])
+        
+        self.checkpointer = self._initialize_checkpointer()
         self.agent = self._initialize_agent()
 
     def _initialize_llm(self):
@@ -295,6 +320,56 @@ class DremioAgent:
                 return ChatOpenAI(model="gpt-4o", api_key=api_key, temperature=0)
             raise ValueError(f"Unsupported model or missing API key for {self.model_name}")
 
+    def _initialize_checkpointer(self):
+        """Initialize the checkpointer for memory persistence."""
+        if self.memory_path:
+            try:
+                from langgraph.checkpoint.sqlite import SqliteSaver
+                return SqliteSaver.from_conn_string(self.memory_path)
+            except ImportError:
+                print("Warning: langgraph.checkpoint.sqlite not found. Memory will not be persisted.")
+                print("Install with: pip install langgraph-checkpoint-sqlite")
+                return None
+        return None
+
+    def _create_list_context_files_tool(self):
+        """Create a tool to list files in the context folder."""
+        context_folder = self.context_folder
+        
+        @tool
+        def list_context_files() -> List[str]:
+            """Lists all files in the user-provided context folder."""
+            if not os.path.exists(context_folder):
+                return [f"Error: Context folder not found: {context_folder}"]
+            
+            files = []
+            for root, _, filenames in os.walk(context_folder):
+                for filename in filenames:
+                    rel_path = os.path.relpath(os.path.join(root, filename), context_folder)
+                    files.append(rel_path)
+            return files
+        
+        return list_context_files
+    
+    def _create_read_context_file_tool(self):
+        """Create a tool to read files from the context folder."""
+        context_folder = self.context_folder
+        
+        @tool
+        def read_context_file(file_path: str) -> str:
+            """Reads the content of a file from the user-provided context folder."""
+            full_path = os.path.join(context_folder, file_path)
+            if not os.path.exists(full_path):
+                return f"Error: File not found: {file_path}"
+            
+            try:
+                with open(full_path, "r", errors="ignore") as f:
+                    return f.read()
+            except Exception as e:
+                return f"Error reading file: {e}"
+        
+        return read_context_file
+
     def _initialize_agent(self):
         system_message = (
             "You are an expert Dremio developer assistant. Your goal is to help users with Dremio tasks.\n"
@@ -303,20 +378,41 @@ class DremioAgent:
             "You can inspect job details using `get_job_details` and list recent jobs with `list_recent_jobs`.\n"
             "You can manage reflections using `list_reflections` and `create_reflection`.\n"
             "You can check privileges using `show_grants`.\n"
-            "When asked to generate a script, ensure it is complete, runnable, and includes comments about required environment variables.\n"
+        )
+        
+        if self.context_folder:
+            system_message += (
+                "\nYou also have access to user-provided context files via `list_context_files` and `read_context_file`.\n"
+                "Use these tools when the user mentions files or context that might be in their project folder."
+            )
+        
+        system_message += (
+            "\nWhen asked to generate a script, ensure it is complete, runnable, and includes comments about required environment variables.\n"
             "When asked to generate SQL, validate table names and columns using the catalog tools if possible. Ensure table paths are correctly quoted (e.g. \"Space\".\"Folder\".\"Table\").\n"
             "When asked to generate an API call, use the documentation to find the correct endpoint and payload.\n"
             "The output should be ONLY the requested content (code block, SQL, or cURL command) unless asked otherwise."
         )
-        return create_react_agent(self.llm, self.tools, prompt=system_message)
+        
+        if self.checkpointer:
+            return create_react_agent(self.llm, self.tools, checkpointer=self.checkpointer, prompt=system_message)
+        else:
+            return create_react_agent(self.llm, self.tools, prompt=system_message)
 
-    def generate_script(self, prompt: str, output_file: Optional[str] = None) -> str:
+    def generate_script(self, prompt: str, output_file: Optional[str] = None, session_id: Optional[str] = None) -> str:
         """
         Generates a dremioframe script based on the prompt.
-        If output_file is provided, writes the code to the file.
+        
+        Args:
+            prompt: Description of the script to generate.
+            output_file: If provided, writes the code to this file.
+            session_id: Session ID for conversation persistence. Required if memory_path was set.
+        
+        Returns:
+            The generated Python code.
         """
         full_prompt = f"Generate a Python script using dremioframe for: {prompt}"
-        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        config = {"configurable": {"thread_id": session_id}} if session_id else {}
+        response = self.agent.invoke({"messages": [("user", full_prompt)]}, config=config)
         # LangGraph returns state, output is in messages[-1].content
         output = response["messages"][-1].content
         
@@ -335,12 +431,20 @@ class DremioAgent:
         
         return code
 
-    def generate_sql(self, prompt: str) -> str:
+    def generate_sql(self, prompt: str, session_id: Optional[str] = None) -> str:
         """
         Generates a SQL query based on the prompt.
+        
+        Args:
+            prompt: Description of the SQL query to generate.
+            session_id: Session ID for conversation persistence.
+        
+        Returns:
+            The generated SQL query.
         """
         full_prompt = f"Generate a Dremio SQL query for: {prompt}. Use the catalog tools to verify table names and columns if needed. Output ONLY the SQL query."
-        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        config = {"configurable": {"thread_id": session_id}} if session_id else {}
+        response = self.agent.invoke({"messages": [("user", full_prompt)]}, config=config)
         output = response["messages"][-1].content
         
         if "```sql" in output:
@@ -349,12 +453,20 @@ class DremioAgent:
             return output.split("```")[1].split("```")[0].strip()
         return output.strip()
 
-    def generate_api_call(self, prompt: str) -> str:
+    def generate_api_call(self, prompt: str, session_id: Optional[str] = None) -> str:
         """
         Generates a cURL command for the Dremio API based on the prompt.
+        
+        Args:
+            prompt: Description of the API call to generate.
+            session_id: Session ID for conversation persistence.
+        
+        Returns:
+            The generated cURL command.
         """
         full_prompt = f"Generate a cURL command for the Dremio API for: {prompt}. Use the documentation tools to find the correct endpoint. Output ONLY the cURL command."
-        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        config = {"configurable": {"thread_id": session_id}} if session_id else {}
+        response = self.agent.invoke({"messages": [("user", full_prompt)]}, config=config)
         output = response["messages"][-1].content
         
         if "```bash" in output:

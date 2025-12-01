@@ -91,6 +91,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Governance: Privileges](docs/admin_governance/privileges.md)
 - [Space & Folder Management](docs/admin_governance/spaces_folders.md)
 
+### 🔗 Integrations
+- [Airflow Integration](docs/integrations/airflow.md)
+
 ### 🚀 Performance & Deployment
 - [Performance Tuning](docs/performance/tuning.md)
 - [CI/CD & Deployment](docs/deployment/cicd.md)

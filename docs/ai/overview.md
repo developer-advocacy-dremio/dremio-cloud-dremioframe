@@ -24,7 +24,30 @@ To use the AI features, you need to install the optional dependencies:
 pip install dremioframe[ai]
 ```
 
-You also need to set your LLM API key in your environment variables (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `GOOGLE_API_KEY`).
+You also need to set your LLM API key in your environment variables.
+
+### Required Environment Variables
+
+The AI agent supports multiple LLM providers. Set the appropriate environment variable for your chosen provider:
+
+| Provider | Environment Variable | How to Get |
+|----------|---------------------|------------|
+| **OpenAI** | `OPENAI_API_KEY` | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
+| **Anthropic** | `ANTHROPIC_API_KEY` | [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys) |
+| **Google** | `GOOGLE_API_KEY` | [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) |
+
+**Example `.env` file:**
+```bash
+# Choose one based on your provider
+OPENAI_API_KEY=sk-proj-...
+# ANTHROPIC_API_KEY=sk-ant-...
+# GOOGLE_API_KEY=AIza...
+
+# Dremio credentials (required for agent to access catalog)
+DREMIO_PAT=your_personal_access_token
+DREMIO_PROJECT_ID=your_project_id
+DREMIO_URL=data.dremio.cloud
+```
 
 ## Usage
 

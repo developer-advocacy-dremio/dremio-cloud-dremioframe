@@ -43,11 +43,12 @@ scheduler = ["apscheduler"]
 dq = ["pyyaml"]
 cli = ["rich", "prompt_toolkit"]
 docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
-ai = ["langchain", "langchain-openai", "langchain-anthropic", "langchain-google-genai"]
+ai = ["langchain", "langchain-openai", "langchain-anthropic", "langchain-google-genai", "langgraph-checkpoint-sqlite"]
 excel = ["openpyxl"]
 html = ["lxml", "html5lib"]
 avro = ["fastavro"]
 lance = ["pylance"]
+airflow = ["apache-airflow"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

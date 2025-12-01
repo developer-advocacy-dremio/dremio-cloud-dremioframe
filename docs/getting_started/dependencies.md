@@ -46,6 +46,7 @@ pip install "dremioframe[group1,group2]"
 | `postgres` | `psycopg2-binary` | Support for using PostgreSQL as an orchestration backend. |
 | `mysql` | `mysql-connector-python` | Support for using MySQL as an orchestration backend. |
 | `celery` | `celery`, `redis` | Distributed task execution using Celery and Redis. |
+| `airflow` | `apache-airflow` | Integration with Apache Airflow for orchestrating Dremio workflows. |
 
 ### Development & Documentation
 
@@ -62,10 +63,15 @@ pip install "dremioframe[group1,group2]"
 - **Persistent State**: Requires a backend like `postgres` or `mysql` (or uses local SQLite by default).
 
 ### AI Functions
-To use functions like `ai_gen_sql` or `ai_analyze_data`, you must install the `ai` group:
+To use the AI agent for script/SQL generation, you must install the `ai` group:
 ```bash
 pip install "dremioframe[ai]"
 ```
+
+This includes support for:
+- Script, SQL, and API call generation
+- Conversation memory persistence (via SQLite)
+- Context folder integration for project-specific files
 
 ### Chart Exporting
 To save charts as images using `chart.save("plot.png")`, you need the `image_export` group:
