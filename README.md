@@ -10,21 +10,29 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Configuration](docs/configuration.md)
 - [Tutorial: ETL Pipeline](docs/tutorial_etl.md)
 - [Cookbook / Recipes](docs/cookbook.md)
-- [Data Modeling](docs/modeling/medallion.md)
-    - [Medallion Architecture](docs/modeling/medallion.md)
-    - [Dimensional Modeling](docs/modeling/dimensional.md)
-    - [Slowly Changing Dimensions](docs/modeling/scd.md)
-    - [Semantic Views](docs/modeling/views.md)
-    - [Documenting Datasets](docs/modeling/documentation.md)
-- [Security Best Practices](docs/security.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
 ### 🛠️ Data Engineering
 - [Dataframe Builder API](docs/builder.md)
-- [Iceberg Lakehouse Management](docs/guide_iceberg_management.md)
-- [SCD2 Helper Guide](docs/scd2_guide.md)
-- [Pydantic Integration](docs/pydantic_integration.md)
 - [Ingestion Patterns](docs/ingestion_patterns.md)
+- [Iceberg Lakehouse Management](docs/guide_iceberg_management.md)
+- [Pydantic Integration](docs/pydantic_integration.md)
 - [SQL Functions](docs/functions.md)
+    - [Aggregate](docs/functions/aggregate.md)
+    - [AI](docs/functions/ai.md)
+    - [Complex Types](docs/functions/complex.md)
+    - [Conditional](docs/functions/conditional.md)
+    - [Date & Time](docs/functions/date.md)
+    - [Math](docs/functions/math.md)
+    - [String](docs/functions/string.md)
+    - [Window](docs/functions/window.md)
+
+### 📐 Data Modeling
+- [Medallion Architecture](docs/modeling/medallion.md)
+- [Dimensional Modeling](docs/modeling/dimensional.md)
+- [Slowly Changing Dimensions](docs/modeling/scd.md)
+- [Semantic Views](docs/modeling/views.md)
+- [Documenting Datasets](docs/modeling/documentation.md)
 
 ### ⚙️ Orchestration
 - [Overview](docs/orchestration.md)
@@ -32,23 +40,30 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Deployment](docs/orchestration_deployment.md)
 - [Distributed Execution](docs/orchestration_distributed.md)
 - [CLI & UI](docs/orchestration_cli.md)
+- [Best Practices](docs/orchestration_best_practices.md)
+- [Backends](docs/orchestration_backend.md)
 
 ### ✅ Data Quality
 - [DQ Framework](docs/data_quality.md)
 - [DQ Task](docs/orchestration_dq_task.md)
 
-### 🔧 Administration
-- [Reflections Management](docs/guide_reflections.md)
+### 🔧 Administration & Governance
 - [Catalog Management](docs/catalog.md)
-- **Governance**: Manage UDFs, Row Access Policies, Column Masking, Tags, Lineage, and Grants.
-- **AI Script Generation**: Generate Python scripts from natural language prompts using OpenAI, Claude, or Gemini.
-- [Troubleshooting](docs/troubleshooting.md)
+- [Reflections Management](docs/guide_reflections.md)
+- [Security Best Practices](docs/security.md)
+- [Governance: Masking & Row Access](docs/governance/masking_and_row_access.md)
+- [Governance: Tags](docs/governance/tags.md)
+- [Governance: Lineage](docs/governance/lineage.md)
+- [Governance: Privileges](docs/governance/privileges.md)
+- [AI Script Generation](docs/ai_generation.md)
 
 ### 📚 Reference
 - [API Reference](docs/reference/client.md)
 - [Architecture](architecture.md)
 - [Testing Guide](docs/testing.md)
 - [Contributing](CONTRIBUTING.md)
+- [Async Client](docs/async_client.md)
+- [CLI Reference](docs/cli.md)
 
 ## Installation
 
