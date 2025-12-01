@@ -35,9 +35,19 @@ Use this view for:
 **Marketing Data Team** (marketing-data@example.com)
 """
 
+# Get current wiki version (required for updates to avoid 409 Conflict)
+try:
+    current_wiki = client.catalog.get_wiki(dataset_id)
+    version = current_wiki.get("version")
+except Exception:
+    version = None
+
 # Update the Wiki
-client.catalog.update_wiki(dataset_id, wiki_content)
+client.catalog.update_wiki(dataset_id, wiki_content, version=version)
 ```
+
+> [!NOTE]
+> When updating a Wiki, it is best practice to fetch the current version first and pass it to `update_wiki`. This prevents overwriting concurrent changes and avoids `409 Conflict` errors, which are common in Dremio Software.
 
 ### Retrieving Wiki Content
 

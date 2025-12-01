@@ -6,18 +6,21 @@ class Catalog:
         self.client = client
 
     def _get_project_id(self):
-        if not self.client.project_id:
-            raise ValueError("Project ID is not set.")
         return self.client.project_id
 
+    def _build_url(self, endpoint: str):
+        if self.client.project_id:
+             return f"{self.client.base_url}/projects/{self.client.project_id}/{endpoint}"
+        else:
+             return f"{self.client.base_url}/{endpoint}"
+
     def list_catalog(self, path: Optional[str] = None) -> List[Dict[str, Any]]:
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog"
+        url = self._build_url("catalog")
         
         if path:
              # If path is provided, we might need to use by-path endpoint or just list children of a folder
              # The API docs say: GET /v0/projects/{project_id}/catalog/by-path/{path}
-             url = f"{self.client.base_url}/projects/{project_id}/catalog/by-path/{path}"
+             url = self._build_url(f"catalog/by-path/{path}")
 
         response = self.client.session.get(url)
         response.raise_for_status()
@@ -33,22 +36,19 @@ class Catalog:
             return [data] # It might be a single entity if path pointed to a file/table
 
     def get_entity(self, path: str) -> Dict[str, Any]:
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/by-path/{path}"
+        url = self._build_url(f"catalog/by-path/{path}")
         response = self.client.session.get(url)
         response.raise_for_status()
         return response.json()
 
     def get_entity_by_id(self, id: str) -> Dict[str, Any]:
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}"
+        url = self._build_url(f"catalog/{id}")
         response = self.client.session.get(url)
         response.raise_for_status()
         return response.json()
 
     def create_source(self, name: str, source_type: str, config: Dict[str, Any]):
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog"
+        url = self._build_url("catalog")
         payload = {
             "entityType": "source",
             "name": name,
@@ -60,8 +60,7 @@ class Catalog:
         return response.json()
 
     def create_folder(self, path: List[str]):
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog"
+        url = self._build_url("catalog")
         payload = {
             "entityType": "folder",
             "path": path
@@ -71,18 +70,23 @@ class Catalog:
         return response.json()
 
     def delete_catalog_item(self, id: str):
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}"
+        url = self._build_url(f"catalog/{id}")
         response = self.client.session.delete(url)
         response.raise_for_status()
 
-    def update_wiki(self, id: str, content: str):
+    def update_wiki(self, id: str, content: str, version: str = None):
         """
         Updates the wiki content for a catalog entity.
+        Args:
+            id: Entity ID.
+            content: Wiki text content.
+            version: Optional version string (required for updates to avoid 409 Conflict).
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/wiki"
+        url = self._build_url(f"catalog/{id}/collaboration/wiki")
         payload = {"text": content}
+        if version:
+            payload["version"] = version
+            
         response = self.client.session.post(url, json=payload)
         response.raise_for_status()
         return response.json()
@@ -91,8 +95,7 @@ class Catalog:
         """
         Retrieves the wiki content for a catalog entity.
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/wiki"
+        url = self._build_url(f"catalog/{id}/collaboration/wiki")
         response = self.client.session.get(url)
         # 404 means no wiki exists, return empty dict or None? Dremio API might return 404.
         if response.status_code == 404:
@@ -104,8 +107,7 @@ class Catalog:
         """
         Retrieves the tags for a catalog entity.
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
+        url = self._build_url(f"catalog/{id}/collaboration/tag")
         response = self.client.session.get(url)
         if response.status_code == 404:
             return []
@@ -118,8 +120,7 @@ class Catalog:
         Retrieves the tags and version for a catalog entity.
         Returns dict with 'tags' (List[str]) and 'version' (str).
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
+        url = self._build_url(f"catalog/{id}/collaboration/tag")
         response = self.client.session.get(url)
         if response.status_code == 404:
             return {"tags": [], "version": None}
@@ -134,8 +135,7 @@ class Catalog:
             tags: List of tags.
             version: Optional version string (required for updates to avoid 409 Conflict).
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
+        url = self._build_url(f"catalog/{id}/collaboration/tag")
         payload = {"tags": tags}
         if version:
             payload["version"] = version
@@ -152,8 +152,7 @@ class Catalog:
             sql: SQL string or DremioBuilder object.
             context: Optional list of context path components.
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog"
+        url = self._build_url("catalog")
         
         # Handle Builder object
         if hasattr(sql, "_compile_sql"):
@@ -179,7 +178,6 @@ class Catalog:
         Updates an existing virtual dataset (View).
         If 'tag' (version) is not provided, it will be fetched automatically.
         """
-        project_id = self._get_project_id()
         
         # Handle Builder object
         if hasattr(sql, "_compile_sql"):
@@ -192,7 +190,7 @@ class Catalog:
             current = self.get_entity_by_id(id)
             tag = current.get("tag")
 
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}"
+        url = self._build_url(f"catalog/{id}")
         payload = {
             "entityType": "dataset",
             "type": "VIRTUAL_DATASET",
@@ -212,8 +210,7 @@ class Catalog:
         """
         Retrieves the lineage graph for a dataset.
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/graph"
+        url = self._build_url(f"catalog/{id}/graph")
         response = self.client.session.get(url)
         response.raise_for_status()
         return response.json()
@@ -222,8 +219,7 @@ class Catalog:
         """
         Retrieves the grants for a catalog entity.
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/grants"
+        url = self._build_url(f"catalog/{id}/grants")
         response = self.client.session.get(url)
         response.raise_for_status()
         return response.json()
@@ -235,8 +231,7 @@ class Catalog:
             id: Entity ID.
             grants: List of grant objects (e.g. [{"granteeType": "USER", "id": "...", "privileges": ["SELECT"]}]).
         """
-        project_id = self._get_project_id()
-        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/grants"
+        url = self._build_url(f"catalog/{id}/grants")
         payload = {"grants": grants}
         response = self.client.session.put(url, json=payload)
         response.raise_for_status()

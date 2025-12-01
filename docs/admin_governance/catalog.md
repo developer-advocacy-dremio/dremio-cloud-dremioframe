@@ -83,10 +83,17 @@ Manage documentation and tags for any catalog entity (dataset, source, space, fo
 wiki = catalog.get_wiki("entity-id")
 print(wiki.get("text"))
 
-# Update Wiki
+# Update Wiki (fetch version first to avoid conflict)
+try:
+    current_wiki = catalog.get_wiki("entity-id")
+    version = current_wiki.get("version")
+except:
+    version = None
+
 catalog.update_wiki(
     id="entity-id",
-    content="# My Dataset\n\nThis is a documented dataset."
+    content="# My Dataset\n\nThis is a documented dataset.",
+    version=version
 )
 ```
 

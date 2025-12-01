@@ -252,8 +252,12 @@ class DremioBuilder:
             options = flight.FlightCallOptions(headers=headers)
         elif self.client.username and self.client.password:
             # Basic Auth (Software)
-            # client.authenticate_basic_token(user, pass) returns call_options with the token
-            options = client.authenticate_basic_token(self.client.username, self.client.password)
+            # client.authenticate_basic_token(user, pass) returns (call_options, token)
+            auth_result = client.authenticate_basic_token(self.client.username, self.client.password)
+            if isinstance(auth_result, tuple):
+                options = auth_result[0]
+            else:
+                options = auth_result
         
         if self.client.disable_certificate_verification:
             # This is usually set at client creation or context, but PyArrow Flight handles it via URI or args.
@@ -398,6 +402,16 @@ class DremioBuilder:
             
         return LocalBuilder(file_path, table_name=name)
 
+    def _quote_path(self, path: str) -> str:
+        """
+        Quote a path for SQL (e.g. space.folder.table -> "space"."folder"."table").
+        """
+        if '"' in path:
+            return path # Assume already quoted
+        parts = path.split(".")
+        quoted_parts = [f'"{p}"' for p in parts]
+        return ".".join(quoted_parts)
+
     # DML Operations
     def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):
         """
@@ -410,6 +424,8 @@ class DremioBuilder:
             batch_size: Batch size for insertion.
             schema: Optional Pydantic model for validation.
         """
+        quoted_name = self._quote_path(name)
+        
         if data is not None:
             # Validate data if schema provided
             if schema:
@@ -450,11 +466,11 @@ class DremioBuilder:
                 values_list.append(f"({', '.join(row_vals)})")
             
             values_clause = ", ".join(values_list)
-            cols_def = ", ".join(data.column_names)
+            cols_def = ", ".join([f'"{c}"' for c in data.column_names]) # Quote columns too
             
             # CTAS SQL
             # CREATE TABLE name AS SELECT * FROM (VALUES ...) AS sub(col1, col2)
-            create_sql = f"CREATE TABLE {name} AS SELECT * FROM (VALUES {values_clause}) AS sub({cols_def})"
+            create_sql = f"CREATE TABLE {quoted_name} AS SELECT * FROM (VALUES {values_clause}) AS sub({cols_def})"
             
             result = self._execute_dml(create_sql)
             
@@ -466,7 +482,7 @@ class DremioBuilder:
             return result
 
         sql = self._compile_sql()
-        create_sql = f"CREATE TABLE {name} AS {sql}"
+        create_sql = f"CREATE TABLE {quoted_name} AS {sql}"
         return self._execute_dml(create_sql)
 
     def insert(self, table_name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):

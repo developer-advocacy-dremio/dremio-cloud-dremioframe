@@ -46,18 +46,48 @@ class DremioClient:
         if self.pat:
             self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
         elif self.username and self.password:
-            # For REST API, we might need to login to get a token.
-            # Dremio Software /apiv3/login
+            # For REST API, we need to login to get a token.
+            # Dremio Software /apiv3/login (v26+) or /apiv2/login (v25)
             try:
-                login_url = f"{self.base_url}/login"
-                # Only attempt if we think it's a valid REST endpoint
-                # This might fail if the user only wants Flight and didn't configure REST port
-                # But Catalog requires REST.
-                pass 
-            except Exception:
-                pass
-            # For now, we'll assume Flight is the primary goal. 
-            # Catalog might not work with User/Pass without implementing the login flow.
+                # Determine base root (remove /api/v3 if present)
+                if self.base_url.endswith("/api/v3"):
+                    base_root = self.base_url[:-7] # remove /api/v3
+                else:
+                    base_root = self.base_url
+
+                # Endpoints to try: /api/v3/login, /apiv2/login
+                login_endpoints = [
+                    f"{self.base_url}/login",       # Standard v3
+                    f"{base_root}/apiv2/login",     # v25
+                    f"{base_root}/apiv3/login"      # v26+ alternative
+                ]
+
+                token = None
+                for login_url in login_endpoints:
+                    try:
+                        payload = {"userName": self.username, "password": self.password}
+                        headers = {"Content-Type": "application/json", "Accept": "application/json"}
+                        response = requests.post(login_url, json=payload, headers=headers, verify=not self.disable_certificate_verification)
+                        
+                        if response.status_code == 200:
+                            try:
+                                data = response.json()
+                                token = data.get("token")
+                                if token:
+                                    self.session.headers.update({"Authorization": f"_dremio{token}"})
+                                    # Also set self.pat so Flight client can use it as Bearer token
+                                    self.pat = token
+                                    break # Success
+                            except Exception:
+                                pass
+                    except Exception:
+                        pass
+                
+                if not token:
+                    print("Warning: All REST API login attempts failed.")
+
+            except Exception as e:
+                print(f"Warning: REST API login process failed: {e}")
             
         self.session.headers.update({
             "Content-Type": "application/json"

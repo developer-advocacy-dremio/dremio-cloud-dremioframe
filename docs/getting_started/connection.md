@@ -102,6 +102,14 @@ client = DremioClient(
 )
 ```
 
+### Dremio Software Versions (v25 vs v26+)
+
+`dremioframe` automatically handles authentication differences between Dremio Software versions:
+-   **v25**: Uses `/apiv2/login`
+-   **v26+**: Uses `/apiv3/login`
+
+The client will attempt to detect the correct endpoint automatically.
+
 > **Warning**: Disabling certificate verification is insecure and should not be used in production environments.
 
 ---
@@ -132,6 +140,11 @@ client = DremioClient(
 **Symptoms**: Errors parsing the response.
 **Causes**:
 - **HTTP vs Flight**: You might be trying to connect to the HTTP REST API port (`9047`) using the Arrow Flight client. Make sure `port` is set to the Flight port (`32010` for Software, `443` for Cloud).
+
+### Dremio Software Specifics
+-   **Login Failures**: If you see 404s on login, ensure you are not pointing the `base_url` to a sub-path that doesn't exist. The client handles `/apiv2` vs `/apiv3` automatically, but `hostname` should be just the domain/IP.
+-   **Environment Variables**: If you have `DREMIO_PAT` set in your environment, the client will prioritize it over username/password. Unset it or pass `pat=""` to force username/password auth.
+-   **"Method Not Allowed"**: If you see this during login, it might be an API version mismatch. `dremioframe` tries multiple endpoints, so check the logs for which one succeeded.
 
 ## 4. Testing Connectivity
 
