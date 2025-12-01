@@ -70,6 +70,15 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [YAML Syntax](docs/data_quality/yaml_syntax.md)
 - [Recipes](docs/data_quality/recipes.md)
 
+### 🤖 AI Agent
+- [Overview](docs/ai/overview.md)
+- [Observability](docs/ai/observability.md)
+- [Reflections](docs/ai/reflections.md)
+- [Governance](docs/ai/governance.md)
+- [Data Quality](docs/ai/data_quality.md)
+- [SQL Optimization](docs/ai/optimization.md)
+- [CLI Chat](docs/ai/cli_chat.md)
+
 ### 🔧 Administration & Governance
 - [Administration](docs/admin_governance/admin.md)
 - [Catalog Management](docs/admin_governance/catalog.md)

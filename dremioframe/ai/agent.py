@@ -157,13 +157,170 @@ def get_table_schema(path: str) -> str:
         return f"No fields found for {path}. Metadata: {dataset}"
     except Exception as e:
         return f"Error getting schema: {e}"
+@tool
+def get_job_details(job_id: str) -> str:
+    """
+    Retrieves details for a specific job, including status and error messages.
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        # Use the raw session to get job details as client.get_job_profile might return a Profile object
+        # We want the raw JSON for the agent to inspect
+        response = client.session.get(f"{client.base_url}/job/{job_id}")
+        response.raise_for_status()
+        job = response.json()
+        
+        # Extract relevant info
+        info = {
+            "id": job.get("id"),
+            "status": job.get("jobState"),
+            "queryType": job.get("queryType"),
+            "user": job.get("user"),
+            "startTime": job.get("startTime"),
+            "endTime": job.get("endTime"),
+            "errorMessage": job.get("errorMessage"),
+            "failureInfo": job.get("failureInfo")
+        }
+        return str(info)
+    except Exception as e:
+        return f"Error getting job details: {e}"
+
+@tool
+def list_recent_jobs(limit: int = 5) -> str:
+    """
+    Lists the most recent jobs.
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        # Dremio SQL API doesn't have a simple "list jobs" table usually, 
+        # but we can use the REST API /jobs endpoint if available or sys.jobs table if accessible.
+        # sys.jobs is often available.
+        try:
+            jobs = client.sql(f"SELECT job_id, status, user_name, start_time, error_msg FROM sys.jobs ORDER BY start_time DESC LIMIT {limit}").collect()
+            return str(jobs.to_dict(orient='records'))
+        except Exception:
+            # Fallback to REST API if sys.jobs fails (e.g. no permission)
+            # Note: /jobs endpoint might be different across versions
+            return "Error: Could not list jobs from sys.jobs."
+    except Exception as e:
+        return f"Error listing jobs: {e}"
+
+@tool
+def list_reflections() -> str:
+    """
+    Lists all reflections in the Dremio environment.
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        reflections = client.admin.list_reflections()
+        # Summarize for the agent
+        summary = []
+        for r in reflections.get("data", []):
+            summary.append(f"ID: {r['id']}, Name: {r['name']}, Type: {r['type']}, Status: {r['status']}")
+        return "\n".join(summary) if summary else "No reflections found."
+    except Exception as e:
+        return f"Error listing reflections: {e}"
+
+@tool
+def create_reflection(dataset_id: str, name: str, type: str, fields: List[str]) -> str:
+    """
+    Creates a reflection.
+    type: "RAW" or "AGGREGATION"
+    fields: List of field names to include.
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        if type.upper() == "RAW":
+            client.admin.create_reflection(dataset_id, name, type, display_fields=fields)
+        else:
+            # For simplicity, assume fields are dimensions and measures
+            # In a real agent, we might want more granular control
+            client.admin.create_reflection(dataset_id, name, type, dimension_fields=fields, measure_fields=fields)
+        return f"Reflection '{name}' created successfully."
+    except Exception as e:
+        return f"Error creating reflection: {e}"
+
+@tool
+def show_grants(entity: str) -> str:
+    """
+    Shows privileges granted on a specific entity (table, view, folder, space).
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        # Dremio SQL: SHOW GRANTS ON [TABLE|VIEW|FOLDER|SPACE] <name>
+        # We need to determine the type or just try generic
+        # But SHOW GRANTS syntax usually requires type.
+        # Let's try to infer or just use TABLE as default for datasets
+        try:
+            grants = client.sql(f"SHOW GRANTS ON TABLE {entity}").collect()
+            return str(grants.to_dict(orient='records'))
+        except Exception:
+            # Try without type or other types?
+            return "Error: Could not fetch grants. Ensure the entity exists and you have permission."
+    except Exception as e:
+        return f"Error showing grants: {e}"
+
+@tool
+def generate_dq_checks(table: str) -> str:
+    """
+    Generates a Data Quality YAML recipe for a table based on its schema.
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        
+        # 1. Get Schema
+        try:
+            dataset = client.catalog.get_dataset(table)
+            fields = dataset.get("fields", [])
+        except Exception:
+            return f"Error: Could not find dataset {table}"
+
+        # 2. Generate YAML via simple heuristics or return schema for agent to process
+        # Since this is a tool, it should return information for the agent to use.
+        # The agent's system prompt or a specific method should handle the generation.
+        # But the user asked for a tool.
+        # Let's return the schema and a prompt for the agent to generate the YAML.
+        
+        schema_info = ", ".join([f"{f['name']} ({f['type']['name']})" for f in fields])
+        return f"Schema for {table}: {schema_info}. Please generate a YAML data quality recipe with checks like 'not_null' for IDs and 'unique' for primary keys."
+    except Exception as e:
+        return f"Error generating DQ checks: {e}"
+
+@tool
+def optimize_query(query: str) -> str:
+    """
+    Analyzes a SQL query using EXPLAIN PLAN and suggests optimizations.
+    """
+    try:
+        from dremioframe.client import DremioClient
+        client = DremioClient()
+        
+        # 1. Get Explain Plan
+        try:
+            # Use EXPLAIN PLAN FOR <query>
+            explain_query = f"EXPLAIN PLAN FOR {query}"
+            plan_df = client.sql(explain_query).collect()
+            plan_text = str(plan_df.to_dict(orient='records'))
+        except Exception as e:
+            return f"Error getting explain plan: {e}. Please check if the query is valid."
+
+        # 2. Return plan for agent to analyze
+        return f"Explain Plan: {plan_text}. Please analyze this plan and suggest optimizations (e.g. reflections, rewriting joins, filtering earlier)."
+    except Exception as e:
+        return f"Error optimizing query: {e}"
 
 class DremioAgent:
     def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None):
         self.model_name = model
         self.api_key = api_key
         self.llm = llm or self._initialize_llm()
-        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, list_catalog_items, get_table_schema]
+        self.tools = [list_documentation, read_documentation, search_dremio_docs, read_dremio_doc, list_catalog_items, get_table_schema, get_job_details, list_recent_jobs, list_reflections, create_reflection, show_grants, generate_dq_checks, optimize_query]
         self.agent = self._initialize_agent()
 
     def _initialize_llm(self):
@@ -193,6 +350,11 @@ class DremioAgent:
             "You are an expert Dremio developer assistant. Your goal is to help users with Dremio tasks.\n"
             "You have access to the library's documentation and native Dremio documentation via tools.\n"
             "You also have access to the Dremio Catalog via `list_catalog_items` and `get_table_schema` to inspect tables and views.\n"
+            "You can inspect job details using `get_job_details` and list recent jobs with `list_recent_jobs`.\n"
+            "You can manage reflections using `list_reflections` and `create_reflection`.\n"
+            "You can check privileges using `show_grants`.\n"
+            "You can generate Data Quality checks using `generate_dq_checks`.\n"
+            "You can optimize SQL queries using `optimize_query`.\n"
             "When asked to generate a script, ensure it is complete, runnable, and includes comments about required environment variables.\n"
             "When asked to generate SQL, validate table names and columns using the catalog tools if possible. Ensure table paths are correctly quoted (e.g. \"Space\".\"Folder\".\"Table\").\n"
             "When asked to generate an API call, use the documentation to find the correct endpoint and payload.\n"
@@ -254,3 +416,49 @@ class DremioAgent:
         elif "```" in output:
             return output.split("```")[1].split("```")[0].strip()
         return output.strip()
+
+    def analyze_job_failure(self, job_id: str) -> str:
+        """
+        Analyzes a failed job and provides an explanation and potential fixes.
+        """
+        full_prompt = f"Analyze the failure for job {job_id}. Use `get_job_details` to retrieve the error message and context. Explain why it failed and suggest a fix."
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        return response["messages"][-1].content
+
+    def recommend_reflections(self, query: str) -> str:
+        """
+        Analyzes a SQL query and recommends reflections to improve performance.
+        """
+        full_prompt = f"Analyze this SQL query and recommend Dremio Reflections (Raw or Aggregation) that would accelerate it. Specify the fields for dimensions, measures, etc. Assume the table and columns exist.\n\nQuery: {query}"
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        return response["messages"][-1].content
+
+    def auto_document_dataset(self, path: str) -> str:
+        """
+        Generates a Wiki description and Tags for a dataset based on its schema.
+        """
+        full_prompt = f"Generate a Wiki description (Markdown) and a list of 3-5 Tags for the Dremio dataset at '{path}'. Use `get_table_schema` to inspect the columns and types. The output should be a JSON object with 'wiki' and 'tags' keys."
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        return response["messages"][-1].content
+
+    def generate_dq_recipe(self, table: str) -> str:
+        """
+        Generates a Data Quality YAML recipe for a table.
+        """
+        full_prompt = f"Generate a Data Quality YAML recipe for the table '{table}'. Use `generate_dq_checks` to inspect the schema and get suggestions. Output ONLY the YAML content."
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        output = response["messages"][-1].content
+        
+        if "```yaml" in output:
+            return output.split("```yaml")[1].split("```")[0].strip()
+        elif "```" in output:
+            return output.split("```")[1].split("```")[0].strip()
+        return output.strip()
+
+    def optimize_sql(self, query: str) -> str:
+        """
+        Analyzes a SQL query and suggests optimizations.
+        """
+        full_prompt = f"Optimize this SQL query. Use `optimize_query` to get the EXPLAIN PLAN and analyze it. Suggest improvements.\n\nQuery: {query}"
+        response = self.agent.invoke({"messages": [("user", full_prompt)]})
+        return response["messages"][-1].content

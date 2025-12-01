@@ -334,6 +334,61 @@ def generate_api(
     except Exception as e:
         console.print(f"[red]Error generating API call: {e}[/red]")
         raise typer.Exit(code=1)
+@app.command(name="chat")
+def chat_cmd(
+    model: str = typer.Option("gpt-4o", "--model", "-m", help="Model to use")
+):
+    """
+    Start an interactive chat session with the Dremio Agent.
+    """
+    if not AI_AVAILABLE:
+        console.print("[red]AI module not available. Please install with 'pip install dremioframe[ai]'[/red]")
+        raise typer.Exit(code=1)
+
+    try:
+        from prompt_toolkit import PromptSession
+        from prompt_toolkit.history import FileHistory
+    except ImportError:
+        console.print("[red]CLI dependencies not installed. Run `pip install dremioframe[cli]`[/red]")
+        raise typer.Exit(1)
+
+    console.print(f"[green]Starting Dremio Agent Chat ({model})...[/green]")
+    console.print("Type 'exit' or 'quit' to leave.")
+    
+    try:
+        agent = DremioAgent(model=model)
+    except Exception as e:
+        console.print(f"[red]Error initializing agent: {e}[/red]")
+        raise typer.Exit(1)
+
+    session = PromptSession(history=FileHistory('.dremio_agent_history'))
+
+    while True:
+        try:
+            text = session.prompt('You: ')
+            text = text.strip()
+            
+            if not text:
+                continue
+                
+            if text.lower() in ['exit', 'quit']:
+                break
+            
+            with console.status("[bold green]Thinking...[/bold green]"):
+                response = agent.agent.invoke({"messages": [("user", text)]})
+                output = response["messages"][-1].content
+                
+            console.print(f"[bold blue]Agent:[/bold blue] {output}")
+            console.print("-" * 40)
+            
+        except KeyboardInterrupt:
+            continue
+        except EOFError:
+            break
+        except Exception as e:
+            console.print(f"[red]Error: {e}[/red]")
+
+    console.print("Goodbye!")
 
 if __name__ == "__main__":
     app()
