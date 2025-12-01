@@ -113,13 +113,33 @@ class Catalog:
         data = response.json()
         return data.get("tags", [])
 
-    def set_tags(self, id: str, tags: List[str]):
+    def get_tag_info(self, id: str) -> Dict[str, Any]:
+        """
+        Retrieves the tags and version for a catalog entity.
+        Returns dict with 'tags' (List[str]) and 'version' (str).
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
+        response = self.client.session.get(url)
+        if response.status_code == 404:
+            return {"tags": [], "version": None}
+        response.raise_for_status()
+        return response.json()
+
+    def set_tags(self, id: str, tags: List[str], version: str = None):
         """
         Sets the tags for a catalog entity (overwrites existing tags).
+        Args:
+            id: Entity ID.
+            tags: List of tags.
+            version: Optional version string (required for updates to avoid 409 Conflict).
         """
         project_id = self._get_project_id()
         url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/collaboration/tag"
         payload = {"tags": tags}
+        if version:
+            payload["version"] = version
+            
         response = self.client.session.post(url, json=payload)
         response.raise_for_status()
         return response.json()
@@ -143,7 +163,7 @@ class Catalog:
 
         payload = {
             "entityType": "dataset",
-            "type": "VIRTUAL",
+            "type": "VIRTUAL_DATASET",
             "path": path,
             "sql": sql_str
         }
@@ -175,7 +195,7 @@ class Catalog:
         url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}"
         payload = {
             "entityType": "dataset",
-            "type": "VIRTUAL",
+            "type": "VIRTUAL_DATASET",
             "id": id,
             "path": path,
             "sql": sql_str,
@@ -186,4 +206,40 @@ class Catalog:
 
         response = self.client.session.put(url, json=payload)
         response.raise_for_status()
+        return response.json()
+
+    def get_lineage(self, id: str) -> Dict[str, Any]:
+        """
+        Retrieves the lineage graph for a dataset.
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/graph"
+        response = self.client.session.get(url)
+        response.raise_for_status()
+        return response.json()
+
+    def get_grants(self, id: str) -> Dict[str, Any]:
+        """
+        Retrieves the grants for a catalog entity.
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/grants"
+        response = self.client.session.get(url)
+        response.raise_for_status()
+        return response.json()
+
+    def set_grants(self, id: str, grants: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """
+        Sets the grants for a catalog entity.
+        Args:
+            id: Entity ID.
+            grants: List of grant objects (e.g. [{"granteeType": "USER", "id": "...", "privileges": ["SELECT"]}]).
+        """
+        project_id = self._get_project_id()
+        url = f"{self.client.base_url}/projects/{project_id}/catalog/{id}/grants"
+        payload = {"grants": grants}
+        response = self.client.session.put(url, json=payload)
+        response.raise_for_status()
+        if response.status_code == 204 or not response.content:
+            return {}
         return response.json()

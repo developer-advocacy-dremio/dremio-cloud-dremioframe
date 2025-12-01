@@ -83,6 +83,9 @@ nav:
       - Documenting Datasets: docs/modeling/documentation.md
     - Governance:
       - Row Access & Masking: docs/governance/masking_and_row_access.md
+      - Tags: docs/governance/tags.md
+      - Data Lineage: docs/governance/lineage.md
+      - Grants & Privileges: docs/governance/privileges.md
     - Security Best Practices: docs/security.md
     - Iceberg Management: docs/guide_iceberg_management.md
     - Reflections Management: docs/guide_reflections.md

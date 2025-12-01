@@ -41,6 +41,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Reflections Management](docs/guide_reflections.md)
 - [Catalog Management](docs/catalog.md)
 - [Governance (Masking & Row Access)](docs/governance/masking_and_row_access.md)
+- [Governance (Tags)](docs/governance/tags.md)
+- [Governance (Lineage)](docs/governance/lineage.md)
+- [Governance (Privileges)](docs/governance/privileges.md)
 - [Troubleshooting](docs/troubleshooting.md)
 
 ### 📚 Reference

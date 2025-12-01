@@ -8,8 +8,7 @@ DremioFrame is designed to abstract the complexities of Dremio's REST API and Ar
 The main entry point. It manages authentication and holds references to the `Catalog` and `Builder` factories.
 
 ### 2. Catalog (`catalog.py`)
-Handles all metadata and administrative operations using the Dremio REST API.
-- List catalogs, sources, folders, tables.
+Handles all metadata and administrative operations- **Catalog**: Manages Dremio catalog entities (sources, spaces, folders, datasets). Supports creating/updating views, managing tags, wiki content, data lineage, and access grants.
 - Create/Update/Delete sources and views.
 
 ### 3. DremioBuilder (`builder.py`)
