@@ -14,6 +14,8 @@ The AI Agent is designed to assist with:
 -   **[SQL Optimization](optimization.md)**: Analyze query plans and suggest performance improvements.
 -   **[Interactive Chat](cli_chat.md)**: Converse with the agent directly from the CLI.
 
+**note:** this libraries embdedded agent is primarily meant as a code generation assist tool, not meant as an alternative to the integrated Dremio agent for deeper administration and natural language analytics. Login to your Dremio instance's UI to leverage integrated agent.
+
 ## Getting Started
 
 To use the AI features, you need to install the optional dependencies:
