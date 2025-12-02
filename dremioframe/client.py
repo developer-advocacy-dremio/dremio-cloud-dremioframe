@@ -386,3 +386,22 @@ class DremioClient:
         # Create table and insert data
         self.table(table_name).create(table_name, data=table)
         print(f"Successfully uploaded {file_path} to {table_name}")
+    @property
+    def ingest(self):
+        """
+        Access ingestion modules.
+        Example: client.ingest.dlt(source, "table")
+        """
+        from dremioframe import ingest
+        
+        class IngestNamespace:
+            def __init__(self, client):
+                self.client = client
+                
+            def dlt(self, source, table_name, **kwargs):
+                return ingest.ingest_dlt(self.client, source, table_name, **kwargs)
+
+            def database(self, connection_string, query, table_name, **kwargs):
+                return ingest.ingest_database(self.client, connection_string, query, table_name, **kwargs)
+                
+        return IngestNamespace(self)

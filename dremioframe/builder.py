@@ -413,16 +413,17 @@ class DremioBuilder:
         return ".".join(quoted_parts)
 
     # DML Operations
-    def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):
+    def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None, method: str = "values"):
         """
         Create table as select (CTAS).
-        If data is provided, it creates the table from the data (VALUES).
+        If data is provided, it creates the table from the data.
         
         Args:
             name: Table name.
             data: Data to insert (Pandas DataFrame, Arrow Table, or list of dicts).
-            batch_size: Batch size for insertion.
+            batch_size: Batch size for insertion (only for 'values' method).
             schema: Optional Pydantic model for validation.
+            method: 'values' (default) or 'staging' (faster for large data).
         """
         quoted_name = self._quote_path(name)
         
@@ -431,20 +432,45 @@ class DremioBuilder:
             if schema:
                 self._validate_data(data, schema)
 
-            # Reuse insert logic to generate VALUES clause
-            # But we need to wrap it in a SELECT * FROM (VALUES ...)
-            # And we need to handle batching? CTAS usually is one shot.
-            # If batching is needed, we should CREATE with first batch, then INSERT rest.
-            
             import pyarrow as pa
             import math
+            import pandas as pd
             
             if isinstance(data, pd.DataFrame):
                 data = pa.Table.from_pandas(data)
             
             if not isinstance(data, pa.Table):
                 raise ValueError("Data must be a PyArrow Table or Pandas DataFrame")
-            
+
+            if method == "staging":
+                # Staging method: Write to parquet, upload, CTAS
+                import tempfile
+                import os
+                
+                with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as tmp:
+                    import pyarrow.parquet as pq
+                    pq.write_table(data, tmp.name)
+                    tmp_path = tmp.name
+                
+                try:
+                    # Upload file
+                    # We need a location. Let's assume user has a home space or scratch space?
+                    # Or we upload to the target folder if possible.
+                    # upload_file uploads to a table? No, it uploads to a location then promotes?
+                    # client.upload_file uploads to a table directly usually via arrow flight or rest.
+                    # Wait, client.upload_file in client.py (lines 286+) uses... what?
+                    # It's not implemented fully in the snippet I saw earlier (it just had imports).
+                    # Let's assume we can use client.upload_file if implemented, or implement a simple version here.
+                    
+                    # Actually, client.upload_file docstring says "Upload a local file to Dremio as a new table."
+                    # So we can just use that!
+                    self.client.upload_file(tmp_path, name, file_format="parquet")
+                    return
+                finally:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
+
+            # method == 'values'
             rows = data.to_pylist()
             total_rows = len(rows)
             
@@ -477,7 +503,7 @@ class DremioBuilder:
             # If there are more batches, insert them
             if batch_size and total_rows > batch_size:
                 remaining_data = data.slice(batch_size)
-                self.insert(name, data=remaining_data, batch_size=batch_size)
+                self.insert(name, data=remaining_data, batch_size=batch_size, method=method)
                 
             return result
 
@@ -485,7 +511,7 @@ class DremioBuilder:
         create_sql = f"CREATE TABLE {quoted_name} AS {sql}"
         return self._execute_dml(create_sql)
 
-    def insert(self, table_name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None):
+    def insert(self, table_name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None, method: str = "values"):
         """
         Insert into table.
         If data is provided (Arrow Table or Pandas DataFrame), it generates a VALUES clause.
@@ -496,6 +522,7 @@ class DremioBuilder:
             data: Optional PyArrow Table or Pandas DataFrame.
             batch_size: Optional integer to split data into batches.
             schema: Optional Pydantic model for validation.
+            method: 'values' (default) or 'staging' (faster for large data).
         """
         if data is not None:
             # Validate data if schema provided
@@ -505,6 +532,7 @@ class DremioBuilder:
             # Handle Arrow Table or Pandas DataFrame
             import pyarrow as pa
             import math
+            import pandas as pd
             
             if isinstance(data, pd.DataFrame):
                 data = pa.Table.from_pandas(data)
@@ -512,7 +540,39 @@ class DremioBuilder:
             if not isinstance(data, pa.Table):
                 raise ValueError("Data must be a PyArrow Table or Pandas DataFrame")
             
-            # Convert to VALUES clause
+            if method == "staging":
+                # Staging method: Write to parquet, upload to temp table, INSERT INTO target SELECT * FROM temp, DROP temp
+                import tempfile
+                import os
+                import uuid
+                
+                # Create temp table name
+                # We need a valid path. Use same folder as target if possible?
+                # Or just append suffix.
+                # Assuming table_name is "Space"."Folder"."Table"
+                temp_table_name = f"{table_name}_staging_{uuid.uuid4().hex[:8]}"
+                
+                with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as tmp:
+                    import pyarrow.parquet as pq
+                    pq.write_table(data, tmp.name)
+                    tmp_path = tmp.name
+                
+                try:
+                    # Upload to temp table
+                    self.client.upload_file(tmp_path, temp_table_name, file_format="parquet")
+                    
+                    # Insert into target from temp
+                    insert_sql = f"INSERT INTO {table_name} SELECT * FROM {temp_table_name}"
+                    result = self._execute_dml(insert_sql)
+                    
+                    # Drop temp table
+                    self.client.execute(f"DROP TABLE IF EXISTS {temp_table_name}")
+                    return result
+                finally:
+                    if os.path.exists(tmp_path):
+                        os.remove(tmp_path)
+
+            # method == 'values'
             rows = data.to_pylist()
             total_rows = len(rows)
             
