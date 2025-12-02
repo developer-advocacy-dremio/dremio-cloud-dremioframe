@@ -43,6 +43,8 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 **note:** this libraries embdedded agent is primarily meant as a code generation assist tool, not meant as an alternative to the integrated Dremio agent for deeper administration and natural language analytics. Login to your Dremio instance's UI to leverage integrated agent.
 - [Overview](docs/ai/overview.md)
 - [DremioAgent Class](docs/ai/agent.md)
+- [MCP Server Integration](docs/ai/mcp_integration.md)
+- [Document Extraction](docs/ai/document_extraction.md)
 - [Script Generation](docs/ai/generation.md)
 - [SQL Generation](docs/ai/sql.md)
 - [API Call Generation](docs/ai/api.md)

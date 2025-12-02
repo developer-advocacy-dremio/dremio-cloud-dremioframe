@@ -27,6 +27,8 @@ pip install "dremioframe[group1,group2]"
 | `scheduler` | `apscheduler` | Built-in task scheduling capabilities. |
 | `dq` | `pyyaml` | Data Quality framework configuration parsing. |
 | `ai` | `langchain`, `langchain-openai`, `langchain-anthropic`, `langchain-google-genai` | AI-powered Agent for Generating Python Scripts, SQL and cURL commands and light admin work. |
+| `mcp` | `langchain-mcp-adapters` | Model Context Protocol server integration for extending AI agent with custom tools. |
+| `document` | `pdfplumber` | PDF document extraction for AI agent to read and extract data from PDF files. |
 **note:** this libraries embdedded agent is primarily meant as a code generation assist tool, not meant as an alternative to the integrated Dremio agent for deeper administration and natural language analytics.
 
 ### File Formats & Export

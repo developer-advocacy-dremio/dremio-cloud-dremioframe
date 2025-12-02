@@ -51,6 +51,8 @@ lance = ["pylance"]
 airflow = ["apache-airflow"]
 ingest = ["dlt"]
 database = ["connectorx", "sqlalchemy"]
+mcp = ["langchain-mcp-adapters"]
+document = ["pdfplumber"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

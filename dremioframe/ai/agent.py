@@ -1,6 +1,6 @@
 import os
 import glob
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict, Any
 from langchain_core.tools import tool
 from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
@@ -267,7 +267,8 @@ def show_grants(entity: str) -> str:
 
 class DremioAgent:
     def __init__(self, model: str = "gpt-4o", api_key: Optional[str] = None, llm: Optional[BaseChatModel] = None, 
-                 memory_path: Optional[str] = None, context_folder: Optional[str] = None):
+                 memory_path: Optional[str] = None, context_folder: Optional[str] = None,
+                 mcp_servers: Optional[Dict[str, Dict[str, Any]]] = None):
         """
         Initialize the Dremio AI Agent.
         
@@ -277,12 +278,14 @@ class DremioAgent:
             llm: Pre-configured LLM instance (overrides model and api_key).
             memory_path: Path to SQLite database for conversation persistence. If None, memory is not persisted.
             context_folder: Path to a folder containing additional context files for the agent to reference.
+            mcp_servers: Dictionary of MCP server configurations. Keys are server names, values are dicts with 'transport', 'command', 'args'.
         """
         self.model_name = model
         self.api_key = api_key
         self.llm = llm or self._initialize_llm()
         self.memory_path = memory_path
         self.context_folder = context_folder
+        self.mcp_servers = mcp_servers or {}
         
         # Build tools list
         self.tools = [
@@ -293,7 +296,17 @@ class DremioAgent:
         
         # Add context folder tools if specified
         if self.context_folder:
-            self.tools.extend([self._create_list_context_files_tool(), self._create_read_context_file_tool()])
+            self.tools.extend([
+                self._create_list_context_files_tool(), 
+                self._create_read_context_file_tool(),
+                self._create_read_pdf_file_tool()
+            ])
+        
+        # Add MCP tools if specified
+        if self.mcp_servers:
+            mcp_tools = self._initialize_mcp_tools()
+            if mcp_tools:
+                self.tools.extend(mcp_tools)
         
         self.checkpointer = self._initialize_checkpointer()
         self.agent = self._initialize_agent()
@@ -331,6 +344,24 @@ class DremioAgent:
                 print("Install with: pip install langgraph-checkpoint-sqlite")
                 return None
         return None
+
+    def _initialize_mcp_tools(self):
+        """Initialize tools from MCP servers."""
+        try:
+            from langchain_mcp_adapters import MultiServerMCPClient
+        except ImportError:
+            print("Warning: langchain-mcp-adapters not found. MCP servers will not be available.")
+            print("Install with: pip install dremioframe[mcp]")
+            return []
+        
+        try:
+            mcp_client = MultiServerMCPClient(self.mcp_servers)
+            tools = mcp_client.get_tools()
+            print(f"Loaded {len(tools)} tools from {len(self.mcp_servers)} MCP server(s)")
+            return tools
+        except Exception as e:
+            print(f"Warning: Failed to initialize MCP tools: {e}")
+            return []
 
     def _create_list_context_files_tool(self):
         """Create a tool to list files in the context folder."""
@@ -370,6 +401,35 @@ class DremioAgent:
         
         return read_context_file
 
+    def _create_read_pdf_file_tool(self):
+        """Create a tool to read PDF files from the context folder."""
+        context_folder = self.context_folder
+        
+        @tool
+        def read_pdf_file(file_path: str) -> str:
+            """Extracts text content from a PDF file in the user-provided context folder."""
+            try:
+                import pdfplumber
+            except ImportError:
+                return "Error: pdfplumber not installed. Install with: pip install dremioframe[document]"
+            
+            full_path = os.path.join(context_folder, file_path)
+            if not os.path.exists(full_path):
+                return f"Error: File not found: {file_path}"
+            
+            try:
+                text = ""
+                with pdfplumber.open(full_path) as pdf:
+                    for page in pdf.pages:
+                        page_text = page.extract_text()
+                        if page_text:
+                            text += page_text + "\n"
+                return text if text else "No text content found in PDF"
+            except Exception as e:
+                return f"Error reading PDF: {e}"
+        
+        return read_pdf_file
+
     def _initialize_agent(self):
         system_message = (
             "You are an expert Dremio developer assistant. Your goal is to help users with Dremio tasks.\n"
@@ -382,8 +442,17 @@ class DremioAgent:
         
         if self.context_folder:
             system_message += (
-                "\nYou also have access to user-provided context files via `list_context_files` and `read_context_file`.\n"
-                "Use these tools when the user mentions files or context that might be in their project folder."
+                "\nYou have access to user-provided context files via `list_context_files`, `read_context_file`, and `read_pdf_file`.\n"
+                "Use these tools when the user mentions files or context that might be in their project folder.\n"
+                "For PDF files, use `read_pdf_file` to extract text content.\n"
+                "When asked to extract structured data from documents (PDFs, markdown, etc.), read the files, "
+                "analyze the content, and generate Python code to create/insert data into Dremio tables based on the user's schema requirements."
+            )
+        
+        if self.mcp_servers:
+            system_message += (
+                f"\nYou have access to {len(self.mcp_servers)} MCP server(s) providing additional tools.\n"
+                "Use these tools when appropriate for the user's request."
             )
         
         system_message += (
