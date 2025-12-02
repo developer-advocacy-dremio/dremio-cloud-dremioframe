@@ -547,10 +547,20 @@ class DremioBuilder:
                 import uuid
                 
                 # Create temp table name
-                # We need a valid path. Use same folder as target if possible?
-                # Or just append suffix.
-                # Assuming table_name is "Space"."Folder"."Table"
-                temp_table_name = f"{table_name}_staging_{uuid.uuid4().hex[:8]}"
+                # Parse table_name to extract components
+                # table_name might be "Space"."Folder"."Table" or Space.Folder.Table
+                # We need to append _staging_xxx to the table part only
+                import re
+                
+                # Remove quotes and split
+                parts = [p.strip('"') for p in table_name.split('.')]
+                if len(parts) >= 3:
+                    # Space.Folder.Table format
+                    parts[-1] = f"{parts[-1]}_staging_{uuid.uuid4().hex[:8]}"
+                    temp_table_name = '.'.join([f'"{p}"' for p in parts])
+                else:
+                    # Fallback: just append
+                    temp_table_name = f"{table_name}_staging_{uuid.uuid4().hex[:8]}"
                 
                 with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as tmp:
                     import pyarrow.parquet as pq
