@@ -7,7 +7,8 @@ DremioFrame is designed to abstract the complexities of Dremio's REST API and Ar
 ### 1. DremioClient (`client.py`)
 The main entry point. It manages authentication and holds references to the `Catalog` and `Builder` factories.
 - **Authentication**: Supports PAT (Cloud/Software) and Username/Password (Software).
-- **Factories**: Access to `catalog`, `admin`, `iceberg`, `udf`, `quality`, and `orchestration` modules.
+- **API Abstraction**: Handles endpoint differences between Dremio Cloud (`/v0/projects/...`) and Software (`/api/v3/...`) transparently.
+- **Factories**: Access to `catalog`, `admin`, `iceberg`, `udf`, `quality`, `orchestration`, and `airflow` modules.
 
 ### 2. Catalog (`catalog.py`)
 Handles all metadata and administrative operations.
@@ -29,7 +30,7 @@ A module (`F`) providing a comprehensive suite of SQL functions and Window API.
 - **Categories**: Aggregates, Math, String, Date/Time, Conditional, Complex Types, AI Functions.
 
 ### 5. Administration (`admin.py`)
-Handles administrative tasks via REST API.
+Handles administrative tasks via REST API, utilizing the unified API abstraction for Cloud/Software compatibility.
 - **User/Role Management**: Create, update, delete users and roles.
 - **Privileges**: Grant/Revoke privileges on catalog entities.
 - **Governance**: Manage Row Access Policies and Column Masking Policies.
@@ -96,6 +97,12 @@ Manages SQL User Defined Functions.
 ### 13. DremioIcebergClient (`iceberg.py`)
 Wraps `pyiceberg` for direct catalog interaction.
 - `list_namespaces`, `list_tables`, `load_table`, `create_table`.
+
+### 14. Airflow Integration (`airflow/`)
+Provides native Airflow components for integrating DremioFrame into Airflow DAGs.
+- **DremioHook**: Manages connection and authentication to Dremio.
+- **DremioOperator**: Executes DremioFrame logic (SQL, Builder, Admin) as an Airflow task.
+- **Integration**: Allows seamless scheduling of DremioFrame pipelines within existing Airflow infrastructure.
 
 
 ## Data Flow
