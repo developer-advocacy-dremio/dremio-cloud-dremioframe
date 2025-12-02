@@ -23,6 +23,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Sorting & Filtering](docs/data_engineering/sorting.md)
 - [Ingestion API](docs/data_engineering/ingestion.md)
 - [Ingestion Patterns](docs/data_engineering/ingestion_patterns.md)
+- [dlt Integration](docs/data_engineering/dlt_integration.md)
+- [Database Ingestion](docs/data_engineering/database_ingestion.md)
+- [File System Ingestion](docs/data_engineering/file_system_ingestion.md)
 - [File Upload](docs/data_engineering/file_upload.md)
 - [Exporting Data](docs/data_engineering/export.md)
 - [Working with Files](docs/data_engineering/files.md)
@@ -96,6 +99,7 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 
 ### 🚀 Performance & Deployment
 - [Performance Tuning](docs/performance/tuning.md)
+- [Bulk Loading Optimization](docs/performance/bulk_loading.md)
 - [CI/CD & Deployment](docs/deployment/cicd.md)
 
 ### 📚 Reference

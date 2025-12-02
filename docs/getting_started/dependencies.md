@@ -39,6 +39,13 @@ pip install "dremioframe[group1,group2]"
 | `lance` | `pylance` | Support for Lance file format. |
 | `image_export` | `kaleido` | Exporting Plotly charts as static images (PNG, JPG, PDF). |
 
+### Data Ingestion
+
+| Group | Dependencies | Features Enabled |
+| :--- | :--- | :--- |
+| `ingest` | `dlt` | Load data from 100+ sources (APIs, SaaS, databases) using dlt integration. |
+| `database` | `connectorx`, `sqlalchemy` | High-performance SQL database ingestion (Postgres, MySQL, SQLite, etc.). |
+
 ### External Backends
 
 | Group | Dependencies | Features Enabled |

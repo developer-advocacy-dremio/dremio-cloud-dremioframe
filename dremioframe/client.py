@@ -403,5 +403,8 @@ class DremioClient:
 
             def database(self, connection_string, query, table_name, **kwargs):
                 return ingest.ingest_database(self.client, connection_string, query, table_name, **kwargs)
+
+            def files(self, pattern, table_name, **kwargs):
+                return ingest.ingest_files(self.client, pattern, table_name, **kwargs)
                 
         return IngestNamespace(self)
