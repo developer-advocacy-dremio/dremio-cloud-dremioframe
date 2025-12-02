@@ -7,3 +7,7 @@ build/
 *.egg-info/
 .vscode/
 .idea/
+generate_docs_pdf.py
+
+# Generated documentation
+/docpdf

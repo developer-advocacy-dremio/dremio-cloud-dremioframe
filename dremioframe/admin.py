@@ -4,6 +4,13 @@ class Admin:
     def __init__(self, client):
         self.client = client
 
+    def _build_url(self, endpoint: str):
+        """Build URL with project_id for Cloud or without for Software."""
+        if self.client.project_id:
+            return f"{self.client.base_url}/projects/{self.client.project_id}/{endpoint}"
+        else:
+            return f"{self.client.base_url}/{endpoint}"
+
     # --- Users ---
     def create_user(self, username: str, password: Optional[str] = None):
         """Create a new user."""
@@ -119,7 +126,7 @@ class Admin:
         """List all reflections."""
         # This requires using the REST API directly as there is no SQL command for listing reflections in this detail
         # Dremio REST API: GET /api/v3/reflection
-        response = self.client.session.get(f"{self.client.base_url}/reflection")
+        response = self.client.session.get(self._build_url("reflection"))
         response.raise_for_status()
         return response.json()
 
@@ -158,13 +165,13 @@ class Admin:
         if partition_fields: payload["partitionFields"] = [{"name": f} for f in partition_fields]
         if sort_fields: payload["sortFields"] = [{"name": f} for f in sort_fields]
 
-        response = self.client.session.post(f"{self.client.base_url}/reflection", json=payload)
+        response = self.client.session.post(self._build_url("reflection"), json=payload)
         response.raise_for_status()
         return response.json()
 
     def delete_reflection(self, reflection_id: str):
         """Delete a reflection by ID."""
-        response = self.client.session.delete(f"{self.client.base_url}/reflection/{reflection_id}")
+        response = self.client.session.delete(self._build_url(f"reflection/{reflection_id}"))
         response.raise_for_status()
         return True
 
@@ -182,19 +189,19 @@ class Admin:
         return self._update_reflection(reflection_id, ref)
 
     def _get_reflection(self, reflection_id: str):
-        response = self.client.session.get(f"{self.client.base_url}/reflection/{reflection_id}")
+        response = self.client.session.get(self._build_url(f"reflection/{reflection_id}"))
         response.raise_for_status()
         return response.json()
 
     def _update_reflection(self, reflection_id: str, payload: dict):
-        response = self.client.session.put(f"{self.client.base_url}/reflection/{reflection_id}", json=payload)
+        response = self.client.session.put(self._build_url(f"reflection/{reflection_id}"), json=payload)
         response.raise_for_status()
         return response.json()
 
     # --- Sources ---
     def list_sources(self):
         """List all sources."""
-        response = self.client.session.get(f"{self.client.base_url}/source")
+        response = self.client.session.get(self._build_url("source"))
         response.raise_for_status()
         return response.json()
 
@@ -202,7 +209,7 @@ class Admin:
         """Get a source by ID or Path."""
         # Try as ID first
         try:
-            response = self.client.session.get(f"{self.client.base_url}/source/{id_or_path}")
+            response = self.client.session.get(self._build_url(f"source/{id_or_path}"))
             response.raise_for_status()
             return response.json()
         except Exception:
@@ -232,7 +239,7 @@ class Admin:
             "entityType": "space",
             "name": name
         }
-        response = self.client.session.post(f"{self.client.base_url}/catalog", json=payload)
+        response = self.client.session.post(self._build_url("catalog"), json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -249,7 +256,7 @@ class Admin:
             "entityType": "folder",
             "path": [space, folder]
         }
-        response = self.client.session.post(f"{self.client.base_url}/catalog", json=payload)
+        response = self.client.session.post(self._build_url("catalog"), json=payload)
         response.raise_for_status()
         return response.json()
 
@@ -277,13 +284,13 @@ class Admin:
             "accelerationNeverRefresh": acceleration_never_refresh
         }
         
-        response = self.client.session.post(f"{self.client.base_url}/source", json=payload)
+        response = self.client.session.post(self._build_url("source"), json=payload)
         response.raise_for_status()
         return response.json()
 
     def delete_source(self, id: str):
         """Delete a source by ID."""
-        response = self.client.session.delete(f"{self.client.base_url}/source/{id}")
+        response = self.client.session.delete(self._build_url(f"source/{id}"))
         response.raise_for_status()
         return True
 
@@ -335,6 +342,6 @@ class Admin:
         # For detailed profile (operator tree), it might be internal or different endpoint.
         # Let's use the standard job endpoint for now.
         
-        response = self.client.session.get(f"{self.client.base_url}/job/{job_id}")
+        response = self.client.session.get(self._build_url(f"job/{job_id}"))
         response.raise_for_status()
         return QueryProfile(response.json())

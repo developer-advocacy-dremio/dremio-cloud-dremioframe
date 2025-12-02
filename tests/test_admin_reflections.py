@@ -7,6 +7,7 @@ def mock_client():
     client = DremioClient(pat="mock_pat")
     client.session = MagicMock()
     client.base_url = "https://api.dremio.cloud/v0"
+    client.project_id = "mock_project_id"
     return client
 
 def test_list_reflections(mock_client):
@@ -16,7 +17,7 @@ def test_list_reflections(mock_client):
     
     reflections = mock_client.admin.list_reflections()
     
-    mock_client.session.get.assert_called_with("https://api.dremio.cloud/v0/reflection")
+    mock_client.session.get.assert_called_with("https://api.dremio.cloud/v0/projects/mock_project_id/reflection")
     assert reflections == {"data": []}
 
 def test_create_reflection(mock_client):
@@ -40,7 +41,7 @@ def test_create_reflection(mock_client):
     }
     
     mock_client.session.post.assert_called_with(
-        "https://api.dremio.cloud/v0/reflection",
+        "https://api.dremio.cloud/v0/projects/mock_project_id/reflection",
         json=expected_payload
     )
     assert result == {"id": "123", "name": "my_ref"}
@@ -51,7 +52,7 @@ def test_delete_reflection(mock_client):
     
     result = mock_client.admin.delete_reflection("123")
     
-    mock_client.session.delete.assert_called_with("https://api.dremio.cloud/v0/reflection/123")
+    mock_client.session.delete.assert_called_with("https://api.dremio.cloud/v0/projects/mock_project_id/reflection/123")
     assert result is True
 
 def test_enable_reflection(mock_client):
@@ -68,7 +69,7 @@ def test_enable_reflection(mock_client):
     result = mock_client.admin.enable_reflection("123")
     
     mock_client.session.put.assert_called_with(
-        "https://api.dremio.cloud/v0/reflection/123",
+        "https://api.dremio.cloud/v0/projects/mock_project_id/reflection/123",
         json={"id": "123", "enabled": True, "tag": "v1"}
     )
     assert result["enabled"] is True

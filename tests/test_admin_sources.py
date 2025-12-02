@@ -6,6 +6,7 @@ from dremioframe.admin import Admin
 def mock_client():
     client = MagicMock()
     client.base_url = "http://localhost:9047/api/v3"
+    client.project_id = None
     return client
 
 def test_list_sources(mock_client):
