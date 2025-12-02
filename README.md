@@ -33,6 +33,11 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Pydantic Integration](docs/data_engineering/pydantic_integration.md)
 - [Iceberg Tables](docs/data_engineering/iceberg.md)
 - [Iceberg Lakehouse Management](docs/data_engineering/guide_iceberg_management.md)
+- [Schema Evolution](docs/data_engineering/schema_evolution.md)
+- [Incremental Processing](docs/data_engineering/incremental_processing.md)
+- [Query Templates](docs/data_engineering/query_templates.md)
+- [Export Formats](docs/data_engineering/export_formats.md)
+- [SQL Linting](docs/data_engineering/sql_linting.md)
 
 ### 📊 Analysis & Visualization
 - [Charting & Plotting](docs/analysis/charting.md)
@@ -95,13 +100,16 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Governance: Lineage](docs/admin_governance/lineage.md)
 - [Governance: Privileges](docs/admin_governance/privileges.md)
 - [Space & Folder Management](docs/admin_governance/spaces_folders.md)
+- [Batch Operations](docs/admin_governance/batch_operations.md)
 
 ### 🔗 Integrations
 - [Airflow Integration](docs/integrations/airflow.md)
+- [Notebook Integration](docs/integrations/notebook.md)
 
 ### 🚀 Performance & Deployment
 - [Performance Tuning](docs/performance/tuning.md)
 - [Bulk Loading Optimization](docs/performance/bulk_loading.md)
+- [Connection Pooling](docs/performance/connection_pooling.md)
 - [CI/CD & Deployment](docs/deployment/cicd.md)
 
 ### 📚 Reference

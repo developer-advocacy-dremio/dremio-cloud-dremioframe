@@ -1,8 +1,12 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, mock_open
 import sys
 import os
 
+# Mock optional modules if not installed
+for module in ['fastavro', 'lance']:
+    if module not in sys.modules:
+        sys.modules[module] = MagicMock()
 # Ensure we import from the local directory
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 

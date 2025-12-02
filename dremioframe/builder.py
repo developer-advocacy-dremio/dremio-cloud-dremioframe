@@ -228,11 +228,11 @@ class DremioBuilder:
         # Return new builder with this SQL
         return DremioBuilder(self.client, sql=join_sql)
 
-    def collect(self, library: str = "polars") -> Union[pl.DataFrame, pd.DataFrame]:
+    def collect(self, library: str = "polars", progress_bar: bool = False) -> Union[pl.DataFrame, pd.DataFrame]:
         sql = self._compile_sql()
-        return self._execute_flight(sql, library)
+        return self._execute_flight(sql, library, progress_bar=progress_bar)
 
-    def _execute_flight(self, sql: str, library: str) -> Union[pl.DataFrame, pd.DataFrame]:
+    def _execute_flight(self, sql: str, library: str, progress_bar: bool = False) -> Union[pl.DataFrame, pd.DataFrame]:
         # Construct Flight Endpoint
         hostname = self.client.flight_endpoint or self.client.hostname
         port = self.client.flight_port or self.client.port
@@ -267,7 +267,31 @@ class DremioBuilder:
 
         info = client.get_flight_info(flight.FlightDescriptor.for_command(sql), options)
         reader = client.do_get(info.endpoints[0].ticket, options)
-        table = reader.read_all()
+        
+        if progress_bar:
+            try:
+                from tqdm import tqdm
+            except ImportError:
+                print("Warning: tqdm not installed. Install with: pip install dremioframe[notebook]")
+                table = reader.read_all()
+            else:
+                # Read chunks and update progress bar
+                # Flight doesn't always give total rows upfront easily, so we just show downloaded chunks/rows
+                chunks = []
+                # Try to get total bytes or rows if available, otherwise just count
+                with tqdm(desc="Downloading", unit="chunk") as pbar:
+                    for chunk in reader:
+                        chunks.append(chunk)
+                        pbar.update(1)
+                
+                import pyarrow as pa
+                if chunks:
+                    table = pa.Table.from_batches(chunks)
+                else:
+                    # Empty result
+                    table = reader.schema.empty_table()
+        else:
+            table = reader.read_all()
         
         if library == "polars":
             return pl.from_arrow(table)
@@ -302,6 +326,26 @@ class DremioBuilder:
         """Export query results to Parquet"""
         df = self.collect("pandas")
         df.to_parquet(path, **kwargs)
+
+    def to_delta(self, path: str, mode: str = "overwrite", **kwargs):
+        """
+        Export query results to Delta Lake.
+        Requires 'deltalake' package.
+        """
+        try:
+            from deltalake import write_deltalake
+        except ImportError:
+            raise ImportError("deltalake package is required. Install with: pip install dremioframe[delta]")
+        
+        df = self.collect(library="pandas")
+        write_deltalake(path, df, mode=mode, **kwargs)
+
+    def to_json(self, path: str, orient: str = "records", **kwargs):
+        """
+        Export query results to JSON.
+        """
+        df = self.collect(library="pandas")
+        df.to_json(path, orient=orient, **kwargs)
 
     def chart(self, kind: str = 'line', x: str = None, y: str = None, title: str = None, save_to: str = None, backend: str = 'matplotlib', **kwargs):
         """
@@ -411,6 +455,29 @@ class DremioBuilder:
         parts = path.split(".")
         quoted_parts = [f'"{p}"' for p in parts]
         return ".".join(quoted_parts)
+
+    def _repr_html_(self):
+        """
+        Rich HTML representation for Jupyter Notebooks.
+        Shows a preview of the data (first 20 rows).
+        """
+        try:
+            # Create a preview query
+            preview_sql = self._compile_sql()
+            if "LIMIT" not in preview_sql.upper():
+                preview_sql += " LIMIT 20"
+            
+            # Execute and get pandas DF
+            df = self._execute_flight(preview_sql, library='pandas')
+            
+            # Add some metadata
+            html = f"<h4>DremioBuilder Preview</h4>"
+            html += f"<p><strong>SQL:</strong> <code>{self._compile_sql()}</code></p>"
+            html += df.to_html(index=False, classes='dataframe table table-striped table-hover')
+            html += f"<p><em>Showing up to 20 rows. Use .collect() to get full result.</em></p>"
+            return html
+        except Exception as e:
+            return f"<p><strong>Error generating preview:</strong> {e}</p>"
 
     # DML Operations
     def create(self, name: str, data: Union[Any, None] = None, batch_size: Optional[int] = None, schema: Any = None, method: str = "values"):

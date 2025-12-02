@@ -47,6 +47,8 @@ pip install "dremioframe[group1,group2]"
 | :--- | :--- | :--- |
 | `ingest` | `dlt` | Load data from 100+ sources (APIs, SaaS, databases) using dlt integration. |
 | `database` | `connectorx`, `sqlalchemy` | High-performance SQL database ingestion (Postgres, MySQL, SQLite, etc.). |
+| `notebook` | `tqdm`, `ipywidgets` | For Jupyter notebook integration. |
+| `delta` | `deltalake` | For Delta Lake export. |
 
 ### External Backends
 

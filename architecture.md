@@ -114,8 +114,14 @@ graph LR
     Client -->|Metadata| REST[Dremio REST API]
     Client -->|Query| Flight[Arrow Flight SQL]
     REST --> Dremio[Dremio Engine]
-    Flight --> Dremio
-    Dremio -->|JSON| REST
+    DremioClient --> DremioBuilder
+    DremioClient --> DremioAgent
+    DremioClient --> ConnectionPool
+    DremioBuilder --> SchemaManager
+    DremioBuilder --> IncrementalLoader
+    DremioBuilder --> BatchManager
+    DremioBuilder --> SqlLinter
+    DremioBuilder --> TemplateLibrary|JSON| REST
     Dremio -->|Arrow Stream| Flight
     Flight -->|PyArrow Table| Builder[DremioBuilder]
     Builder -->|DataFrame| User

@@ -53,6 +53,8 @@ ingest = ["dlt"]
 database = ["connectorx", "sqlalchemy"]
 mcp = ["langchain-mcp-adapters"]
 document = ["pdfplumber"]
+notebook = ["tqdm", "ipywidgets"]
+delta = ["deltalake"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

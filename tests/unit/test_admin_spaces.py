@@ -7,7 +7,9 @@ from dremioframe.admin import Admin
 @pytest.fixture
 def mock_client():
     client = MagicMock(spec=DremioClient)
-    client.base_url = "https://dremio.example.com/api/v3"
+    client.base_url = "http://localhost:9047"
+    client.headers = {"Authorization": "Bearer test_token"}
+    client.project_id = None # Default to Software (no project_id)
     client.session = MagicMock()
     client.execute = MagicMock()
     return client
