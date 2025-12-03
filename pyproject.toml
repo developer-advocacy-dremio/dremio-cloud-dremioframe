@@ -55,6 +55,7 @@ mcp = ["langchain-mcp-adapters"]
 document = ["pdfplumber"]
 notebook = ["tqdm", "ipywidgets"]
 delta = ["deltalake"]
+lineage = ["networkx", "graphviz"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"

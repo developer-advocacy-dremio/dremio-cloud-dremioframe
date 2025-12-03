@@ -21,7 +21,25 @@ Provides a fluent interface for constructing queries and performing operations.
 - **Data Ingestion**: `insert`, `merge`, `create` (CTAS), `create_view`.
 - **Iceberg**: `at_snapshot`, `at_timestamp`, `optimize`, `vacuum`, `expire_snapshots`.
 - **Visualization**: `chart` (matplotlib/plotly integration).
-- **Export**: `to_csv`, `to_parquet`, `to_json`.
+- **Export**: `to_csv`, `to_parquet`, `to_json`, `to_delta`.
+
+### 4. Query Cost Estimator (`cost_estimator.py`)
+Analyzes query execution plans to estimate costs and suggest optimizations.
+- **Cost Estimation**: Parse EXPLAIN PLAN output for cost metrics
+- **Optimization Hints**: Detect anti-patterns (SELECT *, missing WHERE, etc.)
+- **Query Comparison**: Compare multiple query approaches
+
+### 5. Data Lineage Tracker (`lineage.py`)
+Tracks and visualizes data transformations for governance and impact analysis.
+- **Lineage Graph**: Build dependency graphs showing data flow
+- **Visualization**: Generate interactive HTML or static images
+- **Export**: Export to JSON, DataHub, or Amundsen formats
+
+### 6. Testing Framework (`testing/`)
+Mock objects and test utilities for writing tests without live connections.
+- **MockDremioClient**: Configurable mock client for testing
+- **FixtureManager**: Manage test data fixtures
+- **Assertions**: Helper functions for DataFrame and schema validation
 
 ### 4. SQL Functions (`functions.py`)
 A module (`F`) providing a comprehensive suite of SQL functions and Window API.

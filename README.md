@@ -101,6 +101,7 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Governance: Privileges](docs/admin_governance/privileges.md)
 - [Space & Folder Management](docs/admin_governance/spaces_folders.md)
 - [Batch Operations](docs/admin_governance/batch_operations.md)
+- [Lineage Tracking](docs/admin_governance/lineage_tracking.md)
 
 ### 🔗 Integrations
 - [Airflow Integration](docs/integrations/airflow.md)
@@ -110,6 +111,7 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Performance Tuning](docs/performance/tuning.md)
 - [Bulk Loading Optimization](docs/performance/bulk_loading.md)
 - [Connection Pooling](docs/performance/connection_pooling.md)
+- [Query Cost Estimation](docs/performance/cost_estimation.md)
 - [CI/CD & Deployment](docs/deployment/cicd.md)
 
 ### 📚 Reference
@@ -118,6 +120,9 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [CLI Reference](docs/reference/cli.md)
 - [API Reference](docs/reference/client.md)
 - [Async Client](docs/reference/async_client.md)
+
+### 🧪 Testing
+- [Mock/Testing Framework](docs/testing/mocking.md)
 - [Advanced Usage](docs/reference/advanced.md)
 - [Architecture](architecture.md)
 - [Testing Guide](docs/reference/testing.md)

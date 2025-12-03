@@ -49,6 +49,7 @@ pip install "dremioframe[group1,group2]"
 | `database` | `connectorx`, `sqlalchemy` | High-performance SQL database ingestion (Postgres, MySQL, SQLite, etc.). |
 | `notebook` | `tqdm`, `ipywidgets` | For Jupyter notebook integration. |
 | `delta` | `deltalake` | For Delta Lake export. |
+| `lineage` | `networkx`, `graphviz` | For data lineage visualization. |
 
 ### External Backends
 
