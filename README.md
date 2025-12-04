@@ -152,7 +152,7 @@ from dremioframe.client import DremioClient
 client = DremioClient()
 
 # Query a table
-df = client.table("Samples.samples.dremio.com.zips.json").select("city", "state").limit(5).collect()
+df = client.table('Samples."samples.dremio.com".zips.json').select("city", "state").limit(5).collect()
 print(df)
 ```
 
@@ -179,7 +179,7 @@ client = DremioClient(pat="YOUR_PAT", project_id="YOUR_PROJECT_ID")
 print(client.catalog.list_catalog())
 
 # Query data
-df = client.table("Samples.samples.dremio.com.zips.json").select("city", "state").filter("state = 'MA'").collect()
+df = client.table('Samples."samples.dremio.com".zips.json').select("city", "state").filter("state = 'MA'").collect()
 print(df)
 
 # Calculated Columns

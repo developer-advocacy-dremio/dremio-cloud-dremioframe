@@ -10,7 +10,7 @@ Start by selecting a table from the client:
 from dremioframe.client import DremioClient
 
 client = DremioClient()
-df = client.table("Samples.samples.dremio.com.zips.json")
+df = client.table('Samples."samples.dremio.com".zips.json')
 ```
 
 ## Querying Data
