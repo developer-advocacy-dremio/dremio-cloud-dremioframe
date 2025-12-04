@@ -152,19 +152,34 @@ from dremioframe.client import DremioClient
 client = DremioClient()
 
 # Query a table
-df = client.table('Samples."samples.dremio.com".zips.json').select("city", "state").limit(5).collect()
+df = client.table('finance.bronze.transactions').select("transaction_id", "amount", "customer_id").limit(5).collect()
 print(df)
 ```
 
-### Dremio Software
+### Dremio Software v26+
+
+```python
+# Assumes DREMIO_SOFTWARE_HOST and DREMIO_SOFTWARE_PAT are set in env
+client = DremioClient(mode="v26")
+
+# Or with explicit parameters
+client = DremioClient(
+    hostname="v26.dremio.org",
+    pat="your_pat_here",
+    tls=True,
+    mode="v26"
+)
+```
+
+### Dremio Software v25
 
 ```python
 client = DremioClient(
     hostname="localhost",
-    port=32010,
     username="admin",
     password="password123",
-    tls=False
+    tls=False,
+    mode="v25"
 )
 ```
 
@@ -173,53 +188,54 @@ client = DremioClient(
 ```python
 from dremioframe.client import DremioClient
 
-client = DremioClient(pat="YOUR_PAT", project_id="YOUR_PROJECT_ID")
+# Assumes DREMIO_PAT and DREMIO_PROJECT_ID are set in env
+client = DremioClient()
 
 # List catalog
 print(client.catalog.list_catalog())
 
 # Query data
-df = client.table('Samples."samples.dremio.com".zips.json').select("city", "state").filter("state = 'MA'").collect()
+df = client.table('finance.bronze.transactions').select("transaction_id", "amount", "customer_id").filter("amount > 1000").collect()
 print(df)
 
 # Calculated Columns
-df.mutate(total_pop="pop * 2").show()
+df.mutate(amount_with_tax="amount * 1.08").show()
 
 # Aggregation
-df.group_by("state").agg(avg_pop="AVG(pop)").show()
+df.group_by("customer_id").agg(total_spent="SUM(amount)").show()
 
 # Joins
-df.join("other_table", on="left_tbl.id = right_tbl.id").show()
+customers = client.table('finance.silver.customers')
+df.join(customers, on="transactions.customer_id = customers.customer_id").show()
 
 # Iceberg Time Travel
 df.at_snapshot("123456789").show()
 
-
-
 # API Ingestion
 client.ingest_api(
     url="https://api.example.com/users",
-    table_name="users",
+    table_name="finance.bronze.users",
     mode="merge",
     pk="id"
 )
 
 # Charting
-df.chart(kind="bar", x="category", y="sales", save_to="sales.png")
+sales_summary = client.table('finance.gold.sales_summary')
+sales_summary.chart(kind="bar", x="category", y="total_sales", save_to="sales.png")
 
 # Export
-df.to_csv("data.csv")
-df.to_parquet("data.parquet")
+df.to_csv("transactions.csv")
+df.to_parquet("transactions.parquet")
 
 # Insert Data (Batched)
 import pandas as pd
 data = pd.DataFrame({"id": [1, 2], "name": ["A", "B"]})
-client.table("my_table").insert("my_table", data=data, batch_size=1000)
+client.table("finance.bronze.raw_data").insert("finance.bronze.raw_data", data=data, batch_size=1000)
 
 # SQL Functions
 from dremioframe import F
 
-client.table("sales") \
+client.table("finance.silver.sales") \
     .select(
         F.col("dept"),
         F.sum("amount").alias("total_sales"),
@@ -228,17 +244,17 @@ client.table("sales") \
     .show()
 
 # Merge (Upsert)
-client.table("target").merge(
-    target_table="target",
-    on="id",
-    matched_update={"name": "source.name"},
-    not_matched_insert={"id": "source.id", "val": "source.val"},
+client.table("finance.silver.customers").merge(
+    target_table="finance.silver.customers",
+    on="customer_id",
+    matched_update={"name": "source.name", "updated_at": "source.updated_at"},
+    not_matched_insert={"customer_id": "source.customer_id", "name": "source.name"},
     data=data
 )
 
 # Data Quality
-df.quality.expect_not_null("city")
-df.quality.expect_row_count("pop > 1000000", 5, "ge") # Expect at least 5 cities with pop > 1M
+df.quality.expect_not_null("customer_id")
+df.quality.expect_row_count("amount > 10000", 5, "ge") # Expect at least 5 large transactions
 
 # Query Explanation
 print(df.explain())
@@ -247,13 +263,13 @@ print(df.explain())
 client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", display_fields=["col1"])
 
 # Async Client
-# async with AsyncDremioClient(pat="...") as client: ...
+# async with AsyncDremioClient() as client: ...
 
 # CLI
-# dremio-cli query "SELECT 1"
+# dremio-cli query "SELECT * FROM finance.gold.sales_summary LIMIT 10"
 
 # Local Caching
-# client.table("source").cache("my_cache", ttl_seconds=300).sql("SELECT * FROM my_cache").show()
+# client.table("finance.bronze.transactions").cache("my_cache", ttl_seconds=300).sql("SELECT * FROM my_cache").show()
 
 # Interactive Plotting
 # df.chart(kind="scatter", backend="plotly").show()
@@ -262,7 +278,7 @@ client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", disp
 # client.udf.create("add_one", {"x": "INT"}, "INT", "x + 1")
 
 # Raw SQL
-# df = client.query("SELECT * FROM my_table")
+# df = client.query("SELECT * FROM finance.silver.customers")
 
 # Source Management
 # client.admin.create_source_s3("my_datalake", "bucket")
@@ -271,7 +287,7 @@ client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", disp
 # client.admin.get_job_profile("job_123").visualize().show()
 
 # Iceberg Client
-# client.iceberg.list_tables("my_namespace")
+# client.iceberg.list_tables("finance")
 
 # Orchestration CLI
 # dremio-cli pipeline list

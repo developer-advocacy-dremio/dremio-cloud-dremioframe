@@ -10,7 +10,7 @@ Start by selecting a table from the client:
 from dremioframe.client import DremioClient
 
 client = DremioClient()
-df = client.table('Samples."samples.dremio.com".zips.json')
+df = client.table('finance.bronze.transactions')
 ```
 
 ## Querying Data
@@ -19,8 +19,8 @@ You can chain methods to build a query:
 
 ```python
 result = (
-    df.select("city", "state", "pop")
-      .filter("state = 'MA'")
+    df.select("transaction_id", "customer_id", "amount")
+      .filter("amount > 1000")
       .limit(10)
       .collect()
 )
@@ -44,7 +44,7 @@ print(result)
 You can view the execution plan for a query using the `explain()` method. This is useful for debugging performance issues.
 
 ```python
-plan = df.filter("state = 'MA'").explain()
+plan = df.filter("amount > 1000").explain()
 print(plan)
 ```
 
@@ -54,21 +54,21 @@ You can also perform Data Manipulation Language (DML) operations:
 
 ```python
 # Create Table As Select (CTAS)
-df.filter("state = 'NY'").create("NewYorkZips")
+df.filter("amount > 5000").create("finance.silver.large_transactions")
 
 # Insert into existing table from query
-df.filter("state = 'NJ'").insert("NewYorkZips")
+df.filter("amount > 10000").insert("finance.silver.large_transactions")
 
 # Insert from Pandas DataFrame or Arrow Table
 import pandas as pd
-data = pd.DataFrame({"city": ["New City"], "state": ["NY"]})
-client.table("NewYorkZips").insert("NewYorkZips", data=data)
+data = pd.DataFrame({"transaction_id": [1001], "customer_id": [5], "amount": [15000.00]})
+client.table("finance.silver.large_transactions").insert("finance.silver.large_transactions", data=data)
 
 # Update rows
-client.table("NewYorkZips").filter("city = 'New York'").update({"pop": 9000000})
+client.table("finance.bronze.transactions").filter("transaction_id = 1001").update({"amount": 16000.00})
 
 # Delete rows
-client.table("NewYorkZips").filter("pop < 1000").delete()
+client.table("finance.bronze.transactions").filter("amount < 0").delete()
 
 ## Slowly Changing Dimensions (SCD2)
 
@@ -141,18 +141,18 @@ client.table("users").insert("users", data=df, schema=User)
 You can run data quality checks on a builder instance. These checks execute queries to verify assumptions about the data.
 
 ```python
-# Check that 'city' is never NULL
-df.quality.expect_not_null("city")
+# Check that 'customer_id' is never NULL
+df.quality.expect_not_null("customer_id")
 
-# Check that 'zip' is unique
-df.quality.expect_unique("zip")
+# Check that 'transaction_id' is unique
+df.quality.expect_unique("transaction_id")
 
-# Check that 'state' is one of the allowed values
-df.quality.expect_values_in("state", ["MA", "NY", "CT"])
+# Check that 'status' is one of the allowed values
+df.quality.expect_values_in("status", ["completed", "pending", "cancelled"])
 
 # Custom Check: Row Count
-# Check that there are exactly 0 rows where age is negative
-df.quality.expect_row_count("age < 0", 0, "eq")
+# Check that there are exactly 0 rows where amount is negative
+df.quality.expect_row_count("amount < 0", 0, "eq")
 
 # Check that there are at least 100 rows total
 df.quality.expect_row_count("1=1", 100, "ge")

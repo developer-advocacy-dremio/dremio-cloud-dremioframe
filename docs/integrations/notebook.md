@@ -24,7 +24,7 @@ When you display a `DremioBuilder` object in a notebook, it automatically execut
 from dremioframe.client import DremioClient
 
 client = DremioClient()
-df = client.table("Samples.samples.dremio.NYC_trips")
+df = client.table("finance.bronze.trips")
 
 # Displaying the builder object shows a preview
 df
@@ -66,9 +66,9 @@ Use `%%dremio_sql` to execute SQL queries directly in a cell.
 ```sql
 %%dremio_sql my_result
 SELECT 
-    pickup_datetime,
+    trip_date,
     passenger_count
-FROM "Samples"."samples.dremio"."NYC_trips"
+FROM finance.bronze.trips
 WHERE passenger_count > 2
 LIMIT 100
 ```

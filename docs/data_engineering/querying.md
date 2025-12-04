@@ -8,13 +8,13 @@ Use the `query()` method on the `DremioClient`.
 
 ```python
 # Return as Pandas DataFrame (default)
-df = client.query('SELECT * FROM "samples.dremio.com".zips LIMIT 10')
+df = client.query('SELECT * FROM finance.bronze.transactions LIMIT 10')
 
 # Return as Arrow Table
-arrow_table = client.query('SELECT * FROM "samples.dremio.com".zips LIMIT 10', format="arrow")
+arrow_table = client.query('SELECT * FROM finance.bronze.transactions LIMIT 10', format="arrow")
 
 # Return as Polars DataFrame
-polars_df = client.query('SELECT * FROM "samples.dremio.com".zips LIMIT 10', format="polars")
+polars_df = client.query('SELECT * FROM finance.bronze.transactions LIMIT 10', format="polars")
 ```
 
 ## DDL/DML
