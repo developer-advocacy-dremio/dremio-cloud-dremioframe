@@ -22,7 +22,7 @@ To get started with Dremio, you have two options for a hands-on experience:
 Choose the option that best fits your needs.
 To learn about the differences between the two editions, see [Dremio Editions](/editions).
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 If you want to learn more about Dremio, see the following:
 
@@ -37,7 +37,7 @@ Overview](/current/)[Next
 
 Enterprise Edition Free Trial](/current/get-started/kubernetes-trial)
 
-* [Related Topics](#related-topics)
+* Related Topics
 
 ---
 
@@ -51,7 +51,7 @@ On this page
 
 This Get Started guide walks you through deploying Dremio on Kubernetes using a free trial of the Enterprise Edition, exploring the multiple features available in this edition. For more information, see [How Does the Enterprise Edition Free Trial Work](/current/admin/licensing/free-trial#how-does-the-enterprise-edition-free-trial-work).
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before deploying Dremio on Kubernetes, ensure you have the following:
 
@@ -61,7 +61,7 @@ Before deploying Dremio on Kubernetes, ensure you have the following:
 * A local kubectl configured to access your Kubernetes cluster. For installation instructions, refer to [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) in the Kubernetes documentation.
 * Object Storage: Amazon S3 (including S3-compatible, e.g., MinIO), Azure Storage, or Google Cloud Storage (GCS).
 
-## Step 1: Deploy Dremio[​](#step-1-deploy-dremio "Direct link to Step 1: Deploy Dremio")
+## Step 1: Deploy Dremio
 
 Let's start by deploying the Enterprise Edition on your hosted Kubernetes environment:
 
@@ -118,7 +118,7 @@ You should have the Dremio console ready in your browser.
 
 To learn how to navigate the Dremio console, see [Quick Tour of the Dremio Console](/current/get-started/quick_tour).
 
-## Step 2: Create an Engine[​](#step-2-create-an-engine "Direct link to Step 2: Create an Engine")
+## Step 2: Create an Engine
 
 Engines are responsible for query execution. Each engine comprises one or more executors that perform queries and Data Manipulation Language (DML) operations by running the query execution plan and transiting data between themselves to serve queries.
 
@@ -138,14 +138,14 @@ The engine you created is configured to automatically stop/start. This means tha
 
 If you want to have the engine always running, edit the engine and uncheck the **Automatically start/stop** option.
 
-## Step 3: Add the Sample Data[​](#step-3-add-the-sample-data "Direct link to Step 3: Add the Sample Data")
+## Step 3: Add the Sample Data
 
 Let's add the sample datasets that will be used in this Get Started guide, namely:
 
 * **NYC taxi trip data** – In Iceberg format, with more than 338 million records.
 * **NYC weather data** – In CSV format, with more than 4 thousand records.
 
-### Add the Datasets[​](#add-the-datasets "Direct link to Add the Datasets")
+### Add the Datasets
 
 Add the datasets from a sample data source, as follows:
 
@@ -153,7 +153,7 @@ Add the datasets from a sample data source, as follows:
 2. Click ![This is the Add Source icon.](/images/icons/plus.png "The Add Source icon.") right next to **Sources**.
 3. In the Add Source dialog, select `Sample Source` in the **Object Storage** section.
 
-### Format the Datasets[​](#format-the-datasets "Direct link to Format the Datasets")
+### Format the Datasets
 
 Now that the data source has been added, let's format the needed datasets as tables so that we can query them:
 
@@ -173,11 +173,11 @@ You can validate it by clicking ![This is the icon that represents the Datasets 
 * The icon for `NYC-taxi-trips-iceberg` is ![This is the icon that represents a formatted folder on the Datasets page.](/images/tableIcon-folder.png "The formatted folder icon."), which means the folder is formatted as a table.
 * The icon for `NYC-weather.csv` is ![This is the icon that represents the a formatted file on the Datasets page.](/images/tableicon-file.png "The formatted file icon."), which means the file is formatted as a table.
 
-## Step 4: Create a Data Product[​](#step-4-create-a-data-product "Direct link to Step 4: Create a Data Product")
+## Step 4: Create a Data Product
 
 In this step, you will start creating a data product to explore the relationship between weather conditions and tipping behavior in taxi rides to answer the business question: "Do people tip more during taxi rides when it's raining?".
 
-### Run the Query for the Data Product[​](#run-the-query-for-the-data-product "Direct link to Run the Query for the Data Product")
+### Run the Query for the Data Product
 
 To answer the business question, you will need the average tip amount per precipitation level. For that, combine the data in the `NYC-taxi-trips-iceberg` and `NYC-weather.csv` datasets on a common field: the date.
 
@@ -200,7 +200,7 @@ You will get the query results, as shown in the image below.
 
 ![The result of the query to join the datasets with the average tip amount per precipitation level.](/images/get-started/free-trial-run-query.png "The result of the query with the average the tip amount per precipitation level.")
 
-### Create the View for the Data Product[​](#create-the-view-for-the-data-product "Direct link to Create the View for the Data Product")
+### Create the View for the Data Product
 
 In Dremio, views are virtual tables based on the result set of a query. You can create views from data that resides in any data source, folder, table, or view that you have access to. You can also share views you've created with stakeholders in your organization.
 
@@ -215,18 +215,18 @@ For your newly created view, see the lineage by selecting the **Lineage** tab at
 
 ![The lineage graph for the view showing how datasets are connected.](/images/get-started/free-trial-lineage.png "The lineage graph for the view.")
 
-## Step 5: Accelerate the Query with Reflections[​](#step-5-accelerate-the-query-with-reflections "Direct link to Step 5: Accelerate the Query with Reflections")
+## Step 5: Accelerate the Query with Reflections
 
 In this step, you will use [Reflections](/current/acceleration) to accelerate queries, particularly when working with large datasets.
 
-### Enable the Reflection[​](#enable-the-reflection "Direct link to Enable the Reflection")
+### Enable the Reflection
 
 Let's enable a [Raw Reflection](/current/acceleration/#types) to accelerate the query of your view:
 
 1. Select the **Reflections** tab at the top of the page, toggle the **Raw Reflections** switch to on, and click **Save**.
 2. On the far right, you will see an animated spinner icon close to **Footprint**. Wait until it turns into a green checkmark, which means that your query has been accelerated.
 
-### Run the Accelerated Query[​](#run-the-accelerated-query "Direct link to Run the Accelerated Query")
+### Run the Accelerated Query
 
 Let's now query the view and see the acceleration in action:
 
@@ -254,18 +254,18 @@ Get Started with Dremio](/current/get-started/)[Next
 
 Community Edition on Docker](/current/get-started/docker)
 
-* [Prerequisites](#prerequisites)
-* [Step 1: Deploy Dremio](#step-1-deploy-dremio)
-* [Step 2: Create an Engine](#step-2-create-an-engine)
-* [Step 3: Add the Sample Data](#step-3-add-the-sample-data)
-  + [Add the Datasets](#add-the-datasets)
-  + [Format the Datasets](#format-the-datasets)
-* [Step 4: Create a Data Product](#step-4-create-a-data-product)
-  + [Run the Query for the Data Product](#run-the-query-for-the-data-product)
-  + [Create the View for the Data Product](#create-the-view-for-the-data-product)
-* [Step 5: Accelerate the Query with Reflections](#step-5-accelerate-the-query-with-reflections)
-  + [Enable the Reflection](#enable-the-reflection)
-  + [Run the Accelerated Query](#run-the-accelerated-query)
+* Prerequisites
+* Step 1: Deploy Dremio
+* Step 2: Create an Engine
+* Step 3: Add the Sample Data
+  + Add the Datasets
+  + Format the Datasets
+* Step 4: Create a Data Product
+  + Run the Query for the Data Product
+  + Create the View for the Data Product
+* Step 5: Accelerate the Query with Reflections
+  + Enable the Reflection
+  + Run the Accelerated Query
 
 ---
 
@@ -281,11 +281,11 @@ This Docker-based Get Started guide offers a simple and fast way to spin up Drem
 
 This Docker deployment is indicated for testing and evaluation purposes and is not recommended for production usage. To try out a complete version of Dremio with enterprise-grade features, go to [Get Started with the Enterprise Edition Free Trial](/current/get-started/kubernetes-trial).
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before you start, download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 
-## Step 1: Deploy Dremio[​](#step-1-deploy-dremio "Direct link to Step 1: Deploy Dremio")
+## Step 1: Deploy Dremio
 
 Let's deploy the Dremio Community Edition on Docker:
 
@@ -314,14 +314,14 @@ You should have the Dremio console ready in your browser.
 
 To learn how to navigate the Dremio console, see [Quick Tour of the Dremio Console](/current/get-started/quick_tour).
 
-## Step 2: Add the Sample Data[​](#step-2-add-the-sample-data "Direct link to Step 2: Add the Sample Data")
+## Step 2: Add the Sample Data
 
 Let's add the sample datasets that will be used in this Get Started guide, namely:
 
 * **NYC taxi trip data** – In Iceberg format, with more than 338 million records.
 * **NYC weather data** – In CSV format, with more than 4 thousand records.
 
-### Add the Datasets[​](#add-the-datasets "Direct link to Add the Datasets")
+### Add the Datasets
 
 Add the datasets from a sample data source, as follows:
 
@@ -329,7 +329,7 @@ Add the datasets from a sample data source, as follows:
 2. Click ![This is the Add Source icon.](/images/icons/plus.png "The Add Source icon.") right next to **Sources**.
 3. In the Add Source dialog, select `Sample Source` in the **Object Storage** section.
 
-### Format the Datasets[​](#format-the-datasets "Direct link to Format the Datasets")
+### Format the Datasets
 
 Now that the data source has been added, let's format the needed datasets as tables so that we can query them:
 
@@ -349,11 +349,11 @@ You can validate it by clicking ![This is the icon that represents the Datasets 
 * The icon for `NYC-taxi-trips-iceberg` is ![This is the icon that represents a formatted folder on the Datasets page.](/images/tableIcon-folder.png "The formatted folder icon."), which means the folder is formatted as a table.
 * The icon for `NYC-weather.csv` is ![This is the icon that represents the a formatted file on the Datasets page.](/images/tableicon-file.png "The formatted file icon."), which means the file is formatted as a table.
 
-## Step 3: Create a Data Product[​](#step-3-create-a-data-product "Direct link to Step 3: Create a Data Product")
+## Step 3: Create a Data Product
 
 In this step, you will start creating a data product to explore the relationship between weather conditions and tipping behavior in taxi rides to answer the business question: "Do people tip more during taxi rides when it's raining?".
 
-### Run the Query for the Data Product[​](#run-the-query-for-the-data-product "Direct link to Run the Query for the Data Product")
+### Run the Query for the Data Product
 
 To answer the business question, you will need the average tip amount per precipitation level. For that, combine the data in the `NYC-taxi-trips-iceberg` and `NYC-weather.csv` datasets on a common field: the date.
 
@@ -376,7 +376,7 @@ You will get the query results, as shown in the image below.
 
 ![The result of the query to join the datasets with the average tip amount per precipitation level.](/images/get-started/docker-run-query.png "The result of the query with the average the tip amount per precipitation level.")
 
-### Create the View for the Data Product[​](#create-the-view-for-the-data-product "Direct link to Create the View for the Data Product")
+### Create the View for the Data Product
 
 In Dremio, views are virtual tables based on the result set of a query. You can create views from data that resides in any data source, folder, table, or view that you have access to. You can also share views you've created with stakeholders in your organization.
 
@@ -388,18 +388,18 @@ Let's create a view for the data product from the query that you ran above:
 
 Your view is created and ready to be used.
 
-## Step 4: Accelerate the Query with Reflections[​](#step-4-accelerate-the-query-with-reflections "Direct link to Step 4: Accelerate the Query with Reflections")
+## Step 4: Accelerate the Query with Reflections
 
 In this step, you will use [Reflections](/current/acceleration) to accelerate queries, particularly when working with large datasets.
 
-### Enable the Reflection[​](#enable-the-reflection "Direct link to Enable the Reflection")
+### Enable the Reflection
 
 Let's enable a [Raw Reflection](/current/acceleration/#types) to accelerate the query of your view:
 
 1. Select the **Reflections** tab at the top of the page, toggle the **Raw Reflections** switch to on, and click **Save**.
 2. On the far right, you will see an animated spinner icon close to **Footprint**. Wait until it turns into a green checkmark, which means that your query has been accelerated.
 
-### Run the Accelerated Query[​](#run-the-accelerated-query "Direct link to Run the Accelerated Query")
+### Run the Accelerated Query
 
 Let's now query the view and see the acceleration in action:
 
@@ -427,17 +427,17 @@ Enterprise Edition Free Trial](/current/get-started/kubernetes-trial)[Next
 
 Quick Tour of the Console](/current/get-started/quick_tour)
 
-* [Prerequisites](#prerequisites)
-* [Step 1: Deploy Dremio](#step-1-deploy-dremio)
-* [Step 2: Add the Sample Data](#step-2-add-the-sample-data)
-  + [Add the Datasets](#add-the-datasets)
-  + [Format the Datasets](#format-the-datasets)
-* [Step 3: Create a Data Product](#step-3-create-a-data-product)
-  + [Run the Query for the Data Product](#run-the-query-for-the-data-product)
-  + [Create the View for the Data Product](#create-the-view-for-the-data-product)
-* [Step 4: Accelerate the Query with Reflections](#step-4-accelerate-the-query-with-reflections)
-  + [Enable the Reflection](#enable-the-reflection)
-  + [Run the Accelerated Query](#run-the-accelerated-query)
+* Prerequisites
+* Step 1: Deploy Dremio
+* Step 2: Add the Sample Data
+  + Add the Datasets
+  + Format the Datasets
+* Step 3: Create a Data Product
+  + Run the Query for the Data Product
+  + Create the View for the Data Product
+* Step 4: Accelerate the Query with Reflections
+  + Enable the Reflection
+  + Run the Accelerated Query
 
 ---
 
@@ -456,7 +456,7 @@ The Dremio console has two main pages:
 * **Datasets page**: Provides a view of your data products and underlying source tables. You can discover and explore your data on this page. For a quick tour of the Datasets page, see [Datasets Page Quick Tour](/current/get-started/quick_tour#datasets-page).
 * **SQL Runner**: An easy to use editor to query data and create data products. For a quick tour of the SQL Runner, see [SQL Runner Quick Tour](/current/get-started/quick_tour#sql-runner).
 
-## Datasets Page[​](#datasets-page "Direct link to Datasets Page")
+## Datasets Page
 
 When you work on the Datasets page, there are different components that you can use to manage your data. The largest component is the **Data** panel, which is used to explore the spaces and sources in your data catalog, as shown in this image:
 
@@ -470,7 +470,7 @@ When you work on the Datasets page, there are different components that you can 
 | 4 | The title indicates that the Samples data lake is open and lists the contents of the sample source. A source also consists of layers, so if you expand a data source, you will find datasets and data types within the datasets. |
 | 5 | A [dataset](/current/what-is-dremio/key-concepts/#tables-and-views) is a collection of data. The datasets stored in files can be in many different formats, and to run SQL queries against data in different formats, you can create tables and views. By default, when you click on a dataset, the SQL editor is opened on the SQL Runner page with a `SELECT * FROM <dataset_name>` statement. To get a preview of the query, click **Run** or **Preview**. If you would rather click directly on a dataset to see or edit the definition, see [Preferences](/current/help-support/advanced-topics/dremio-preferences) for modifying this setting. |
 
-### Opening Datasets[​](#opening-datasets "Direct link to Opening Datasets")
+### Opening Datasets
 
 If you have privileges to modify the table or view, you will have the option of viewing and editing the table or view definition. When viewing or editing a table or view, you are directed to the **Data** tab by default, which shows the definitions of the table or view. For more options, check out the other tabs:
 
@@ -484,7 +484,7 @@ If you have privileges to modify the table or view, you will have the option of 
 
 Tabs are made visible based on the privileges that you have.
 
-## SQL Runner[​](#sql-runner "Direct link to SQL Runner")
+## SQL Runner
 
 The SQL Runner is where you run queries on your datasets and get results. To navigate to the SQL Runner, click ![](/images/cloud/sql-runner-icon.png) in the side navigation bar. The main components of the SQL Runner are highlighted below:
 
@@ -494,13 +494,13 @@ caution
 
 Dremio's query engine intentionally ignores any file or folder if the filename or folder name starts with a period (“.”) or an underscore (“\_”).
 
-### 1. Data[​](#1-data "Direct link to 1. Data")
+### 1. Data
 
 The **Data** panel is used to explore your data catalog, which includes [sources](/current/data-sources/), [tables, and views](/current/what-is-dremio/key-concepts#tables--views). For catalog objects that you use frequently, you can star the objects to make them easier to access from the panel.
 
 To add a dataset into the SQL editor, go to the data source. Use the left caret > to expand the source view. Locate the dataset that you would like to use within the query. Click the + button or drag and drop the data into the SQL editor.
 
-### 2. Scripts[​](#2-scripts "Direct link to 2. Scripts")
+### 2. Scripts
 
 You can save your SQL as a script if you have drafts or SQL statements that you run frequently. Each saved script has a name, when the script was created or modified, and the context that was set for the editor.
 
@@ -513,7 +513,7 @@ In the **Scripts** panel, you can:
 * Search your set of scripts by name
 * Sort scripts by name or date
 
-### 3. Run Mode[​](#3-run-mode "Direct link to 3. Run Mode")
+### 3. Run Mode
 
 Running the query routes it to the engine and returns the complete result set. Dremio's query engine intentionally ignores any file or folder if the filename or folder name starts with a period (“.”) or an underscore (“\_”).
 
@@ -529,11 +529,11 @@ note
 
 Known issue: Running a `USE` statement will not update the context that is set in the SQL Runner.
 
-### 4. Preview Mode[​](#4-preview-mode "Direct link to 4. Preview Mode")
+### 4. Preview Mode
 
 Executing a preview returns a subset of rows in the result set. Like the run mode, running the preview job will route the query to the selected engine, although the preview mode runs a subset of your results in less time.
 
-### 5. SQL Editor[​](#5-sql-editor "Direct link to 5. SQL Editor")
+### 5. SQL Editor
 
 The SQL editor is where you create and edit queries to get insight from your data. In the top-right corner of the SQL editor, you'll find:
 
@@ -555,13 +555,13 @@ g. Enable autocomplete to receive suggestions for SQL keywords, catalog objects,
 
 h. Click the keyboard button to see the shortcuts for the SQL Runner. For a list of shortcuts, see [Keyboard Shortcuts](/current/help-support/keyboard-shortcuts).
 
-#### Syntax Error Highlighting[​](#syntax-error-highlighting "Direct link to Syntax Error Highlighting")
+#### Syntax Error Highlighting
 
 Before you run a query, make sure to fix any syntax errors that have been detected in your query.
 
 The SQL editor automatically checks for syntax errors, and every detected error is marked with a red wavy underline. If you hover over the error, you’ll see a message stating whether the error is the result of a token that is missing, unexpected, unrecognized, or extraneous in the query.
 
-#### Running Multiple Queries[​](#running-multiple-queries "Direct link to Running Multiple Queries")
+#### Running Multiple Queries
 
 You can run multiple queries in the SQL editor by using a semicolon to separate each statement. To run all of the queries in the SQL editor, simply click **Run**. The results of each query will be shown in the same order that the queries are constructed:
 
@@ -571,7 +571,7 @@ When you have multiple queries, you can also select a subset to run. If you sele
 
 ![](/assets/images/select-multiple-queries-db16bfe6d0aff008ac78896692644232.png)
 
-### 6. Result Set Actions[​](#6-result-set-actions "Direct link to 6. Result Set Actions")
+### 6. Result Set Actions
 
 Above the top-right corner of the result set, you will find these actions:
 
@@ -588,13 +588,13 @@ note
 
 The download and copy results features can be enabled or disabled for a project in [Dremio Preferences](/current/help-support/advanced-topics/dremio-preferences). Disabling this in a project will prevent all users from downloading and copying results from the project.
 
-### 7. Execution State[​](#7-execution-state "Direct link to 7. Execution State")
+### 7. Execution State
 
 The execution state will show you the type of job that was run, the number of records, and the amount of time that it took to run the query. When you click on the linked job, a Job Overview page opens in a new tab, providing a summary, total execution time, Reflections data, job results, and more details. If a job took too long or failed, [viewing the job overview](/current/admin/monitoring/jobs/) can help you troubleshoot what actually happened.
 
 ![](/assets/images/execution-state-21cf846753f9770af207bac5cf203d62.png)
 
-### 8. Transformations[​](#8-transformations "Direct link to 8. Transformations")
+### 8. Transformations
 
 Transformations can be applied to data. Using the following no-code UI flows automatically updates the SQL in the SQL editor:
 
@@ -605,7 +605,7 @@ Transformations can be applied to data. Using the following no-code UI flows aut
 
 If you are using the preview mode, transformations use a subset of the results and may not provide a complete profile of the result set. It may show null or incomplete values in the dataset as a result of joining, grouping, or calculating fields. You may encounter an error showing "no rows returned due to the LIMIT logic" or "more rows returned due to an outer join".
 
-### 9. Results Table[​](#9-results-table "Direct link to 9. Results Table")
+### 9. Results Table
 
 The results of the query are shown in a table format. You can edit a table column by clicking directly on the column title to open a dropdown of edit options, which include sorting results, converting data types, renaming columns, and calculating fields.
 
@@ -617,7 +617,7 @@ tip
 
 Downloading large result sets could produce delays and errors. If you encounter these issues, create smaller views that summarize the results. You can then run queries on these smaller views and download the results.
 
-## Additional Resources[​](#additional-resources "Direct link to Additional Resources")
+## Additional Resources
 
 Find out more about Dremio by enrolling in the [Dremio Fundamentals course in Dremio University](https://university.dremio.com/course/dremio-fundamentals-software).
 
@@ -629,19 +629,19 @@ Community Edition on Docker](/current/get-started/docker)[Next
 
 What is Dremio?](/current/what-is-dremio/)
 
-* [Datasets Page](#datasets-page)
-  + [Opening Datasets](#opening-datasets)
-* [SQL Runner](#sql-runner)
-  + [1. Data](#1-data)
-  + [2. Scripts](#2-scripts)
-  + [3. Run Mode](#3-run-mode)
-  + [4. Preview Mode](#4-preview-mode)
-  + [5. SQL Editor](#5-sql-editor)
-  + [6. Result Set Actions](#6-result-set-actions)
-  + [7. Execution State](#7-execution-state)
-  + [8. Transformations](#8-transformations)
-  + [9. Results Table](#9-results-table)
-* [Additional Resources](#additional-resources)
+* Datasets Page
+  + Opening Datasets
+* SQL Runner
+  + 1. Data
+  + 2. Scripts
+  + 3. Run Mode
+  + 4. Preview Mode
+  + 5. SQL Editor
+  + 6. Result Set Actions
+  + 7. Execution State
+  + 8. Transformations
+  + 9. Results Table
+* Additional Resources
 
 ---
 
@@ -660,7 +660,7 @@ The Dremio console has two main pages:
 * **Datasets page**: Provides a view of your data products and underlying source tables. You can discover and explore your data on this page. For a quick tour of the Datasets page, see [Datasets Page Quick Tour](/current/get-started/quick_tour#datasets-page).
 * **SQL Runner**: An easy to use editor to query data and create data products. For a quick tour of the SQL Runner, see [SQL Runner Quick Tour](/current/get-started/quick_tour#sql-runner).
 
-## Datasets Page[​](#datasets-page "Direct link to Datasets Page")
+## Datasets Page
 
 When you work on the Datasets page, there are different components that you can use to manage your data. The largest component is the **Data** panel, which is used to explore the spaces and sources in your data catalog, as shown in this image:
 
@@ -674,7 +674,7 @@ When you work on the Datasets page, there are different components that you can 
 | 4 | The title indicates that the Samples data lake is open and lists the contents of the sample source. A source also consists of layers, so if you expand a data source, you will find datasets and data types within the datasets. |
 | 5 | A [dataset](/current/what-is-dremio/key-concepts/#tables-and-views) is a collection of data. The datasets stored in files can be in many different formats, and to run SQL queries against data in different formats, you can create tables and views. By default, when you click on a dataset, the SQL editor is opened on the SQL Runner page with a `SELECT * FROM <dataset_name>` statement. To get a preview of the query, click **Run** or **Preview**. If you would rather click directly on a dataset to see or edit the definition, see [Preferences](/current/help-support/advanced-topics/dremio-preferences) for modifying this setting. |
 
-### Opening Datasets[​](#opening-datasets "Direct link to Opening Datasets")
+### Opening Datasets
 
 If you have privileges to modify the table or view, you will have the option of viewing and editing the table or view definition. When viewing or editing a table or view, you are directed to the **Data** tab by default, which shows the definitions of the table or view. For more options, check out the other tabs:
 
@@ -688,7 +688,7 @@ If you have privileges to modify the table or view, you will have the option of 
 
 Tabs are made visible based on the privileges that you have.
 
-## SQL Runner[​](#sql-runner "Direct link to SQL Runner")
+## SQL Runner
 
 The SQL Runner is where you run queries on your datasets and get results. To navigate to the SQL Runner, click ![](/images/cloud/sql-runner-icon.png) in the side navigation bar. The main components of the SQL Runner are highlighted below:
 
@@ -698,13 +698,13 @@ caution
 
 Dremio's query engine intentionally ignores any file or folder if the filename or folder name starts with a period (“.”) or an underscore (“\_”).
 
-### 1. Data[​](#1-data "Direct link to 1. Data")
+### 1. Data
 
 The **Data** panel is used to explore your data catalog, which includes [sources](/current/data-sources/), [tables, and views](/current/what-is-dremio/key-concepts#tables--views). For catalog objects that you use frequently, you can star the objects to make them easier to access from the panel.
 
 To add a dataset into the SQL editor, go to the data source. Use the left caret > to expand the source view. Locate the dataset that you would like to use within the query. Click the + button or drag and drop the data into the SQL editor.
 
-### 2. Scripts[​](#2-scripts "Direct link to 2. Scripts")
+### 2. Scripts
 
 You can save your SQL as a script if you have drafts or SQL statements that you run frequently. Each saved script has a name, when the script was created or modified, and the context that was set for the editor.
 
@@ -717,7 +717,7 @@ In the **Scripts** panel, you can:
 * Search your set of scripts by name
 * Sort scripts by name or date
 
-### 3. Run Mode[​](#3-run-mode "Direct link to 3. Run Mode")
+### 3. Run Mode
 
 Running the query routes it to the engine and returns the complete result set. Dremio's query engine intentionally ignores any file or folder if the filename or folder name starts with a period (“.”) or an underscore (“\_”).
 
@@ -733,11 +733,11 @@ note
 
 Known issue: Running a `USE` statement will not update the context that is set in the SQL Runner.
 
-### 4. Preview Mode[​](#4-preview-mode "Direct link to 4. Preview Mode")
+### 4. Preview Mode
 
 Executing a preview returns a subset of rows in the result set. Like the run mode, running the preview job will route the query to the selected engine, although the preview mode runs a subset of your results in less time.
 
-### 5. SQL Editor[​](#5-sql-editor "Direct link to 5. SQL Editor")
+### 5. SQL Editor
 
 The SQL editor is where you create and edit queries to get insight from your data. In the top-right corner of the SQL editor, you'll find:
 
@@ -759,13 +759,13 @@ g. Enable autocomplete to receive suggestions for SQL keywords, catalog objects,
 
 h. Click the keyboard button to see the shortcuts for the SQL Runner. For a list of shortcuts, see [Keyboard Shortcuts](/current/help-support/keyboard-shortcuts).
 
-#### Syntax Error Highlighting[​](#syntax-error-highlighting "Direct link to Syntax Error Highlighting")
+#### Syntax Error Highlighting
 
 Before you run a query, make sure to fix any syntax errors that have been detected in your query.
 
 The SQL editor automatically checks for syntax errors, and every detected error is marked with a red wavy underline. If you hover over the error, you’ll see a message stating whether the error is the result of a token that is missing, unexpected, unrecognized, or extraneous in the query.
 
-#### Running Multiple Queries[​](#running-multiple-queries "Direct link to Running Multiple Queries")
+#### Running Multiple Queries
 
 You can run multiple queries in the SQL editor by using a semicolon to separate each statement. To run all of the queries in the SQL editor, simply click **Run**. The results of each query will be shown in the same order that the queries are constructed:
 
@@ -775,7 +775,7 @@ When you have multiple queries, you can also select a subset to run. If you sele
 
 ![](/assets/images/select-multiple-queries-db16bfe6d0aff008ac78896692644232.png)
 
-### 6. Result Set Actions[​](#6-result-set-actions "Direct link to 6. Result Set Actions")
+### 6. Result Set Actions
 
 Above the top-right corner of the result set, you will find these actions:
 
@@ -792,13 +792,13 @@ note
 
 The download and copy results features can be enabled or disabled for a project in [Dremio Preferences](/current/help-support/advanced-topics/dremio-preferences). Disabling this in a project will prevent all users from downloading and copying results from the project.
 
-### 7. Execution State[​](#7-execution-state "Direct link to 7. Execution State")
+### 7. Execution State
 
 The execution state will show you the type of job that was run, the number of records, and the amount of time that it took to run the query. When you click on the linked job, a Job Overview page opens in a new tab, providing a summary, total execution time, Reflections data, job results, and more details. If a job took too long or failed, [viewing the job overview](/current/admin/monitoring/jobs/) can help you troubleshoot what actually happened.
 
 ![](/assets/images/execution-state-21cf846753f9770af207bac5cf203d62.png)
 
-### 8. Transformations[​](#8-transformations "Direct link to 8. Transformations")
+### 8. Transformations
 
 Transformations can be applied to data. Using the following no-code UI flows automatically updates the SQL in the SQL editor:
 
@@ -809,7 +809,7 @@ Transformations can be applied to data. Using the following no-code UI flows aut
 
 If you are using the preview mode, transformations use a subset of the results and may not provide a complete profile of the result set. It may show null or incomplete values in the dataset as a result of joining, grouping, or calculating fields. You may encounter an error showing "no rows returned due to the LIMIT logic" or "more rows returned due to an outer join".
 
-### 9. Results Table[​](#9-results-table "Direct link to 9. Results Table")
+### 9. Results Table
 
 The results of the query are shown in a table format. You can edit a table column by clicking directly on the column title to open a dropdown of edit options, which include sorting results, converting data types, renaming columns, and calculating fields.
 
@@ -821,7 +821,7 @@ tip
 
 Downloading large result sets could produce delays and errors. If you encounter these issues, create smaller views that summarize the results. You can then run queries on these smaller views and download the results.
 
-## Additional Resources[​](#additional-resources "Direct link to Additional Resources")
+## Additional Resources
 
 Find out more about Dremio by enrolling in the [Dremio Fundamentals course in Dremio University](https://university.dremio.com/course/dremio-fundamentals-software).
 
@@ -833,16 +833,16 @@ Community Edition on Docker](/current/get-started/docker)[Next
 
 What is Dremio?](/current/what-is-dremio/)
 
-* [Datasets Page](#datasets-page)
-  + [Opening Datasets](#opening-datasets)
-* [SQL Runner](#sql-runner)
-  + [1. Data](#1-data)
-  + [2. Scripts](#2-scripts)
-  + [3. Run Mode](#3-run-mode)
-  + [4. Preview Mode](#4-preview-mode)
-  + [5. SQL Editor](#5-sql-editor)
-  + [6. Result Set Actions](#6-result-set-actions)
-  + [7. Execution State](#7-execution-state)
-  + [8. Transformations](#8-transformations)
-  + [9. Results Table](#9-results-table)
-* [Additional Resources](#additional-resources)
+* Datasets Page
+  + Opening Datasets
+* SQL Runner
+  + 1. Data
+  + 2. Scripts
+  + 3. Run Mode
+  + 4. Preview Mode
+  + 5. SQL Editor
+  + 6. Result Set Actions
+  + 7. Execution State
+  + 8. Transformations
+  + 9. Results Table
+* Additional Resources

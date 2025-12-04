@@ -6,7 +6,7 @@ On this page
 
 This changelog provides a detailed record of updates and enhancements we have made to improve your Dremio Cloud experience.
 
-## November 12, 2025[​](#november-12-2025 "Direct link to November 12, 2025")
+## November 12, 2025
 
 What's New
 
@@ -26,7 +26,7 @@ DX-105441
 
 Was this page helpful?
 
-* [November 12, 2025](#november-12-2025)
+* November 12, 2025
 
 <div style="page-break-after: always;"></div>
 

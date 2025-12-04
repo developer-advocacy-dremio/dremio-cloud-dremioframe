@@ -12,11 +12,11 @@ On this page
 
 # Monitoring
 
-As an administrator, you can monitor [logs](#logs), [usage](#usage), [system telemetry](#system-telemetry), [jobs](/current/admin/monitoring/jobs/), and [Dremio nodes](/current/admin/monitoring/dremio-nodes).
+As an administrator, you can monitor logs, usage, system telemetry, [jobs](/current/admin/monitoring/jobs/), and [Dremio nodes](/current/admin/monitoring/dremio-nodes).
 
 As the [Dremio Shared Responsibility Models](/responsibility) outline, monitoring is a shared responsibility between Dremio and you. The Shared Responsibility Models lay out Dremio's responsibilities for providing monitoring technologies and logs and your responsibilities for implementation and use.
 
-## Logs[​](#logs "Direct link to Logs")
+## Logs
 
 Logs are primarily for troubleshooting issues and monitoring the health of the deployment.
 
@@ -28,7 +28,7 @@ By default, Dremio uses the following locations to write logs:
 * RPM - `/var/log/dremio`
 * Kubernetes - `/opt/dremio/log`
 
-### Log Types[​](#log-types "Direct link to Log Types")
+### Log Types
 
 | Log Type | Description |
 | --- | --- |
@@ -37,16 +37,16 @@ By default, Dremio uses the following locations to write logs:
 | Query | Query logging is enabled by default. The `queries.json` file contains the log of completed queries; it does not include queries currently in planning or execution. You can retrieve the same information that is in `queries.json` using the [`sys.jobs_recent`](/current/reference/sql/system-tables/jobs_recent) system table. Query logs include the following information:  * `queryId`: Unique ID of the executed query. * `queryText`: SQL query text. * `start`: Start time of the query. * `finish`: End time of the query. * `outcome`: Whether the query was completed or failed. * `username`: User who executed the query. * `commandDescription`: Type of the command; may be a regular SQL query execution job or another SQL command.  The query log may contain additional information depending on your Dremio configuration. |
 | Warning | The `hive.deprecated.function.warning.log` file contains warnings for Hive functions that have been deprecated. To resolve warnings that are listed in this file, replace deprecated functions with a [supported function](/current/reference/sql/sql-functions/ALL_FUNCTIONS/). For example, to resolve a warning that mentions `NVL`, replace `NVL` with `COALESCE`. |
 
-### Retrieving Logs from the Dremio Console Enterprise[​](#retrieving-logs-from-the-dremio-console-enterprise "Direct link to retrieving-logs-from-the-dremio-console-enterprise")
+### Retrieving Logs from the Dremio Console Enterprise
 
 Retrieve logs for Kubernetes deployments in the Dremio console at **Settings** > **Support** > **Download Logs**.
 
-#### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+#### Prerequisites
 
 * You must be using Dremio 25.1+. Log collection is powered by Dremio Diagnostics Collector (DDC).
 * You must have the EXPORT DIAGNOSTICS privilege to view **Download Logs** options in **Settings** > **Support**.
 
-#### Downloading Logs[​](#downloading-logs "Direct link to Downloading Logs")
+#### Downloading Logs
 
 To download logs:
 
@@ -60,13 +60,13 @@ We recommend the default `Light` collection, which provides 7 days of logs and c
 
 2. When Dremio completes log collection, the log bundle appears in a list below **Start collecting data**. To download a log bundle, click **Download** next to the applicable bundle. Log bundles are available to download for 24 hours.
 
-### Logging in Kubernetes[​](#logging-in-kubernetes "Direct link to Logging in Kubernetes")
+### Logging in Kubernetes
 
 By default, all logs are written to a persisted volume mounted at `/opt/dremio/log`.
 
 To disable logging, set `writeLogsToFile: false` in the `values-overrides.yaml` configuration file either globally or individually for each `coordinator` and `executor` parent. For more information, see [Configuring Your Values](/current/deploy-dremio/configuring-kubernetes/).
 
-#### Using the Container Console[​](#using-the-container-console "Direct link to Using the Container Console")
+#### Using the Container Console
 
 All logs are written to the container's console (stdout) simultaneously. These logs can be monitored using a `kubectl` command:
 
@@ -80,7 +80,7 @@ Use the `-f` flag to continuously print new log entries to your terminal as they
 
 You can also write logs to a file on disk in addition to stdout. Read [Writing Logs to a File](https://github.com/dremio/dremio-cloud-tools/blob/master/charts/dremio_v2/docs/setup/Writing-Logs-To-A-File.md) for details.
 
-#### Using the AKS Container[​](#using-the-aks-container "Direct link to Using the AKS Container")
+#### Using the AKS Container
 
 Azure provides integration with AKS clusters and Azure Log Analytics to monitor container logs. This is a standard practice that puts infrastructure in place to aggregate logs from containers into a central log store to analyze them.
 
@@ -92,7 +92,7 @@ AKS log monitoring is useful for the following reasons:
 
 For more information regarding AKS, see [Azure Monitor features for Kubernetes monitoring](https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview).
 
-#### Enabling Log Monitoring[​](#enabling-log-monitoring "Direct link to Enabling Log Monitoring")
+#### Enabling Log Monitoring
 
 You can enable log monitoring when creating an AKS cluster or after the cluster has been created.
 
@@ -101,18 +101,18 @@ Once logging is enabled, all your container `stdout` and `stderr` logs are colle
 1. While creating an AKS cluster, enable container monitoring. You can use an existing Log Analytics workspace or create a new one.
 2. In an existing AKS cluster where monitoring was not enabled during creation, go to **Logs on the AKS cluster** and enable it.
 
-#### Viewing Container Logs[​](#viewing-container-logs "Direct link to Viewing Container Logs")
+#### Viewing Container Logs
 
 To view all the container logs:
 
 1. Go to **Monitoring** > **Logs**.
 2. Use the filter option to see the logs from the containers that you are interested in.
 
-## Usage[​](#usage "Direct link to Usage")
+## Usage
 
 Monitoring usage across your cluster makes it easier to observe patterns, analyze the resources being consumed by your data platform, and understand the impact on your users.
 
-### Catalog Usage Enterprise[​](#catalog-usage-enterprise "Direct link to catalog-usage-enterprise")
+### Catalog Usage Enterprise
 
 Go to **Settings** > **Monitor** to view your catalog usage. You must be a member of the `ADMIN` role to access the Monitor page. When you open the Monitor page, you are directed to the Catalog Usage tab by default where you can see the following metrics:
 
@@ -127,7 +127,7 @@ All datasets are assessed in the metrics on the Monitor page except for datasets
 
 The metrics on the Monitor page analyze only user queries. Refreshes of data Reflections and metadata refreshes are excluded.
 
-### Jobs Enterprise[​](#jobs-enterprise "Direct link to jobs-enterprise")
+### Jobs Enterprise
 
 Go to **Settings** > **Monitor** > **Jobs** to open the Jobs tab. You must be a member of the `ADMIN` role to access the Monitor page. The Jobs tab shows an aggregate view of the following metrics for the jobs that are running on your cluster:
 
@@ -142,7 +142,7 @@ Go to **Settings** > **Monitor** > **Jobs** to open the Jobs tab. You must be a 
 
 To view all jobs and the details of specific jobs, see [Viewing Jobs](/current/admin/monitoring/jobs/).
 
-### Resources Enterprise[​](#resources-enterprise "Direct link to resources-enterprise")
+### Resources Enterprise
 
 Go to **Settings** > **Monitor** > **Resources** to open the Resources tab. You must be a member of the `ADMIN` role to access the Monitor page. The Resources tab shows an aggregate view of the following metrics for the jobs and nodes running on your cluster:
 
@@ -150,7 +150,7 @@ Go to **Settings** > **Monitor** > **Resources** to open the Resources tab. You 
 * Top 10 most CPU and memory intensive jobs
 * Number of running executors
 
-### Cluster Usage[​](#cluster-usage "Direct link to Cluster Usage")
+### Cluster Usage
 
 Dremio displays the number of unique users who executed jobs on that day and the number of executed jobs.
 
@@ -160,7 +160,7 @@ Dremio displays the number of unique users who executed jobs on that day and the
 
 ![](/images/cluster-usage.png "Viewing Cluster Usage")
 
-## System Telemetry[​](#system-telemetry "Direct link to System Telemetry")
+## System Telemetry
 
 Dremio exposes system telemetry metrics in Prometheus format by default. It is not necessary to configure an exporter to collect the metrics. Instead, you can specify the host and port number where metrics are exposed in the [dremio.conf](/current/deploy-dremio/other-options/standalone/dremio-config/dremio-conf/index.md) file and scrape the metrics with any Prometheus-compliant tool.
 
@@ -192,16 +192,16 @@ Workload Management](/current/admin/workloads/workload-management)[Next
 
 Viewing Jobs](/current/admin/monitoring/jobs/)
 
-* [Logs](#logs)
-  + [Log Types](#log-types)
-  + [Retrieving Logs from the Dremio Console Enterprise](#retrieving-logs-from-the-dremio-console-enterprise)
-  + [Logging in Kubernetes](#logging-in-kubernetes)
-* [Usage](#usage)
-  + [Catalog Usage Enterprise](#catalog-usage-enterprise)
-  + [Jobs Enterprise](#jobs-enterprise)
-  + [Resources Enterprise](#resources-enterprise)
-  + [Cluster Usage](#cluster-usage)
-* [System Telemetry](#system-telemetry)
+* Logs
+  + Log Types
+  + Retrieving Logs from the Dremio Console Enterprise
+  + Logging in Kubernetes
+* Usage
+  + Catalog Usage Enterprise
+  + Jobs Enterprise
+  + Resources Enterprise
+  + Cluster Usage
+* System Telemetry
 
 ---
 
@@ -217,7 +217,7 @@ All jobs run in Dremio are listed on a separate page, showing the job ID, type, 
 
 To navigate to the Jobs page, click ![This is the icon that represents the Jobs page.](/images/cloud/jobs-page-icon.png "Jobs icon.") in the side navigation bar.
 
-## Search Filters and Columns[​](#search-filters-and-columns "Direct link to Search Filters and Columns")
+## Search Filters and Columns
 
 By default, the Jobs page lists the jobs run within the last 30 days and the jobs are filtered by **UI, External Tools** job types. To change these defaults for your account, you can filter on values and manage columns directly on the Jobs page, as shown in this image:
 
@@ -227,15 +227,15 @@ a. **Search Jobs** by typing the username or job ID.
 
 b. **Start Time** allows you to pick the date and time at which the job began.
 
-c. **Status** represents one or more job states. For descriptions, see [Job States and Statuses](#job-states-and-statuses).
+c. **Status** represents one or more job states. For descriptions, see Job States and Statuses.
 
-d. **Attribute** includes Accelerator, AI agent, AI function, Downloads, External Tools, Internal, MCP, and UI. For descriptions, see Query Types in the [Job Attributes](#job-attributes).
+d. **Attribute** includes Accelerator, AI agent, AI function, Downloads, External Tools, Internal, MCP, and UI. For descriptions, see Query Types in the Job Attributes.
 
 e. **User** can be searched by typing the username or checking the box next to the username in the dropdown.
 
 f. **Manage Columns** by checking the boxes next to additional columns that you want to see in the Jobs list. The grayed out checkboxes show the columns that are required by default. You can also rearrange the column order by clicking directly on a column to drag and drop.
 
-## Job Attributes[​](#job-attributes "Direct link to Job Attributes")
+## Job Attributes
 
 Each job has the following attributes, which can appear as columns in the list of jobs:
 
@@ -256,7 +256,7 @@ Each job has the following attributes, which can appear as columns in the list o
 | Status | An icon that represents one or more job states. This column is automatically shown at the start of each row. For descriptions, see [Job states and statuses](.#job-states-and-statuses). |
 | User | Username of the user who ran the query and initiated the job. |
 
-## Job States and Statuses[​](#job-states-and-statuses "Direct link to Job States and Statuses")
+## Job States and Statuses
 
 Each job passes through a sequence of states until it is complete, though the sequence can be interrupted if a query is canceled or if there is an error during a state. In this diagram, the states that a job passes through are in white, and the possible end states are in dark gray.
 
@@ -286,9 +286,9 @@ Monitoring](/current/admin/monitoring/)[Next
 
 Overview](/current/admin/monitoring/jobs/overview)
 
-* [Search Filters and Columns](#search-filters-and-columns)
-* [Job Attributes](#job-attributes)
-* [Job States and Statuses](#job-states-and-statuses)
+* Search Filters and Columns
+* Job Attributes
+* Job States and Statuses
 
 ---
 
@@ -307,11 +307,11 @@ There are various approaches for operational monitoring of Dremio nodes. This to
 
 While these two datasets can be used in similar ways, Prometheus metrics are less granular than `queries.json`—the latter allows you to drill down into which specific kinds of queries or users are experiencing SLA breaches.
 
-### Enabling Node Metrics[​](#enabling-node-metrics "Direct link to Enabling Node Metrics")
+### Enabling Node Metrics
 
 Dremio enables node monitoring by default. Starting in Dremio 26.0, each node in the cluster exposes Prometheus metrics via the `/metrics` endpoint on port 9010.
 
-### Available Prometheus Metrics[​](#available-prometheus-metrics "Direct link to Available Prometheus Metrics")
+### Available Prometheus Metrics
 
 The following table describes the Prometheus metrics provided by Dremio and specifies which Dremio node roles support them:
 
@@ -352,11 +352,11 @@ The following table describes the Prometheus metrics provided by Dremio and spec
 | `threads.waiting.count` | Current number of threads in the waiting state | Yes | Yes | Yes |
 | `jvm.gc.overhead.percent` | An approximate percentage of CPU time used by garbage collection activities | Yes | Yes | No |
 
-## Parameters to Monitor for Scaling Capacity[​](#parameters-to-monitor-for-scaling-capacity "Direct link to Parameters to Monitor for Scaling Capacity")
+## Parameters to Monitor for Scaling Capacity
 
 The following parameters, derived from the `queries.json`, can help identify when additional engines or vertical scaling are needed to maintain performance.
 
-### Query Execution Errors[​](#query-execution-errors "Direct link to Query Execution Errors")
+### Query Execution Errors
 
 By reviewing the `outcomeReason` field in `queries.json`, you can identify resource-related issues and take proactive steps, such as scaling engines or redistributing workloads, to maintain performance and stability.
 
@@ -368,7 +368,7 @@ By reviewing the `outcomeReason` field in `queries.json`, you can identify resou
 | `ChannelClosedException (fabric server)` | 1% of queries exhibiting node disconnects | Add an engine and move workload |
 | `CONNECTION ERROR: Exceeded timeout` | 1% of queries exhibiting node disconnects | Add an engine and move workload |
 
-### Job State Durations[​](#job-state-durations "Direct link to Job State Durations")
+### Job State Durations
 
 Use the [job state durations](/current/admin/monitoring/jobs/#job-states-and-statuses) (provided in milliseconds) in the `queries.json` to address SLA breaches.
 
@@ -393,11 +393,11 @@ Viewing Jobs](/current/admin/monitoring/jobs/)[Next
 
 Exporting Logs](/current/admin/monitoring/exporting/)
 
-* [Enabling Node Metrics](#enabling-node-metrics)
-* [Available Prometheus Metrics](#available-prometheus-metrics)
-* [Parameters to Monitor for Scaling Capacity](#parameters-to-monitor-for-scaling-capacity)
-  + [Query Execution Errors](#query-execution-errors)
-  + [Job State Durations](#job-state-durations)
+* Enabling Node Metrics
+* Available Prometheus Metrics
+* Parameters to Monitor for Scaling Capacity
+  + Query Execution Errors
+  + Job State Durations
 
 ---
 

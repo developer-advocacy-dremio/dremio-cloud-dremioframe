@@ -8,7 +8,7 @@ Dremio Cloud is the agentic lakehouse—a fully managed platform built for AI ag
 
 Unlike traditional systems that require constant tuning and manual operations, Dremio Cloud continuously learns, adapts, and optimizes without human intervention. This creates a self-managing environment where AI agents, applications, and users can seamlessly access consistent, governed data.
 
-## Core Capabilities[​](#core-capabilities "Direct link to Core Capabilities")
+## Core Capabilities
 
 **AI Agent**: Dremio Cloud includes a native AI agent integrated with the catalog and governance controls. The agent can discover datasets, generate queries, and help both technical and non-technical users move from questions to repeatable assets quickly. It reduces complexity by automating routine analytics tasks while operating within enterprise security and governance.
 
@@ -18,14 +18,14 @@ Unlike traditional systems that require constant tuning and manual operations, D
 
 **Autonomous Management**: The platform delivers consistent sub-second performance without manual tuning. Features such as [Autonomous Reflections](/dremio-cloud/admin/performance/autonomous-reflections) act as an intelligent cache that adapts to workload patterns, while Iceberg clustering and automatic table optimization continuously organize data to address skew and small files. These optimizations happen transparently—no changes to applications or hand-tuning required.
 
-## Why It Matters[​](#why-it-matters "Direct link to Why It Matters")
+## Why It Matters
 
 Dremio Cloud gives AI agents and humans a unified, governed foundation for analytics and decision-making. The AI Semantic Layer ensures a consistent business context, while Autonomous Management capabilities deliver fast, reliable performance across all data. Built on open standards—Apache Iceberg, Apache Polaris, and Apache Arrow—Dremio avoids lock-in while supporting the scale, speed, and trust required for agentic workloads.
 
 Was this page helpful?
 
-* [Core Capabilities](#core-capabilities)
-* [Why It Matters](#why-it-matters)
+* Core Capabilities
+* Why It Matters
 
 <div style="page-break-after: always;"></div>
 
@@ -49,7 +49,7 @@ The table below lists the supported regions and availability zones:
 | US East (N. Virginia) | us-east-1 | us-east-1a, us-east-1b, us-east-1c, us-east-1d, us-east-1e, and us-east-1f |
 | US West (Oregon) | us-west-2 | us-west-2a, us-west-2b, us-west-2c, us-west-2d |
 
-## Connection Endpoints[​](#connection-endpoints "Direct link to Connection Endpoints")
+## Connection Endpoints
 
 Use these URLs to connect to Dremio:
 
@@ -66,7 +66,7 @@ Use these URLs to connect to Dremio:
 
 Was this page helpful?
 
-* [Connection Endpoints](#connection-endpoints)
+* Connection Endpoints
 
 <div style="page-break-after: always;"></div>
 
@@ -78,11 +78,11 @@ On this page
 
 This page defines core Dremio concepts.
 
-## Platform[​](#platform "Direct link to Platform")
+## Platform
 
 The platform provides the foundational organizational structure for Dremio. It establishes the account hierarchy through organizations and projects, and enables administrators to control user access and allocate resources.
 
-### Organizations and Projects[​](#organizations-and-projects "Direct link to Organizations and Projects")
+### Organizations and Projects
 
 An [organization](/dremio-cloud/admin/subscription/#organizations) is the top-level account within Dremio where authentication, roles, AI configuration for Model Providers, and billing are managed. An organization can contain multiple projects.
 
@@ -90,31 +90,31 @@ A [project](/dremio-cloud/admin/projects/) isolates compute, data, and resources
 
 When creating a project, you can choose between Dremio-managed storage or provide [your own object storage](/dremio-cloud/admin/projects/your-own-project-storage) as the project store. This is where Dremio stores materializations, metadata, and Iceberg tables created in your Open Catalog.
 
-### Roles and Permissions[​](#roles-and-permissions "Direct link to Roles and Permissions")
+### Roles and Permissions
 
 [Roles](/dremio-cloud/security/roles) define what actions users can perform within Dremio. Permissions control access to specific resources like projects, catalogs, tables, and views. Administrators assign roles to users to manage who can view, create, modify, or delete data objects and configurations.
 
-## Catalog[​](#catalog "Direct link to Catalog")
+## Catalog
 
 Enables unified data access across heterogeneous sources without requiring data movement or ETL processes.
 
-### Open Catalog[​](#open-catalog "Direct link to Open Catalog")
+### Open Catalog
 
 [Dremio's Open Catalog](/dremio-cloud/bring-data/connect/catalogs/open-catalog) is a metadata and data management layer built on Apache Polaris. It provides a unified namespace for organizing and accessing data across your Dremio environment with Apache Iceberg support.
 
-#### Namespaces and Folders[​](#namespaces-and-folders "Direct link to Namespaces and Folders")
+#### Namespaces and Folders
 
 A **namespace** is the top-level container within the Open Catalog that organizes data objects. The catalog name corresponds to your project name, and namespaces are the primary organizational boundary for tables, views, and folders within that catalog.
 
 **Folders** are directories that contain tables, views, and other folders. Use folders to organize your data into common themes, such as data quality (raw, enrichment, and presentation layers), business units, or geographic regions. Folders can be organized hierarchically for better data governance.
 
-#### Tables and Views[​](#tables-and-views "Direct link to Tables and Views")
+#### Tables and Views
 
 **Tables** contain data from your sources, formatted as rows and columns. Tables in the Open Catalog use the Iceberg table format, and Dremio automates maintenance processes including compaction and garbage collection.
 
 **Views** are virtual tables based on SQL queries. Views do not contain data but provide logical abstractions over tables, other views, or combinations of both. Views leverage the Iceberg view specification for portability across different query engines.
 
-### Data Sources[​](#data-sources "Direct link to Data Sources")
+### Data Sources
 
 Dremio connects to external systems through data sources without data movement. Supported sources include:
 
@@ -122,7 +122,7 @@ Dremio connects to external systems through data sources without data movement. 
 * **Object Storage**: Amazon S3 and Azure Storage for data lake workloads
 * **Relational Databases**: PostgreSQL, MySQL, SQL Server, and other RDBMS systems
 
-### Paths[​](#paths "Direct link to Paths")
+### Paths
 
 Paths are dot-separated identifiers that specify the location of an object, starting with the source or catalog name, followed by any folders, and ending with the name of the dataset, table, or view. Paths are used to qualify objects when referencing them in queries.
 
@@ -132,59 +132,59 @@ For example, in the path `my_catalog.usage.onprem_deployment.daily_usage`:
 * `usage` and `onprem_deployment` are folders within the catalog
 * `daily_usage` is the table or view name
 
-## AI Semantic Layer[​](#ai-semantic-layer "Direct link to AI Semantic Layer")
+## AI Semantic Layer
 
 Dremio provides multiple ways to discover and understand your data across all connected sources.
 
-### Wikis and Labels[​](#wikis-and-labels "Direct link to Wikis and Labels")
+### Wikis and Labels
 
 [Wikis](/dremio-cloud/manage-govern/wikis-labels#wikis) provide detailed descriptions and context for your datasets, like a README for your data. Wikis support [Markdown](https://daringfireball.net/projects/markdown/) formatting and can include dataset descriptions, source information, and example queries.
 
 [Labels](/dremio-cloud/manage-govern/wikis-labels#labels) enable easy categorization of datasets. For example, add a `PII` label to indicate personally identifiable information, or `Finance` to group financial datasets.
 
-### Semantic Search[​](#semantic-search "Direct link to Semantic Search")
+### Semantic Search
 
 [Semantic search](/dremio-cloud/explore-analyze/discover#search-for-dremio-objects-and-entities) enables you to find objects and entities across your data catalog using natural language queries. It searches object names, metadata, wikis, and labels to return relevant results including sources, folders, tables, views, user-defined functions, Reflections, scripts, and jobs.
 
-## Dremio's AI Agent[​](#dremios-ai-agent "Direct link to Dremio's AI Agent")
+## Dremio's AI Agent
 
 [Dremio's AI Agent](/dremio-cloud/explore-analyze/ai-agent) enables natural language data exploration and analysis. You can ask questions about your data in natural language, and the AI Agent generates SQL queries and provides insights based on your datasets. The AI Agent works with data from all connected sources and can help create views and analyze patterns across your data catalog.
 
-## Query Engine[​](#query-engine "Direct link to Query Engine")
+## Query Engine
 
 A Dremio-managed compute engine that automatically starts, scales, and stops based on query demand. Each query engine consists of one or more replicas made up of executor instances that process queries. Every project includes a default preview query engine, which remains available for essential operations and automatically scales down when idle.
 
-### Engines[​](#engines "Direct link to Engines")
+### Engines
 
 An engine processes jobs that run queries issued by users (either through a client application or through the user interface) or by Dremio (as, for example, when Dremio creates a Reflection that a user has defined). Compute resources for an engine are allocated in the cloud associated with the project. All engines in a project are associated with the same cloud.
 
 Engines are automatically started and stopped by the Dremio control plane and can be configured to have multiple replicas for scaling. For more information, see [Manage Engines](/dremio-cloud/admin/engines/).
 
-### Workload Management[​](#workload-management "Direct link to Workload Management")
+### Workload Management
 
 [Workload Management](/dremio-cloud/admin/engines/workload-management/) enables you to control how compute resources are allocated and prioritized across different types of queries and users to optimize performance for your specific workloads.
 
-### Reflections[​](#reflections "Direct link to Reflections")
+### Reflections
 
 Reflections accelerate query performance by providing precomputed and optimized copies of source data or query results. They can be [Autonomous](/dremio-cloud/admin/performance/autonomous-reflections) or [manually managed](/dremio-cloud/admin/performance/manual-reflections/). For more details, see [Optimize Performance](/dremio-cloud/admin/performance/).
 
 Was this page helpful?
 
-* [Platform](#platform)
-  + [Organizations and Projects](#organizations-and-projects)
-  + [Roles and Permissions](#roles-and-permissions)
-* [Catalog](#catalog)
-  + [Open Catalog](#open-catalog)
-  + [Data Sources](#data-sources)
-  + [Paths](#paths)
-* [AI Semantic Layer](#ai-semantic-layer)
-  + [Wikis and Labels](#wikis-and-labels)
-  + [Semantic Search](#semantic-search)
-* [Dremio's AI Agent](#dremios-ai-agent)
-* [Query Engine](#query-engine)
-  + [Engines](#engines)
-  + [Workload Management](#workload-management)
-  + [Reflections](#reflections)
+* Platform
+  + Organizations and Projects
+  + Roles and Permissions
+* Catalog
+  + Open Catalog
+  + Data Sources
+  + Paths
+* AI Semantic Layer
+  + Wikis and Labels
+  + Semantic Search
+* Dremio's AI Agent
+* Query Engine
+  + Engines
+  + Workload Management
+  + Reflections
 
 <div style="page-break-after: always;"></div>
 
@@ -196,30 +196,30 @@ On this page
 
 At a high level, Dremio's architecture is divided into three planes: data, execution, and control. Dremio is fully hosted with the control and execution planes running on Dremio's tenant.
 
-## Data[​](#data "Direct link to Data")
+## Data
 
 Dremio's primary data plane is Amazon S3. You can use Dremio-managed storage or bring your own bucket. Dremio can also federate across relational sources, so you can pull data from wherever it resides.
 
-## Execution[​](#execution "Direct link to Execution")
+## Execution
 
 The execution plane follows a massively parallel processing (MPP) model, where workloads are divided into fragments and spread across a cluster of executors. To minimize repeated reads from S3, Dremio uses caching layers to make queries as fast as possible.
 
-## Control[​](#control "Direct link to Control")
+## Control
 
 The control plane is where metadata is managed, queries are planned, and security is defined.
 
 ![](/images/cloud/simple_architecture_diagram.png)
 
-## How Queries Flow Through Dremio[​](#how-queries-flow-through-dremio "Direct link to How Queries Flow Through Dremio")
+## How Queries Flow Through Dremio
 
 With an understanding of the layers, we can follow a query through Dremio. A SQL query will start in your organization's slice of our control plane, whether submitted via the web console or via a client connection. The metadata of the datasets being queried informs Dremio how it should plan to access and transform your data. This plan is iterated over, with each iteration applying optimization. This plan, separated into fragments, is passed to a query engine. The query engine will read and transform the data amongst its constituent executors, delivering the results back up to the point of origin.
 
 Was this page helpful?
 
-* [Data](#data)
-* [Execution](#execution)
-* [Control](#control)
-* [How Queries Flow Through Dremio](#how-queries-flow-through-dremio)
+* Data
+* Execution
+* Control
+* How Queries Flow Through Dremio
 
 <div style="page-break-after: always;"></div>
 

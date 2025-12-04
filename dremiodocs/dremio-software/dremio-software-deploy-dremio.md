@@ -14,7 +14,7 @@ On this page
 
 This topic describes the deployment models. Dremio is a distributed system that can be deployed in a public cloud or on-premises. A Dremio cluster can be co-located with one of the data sources (Hadoop or NoSQL database) or deployed separately.
 
-## Deploy on Kubernetes[​](#deploy-on-kubernetes "Direct link to Deploy on Kubernetes")
+## Deploy on Kubernetes
 
 Kubernetes is the recommended deployment option for Dremio. For more information, see the following topics in this section:
 
@@ -23,11 +23,11 @@ Kubernetes is the recommended deployment option for Dremio. For more information
 * [Configuring Your Values](/current/deploy-dremio/configuring-kubernetes/) – Understand the configuration of your deployments in more detail.
 * [Managing Engines](/current/deploy-dremio/managing-engines-kubernetes/) – Manage Dremio engines to optimize query execution.
 
-## Other Deployment Options[​](#other-deployment-options "Direct link to Other Deployment Options")
+## Other Deployment Options
 
 Besides Kubernetes, Dremio provides other options for deployment described in this section.
 
-### Shared Multi-Tenant Environment[​](#shared-multi-tenant-environment "Direct link to Shared Multi-Tenant Environment")
+### Shared Multi-Tenant Environment
 
 If you plan on using a shared multi-tenant environment, Dremio provides a model that uses YARN for deployment:
 
@@ -39,7 +39,7 @@ Co-locating Dremio with Hadoop/NoSQL: When Dremio is co-located with a Hadoop cl
 
 Dremio features a high-performance asynchronous engine that minimizes the number of threads and context switches under heavy load. So, unless containers are utilized, the operating system may over-allocate resources to other thread-hungry processes on the nodes.
 
-### Standalone Cluster[​](#standalone-cluster "Direct link to Standalone Cluster")
+### Standalone Cluster
 
 If you plan on creating a standalone cluster, Dremio provides the flexibility to deploy Dremio as a standalone on-premise cluster:
 
@@ -53,10 +53,10 @@ Architecture](/current/what-is-dremio/architecture)[Next
 
 Kubernetes Environments](/current/deploy-dremio/kubernetes-environments)
 
-* [Deploy on Kubernetes](#deploy-on-kubernetes)
-* [Other Deployment Options](#other-deployment-options)
-  + [Shared Multi-Tenant Environment](#shared-multi-tenant-environment)
-  + [Standalone Cluster](#standalone-cluster)
+* Deploy on Kubernetes
+* Other Deployment Options
+  + Shared Multi-Tenant Environment
+  + Standalone Cluster
 
 ---
 
@@ -83,19 +83,19 @@ note
 
 If you're using a containerization platform built on Kubernetes that isn't listed here, please contact your provider and Dremio Account team to discuss compatibility and support options.
 
-## Requirements[​](#requirements "Direct link to Requirements")
+## Requirements
 
-### Versions[​](#versions "Direct link to Versions")
+### Versions
 
 Dremio requires regular updates to your Kubernetes version. You must be on an officially supported version, and preferably not one on extended support. See the following examples for AWS [Available versions on standard support](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#available-versions) and Azure [Kubernetes versions](https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions).
 
-### Recommendations[​](#recommendations "Direct link to Recommendations")
+### Recommendations
 
 See this table for resource request recommendations of the variours parts of the deployment, [Recommended Resources Configuration](/current/deploy-dremio/configuring-kubernetes/#recommended-resources-configuration).
 
 For a list of all Dremio engine sizes see, [Add an Engine](/current/deploy-dremio/managing-engines-kubernetes/add-an-engine). Engines will make up the lions share of any Dremio deployment.
 
-#### Node Sizes[​](#node-sizes "Direct link to Node Sizes")
+#### Node Sizes
 
 The following sections suggest AWS and Azure machines that could be used to meet our recommendations.
 
@@ -125,7 +125,7 @@ Each of these components needs between 2-4 CPUs and 4-16 GB of memory; hence, a 
 
 Each of these need between 0.5-1 CPUs and 0.5-1 GB, `m5d.large`, `t2.medium`, `Standard_D2_v5` or `Standard_A2_v2` are good options and could be used to host multiple containers that are part of these services.
 
-#### Disk Storage Class[​](#disk-storage-class "Direct link to Disk Storage Class")
+#### Disk Storage Class
 
 Dremio recommends:
 
@@ -145,7 +145,7 @@ Storage size requirements are:
 * OpenSearch volume: 128 GB.
 * Zookeeper volume: 16 GB.
 
-### EKS Add-Ons[​](#eks-add-ons "Direct link to EKS Add-Ons")
+### EKS Add-Ons
 
 The following add-ons are required for EKS clusters:
 
@@ -160,10 +160,10 @@ Deploy Dremio](/current/deploy-dremio/)[Next
 
 Deploy on Kubernetes](/current/deploy-dremio/deploy-on-kubernetes)
 
-* [Requirements](#requirements)
-  + [Versions](#versions)
-  + [Recommendations](#recommendations)
-  + [EKS Add-Ons](#eks-add-ons)
+* Requirements
+  + Versions
+  + Recommendations
+  + EKS Add-Ons
 
 ---
 
@@ -181,7 +181,7 @@ FREE TRIAL
 
 If you are using an **Enterprise Edition free trial**, go to [Get Started with the Enterprise Edition Free Trial](/current/get-started/kubernetes-trial).
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before deploying Dremio on Kubernetes, ensure you have the following:
 
@@ -193,7 +193,7 @@ Before deploying Dremio on Kubernetes, ensure you have the following:
 * Storage classes that support ReadWriteOnce (RWO) access mode and ideally can create expandable volumes.
 * The ability to connect to [Quay.io](http://quay.io/) to access the [new v3 Helm chart](https://quay.io/repository/dremio/dremio-helm?tab=tags) for Dremio 26+, since the [older v2 Helm chart](https://github.com/dremio/dremio-cloud-tools/tree/master/charts/dremio_v2) will not function.
 
-### Additional Prerequisites for the Enterprise Edition[​](#additional-prerequisites-for-the-enterprise-edition "Direct link to Additional Prerequisites for the Enterprise Edition")
+### Additional Prerequisites for the Enterprise Edition
 
 For the Enterprise Edition, you must:
 
@@ -205,13 +205,13 @@ For the Enterprise Edition, you must:
   If your internet access doesn't allow reaching Dremio's OCI repository in Quay.io, consider using a private mirror to fetch Dremio's Helm chart images.
 * Get a valid license key issued by Dremio to put in the Helm chart. To obtain the license, refer to [Licensing](/current/admin/licensing/).
 
-### Additional Prerequisites for the OpenShift[​](#additional-prerequisites-for-the-openshift "Direct link to Additional Prerequisites for the OpenShift")
+### Additional Prerequisites for the OpenShift
 
 Before deploying Dremio onto OpenShift, you additionally need the following:
 
 * Have the OpenShift `oc` CLI command configured and authenticated. For the installation instructions, see [OpenShift CLI (oc)](https://docs.redhat.com/en/documentation/openshift_container_platform/4.11/html/cli_tools/openshift-cli-oc).
 
-#### Node Tuning for OpenSearch on OpenShift[​](#node-tuning-for-opensearch-on-openshift "Direct link to Node Tuning for OpenSearch on OpenShift")
+#### Node Tuning for OpenSearch on OpenShift
 
 OpenSearch requires the `vm.max_map_count` kernel parameter to be set to at least **262144**.
 
@@ -254,7 +254,7 @@ This YAML should be saved locally and applied to any cluster you intend to deplo
 oc apply -f tuned-opensearch.yaml
 ```
 
-## Step 1: Deploy Dremio[​](#step-1-deploy-dremio "Direct link to Step 1: Deploy Dremio")
+## Step 1: Deploy Dremio
 
 To deploy the Dremio cluster in Kubernetes, do the following:
 
@@ -348,7 +348,7 @@ To deploy the Dremio cluster in Kubernetes, do the following:
      oc logs deployment/dremio-master
      ```
 
-## Step 2: Connecting to Dremio[​](#step-2-connecting-to-dremio "Direct link to Step 2: Connecting to Dremio")
+## Step 2: Connecting to Dremio
 
 Now that you've installed the Helm chart and deployed Dremio on Kubernetes, the next step is connecting to Dremio, where you have the following options:
 
@@ -433,11 +433,11 @@ Kubernetes Environments](/current/deploy-dremio/kubernetes-environments)[Next
 
 Configuring Your Values](/current/deploy-dremio/configuring-kubernetes/)
 
-* [Prerequisites](#prerequisites)
-  + [Additional Prerequisites for the Enterprise Edition](#additional-prerequisites-for-the-enterprise-edition)
-  + [Additional Prerequisites for the OpenShift](#additional-prerequisites-for-the-openshift)
-* [Step 1: Deploy Dremio](#step-1-deploy-dremio)
-* [Step 2: Connecting to Dremio](#step-2-connecting-to-dremio)
+* Prerequisites
+  + Additional Prerequisites for the Enterprise Edition
+  + Additional Prerequisites for the OpenShift
+* Step 1: Deploy Dremio
+* Step 2: Connecting to Dremio
 
 ---
 
@@ -457,7 +457,7 @@ FREE TRIAL
 
 If you are using an **Enterprise Edition free trial**, you don't need to do all the configurations described on this page. Instead, follow the configuration steps described in [Get Started with the Enterprise Edition Free Trial](/current/get-started/kubernetes-trial).
 
-## Configure Your Values[​](#configure-your-values "Direct link to Configure Your Values")
+## Configure Your Values
 
 To configure your deployment values, do the following:
 
@@ -575,12 +575,12 @@ To configure your deployment values, do the following:
    ```
 2. Edit the `values-overrides.yaml` file to configure your values. See the following sections for details on each configuration option:
 
-   * [License](#license)
-   * [Pull Secret](#pull-secret)
-   * [Coordinator](#coordinator)
-   * [Coordinator's Distributed Storage](#coordinators-distributed-storage)
-   * [Open Catalog](#open-catalog)
-   * [Advanced Values Configurations](#configuring-your-values---advanced)
+   * License
+   * Pull Secret
+   * Coordinator
+   * Coordinator's Distributed Storage
+   * Open Catalog
+   * Advanced Values Configurations
 
    IMPORTANT
 
@@ -613,7 +613,7 @@ To configure your deployment values, do the following:
 
 Once done with the configuration, deploy Dremio to Kubernetes. See how in [Deploying Dremio to Kubernetes](/current/deploy-dremio/deploy-on-kubernetes/).
 
-### License[​](#license "Direct link to License")
+### License
 
 Provide your license key. To obtain a license, see [Licensing](/current/admin/licensing).  
 Add this configuration under the parent, as shown in the following example:
@@ -626,7 +626,7 @@ dremio:
   ...
 ```
 
-### Pull Secret[​](#pull-secret "Direct link to Pull Secret")
+### Pull Secret
 
 Provide the secret used to pull the images from Quay.io as follows:
 
@@ -642,11 +642,11 @@ Provide the secret used to pull the images from Quay.io as follows:
      - <your-quayio-secret-name>
    ```
 
-### Coordinator[​](#coordinator "Direct link to Coordinator")
+### Coordinator
 
-#### Resource Configuration[​](#resource-configuration "Direct link to Resource Configuration")
+#### Resource Configuration
 
-Configure the volume size, resources limits, and resources requests. To configure these values, see [Recommended Resources Configuration](#recommended-resources-configuration).
+Configure the volume size, resources limits, and resources requests. To configure these values, see Recommended Resources Configuration.
 
 Add this configuration under the parents, as shown in the following example:
 
@@ -662,7 +662,7 @@ coordinator:
   ...
 ```
 
-#### Identity Provider[​](#identity-provider "Direct link to Identity Provider")
+#### Identity Provider
 
 Optionally, you can configure authentication via an identity provider. Each type of identity provider requires an additional configuration file provided during Dremio's deployment.
 
@@ -713,11 +713,11 @@ coordinator:
 
 For examples for the other types, see [Identity Providers](/current/security/authentication/identity-providers)
 
-This is not the only configuration file that can be embedded inside the `values-overrides.yaml` file. However, these are generally used for advanced configurations. For more information, see [Additional Configuration](#additional-configuration).
+This is not the only configuration file that can be embedded inside the `values-overrides.yaml` file. However, these are generally used for advanced configurations. For more information, see Additional Configuration.
 
-#### Transport Level Security[​](#transport-level-security "Direct link to Transport Level Security")
+#### Transport Level Security
 
-Optionally enable the desired level of Transport Level Security (TLS) by setting `enabled: true` for client, Arrow Flight, or web TLS. To provide the TLS secret, see [Creating a TLS Secret](#creating-a-tls-secret).
+Optionally enable the desired level of Transport Level Security (TLS) by setting `enabled: true` for client, Arrow Flight, or web TLS. To provide the TLS secret, see Creating a TLS Secret.
 
 Add this configuration under the parent, as shown in the following example:
 
@@ -742,11 +742,11 @@ coordinator:
 
 note
 
-If Web TLS is enabled, see [Configuring Open Catalog when the Coordinator Web is Using TLS](#configuring-open-catalog-when-coordinator-web-is-using-tls).
+If Web TLS is enabled, see Configuring Open Catalog when the Coordinator Web is Using TLS.
 
-### Coordinator's Distributed Storage[​](#coordinators-distributed-storage "Direct link to Coordinator's Distributed Storage")
+### Coordinator's Distributed Storage
 
-This is where Dremio stores metadata, Reflections, uploaded files, and backups. A distributed store is required for Dremio to be operational. The supported types are Amazon S3 or S3-compatible storage, Azure Storage, and Google Cloud Storage (GCS). For examples of configurations, see [Configuring the Distributed Storage](#configuring-the-distributed-storage).
+This is where Dremio stores metadata, Reflections, uploaded files, and backups. A distributed store is required for Dremio to be operational. The supported types are Amazon S3 or S3-compatible storage, Azure Storage, and Google Cloud Storage (GCS). For examples of configurations, see Configuring the Distributed Storage.
 
 Add this configuration under the parent, as shown in the following example:
 
@@ -758,11 +758,11 @@ distStorage:
   ...
 ```
 
-### Open Catalog[​](#open-catalog "Direct link to Open Catalog")
+### Open Catalog
 
 The configuration for the Open Catalog has several options:
 
-* Configuring storage for the Open Catalog is mandatory since this is the location where Iceberg tables created in the catalog will be written. For configuring the storage, see [Configuring Storage for the Open Catalog](#configuring-storage-for-the-open-catalog).
+* Configuring storage for the Open Catalog is mandatory since this is the location where Iceberg tables created in the catalog will be written. For configuring the storage, see Configuring Storage for the Open Catalog.
 
   Add this configuration under the parent, as shown in the following example:
 
@@ -798,7 +798,7 @@ The configuration for the Open Catalog has several options:
       enabled: true  
     ...
   ```
-* (Optional) Use Transport Level Security (TLS) for external access to require clients connecting to the Open Catalog from outside the namespace to use TLS. To configure it, see [Configuring TLS for Open Catalog External Access](#configuring-tls-for-open-catalog-external-access).
+* (Optional) Use Transport Level Security (TLS) for external access to require clients connecting to the Open Catalog from outside the namespace to use TLS. To configure it, see Configuring TLS for Open Catalog External Access.
 
   Add this configuration under the parent, as shown in the following example:
 
@@ -813,7 +813,7 @@ The configuration for the Open Catalog has several options:
         secret: <your-catalog-tls-secret>  
     ...
   ```
-* (Optional) If Dremio coordinator web access is using TLS, additional configuration is necessary. To configure it, see [Configuring Open Catalog When the Coordinator Web is Using TLS](#configuring-open-catalog-when-the-coordinator-web-is-using-tls).
+* (Optional) If Dremio coordinator web access is using TLS, additional configuration is necessary. To configure it, see Configuring Open Catalog When the Coordinator Web is Using TLS.
 
   Add this configuration under the parent, as shown in the following example:
 
@@ -832,9 +832,9 @@ Save the `values-overrides.yaml` file.
 
 Once done with the configuration, deploy Dremio to Kubernetes. See how in the topic [Deploying Dremio to Kubernetes](/current/deploy-dremio/deploy-on-kubernetes/).
 
-## Configuring Your Values - Advanced[​](#configuring-your-values---advanced "Direct link to Configuring Your Values - Advanced")
+## Configuring Your Values - Advanced
 
-### OpenShift[​](#openshift "Direct link to OpenShift")
+### OpenShift
 
 warning
 
@@ -845,7 +845,7 @@ To deploy successfully on OpenShift, you must deploy with two override files. Th
 Get the `openshift-overrides.yaml` configuration file and save it locally.
 [Click here](/downloads/values-openshift-overrides.yaml) to download the file.
 
-### Dremio Platform Images[​](#dremio-platform-images "Direct link to Dremio Platform Images")
+### Dremio Platform Images
 
 The Dremio platform requires 18 images when running fully featured. All images are published by Dremio to our Quay and are listed below. If you want to use a private mirror of our repository, add the snippets below to `values-overrides.yaml` to repoint to your own.
 
@@ -971,7 +971,7 @@ telemetry:
     tag: <the-image-tag-from-quay-io>
 ```
 
-### Scale-out Coordinators[​](#scale-out-coordinators "Direct link to Scale-out Coordinators")
+### Scale-out Coordinators
 
 Dremio can scale to support high-concurrency use cases through scaling coordinators. Multiple stateless coordinators rely on the primary coordinator to manage Dremio's state, enabling Dremio to support many more concurrent users. These scale-out coordinators are intended for high query throughput and are not applicable for standby or disaster recovery. While scale-out coordinators generally reduce the load on the primary coordinator, the primary coordinator's vCPU request should be increased for every two scale-outs added to avoid negatively impacting performance.
 
@@ -987,9 +987,9 @@ coordinator:
 
 note
 
-When using scale-out coordinators, the load balancer session affinity should be enhanced. See: [Advanced Load Balancer Configuration](#advanced-load-balancer-configuration).
+When using scale-out coordinators, the load balancer session affinity should be enhanced. See: Advanced Load Balancer Configuration.
 
-### Configuring Kubernetes Pod Metadata (including Node Selector)[​](#configuring-kubernetes-pod-metadata-including-node-selector "Direct link to Configuring Kubernetes Pod Metadata (including Node Selector)")
+### Configuring Kubernetes Pod Metadata (including Node Selector)
 
 It's possible to add metadata both globally and to each of the StatefulSets (coordinators, classic engines, ZooKeeper, etc.), including configuring a node selector for pods to use specific node pools.
 
@@ -1211,7 +1211,7 @@ opensearchOperator:
     nodetype: operators
 ```
 
-### Configuring Pods Priority[​](#configuring-pods-priority "Direct link to Configuring Pods Priority")
+### Configuring Pods Priority
 
 You can configure the priority of Dremio pods through priority classes. First, define the priority class, as shown in the following example:
 
@@ -1340,7 +1340,7 @@ Run kubectl to list the pods and their priority class
 kubectl get pods -o custom-columns="NAME:.metadata.name,PRIORITY_CLASS:.spec.priorityClassName" -n dremio
 ```
 
-### Configuring Extra Environment Variables[​](#configuring-extra-environment-variables "Direct link to Configuring Extra Environment Variables")
+### Configuring Extra Environment Variables
 
 Optionally, you can define extra environment variables to be passed to either coordinators or executors. This can be done by adding the configuration under the parents as shown in the following examples:
 
@@ -1366,7 +1366,7 @@ executor:
 
 Environment variables defined as shown will be applied to Executors of both [Classic Engines](/current/deploy-dremio/configuring-kubernetes/#configuration-of-classic-engines) and [New Engines](/current/deploy-dremio/managing-engines-kubernetes).
 
-### Advanced Load Balancer Configuration[​](#advanced-load-balancer-configuration "Direct link to Advanced Load Balancer Configuration")
+### Advanced Load Balancer Configuration
 
 Dremio will create a public load balancer by default, and the Dremio Client service will provide an external IP to connect to Dremio. For more information, see [Connecting to the Dremio Console](/current/deploy-dremio/deploy-on-kubernetes#connecting-to-the-dremio-console).
 
@@ -1394,7 +1394,7 @@ Dremio will create a public load balancer by default, and the Dremio Client serv
   tip
 
   This can be helpful if DNS is configured to expect Dremio to have a specific IP.
-* **Session Affinity** - If leveraging [scale-out coordinators](#scale-out-coordinators), set this to `ClientIP`, otherwise leave unset. Add this configuration under the parent as shown in the following example:
+* **Session Affinity** - If leveraging scale-out coordinators, set this to `ClientIP`, otherwise leave unset. Add this configuration under the parent as shown in the following example:
 
   Configuration of session affinity for scale-out coordinators
 
@@ -1405,7 +1405,7 @@ Dremio will create a public load balancer by default, and the Dremio Client serv
     ...
   ```
 
-#### Additional Load Balancer Configuration for Amazon EKS in Auto Mode[​](#additional-load-balancer-configuration-for-amazon-eks-in-auto-mode "Direct link to Additional Load Balancer Configuration for Amazon EKS in Auto Mode")
+#### Additional Load Balancer Configuration for Amazon EKS in Auto Mode
 
 If deploying Dremio to Amazon EKS (Elastic Kubernetes Service) in Auto Mode, you need to add service annotations for the load balancer to start (for more information, see [Use Service Annotations to configure Network Load Balancers](https://docs.aws.amazon.com/eks/latest/userguide/auto-configure-nlb.html)). Add this configuration under the parent as shown in the following example:
 
@@ -1419,7 +1419,7 @@ service:
   ...
 ```
 
-### Advanced TLS Configuration for OpenSearch[​](#advanced-tls-configuration-for-opensearch "Direct link to Advanced TLS Configuration for OpenSearch")
+### Advanced TLS Configuration for OpenSearch
 
 Dremio generates Transport Level Security (TLS) certificates by default for OpenSearch, and they are rotated monthly. However, if you want to have your own, you need to create two secrets containing the relevant certificates. The format of the secrets is different from the other TLS secrets shown on this page, and the `tls.crt`, `tls.key`, and `ca.crt` files must be in PEM format. Use the example below as a reference to create your secrets:
 
@@ -1444,7 +1444,7 @@ opensearch:
  ...
 ```
 
-### Advanced Configuration of Engines[​](#advanced-configuration-of-engines "Direct link to Advanced Configuration of Engines")
+### Advanced Configuration of Engines
 
 Dremio's default resource offset is `reserve-2-8`, where the first value represents 2 vCPUs and the second represents 8 GB of RAM. If you need to change this default for your created engines, add the following snippet to `values-overrides.yaml` and set the `defaultOffset` to one of the configurable offsets listed below, which are available out of the box:
 
@@ -1465,7 +1465,7 @@ engine:
   ...
 ```
 
-### Configuration of Classic Engines[​](#configuration-of-classic-engines "Direct link to Configuration of Classic Engines")
+### Configuration of Classic Engines
 
 note
 
@@ -1494,7 +1494,7 @@ executor:
   ...
 ```
 
-#### Engine Overrides[​](#engine-overrides "Direct link to Engine Overrides")
+#### Engine Overrides
 
 Engine overrides are primarily used in conjunction with classic engines to modify the configuration of one or more named engines. By default, every engine inside the `engines` list under `executor` will be the same. The values set under `executor` act as the default for all engines. Thus, the engine overrides do not need to be exhaustive.
 
@@ -1512,7 +1512,7 @@ engineOverride:
 
 Engine overrides can also be used with the new engines, but only to disable the Cloud Columnar Cache (C3) option. C3 is enabled by default on all new engines, but you can choose to disable it if needed.
 
-### Telemetry[​](#telemetry "Direct link to Telemetry")
+### Telemetry
 
 [Telemetry](/current/admin/service-telemetry-kubernetes) egress is enabled by default. These metrics provide visibility into various components and services, ensuring optimal performance and reliability. To disable egress, add the following to your `values-override.yaml`:
 
@@ -1524,9 +1524,9 @@ telemetry:
   ...
 ```
 
-### Logging[​](#logging "Direct link to Logging")
+### Logging
 
-By default, Dremio enables logging with a pre-defined volume size, which you can check in the `values.yaml` file by [downloading Dremio's Helm chart](#downloading-dremios-helm-charts). To override the default configuration, add the following to your `values-overrides.yaml`:
+By default, Dremio enables logging with a pre-defined volume size, which you can check in the `values.yaml` file by downloading Dremio's Helm chart. To override the default configuration, add the following to your `values-overrides.yaml`:
 
 Configuration of logging
 
@@ -1540,11 +1540,11 @@ dremio:
   ...
 ```
 
-### Disabling Parts of the Deployment[​](#disabling-parts-of-the-deployment "Direct link to Disabling Parts of the Deployment")
+### Disabling Parts of the Deployment
 
 You can disable some components of the Dremio platform if their functionality does not pertain to your use case. Dremio's functionality will continue to work if any of these components described in this section are disabled.
 
-#### Semantic Search[​](#semantic-search "Direct link to Semantic Search")
+#### Semantic Search
 
 To disable Semantic Search, add this configuration under the parent as shown in the following example:
 
@@ -1556,13 +1556,13 @@ opensearch:
   replicas: 0
 ```
 
-## Additional Configuration[​](#additional-configuration "Direct link to Additional Configuration")
+## Additional Configuration
 
-Dremio has several configuration and binary files to define the behavior for [enabling authentication via an identity provider](#identity-provider), logging, connecting to Hive, etc. During the deployment, these files are combined and used to create a [Kubernetes ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/). This ConfigMap is, in turn, used by the Dremio deployment as the source of truth for various settings. Options can be used to embed these in the `values-override.yaml` configuration file.
+Dremio has several configuration and binary files to define the behavior for enabling authentication via an identity provider, logging, connecting to Hive, etc. During the deployment, these files are combined and used to create a [Kubernetes ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/). This ConfigMap is, in turn, used by the Dremio deployment as the source of truth for various settings. Options can be used to embed these in the `values-override.yaml` configuration file.
 
-To inspect Dremio's configuration files or perform a more complex operation not shown here, see [Downloading Dremio's Helm Charts](#downloading-dremios-helm-charts).
+To inspect Dremio's configuration files or perform a more complex operation not shown here, see Downloading Dremio's Helm Charts.
 
-### Additional Config Files[​](#additional-config-files "Direct link to Additional Config Files")
+### Additional Config Files
 
 Use the `configFiles` option to add configuration files to your Dremio deployment. You can add multiple files, each of which is a key-value pair. The key is the file name, and the value is the file content. These can be TXT, XML, or JSON files. For example, here is how to embed the configuration for Hashicorp Vault, followed by a separate example file:
 
@@ -1590,7 +1590,7 @@ dremio:
   ...
 ```
 
-### Additional Config Variables[​](#additional-config-variables "Direct link to Additional Config Variables")
+### Additional Config Variables
 
 Use the `dremioConfExtraOptions` option to add new variables to your Dremio deployment. For example, here is how to enable Transport Layer Security (TLS) between executors and coordinators, leveraging auto-generated self-signed certificates.
 
@@ -1604,7 +1604,7 @@ dremio:
   ...
 ```
 
-### Additional Java Truststore[​](#additional-java-truststore "Direct link to Additional Java Truststore")
+### Additional Java Truststore
 
 Use the `trustStore` option under `advancedConfigs` to provide the password and content of a Java truststore file. The content must be base64-encoded. To extract the encoded content, you can use `cat truststore.jks | base64`. Add this configuration under the parents as shown in the following example:
 
@@ -1619,7 +1619,7 @@ dremio:
       binaryData: "base64EncodedBinaryContent"
 ```
 
-### Additional Config Binary Files[​](#additional-config-binary-files "Direct link to Additional Config Binary Files")
+### Additional Config Binary Files
 
 Use the `configBinaries` option to provide binary configuration files. Provided content must be base64-encoded. Add this configuration under the parents as shown in the following example:
 
@@ -1632,7 +1632,7 @@ dremio:
   ...
 ```
 
-### Hive[​](#hive "Direct link to Hive")
+### Hive
 
 Use the `hive2ConfigFiles` option to configure Hive 2. Add this configuration under the parents as shown in the following example:
 
@@ -1672,9 +1672,9 @@ dremio:
   ...
 ```
 
-## References[​](#references "Direct link to References")
+## References
 
-### Recommended Resources Configuration[​](#recommended-resources-configuration "Direct link to Recommended Resources Configuration")
+### Recommended Resources Configuration
 
 The table in this section contains the recommended values for resources requests and volume size to configure Dremio components. In the `values-overrides.yaml` file, set the following values:
 
@@ -1838,7 +1838,7 @@ telemetry:
       memory: "2Gi"
 ```
 
-### Creating a TLS Secret[​](#creating-a-tls-secret "Direct link to Creating a TLS Secret")
+### Creating a TLS Secret
 
 If you have enabled Transport Layer Security (TLS) in your `values-overrides.yaml`, the corresponding secrets must be created before deploying Dremio. To create a secret, run the following command:
 
@@ -1852,9 +1852,9 @@ For more information, see [kubectl create secret tls](https://kubernetes.io/docs
 
 caution
 
-TLS for OpenSearch requires a secret of a different makeup. See [Advanced TLS Configuration for OpenSearch](#advanced-tls-configuration-for-opensearch).
+TLS for OpenSearch requires a secret of a different makeup. See Advanced TLS Configuration for OpenSearch.
 
-### Configuring the Distributed Storage[​](#configuring-the-distributed-storage "Direct link to Configuring the Distributed Storage")
+### Configuring the Distributed Storage
 
 Dremio’s distributed store uses scalable and fault-tolerant storage, and it is configured as follows:
 
@@ -2264,7 +2264,7 @@ note
 
 When using a GCS bucket on Google Kubernetes Engine (GKE), we recommend enabling **Workload Identity** and configuring a Kubernetes service account for Dremio with an associated workload identity that has access to the GCS bucket.
 
-### Configuring Storage for the Open Catalog[​](#configuring-storage-for-the-open-catalog "Direct link to Configuring Storage for the Open Catalog")
+### Configuring Storage for the Open Catalog
 
 To use the Open Catalog, configure the storage settings based on your storage provider (for example, Amazon S3, Azure Storage, or Google Cloud Storage). This configuration is required to enable support for vended credentials and to allow access to the table metadata necessary for Iceberg table operations.
 
@@ -2400,11 +2400,11 @@ To use the Open Catalog, configure the storage settings based on your storage pr
             useCredentialsFile: True
       ```
 
-### Configuring TLS for Open Catalog External Access[​](#configuring-tls-for-open-catalog-external-access "Direct link to Configuring TLS for Open Catalog External Access")
+### Configuring TLS for Open Catalog External Access
 
 For clients connecting to the Open Catalog from outside the namespace, Transport Layer Security (TLS) can be enabled for Open Catalog external access as follows:
 
-1. Enable external access with TLS and provide the TLS secret. See the section [Creating a TLS Secret](#creating-a-tls-secret).
+1. Enable external access with TLS and provide the TLS secret. See the section Creating a TLS Secret.
 2. In the `values-overrides.yaml` file, find the Open Catalog configuration section:
 
    Configuration section for the Open Catalog
@@ -2427,7 +2427,7 @@ For clients connecting to the Open Catalog from outside the namespace, Transport
      ...
    ```
 
-### Configuring Open Catalog When the Coordinator Web is Using TLS[​](#configuring-open-catalog-when-the-coordinator-web-is-using-tls "Direct link to Configuring Open Catalog When the Coordinator Web is Using TLS")
+### Configuring Open Catalog When the Coordinator Web is Using TLS
 
 When the Dremio coordinator uses Transport Layer Security (TLS)for Web access (i.e., when `coordinator.web.tls` is set to `true`), the Open Catalog external access must be configured appropriately, or client authentication will fail. For that, configure the Open Catalog as follows:
 
@@ -2468,7 +2468,7 @@ When the Dremio coordinator uses Transport Layer Security (TLS)for Web access (i
      ...
    ```
 
-## Downloading Dremio's Helm Charts[​](#downloading-dremios-helm-charts "Direct link to Downloading Dremio's Helm Charts")
+## Downloading Dremio's Helm Charts
 
 You can download Dremio's Helm charts to implement advanced configurations beyond those outlined in this topic.
 
@@ -2492,7 +2492,7 @@ The command creates a new local directory called `dremio-helm` containing the He
 
 For more information on the command, see [Helm Pull](https://helm.sh/docs/helm/helm_pull/) in Helm's documentation.
 
-### Overriding Additional Values[​](#overriding-additional-values "Direct link to Overriding Additional Values")
+### Overriding Additional Values
 
 After completing the `helm pull`:
 
@@ -2502,13 +2502,13 @@ After completing the `helm pull`:
 
 Once done with the configuration, deploy Dremio to Kubernetes via the OCI Repo. See how in [Deploying Dremio to Kubernetes](/current/deploy-dremio/deploy-on-kubernetes).
 
-### Manual Modifications to Deployment Files[​](#manual-modifications-to-deployment-files "Direct link to Manual Modifications to Deployment Files")
+### Manual Modifications to Deployment Files
 
 important
 
 For modifications in these files to take effect, you need to install Dremio using a local version of the Helm charts. Thus, the `helm install` command must reference a local folder, not the OCI repo like Quay. For more information and sample commands, see [Helm install](https://helm.sh/docs/helm/helm_install/).
 
-After completing the `helm pull`, you can edit the charts directly. This may be necessary to add deployment-specific modifications not catered for in the [Additional Configuration](#additional-configuration) section. These would typically require modifications to files in the `/config` directory. Any customizations to your Dremio environment are propagated to all the pods when installing or upgrading the deployment.
+After completing the `helm pull`, you can edit the charts directly. This may be necessary to add deployment-specific modifications not catered for in the Additional Configuration section. These would typically require modifications to files in the `/config` directory. Any customizations to your Dremio environment are propagated to all the pods when installing or upgrading the deployment.
 
 Was this page helpful?
 
@@ -2518,48 +2518,48 @@ Deploy on Kubernetes](/current/deploy-dremio/deploy-on-kubernetes)[Next
 
 Managing Engines](/current/deploy-dremio/managing-engines-kubernetes)
 
-* [Configure Your Values](#configure-your-values)
-  + [License](#license)
-  + [Pull Secret](#pull-secret)
-  + [Coordinator](#coordinator)
-    - [Resource Configuration](#resource-configuration)
-    - [Identity Provider](#identity-provider)
-    - [Transport Level Security](#transport-level-security)
-  + [Coordinator's Distributed Storage](#coordinators-distributed-storage)
-  + [Open Catalog](#open-catalog)
-* [Configuring Your Values - Advanced](#configuring-your-values---advanced)
-  + [OpenShift](#openshift)
-  + [Dremio Platform Images](#dremio-platform-images)
-  + [Scale-out Coordinators](#scale-out-coordinators)
-  + [Configuring Kubernetes Pod Metadata (including Node Selector)](#configuring-kubernetes-pod-metadata-including-node-selector)
-  + [Configuring Pods Priority](#configuring-pods-priority)
-  + [Configuring Extra Environment Variables](#configuring-extra-environment-variables)
-  + [Advanced Load Balancer Configuration](#advanced-load-balancer-configuration)
-    - [Additional Load Balancer Configuration for Amazon EKS in Auto Mode](#additional-load-balancer-configuration-for-amazon-eks-in-auto-mode)
-  + [Advanced TLS Configuration for OpenSearch](#advanced-tls-configuration-for-opensearch)
-  + [Advanced Configuration of Engines](#advanced-configuration-of-engines)
-  + [Configuration of Classic Engines](#configuration-of-classic-engines)
-    - [Engine Overrides](#engine-overrides)
-  + [Telemetry](#telemetry)
-  + [Logging](#logging)
-  + [Disabling Parts of the Deployment](#disabling-parts-of-the-deployment)
-    - [Semantic Search](#semantic-search)
-* [Additional Configuration](#additional-configuration)
-  + [Additional Config Files](#additional-config-files)
-  + [Additional Config Variables](#additional-config-variables)
-  + [Additional Java Truststore](#additional-java-truststore)
-  + [Additional Config Binary Files](#additional-config-binary-files)
-  + [Hive](#hive)
-* [References](#references)
-  + [Recommended Resources Configuration](#recommended-resources-configuration)
-  + [Creating a TLS Secret](#creating-a-tls-secret)
-  + [Configuring the Distributed Storage](#configuring-the-distributed-storage)
-  + [Configuring Storage for the Open Catalog](#configuring-storage-for-the-open-catalog)
-  + [Configuring TLS for Open Catalog External Access](#configuring-tls-for-open-catalog-external-access)
-  + [Configuring Open Catalog When the Coordinator Web is Using TLS](#configuring-open-catalog-when-the-coordinator-web-is-using-tls)
-* [Downloading Dremio's Helm Charts](#downloading-dremios-helm-charts)
-  + [Overriding Additional Values](#overriding-additional-values)
-  + [Manual Modifications to Deployment Files](#manual-modifications-to-deployment-files)
+* Configure Your Values
+  + License
+  + Pull Secret
+  + Coordinator
+    - Resource Configuration
+    - Identity Provider
+    - Transport Level Security
+  + Coordinator's Distributed Storage
+  + Open Catalog
+* Configuring Your Values - Advanced
+  + OpenShift
+  + Dremio Platform Images
+  + Scale-out Coordinators
+  + Configuring Kubernetes Pod Metadata (including Node Selector)
+  + Configuring Pods Priority
+  + Configuring Extra Environment Variables
+  + Advanced Load Balancer Configuration
+    - Additional Load Balancer Configuration for Amazon EKS in Auto Mode
+  + Advanced TLS Configuration for OpenSearch
+  + Advanced Configuration of Engines
+  + Configuration of Classic Engines
+    - Engine Overrides
+  + Telemetry
+  + Logging
+  + Disabling Parts of the Deployment
+    - Semantic Search
+* Additional Configuration
+  + Additional Config Files
+  + Additional Config Variables
+  + Additional Java Truststore
+  + Additional Config Binary Files
+  + Hive
+* References
+  + Recommended Resources Configuration
+  + Creating a TLS Secret
+  + Configuring the Distributed Storage
+  + Configuring Storage for the Open Catalog
+  + Configuring TLS for Open Catalog External Access
+  + Configuring Open Catalog When the Coordinator Web is Using TLS
+* Downloading Dremio's Helm Charts
+  + Overriding Additional Values
+  + Manual Modifications to Deployment Files
 
 ---
 
@@ -2591,7 +2591,7 @@ To manage your engines, open the Engines page as follows:
 
 ![Engines page under Project Settings listing all engines.](/images/settings/engine/settings-engines.png "Engines Page")
 
-## Monitoring Engines[​](#monitoring-engines "Direct link to Monitoring Engines")
+## Monitoring Engines
 
 You can monitor the status and properties of your engines on the Engines page.
 
@@ -2599,21 +2599,21 @@ You can monitor the status and properties of your engines on the Engines page.
 
 Each engine has the following information available:
 
-* **Name** - The name of the engine, which you can click to see its details. See the section about [Viewing Engine Details](#viewing-engine-details).
+* **Name** - The name of the engine, which you can click to see its details. See the section about Viewing Engine Details.
 * **Size** - The size configured for the engine.
-* **Status** - The engine status. For more information, see the section in this topic about [Engine Statuses](#engine-statuses).
+* **Status** - The engine status. For more information, see the section in this topic about Engine Statuses.
 * **Auto start/stop** - Whether the engine has auto start/stop enabled for autoscaling.
 * **Idle period** - The idle time to auto stop when the engine has **Auto start/stop** enabled.
 * **Queues** - Query queues routed to the engine.
 * **Labels** - Labels associated with the engine.
 
-## Performing Actions on Engines[​](#performing-actions-on-engines "Direct link to Performing Actions on Engines")
+## Performing Actions on Engines
 
-While [monitoring engines](#monitoring-engines), you have actions you can perform on each engine through the icons displayed on the right-hand side when hovering over the engine row.
+While monitoring engines, you have actions you can perform on each engine through the icons displayed on the right-hand side when hovering over the engine row.
 
 ![Engines page showing the icons with the actions for each engine.](/images/settings/engine/settings-engines-actions.png "Engines Page with Actions")
 
-### Stopping/Starting an Engine[​](#stoppingstarting-an-engine "Direct link to Stopping/Starting an Engine")
+### Stopping/Starting an Engine
 
 You can click ![The stop engine icon](/images/icons/engine-stop.png "The stop engine icon")/![The start engine icon](/images/icons/engine-start.png "The start engine icon") to stop/start an engine manually at any time. Stopping an engine will cause running queries to fail while new queries will remain queued, which can also fail by timeout if the engine isn't started. To prevent query failures, reroute queries to another engine, and stop the engine only when no queries are running or queued for the engine.
 
@@ -2621,9 +2621,9 @@ note
 
 You can enable **autoscaling on an engine** to make it stop automatically after an idle time without queries and start again automatically when new queries are issued, all without any human intervention.
 
-Autoscaling is configured when you [add an engine](#adding-an-engine) or [edit an engine](#editing-the-engine-settings):
+Autoscaling is configured when you add an engine or edit an engine:
 
-#### Stopping All Engines[​](#stopping-all-engines "Direct link to Stopping All Engines")
+#### Stopping All Engines
 
 Some complex operations, like upgrading or uninstalling Dremio, require all engines to be stopped beforehand. You can stop engines manually one by one as described above, or automate the procedure using the [Engine Management API](/current/reference/api/engine-management) to stop all engines. Expand the sample below of a bash script executing the necessary endpoints to stop all engines.
 
@@ -2659,7 +2659,7 @@ done
 echo "All engines processed."
 ```
 
-### Editing the Engine Settings[​](#editing-the-engine-settings "Direct link to Editing the Engine Settings")
+### Editing the Engine Settings
 
 You can click ![The edit engine icon](/images/icons/engine-edit.png "The edit engine icon") to edit the engine settings. After saving the new settings, the engine may restart, causing running queries to fail and new queries to be queued.
 
@@ -2675,19 +2675,19 @@ The name of the engine must follow these rules:
 * Must be under 30 characters in length.
 * Must be unique and not previously used for any existing or deleted engines.
 
-### Deleting an Engine[​](#deleting-an-engine "Direct link to Deleting an Engine")
+### Deleting an Engine
 
 You can click ![The delete engine icon](/images/icons/engine-delete.png "The delete engine icon") to delete an engine. Deleting an engine will cause running, queued, and new queries to fail. To prevent query failures, you can reroute queries to another engine, and only delete when no more queries are running or queued for the engine.
 
-## Viewing Engine Details[​](#viewing-engine-details "Direct link to Viewing Engine Details")
+## Viewing Engine Details
 
-While [monitoring engines](#monitoring-engines), if you need to know more details about engines, click the engine's name to view all the information about it.
+While monitoring engines, if you need to know more details about engines, click the engine's name to view all the information about it.
 
 ![Engine details page showing all the information about the engine.](/images/settings/engine/settings-engine-details.png "Engine Details Page")
 
-On this page, you will also find a set of buttons at the top to [delete the engine](#deleting-an-engine), [stop/start the engine](#stoppingstarting-an-engine), and [edit the engine settings](#editing-the-engine-settings).
+On this page, you will also find a set of buttons at the top to delete the engine, stop/start the engine, and edit the engine settings.
 
-## Adding an Engine[​](#adding-an-engine "Direct link to Adding an Engine")
+## Adding an Engine
 
 You can create more engines by clicking **Add Engine** at the top-right corner of the Engines page.
 
@@ -2722,7 +2722,7 @@ In the New engine dialog, do the following:
       | 2XLarge | 16 | 120 GB |
       | 3XLarge | 24 | 120 GB |
       | 4XLarge | 32 | 120 GB |
-   3. **Automatically start/stop** - If checked, the engine automatically stops after the specified idle time and automatically starts when new queries are issued to the engine. If not checked, the engine only stops and starts through manual intervention. By default, this setting is checked and the engine stops automatically after `15 min` of idle time. For more information, see the section [Stopping/Starting an Engine](#stoppingstarting-an-engine).
+   3. **Automatically start/stop** - If checked, the engine automatically stops after the specified idle time and automatically starts when new queries are issued to the engine. If not checked, the engine only stops and starts through manual intervention. By default, this setting is checked and the engine stops automatically after `15 min` of idle time. For more information, see the section Stopping/Starting an Engine.
    4. (Optional) Expand **Advanced Options** for further settings.
 
       ![The advanced options to add a new engine.](/images/settings/engine/settings-new-engine-advanced-options.png "Adding a New Engine - Advanced Options")
@@ -2765,7 +2765,7 @@ The newly added engine will be displayed in the listed engines.
 
 ![Engines page showing the current engines, which now includes the newly added engine.](/images/settings/engine/settings-new-engine-added.png "Engines Page with the Newly Added Engine")
 
-## Engine Statuses[​](#engine-statuses "Direct link to Engine Statuses")
+## Engine Statuses
 
 The following table describes each engine status:
 
@@ -2778,7 +2778,7 @@ The following table describes each engine status:
 | Recovering | The recovering engine icon | The engine is recovering. New queries will remain queued, which can fail by timeout if the engine doesn't recover. |
 | Failed | The failed engine icon | The engine failed. New queries will remain queued, which can fail by timeout if the engine doesn't start. |
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Engine Management API](/current/reference/api/engine-management/) - The API to manage your engines using REST API calls.
 * [sys.engines](/current/reference/sql/system-tables/engines/) - The system table to query for information about your engines.
@@ -2792,15 +2792,15 @@ Configuring Your Values](/current/deploy-dremio/configuring-kubernetes/)[Next
 
 Other Options](/current/deploy-dremio/other-options/)
 
-* [Monitoring Engines](#monitoring-engines)
-* [Performing Actions on Engines](#performing-actions-on-engines)
-  + [Stopping/Starting an Engine](#stoppingstarting-an-engine)
-  + [Editing the Engine Settings](#editing-the-engine-settings)
-  + [Deleting an Engine](#deleting-an-engine)
-* [Viewing Engine Details](#viewing-engine-details)
-* [Adding an Engine](#adding-an-engine)
-* [Engine Statuses](#engine-statuses)
-* [Related Topics](#related-topics)
+* Monitoring Engines
+* Performing Actions on Engines
+  + Stopping/Starting an Engine
+  + Editing the Engine Settings
+  + Deleting an Engine
+* Viewing Engine Details
+* Adding an Engine
+* Engine Statuses
+* Related Topics
 
 ---
 
@@ -2848,19 +2848,19 @@ note
 
 If you're using a containerization platform built on Kubernetes that isn't listed here, please contact your provider and Dremio Account team to discuss compatibility and support options.
 
-## Requirements[​](#requirements "Direct link to Requirements")
+## Requirements
 
-### Versions[​](#versions "Direct link to Versions")
+### Versions
 
 Dremio requires regular updates to your Kubernetes version. You must be on an officially supported version, and preferably not one on extended support. See the following examples for AWS [Available versions on standard support](https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html#available-versions) and Azure [Kubernetes versions](https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions).
 
-### Recommendations[​](#recommendations "Direct link to Recommendations")
+### Recommendations
 
 See this table for resource request recommendations of the variours parts of the deployment, [Recommended Resources Configuration](/current/deploy-dremio/configuring-kubernetes/#recommended-resources-configuration).
 
 For a list of all Dremio engine sizes see, [Add an Engine](/current/deploy-dremio/managing-engines-kubernetes/add-an-engine). Engines will make up the lions share of any Dremio deployment.
 
-#### Node Sizes[​](#node-sizes "Direct link to Node Sizes")
+#### Node Sizes
 
 The following sections suggest AWS and Azure machines that could be used to meet our recommendations.
 
@@ -2890,7 +2890,7 @@ Each of these components needs between 2-4 CPUs and 4-16 GB of memory; hence, a 
 
 Each of these need between 0.5-1 CPUs and 0.5-1 GB, `m5d.large`, `t2.medium`, `Standard_D2_v5` or `Standard_A2_v2` are good options and could be used to host multiple containers that are part of these services.
 
-#### Disk Storage Class[​](#disk-storage-class "Direct link to Disk Storage Class")
+#### Disk Storage Class
 
 Dremio recommends:
 
@@ -2910,7 +2910,7 @@ Storage size requirements are:
 * OpenSearch volume: 128 GB.
 * Zookeeper volume: 16 GB.
 
-### EKS Add-Ons[​](#eks-add-ons "Direct link to EKS Add-Ons")
+### EKS Add-Ons
 
 The following add-ons are required for EKS clusters:
 
@@ -2925,10 +2925,10 @@ Deploy Dremio](/current/deploy-dremio/)[Next
 
 Deploy on Kubernetes](/current/deploy-dremio/deploy-on-kubernetes)
 
-* [Requirements](#requirements)
-  + [Versions](#versions)
-  + [Recommendations](#recommendations)
-  + [EKS Add-Ons](#eks-add-ons)
+* Requirements
+  + Versions
+  + Recommendations
+  + EKS Add-Ons
 
 ---
 
@@ -2946,7 +2946,7 @@ FREE TRIAL
 
 If you are using an **Enterprise Edition free trial**, go to [Get Started with the Enterprise Edition Free Trial](/current/get-started/kubernetes-trial).
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before deploying Dremio on Kubernetes, ensure you have the following:
 
@@ -2958,7 +2958,7 @@ Before deploying Dremio on Kubernetes, ensure you have the following:
 * Storage classes that support ReadWriteOnce (RWO) access mode and ideally can create expandable volumes.
 * The ability to connect to [Quay.io](http://quay.io/) to access the [new v3 Helm chart](https://quay.io/repository/dremio/dremio-helm?tab=tags) for Dremio 26+, since the [older v2 Helm chart](https://github.com/dremio/dremio-cloud-tools/tree/master/charts/dremio_v2) will not function.
 
-### Additional Prerequisites for the Enterprise Edition[​](#additional-prerequisites-for-the-enterprise-edition "Direct link to Additional Prerequisites for the Enterprise Edition")
+### Additional Prerequisites for the Enterprise Edition
 
 For the Enterprise Edition, you must:
 
@@ -2970,13 +2970,13 @@ For the Enterprise Edition, you must:
   If your internet access doesn't allow reaching Dremio's OCI repository in Quay.io, consider using a private mirror to fetch Dremio's Helm chart images.
 * Get a valid license key issued by Dremio to put in the Helm chart. To obtain the license, refer to [Licensing](/current/admin/licensing/).
 
-### Additional Prerequisites for the OpenShift[​](#additional-prerequisites-for-the-openshift "Direct link to Additional Prerequisites for the OpenShift")
+### Additional Prerequisites for the OpenShift
 
 Before deploying Dremio onto OpenShift, you additionally need the following:
 
 * Have the OpenShift `oc` CLI command configured and authenticated. For the installation instructions, see [OpenShift CLI (oc)](https://docs.redhat.com/en/documentation/openshift_container_platform/4.11/html/cli_tools/openshift-cli-oc).
 
-#### Node Tuning for OpenSearch on OpenShift[​](#node-tuning-for-opensearch-on-openshift "Direct link to Node Tuning for OpenSearch on OpenShift")
+#### Node Tuning for OpenSearch on OpenShift
 
 OpenSearch requires the `vm.max_map_count` kernel parameter to be set to at least **262144**.
 
@@ -3019,7 +3019,7 @@ This YAML should be saved locally and applied to any cluster you intend to deplo
 oc apply -f tuned-opensearch.yaml
 ```
 
-## Step 1: Deploy Dremio[​](#step-1-deploy-dremio "Direct link to Step 1: Deploy Dremio")
+## Step 1: Deploy Dremio
 
 To deploy the Dremio cluster in Kubernetes, do the following:
 
@@ -3113,7 +3113,7 @@ To deploy the Dremio cluster in Kubernetes, do the following:
      oc logs deployment/dremio-master
      ```
 
-## Step 2: Connecting to Dremio[​](#step-2-connecting-to-dremio "Direct link to Step 2: Connecting to Dremio")
+## Step 2: Connecting to Dremio
 
 Now that you've installed the Helm chart and deployed Dremio on Kubernetes, the next step is connecting to Dremio, where you have the following options:
 
@@ -3198,11 +3198,11 @@ Kubernetes Environments](/current/deploy-dremio/kubernetes-environments)[Next
 
 Configuring Your Values](/current/deploy-dremio/configuring-kubernetes/)
 
-* [Prerequisites](#prerequisites)
-  + [Additional Prerequisites for the Enterprise Edition](#additional-prerequisites-for-the-enterprise-edition)
-  + [Additional Prerequisites for the OpenShift](#additional-prerequisites-for-the-openshift)
-* [Step 1: Deploy Dremio](#step-1-deploy-dremio)
-* [Step 2: Connecting to Dremio](#step-2-connecting-to-dremio)
+* Prerequisites
+  + Additional Prerequisites for the Enterprise Edition
+  + Additional Prerequisites for the OpenShift
+* Step 1: Deploy Dremio
+* Step 2: Connecting to Dremio
 
 ---
 
@@ -3234,7 +3234,7 @@ To manage your engines, open the Engines page as follows:
 
 ![Engines page under Project Settings listing all engines.](/images/settings/engine/settings-engines.png "Engines Page")
 
-## Monitoring Engines[​](#monitoring-engines "Direct link to Monitoring Engines")
+## Monitoring Engines
 
 You can monitor the status and properties of your engines on the Engines page.
 
@@ -3242,21 +3242,21 @@ You can monitor the status and properties of your engines on the Engines page.
 
 Each engine has the following information available:
 
-* **Name** - The name of the engine, which you can click to see its details. See the section about [Viewing Engine Details](#viewing-engine-details).
+* **Name** - The name of the engine, which you can click to see its details. See the section about Viewing Engine Details.
 * **Size** - The size configured for the engine.
-* **Status** - The engine status. For more information, see the section in this topic about [Engine Statuses](#engine-statuses).
+* **Status** - The engine status. For more information, see the section in this topic about Engine Statuses.
 * **Auto start/stop** - Whether the engine has auto start/stop enabled for autoscaling.
 * **Idle period** - The idle time to auto stop when the engine has **Auto start/stop** enabled.
 * **Queues** - Query queues routed to the engine.
 * **Labels** - Labels associated with the engine.
 
-## Performing Actions on Engines[​](#performing-actions-on-engines "Direct link to Performing Actions on Engines")
+## Performing Actions on Engines
 
-While [monitoring engines](#monitoring-engines), you have actions you can perform on each engine through the icons displayed on the right-hand side when hovering over the engine row.
+While monitoring engines, you have actions you can perform on each engine through the icons displayed on the right-hand side when hovering over the engine row.
 
 ![Engines page showing the icons with the actions for each engine.](/images/settings/engine/settings-engines-actions.png "Engines Page with Actions")
 
-### Stopping/Starting an Engine[​](#stoppingstarting-an-engine "Direct link to Stopping/Starting an Engine")
+### Stopping/Starting an Engine
 
 You can click ![The stop engine icon](/images/icons/engine-stop.png "The stop engine icon")/![The start engine icon](/images/icons/engine-start.png "The start engine icon") to stop/start an engine manually at any time. Stopping an engine will cause running queries to fail while new queries will remain queued, which can also fail by timeout if the engine isn't started. To prevent query failures, reroute queries to another engine, and stop the engine only when no queries are running or queued for the engine.
 
@@ -3264,9 +3264,9 @@ note
 
 You can enable **autoscaling on an engine** to make it stop automatically after an idle time without queries and start again automatically when new queries are issued, all without any human intervention.
 
-Autoscaling is configured when you [add an engine](#adding-an-engine) or [edit an engine](#editing-the-engine-settings):
+Autoscaling is configured when you add an engine or edit an engine:
 
-#### Stopping All Engines[​](#stopping-all-engines "Direct link to Stopping All Engines")
+#### Stopping All Engines
 
 Some complex operations, like upgrading or uninstalling Dremio, require all engines to be stopped beforehand. You can stop engines manually one by one as described above, or automate the procedure using the [Engine Management API](/current/reference/api/engine-management) to stop all engines. Expand the sample below of a bash script executing the necessary endpoints to stop all engines.
 
@@ -3302,7 +3302,7 @@ done
 echo "All engines processed."
 ```
 
-### Editing the Engine Settings[​](#editing-the-engine-settings "Direct link to Editing the Engine Settings")
+### Editing the Engine Settings
 
 You can click ![The edit engine icon](/images/icons/engine-edit.png "The edit engine icon") to edit the engine settings. After saving the new settings, the engine may restart, causing running queries to fail and new queries to be queued.
 
@@ -3318,19 +3318,19 @@ The name of the engine must follow these rules:
 * Must be under 30 characters in length.
 * Must be unique and not previously used for any existing or deleted engines.
 
-### Deleting an Engine[​](#deleting-an-engine "Direct link to Deleting an Engine")
+### Deleting an Engine
 
 You can click ![The delete engine icon](/images/icons/engine-delete.png "The delete engine icon") to delete an engine. Deleting an engine will cause running, queued, and new queries to fail. To prevent query failures, you can reroute queries to another engine, and only delete when no more queries are running or queued for the engine.
 
-## Viewing Engine Details[​](#viewing-engine-details "Direct link to Viewing Engine Details")
+## Viewing Engine Details
 
-While [monitoring engines](#monitoring-engines), if you need to know more details about engines, click the engine's name to view all the information about it.
+While monitoring engines, if you need to know more details about engines, click the engine's name to view all the information about it.
 
 ![Engine details page showing all the information about the engine.](/images/settings/engine/settings-engine-details.png "Engine Details Page")
 
-On this page, you will also find a set of buttons at the top to [delete the engine](#deleting-an-engine), [stop/start the engine](#stoppingstarting-an-engine), and [edit the engine settings](#editing-the-engine-settings).
+On this page, you will also find a set of buttons at the top to delete the engine, stop/start the engine, and edit the engine settings.
 
-## Adding an Engine[​](#adding-an-engine "Direct link to Adding an Engine")
+## Adding an Engine
 
 You can create more engines by clicking **Add Engine** at the top-right corner of the Engines page.
 
@@ -3365,7 +3365,7 @@ In the New engine dialog, do the following:
       | 2XLarge | 16 | 120 GB |
       | 3XLarge | 24 | 120 GB |
       | 4XLarge | 32 | 120 GB |
-   3. **Automatically start/stop** - If checked, the engine automatically stops after the specified idle time and automatically starts when new queries are issued to the engine. If not checked, the engine only stops and starts through manual intervention. By default, this setting is checked and the engine stops automatically after `15 min` of idle time. For more information, see the section [Stopping/Starting an Engine](#stoppingstarting-an-engine).
+   3. **Automatically start/stop** - If checked, the engine automatically stops after the specified idle time and automatically starts when new queries are issued to the engine. If not checked, the engine only stops and starts through manual intervention. By default, this setting is checked and the engine stops automatically after `15 min` of idle time. For more information, see the section Stopping/Starting an Engine.
    4. (Optional) Expand **Advanced Options** for further settings.
 
       ![The advanced options to add a new engine.](/images/settings/engine/settings-new-engine-advanced-options.png "Adding a New Engine - Advanced Options")
@@ -3408,7 +3408,7 @@ The newly added engine will be displayed in the listed engines.
 
 ![Engines page showing the current engines, which now includes the newly added engine.](/images/settings/engine/settings-new-engine-added.png "Engines Page with the Newly Added Engine")
 
-## Engine Statuses[​](#engine-statuses "Direct link to Engine Statuses")
+## Engine Statuses
 
 The following table describes each engine status:
 
@@ -3421,7 +3421,7 @@ The following table describes each engine status:
 | Recovering | The recovering engine icon | The engine is recovering. New queries will remain queued, which can fail by timeout if the engine doesn't recover. |
 | Failed | The failed engine icon | The engine failed. New queries will remain queued, which can fail by timeout if the engine doesn't start. |
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Engine Management API](/current/reference/api/engine-management/) - The API to manage your engines using REST API calls.
 * [sys.engines](/current/reference/sql/system-tables/engines/) - The system table to query for information about your engines.
@@ -3435,12 +3435,12 @@ Configuring Your Values](/current/deploy-dremio/configuring-kubernetes/)[Next
 
 Other Options](/current/deploy-dremio/other-options/)
 
-* [Monitoring Engines](#monitoring-engines)
-* [Performing Actions on Engines](#performing-actions-on-engines)
-  + [Stopping/Starting an Engine](#stoppingstarting-an-engine)
-  + [Editing the Engine Settings](#editing-the-engine-settings)
-  + [Deleting an Engine](#deleting-an-engine)
-* [Viewing Engine Details](#viewing-engine-details)
-* [Adding an Engine](#adding-an-engine)
-* [Engine Statuses](#engine-statuses)
-* [Related Topics](#related-topics)
+* Monitoring Engines
+* Performing Actions on Engines
+  + Stopping/Starting an Engine
+  + Editing the Engine Settings
+  + Deleting an Engine
+* Viewing Engine Details
+* Adding an Engine
+* Engine Statuses
+* Related Topics

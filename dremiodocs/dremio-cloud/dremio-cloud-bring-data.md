@@ -6,7 +6,7 @@ On this page
 
 Dremio enables you to connect to, load, and prepare data from a wide variety of sources to enable unified data access. Whether your data resides in catalogs, object storage, or databases, Dremio provides the tools you need to bring your data into the lakehouse and prepare it for analytics.
 
-## Load Data into Tables[​](#load-data-into-tables "Direct link to Load Data into Tables")
+## Load Data into Tables
 
 [Load data](/dremio-cloud/bring-data/load/) from CSV, JSON, or Parquet files into Apache Iceberg tables for faster, more efficient queries. Dremio supports several methods for loading data:
 
@@ -14,11 +14,11 @@ Dremio enables you to connect to, load, and prepare data from a wide variety of 
 * **Autoingest Data** – Set up pipe that keep your tables up to date by automatically loading new files into Iceberg tables as they arrive in Amazon S3.
 * **Upload Local Files** – Upload local files to create Iceberg tables in an Open Catalog for experimentation.
 
-## Connect to Your Data[​](#connect-to-your-data "Direct link to Connect to Your Data")
+## Connect to Your Data
 
 Connect Dremio to your existing [data sources](/dremio-cloud/bring-data/connect/) to query data in place without moving it. Dremio supports a wide range of data sources including catalogs, object storage, and databases.
 
-## Prepare Your Data[​](#prepare-your-data "Direct link to Prepare Your Data")
+## Prepare Your Data
 
 Transform and enhance your data to make it ready for analytics. Dremio provides tools for [data preparation](/dremio-cloud/bring-data/prepare/) including:
 
@@ -28,9 +28,9 @@ Transform and enhance your data to make it ready for analytics. Dremio provides 
 
 Was this page helpful?
 
-* [Load Data into Tables](#load-data-into-tables)
-* [Connect to Your Data](#connect-to-your-data)
-* [Prepare Your Data](#prepare-your-data)
+* Load Data into Tables
+* Connect to Your Data
+* Prepare Your Data
 
 <div style="page-break-after: always;"></div>
 
@@ -42,18 +42,18 @@ On this page
 
 Dremio supports three main methods for loading data into Apache Iceberg tables. You can copy data from CSV, JSON, or Parquet files directly into an existing table, set up autoingest pipes to continuously ingest new data as it arrives, or upload local files as Iceberg tables in a catalog.
 
-## Copy Data into Tables[​](#copy-data-into-tables "Direct link to Copy Data into Tables")
+## Copy Data into Tables
 
 Querying large datasets stored in CSV or JSON files can be inefficient. For faster performance and scalability, load your data into Apache Iceberg tables, which use the columnar Parquet format for optimized storage and retrieval. Even queries on Parquet files perform faster when the data is stored in Iceberg tables, enabling you to take full advantage of Dremio’s Iceberg capabilities.
 
-### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+### Prerequisites
 
 * At least one column in the target table must match a column in every data file.
 * Files cannot contain duplicate column names.
 * CSV data files must have a header line at the start of the file.
 * Supported storage locations: Azure Storage or Amazon S3.
 
-### Copy Operation[​](#copy-operation "Direct link to Copy Operation")
+### Copy Operation
 
 Use the [`COPY INTO`](/dremio-cloud/sql/commands/copy-into-table/) SQL command to load data from CSV, JSON, and Parquet files into existing Iceberg tables. The operation matches columns in the files to columns in the target table and loads data accordingly.
 
@@ -68,14 +68,14 @@ The copy operation verifies that at least one column in the target table matches
 
 The copy operation ignores case when comparing column names.
 
-### Type Coercion[​](#type-coercion "Direct link to Type Coercion")
+### Type Coercion
 
 For a list of the type coercions used by the copy operation when copying data from CSV and JSON files, see [Type Coercion When Copying Data from CSV or JSON Files Into Apache Iceberg Tables](/dremio-cloud/sql/data-types/coercions#type-coercion-when-copying-data-from-csv-or-json-files-into-apache-iceberg-tables).
 
 For the type coercions used by the copy operation when copying data from Parquet files, refer to this table:
 ![Supported and Unsupported Coercions for File-formatted Sources](/assets/images/table-supported-coercions-b78a45f7e4abe4fb3348514afe2845f8.png)
 
-### Column Nullability Constraints[​](#column-nullability-constraints "Direct link to Column Nullability Constraints")
+### Column Nullability Constraints
 
 A column's nullability constraint defines whether the column can contain `NULL` values, because you can specify that each column is either:
 
@@ -86,7 +86,7 @@ When running `COPY INTO` with `ON_ERROR` set to 'continue' or 'skip\_file', the 
 
 However, if `ON_ERROR` is set to 'abort' (or left unspecified), the command will fail if any row violates the table’s `NOT NULL` constraints.
 
-## Autoingest Data Preview[​](#autoingest-data-preview "Direct link to autoingest-data-preview")
+## Autoingest Data Preview
 
 You can use autoingest pipes to automatically ingest data into Apache Iceberg tables.
 
@@ -104,7 +104,7 @@ note
 
 Autoingest pipes can only ingest data from Amazon S3 sources in Dremio.
 
-## Upload Local Files[​](#upload-local-files "Direct link to Upload Local Files")
+## Upload Local Files
 
 You can upload an individual local file to Dremio if the file is 500 MB or smaller and in CSV, JSON, or Parquet format. During the upload process, Dremio formats the file into an Iceberg table.
 
@@ -122,12 +122,12 @@ To upload a file:
 4. (Optional) During the upload process, configure the file settings. For example, configure how the file is delimited.
 5. Click **Save**.
 
-### Limits[​](#limits "Direct link to Limits")
+### Limits
 
 * Uploaded files are copies of your local file. Updates to your local file are not automatically reflected in Dremio.
 * Bulk upload of multiple files is not supported.
 
-## Case Sensitivity[​](#case-sensitivity "Direct link to Case Sensitivity")
+## Case Sensitivity
 
 Dremio does not support case-sensitive data file names, table names, or column names.
 
@@ -137,15 +137,15 @@ For column names, if two columns have the same name using different cases (such 
 
 Was this page helpful?
 
-* [Copy Data into Tables](#copy-data-into-tables)
-  + [Prerequisites](#prerequisites)
-  + [Copy Operation](#copy-operation)
-  + [Type Coercion](#type-coercion)
-  + [Column Nullability Constraints](#column-nullability-constraints)
-* [Autoingest Data Preview](#autoingest-data-preview)
-* [Upload Local Files](#upload-local-files)
-  + [Limits](#limits)
-* [Case Sensitivity](#case-sensitivity)
+* Copy Data into Tables
+  + Prerequisites
+  + Copy Operation
+  + Type Coercion
+  + Column Nullability Constraints
+* Autoingest Data Preview
+* Upload Local Files
+  + Limits
+* Case Sensitivity
 
 <div style="page-break-after: always;"></div>
 
@@ -162,11 +162,11 @@ You can bring curated data into Dremio by:
 
 Once this data is in Dremio, you can further cleanse, combine, transform, and aggregate your data using SQL functions in Dremio and create virtual representations of your data in the form of views.
 
-## Unified Data Access[​](#unified-data-access "Direct link to Unified Data Access")
+## Unified Data Access
 
 You can query and combine data across multiple sources and formats in Dremio. Dremio's Query Engine can federate queries across sources in real time without requiring ETL. This allows you to pull together Iceberg tables from Dremio's Open Catalog with existing data in other catalogs, object stores, and databases. For more information on supported data sources, see [Connect to Your Data](/dremio-cloud/bring-data/connect). You can then create views from the SQL that queries across your sources into your Open Catalog.
 
-## Process Unstructured Data[​](#process-unstructured-data "Direct link to Process Unstructured Data")
+## Process Unstructured Data
 
 Dremio allows you to process and combine structured, semi-structured, and unstructured data. Examples of unstructured data include PDFs, images, and videos that are stored in object storage.
 
@@ -178,7 +178,7 @@ Dremio natively offers [AI functions](/dremio-cloud/sql/sql-functions/AI/) to en
 
 These functions are processed using Dremio's Query Engine and the AI model provider of your choice. For more information on how to configure your model provider, see [Configure Model Providers](/dremio-cloud/admin/model-providers).
 
-## Create a View[​](#create-a-view "Direct link to Create a View")
+## Create a View
 
 To create a virtual representation of your transformed and aggregated data, you can create a view by following these steps in the Dremio console:
 
@@ -189,7 +189,7 @@ To create a virtual representation of your transformed and aggregated data, you 
 
 You can also run the [`CREATE VIEW`](/dremio-cloud/sql/commands/create-view/) from the SQL Runner or your tool of choice to achieve the same results.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Explore and Analyze](/dremio-cloud/explore-analyze/) – Run queries on prepared data.
 * [Manage and Govern Data](/dremio-cloud/manage-govern/) – Organize and secure your data in the AI Semantic Layer.
@@ -197,10 +197,10 @@ You can also run the [`CREATE VIEW`](/dremio-cloud/sql/commands/create-view/) fr
 
 Was this page helpful?
 
-* [Unified Data Access](#unified-data-access)
-* [Process Unstructured Data](#process-unstructured-data)
-* [Create a View](#create-a-view)
-* [Related Topics](#related-topics)
+* Unified Data Access
+* Process Unstructured Data
+* Create a View
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -212,7 +212,7 @@ On this page
 
 You can connect to and access data from a variety of sources, including lakehouse catalogs, object storage, and databases. These sources are supported across Dremio projects, providing a unified foundation for data exploration and analytics.
 
-## Catalogs[​](#catalogs "Direct link to Catalogs")
+## Catalogs
 
 Every Dremio project includes a native Open Catalog, powered by Apache Polaris. You can connect additional Open Catalogs from other projects and the following external catalogs:
 
@@ -220,27 +220,27 @@ Every Dremio project includes a native Open Catalog, powered by Apache Polaris. 
 * [Snowflake Open Catalog](/dremio-cloud/bring-data/connect/catalogs/snowflake-open-catalog)
 * [Unity Catalog](/dremio-cloud/bring-data/connect/catalogs/databricks-unity-catalog)
 
-## Object Storage[​](#object-storage "Direct link to Object Storage")
+## Object Storage
 
 Dremio supports [Amazon S3](/dremio-cloud/bring-data/connect/object-storage/amazon-s3) and [Azure Storage](/dremio-cloud/bring-data/connect/object-storage/azure-storage) as object storage services.
 
-## Databases[​](#databases "Direct link to Databases")
+## Databases
 
 You can run queries directly on the data in [databases](/dremio-cloud/bring-data/connect/databases/), which are referred to as external sources. In addition, you can run external queries:
 
 * That use the native syntax of the relational database.
 * To process SQL statements that are not supported by Dremio or are too complex to convert.
 
-## Network Connectivity[​](#network-connectivity "Direct link to Network Connectivity")
+## Network Connectivity
 
 When connecting Dremio to data sources, the connection must use public networking. Ensure that the data source endpoint is publicly accessible and that network egress rules, firewall settings, and IAM permissions are properly configured to allow outbound connectivity from Dremio to the source.
 
 Was this page helpful?
 
-* [Catalogs](#catalogs)
-* [Object Storage](#object-storage)
-* [Databases](#databases)
-* [Network Connectivity](#network-connectivity)
+* Catalogs
+* Object Storage
+* Databases
+* Network Connectivity
 
 <div style="page-break-after: always;"></div>
 
@@ -264,7 +264,7 @@ This configuration enables:
 
 When you connect a Dremio Software cluster as a data source, all sources on the Software cluster can be available from your project. You can create Reflections, build views, and query across the federated environment just as you would with any connected source.
 
-## Example Configuration[​](#example-configuration "Direct link to Example Configuration")
+## Example Configuration
 
 When you add a Dremio Software cluster as a source to your Dremio project:
 
@@ -274,11 +274,11 @@ When you add a Dremio Software cluster as a source to your Dremio project:
 * Create views and Reflections on any promoted tables, regardless of source type.
 * Query and join data across all sources—direct and federated.
 
-## Deployment Considerations[​](#deployment-considerations "Direct link to Deployment Considerations")
+## Deployment Considerations
 
 If your Dremio project and the source Dremio Software cluster are in different cloud regions or cloud vendors, your deployment design may be influenced by network latency and egress costs.
 
-### Network Latency[​](#network-latency "Direct link to Network Latency")
+### Network Latency
 
 Cross-region or cross-cloud queries can experience increased latency. To minimize impact:
 
@@ -286,7 +286,7 @@ Cross-region or cross-cloud queries can experience increased latency. To minimiz
 * **Push down filters and aggregations** – Write queries that leverage Dremio's query pushdown to perform filtering and aggregation on the Software cluster before returning results.
 * **Colocate when possible** – If latency is critical, deploy the Software cluster in the same region as your Dremio organization.
 
-### Cloud Egress Costs[​](#cloud-egress-costs "Direct link to Cloud Egress Costs")
+### Cloud Egress Costs
 
 Data transfer between cloud regions or cloud vendors can incur significant egress charges. To control costs:
 
@@ -295,11 +295,11 @@ Data transfer between cloud regions or cloud vendors can incur significant egres
 * **Limit full table scans** – Ensure queries include appropriate filters to minimize the amount of data transferred across regions.
 * **Monitor query patterns** – Use Dremio's query history to identify expensive cross-region queries and optimize them with Reflections.
 
-### Security[​](#security "Direct link to Security")
+### Security
 
 Configure full TLS wire encryption on Software clusters to protect data in transit across regions and cloud boundaries.
 
-## User Impersonation[​](#user-impersonation "Direct link to User Impersonation")
+## User Impersonation
 
 When you connect your project to a Dremio Software cluster, you provide the username and password of an account on the cluster. By default, queries that run from the project against the Dremio Software cluster run under the username of that account.
 
@@ -324,16 +324,16 @@ ALTER SYSTEM SET "exec.impersonation.inbound_policies"='[
 ]'
 ```
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 You must have a username and password for the account on the Dremio Software cluster to use for connections from your project.
 
-## Configure a Dremio Software Cluster as a Source[​](#configure-a-dremio-software-cluster-as-a-source "Direct link to Configure a Dremio Software Cluster as a Source")
+## Configure a Dremio Software Cluster as a Source
 
 1. In the bottom-left corner of the Datasets page, click **Add Data**.
 2. Under **Databases** in the Add Data Source dialog, select **Dremio**.
 
-### General Options[​](#general-options "Direct link to General Options")
+### General Options
 
 1. In the **Name** field, specify the name by which you want the data-source cluster to appear in the **Databases** section. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 2. Under **Connection**, specify how you want to connect to the data-source cluster:
@@ -343,7 +343,7 @@ You must have a username and password for the account on the Dremio Software clu
 4. If the data-source cluster is configured to use TLS for connections to it, select the **Use SSL** option.
 5. Under **Authentication**, specify the username and password for the project to use when connecting to the data-source cluster.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 On the Advanced Options page, you can set values for these optional parameters:
 
@@ -352,7 +352,7 @@ On the Advanced Options page, you can set values for these optional parameters:
 * **Query Timeout** – The amount of time (in seconds) allowed to wait for the results of a query. If this time expires, the connection being used is returned to an idle state.
 * **User Impersonation** – Allows users to run queries on the data-source cluster under their own user IDs, not the user ID for the account used to authenticate with the data-source cluster. Inbound impersonation must be configured on the data-source cluster.
 
-### Reflection Refresh Options[​](#reflection-refresh-options "Direct link to Reflection Refresh Options")
+### Reflection Refresh Options
 
 On the Reflection Refresh page, set the policy that controls how often Reflections are scheduled to be refreshed automatically, as well as the time limit after which Reflections expire and are removed.
 
@@ -361,15 +361,15 @@ On the Reflection Refresh page, set the policy that controls how often Reflectio
 * **Never expire** – Select to prevent Reflections from expiring. The default is to automatically expire after the time limit below.
 * **Expire after** – The time limit after which Reflections expire and are removed from Dremio, specified in hours, days, or weeks. This option is ignored if **Never expire** is selected.
 
-### Metadata Options[​](#metadata-options "Direct link to Metadata Options")
+### Metadata Options
 
 On the Metadata page, you can configure settings to refresh metadata and handle datasets.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 * **Remove dataset definitions if underlying data is unavailable** – By default, Dremio removes dataset definitions if underlying data is unavailable. This is useful when files are temporarily deleted and added back in the same location with new sets of files.
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -380,7 +380,7 @@ These are the optional **Metadata Refresh** parameters:
   + **Fetch every** – You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default is 1 hour.
   + **Expire after** – You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default is 3 hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges page, you can grant privileges to specific users or roles. See [Access Control](/cloud/security/access-control/) for additional information about user privileges.
 
@@ -388,16 +388,16 @@ On the Privileges page, you can grant privileges to specific users or roles. See
 2. (Optional) For the users or roles in the **Users** table, toggle the green checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update a Dremio Source[​](#update-a-dremio-source "Direct link to Update a Dremio Source")
+## Update a Dremio Source
 
 To edit a Dremio source:
 
 1. On the Datasets page, under **Databases**, find the name of the source you want to edit.
 2. Right-click the source name and select **Settings** from the list of actions.
-3. In the Source Settings dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see [Configure a Dremio Software Cluster as a Source](#configure-a-dremio-software-cluster-as-a-source).
+3. In the Source Settings dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see Configure a Dremio Software Cluster as a Source.
 4. Click **Save**.
 
-## Remove a Dremio Source[​](#remove-a-dremio-source "Direct link to Remove a Dremio Source")
+## Remove a Dremio Source
 
 To remove a Dremio source, perform these steps:
 
@@ -406,7 +406,7 @@ To remove a Dremio source, perform these steps:
 3. From the list of actions, click **Delete**.
 4. In the Delete Source dialog, click **Delete** to confirm that you want to remove the source.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Projects offload these operations to data-source clusters. Data-source clusters either process these operations or offload them to their connected data sources.
 
@@ -502,29 +502,29 @@ Projects offload these operations to data-source clusters. Data-source clusters 
 `VAR_POP`  
 `VAR_SAMP`
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 You cannot query columns that use complex data types, such as `LIST`, `STRUCT`, and `MAP`. Columns of complex data types do not appear in result sets.
 
 Was this page helpful?
 
-* [Example Configuration](#example-configuration)
-* [Deployment Considerations](#deployment-considerations)
-  + [Network Latency](#network-latency)
-  + [Cloud Egress Costs](#cloud-egress-costs)
-  + [Security](#security)
-* [User Impersonation](#user-impersonation)
-* [Prerequisites](#prerequisites)
-* [Configure a Dremio Software Cluster as a Source](#configure-a-dremio-software-cluster-as-a-source)
-  + [General Options](#general-options)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh Options](#reflection-refresh-options)
-  + [Metadata Options](#metadata-options)
-  + [Privileges](#privileges)
-* [Update a Dremio Source](#update-a-dremio-source)
-* [Remove a Dremio Source](#remove-a-dremio-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
-* [Limitations](#limitations)
+* Example Configuration
+* Deployment Considerations
+  + Network Latency
+  + Cloud Egress Costs
+  + Security
+* User Impersonation
+* Prerequisites
+* Configure a Dremio Software Cluster as a Source
+  + General Options
+  + Advanced Options
+  + Reflection Refresh Options
+  + Metadata Options
+  + Privileges
+* Update a Dremio Source
+* Remove a Dremio Source
+* Predicate Pushdowns
+* Limitations
 
 <div style="page-break-after: always;"></div>
 
@@ -544,7 +544,7 @@ A catalog typically includes:
 
 Dremio can connect to external catalogs to provide a unified metadata layer across platforms. This allows users to query existing datasets in place, without data movement, while preserving a single source of truth for metadata management.
 
-## Catalog Comparison[​](#catalog-comparison "Direct link to Catalog Comparison")
+## Catalog Comparison
 
 | Catalog | Provider | Read | Write | Vended Credentials | Best For |
 | --- | --- | --- | --- | --- | --- |
@@ -556,7 +556,7 @@ Dremio can connect to external catalogs to provide a unified metadata layer acro
 
 \*Write supported for external catalogs only
 
-## Dremio's Open Catalog[​](#dremios-open-catalog "Direct link to Dremio's Open Catalog")
+## Dremio's Open Catalog
 
 Every Dremio project includes a built-in [Open Catalog](/dremio-cloud/bring-data/connect/catalogs/open-catalog) for managing your Iceberg tables. You can also connect to catalogs from other projects in your organization for cross-project collaboration.
 
@@ -569,7 +569,7 @@ Every Dremio project includes a built-in [Open Catalog](/dremio-cloud/bring-data
 
 **Best for:** Teams working with Apache Iceberg who want automated maintenance and multi-engine access without vendor lock-in.
 
-## AWS Glue Data Catalog[​](#aws-glue-data-catalog "Direct link to AWS Glue Data Catalog")
+## AWS Glue Data Catalog
 
 Connect to [AWS Glue's managed metadata catalog](/dremio-cloud/bring-data/connect/catalogs/aws-glue-data-catalog/) for accessing Iceberg tables stored in Amazon S3.
 
@@ -582,7 +582,7 @@ Connect to [AWS Glue's managed metadata catalog](/dremio-cloud/bring-data/connec
 
 **Best for:** AWS-native environments that use Glue for metadata management and want to query Iceberg tables with Dremio.
 
-## Iceberg REST Catalog[​](#iceberg-rest-catalog "Direct link to Iceberg REST Catalog")
+## Iceberg REST Catalog
 
 Connect to any [Iceberg Catalog](/dremio-cloud/bring-data/connect/catalogs/iceberg-rest-catalog/) implementing the REST API specification, including Apache Polaris, AWS Glue Data Catalog, Snowflake Open Catalog, Amazon S3 tables, and Confluent Tableflow.
 
@@ -595,7 +595,7 @@ Connect to any [Iceberg Catalog](/dremio-cloud/bring-data/connect/catalogs/icebe
 
 **Best for:** Connecting to Iceberg catalogs from other vendors or on-premises systems.
 
-## Snowflake Open Catalog[​](#snowflake-open-catalog "Direct link to Snowflake Open Catalog")
+## Snowflake Open Catalog
 
 Connect to [Snowflake's managed service](/dremio-cloud/bring-data/connect/catalogs/snowflake-open-catalog/) for Apache Polaris to read and write Iceberg tables across Snowflake and other compatible engines.
 
@@ -608,7 +608,7 @@ Connect to [Snowflake's managed service](/dremio-cloud/bring-data/connect/catalo
 
 **Best for:** Organizations using Snowflake that want to query Iceberg tables with Dremio while leveraging Snowflake's catalog management.
 
-## Unity Catalog[​](#unity-catalog "Direct link to Unity Catalog")
+## Unity Catalog
 
 Connect to Databricks [Unity Catalog](/dremio-cloud/bring-data/connect/catalogs/databricks-unity-catalog/) to query Delta Lake tables through the UniForm Iceberg compatibility layer.
 
@@ -623,12 +623,12 @@ Connect to Databricks [Unity Catalog](/dremio-cloud/bring-data/connect/catalogs/
 
 Was this page helpful?
 
-* [Catalog Comparison](#catalog-comparison)
-* [Dremio's Open Catalog](#dremios-open-catalog)
-* [AWS Glue Data Catalog](#aws-glue-data-catalog)
-* [Iceberg REST Catalog](#iceberg-rest-catalog)
-* [Snowflake Open Catalog](#snowflake-open-catalog)
-* [Unity Catalog](#unity-catalog)
+* Catalog Comparison
+* Dremio's Open Catalog
+* AWS Glue Data Catalog
+* Iceberg REST Catalog
+* Snowflake Open Catalog
+* Unity Catalog
 
 <div style="page-break-after: always;"></div>
 
@@ -644,7 +644,7 @@ note
 
 For the Dremio trial, database sources are not supported.
 
-## Relational Databases[​](#relational-databases "Direct link to Relational Databases")
+## Relational Databases
 
 These relational databases store data in tables with predefined schemas and use SQL for queries:
 
@@ -655,7 +655,7 @@ These relational databases store data in tables with predefined schemas and use 
 * [PostgreSQL](/dremio-cloud/bring-data/connect/databases/postgres)
 * [SAP HANA](/dremio-cloud/bring-data/connect/databases/sap-hana)
 
-## Data Warehouses[​](#data-warehouses "Direct link to Data Warehouses")
+## Data Warehouses
 
 These data warehouses are optimized for large-scale analytical queries rather than transactional workloads:
 
@@ -665,14 +665,14 @@ These data warehouses are optimized for large-scale analytical queries rather th
 * [Snowflake](/dremio-cloud/bring-data/connect/databases/snowflake)
 * [Vertica](/dremio-cloud/bring-data/connect/databases/vertica/)
 
-## NoSQL Databases[​](#nosql-databases "Direct link to NoSQL Databases")
+## NoSQL Databases
 
 These NoSQL databases use flexible schemas and are designed for unstructured or semi-structured data:
 
 * [Apache Druid](/dremio-cloud/bring-data/connect/databases/apache-druid)
 * [MongoDB](/dremio-cloud/bring-data/connect/databases/mongodb)
 
-## External Queries[​](#external-queries "Direct link to External Queries")
+## External Queries
 
 External queries use native syntax for a source and can be used for SQL statements that are not supported directly in Dremio or are too complex to convert. To run external queries, use the [`SELECT`](/dremio-cloud/sql/commands/SELECT) SQL command with the `EXTERNAL_QUERY` parameter.
 
@@ -682,10 +682,10 @@ When external querying is not enabled, all queries must use standard SQL syntax.
 
 Was this page helpful?
 
-* [Relational Databases](#relational-databases)
-* [Data Warehouses](#data-warehouses)
-* [NoSQL Databases](#nosql-databases)
-* [External Queries](#external-queries)
+* Relational Databases
+* Data Warehouses
+* NoSQL Databases
+* External Queries
 
 <div style="page-break-after: always;"></div>
 
@@ -697,7 +697,7 @@ On this page
 
 [MySQL](https://www.mysql.com/) is a managed database service for deploying cloud-native applications.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that you have the following details before configuring MySQL as a source:
 
@@ -705,7 +705,7 @@ Ensure that you have the following details before configuring MySQL as a source:
 * Port
 * Outbound port (3306 is the default port) open in your AWS or Azure security group
 
-## Configure MySQL as a Source[​](#configure-mysql-as-a-source "Direct link to Configure MySQL as a Source")
+## Configure MySQL as a Source
 
 Perform these steps to configure MySQL as a source:
 
@@ -720,7 +720,7 @@ Perform these steps to configure MySQL as a source:
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### General[​](#general "Direct link to General")
+### General
 
 Under **General** in the sidebar, complete the following steps:
 
@@ -737,7 +737,7 @@ Under **General** in the sidebar, complete the following steps:
    * For **Username**, enter your MySQL database username.
    * For **Password**, enter your MySQL database password.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 (Optional) Select **Advanced Options** in the sidebar and change any of the following settings:
 
@@ -750,13 +750,13 @@ Under **General** in the sidebar, complete the following steps:
 | **Query timeout (s)** | The amount of time (in seconds) for the query to be executed before it is canceled. |
 | **Properties** | Custom key value pairs for the connection relevant to the source. To add a connection property, click **Add property** and add the property name and value. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 Select **Reflection Refresh** in the sidebar and set time intervals for Reflections to refresh or expire.
 
 ![](/assets/images/mysql-reflection-refresh-9a82eaa074c09dfa6a581c5df40a7ce1.png)
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 (Optional) Select **Metadata** in the sidebar and complete the following steps:
 
@@ -770,7 +770,7 @@ Select **Reflection Refresh** in the sidebar and set time intervals for Reflecti
 | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
 | **Expire after** | You can choose to set the expire time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 (Optional) Select **Privileges** in the sidebar and grant privileges to specific users or roles by completing the following steps:
 
@@ -780,7 +780,7 @@ Select **Reflection Refresh** in the sidebar and set time intervals for Reflecti
 2. For the users or roles in the **Users** table, toggle the green checkmark for each privilege you want to grant to the MySQL source that is being created.
 3. Click **Save**.
 
-## Edit a MySQL Source[​](#edit-a-mysql-source "Direct link to Edit a MySQL Source")
+## Edit a MySQL Source
 
 To edit a MySQL source:
 
@@ -789,7 +789,7 @@ To edit a MySQL source:
 3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional.
 4. Click **Save**.
 
-## Remove a MySQL Source[​](#remove-a-mysql-source "Direct link to Remove a MySQL Source")
+## Remove a MySQL Source
 
 To remove a MySQL source, perform these steps:
 
@@ -805,7 +805,7 @@ To remove a MySQL source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio offloads these operations to MySQL.
 
@@ -968,16 +968,16 @@ Dremio supports MySQL data types, as shown in the following table which provides
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure MySQL as a Source](#configure-mysql-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Edit a MySQL Source](#edit-a-mysql-source)
-* [Remove a MySQL Source](#remove-a-mysql-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Prerequisites
+* Configure MySQL as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Edit a MySQL Source
+* Remove a MySQL Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -989,15 +989,15 @@ On this page
 
 Object storage provides scalable, cost-effective storage for data lakes. Dremio connects directly to your Amazon S3 bucket or Azure Storage to query data in place without moving or copying it.
 
-## Amazon S3[​](#amazon-s3 "Direct link to Amazon S3")
+## Amazon S3
 
 Dremio supports [Amazon S3](/dremio-cloud/bring-data/connect/object-storage/amazon-s3/), which stores data in Amazon S3 buckets on AWS. Use data source credentials or project data credentials to enable Dremio to access Amazon S3 using the IAM role that is associated with your Dremio project.
 
-## Azure Storage[​](#azure-storage "Direct link to Azure Storage")
+## Azure Storage
 
 Dremio supports [Azure Storage](/dremio-cloud/bring-data/connect/object-storage/azure-storage/), which stores data in Azure Blob Storage and Azure Data Lake Storage Gen2.
 
-## Table Formatting[​](#table-formatting "Direct link to Table Formatting")
+## Table Formatting
 
 Dremio can query data in object storage across multiple formats:
 
@@ -1012,9 +1012,9 @@ For information about formatting files and folders as tables, see [Table Formatt
 
 Was this page helpful?
 
-* [Amazon S3](#amazon-s3)
-* [Azure Storage](#azure-storage)
-* [Table Formatting](#table-formatting)
+* Amazon S3
+* Azure Storage
+* Table Formatting
 
 <div style="page-break-after: always;"></div>
 
@@ -1026,7 +1026,7 @@ On this page
 
 [Oracle](https://www.oracle.com/database/technologies/) is an object-relational database management system that is widely used in enterprise applications.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that you have the following details before configuring Oracle as a source:
 
@@ -1035,11 +1035,11 @@ Ensure that you have the following details before configuring Oracle as a source
 * Service Name
 * Outbound port (1521 is the default port) open in your AWS or Azure security group
 
-## User Impersonation[​](#user-impersonation "Direct link to User Impersonation")
+## User Impersonation
 
 The Oracle database username provided in the source configuration is the default username that is used for running queries. When queries are run against Oracle in Dremio, users use the privileges associated with the Oracle database username and run queries under that username.
 
-You can change this default in Dremio by enabling user impersonation in the [Advanced Options](#advanced-options), which allows users to run queries under their own usernames and restricts their access. For example, `user_1` can run queries as `user_1` rather than `oracle_svc`. Before enabling user impersonation, some setup is required in Oracle to allow one user to impersonate another user, because the username of the user in Dremio must be the same as their username in Oracle and the user must be able to connect through the Oracle database username.
+You can change this default in Dremio by enabling user impersonation in the Advanced Options, which allows users to run queries under their own usernames and restricts their access. For example, `user_1` can run queries as `user_1` rather than `oracle_svc`. Before enabling user impersonation, some setup is required in Oracle to allow one user to impersonate another user, because the username of the user in Dremio must be the same as their username in Oracle and the user must be able to connect through the Oracle database username.
 
 To set up user impersonation, follow these steps:
 
@@ -1055,12 +1055,12 @@ ALTER USER testuser1 GRANT CONNECT THROUGH proxyuser;
 In this example, the user can log in as `testuser1` in Dremio and in Oracle, and they can connect through the `proxyuser`. The `proxyuser` is the Oracle database username provided in the source configuration.
 
 3. Log in as an admin to Dremio.
-4. Follow the steps for [Configure Oracle as a Source](#configure-oracle-as-a-source) using the Oracle database username and enable **User Impersonation** in the **Advanced Options**.
+4. Follow the steps for Configure Oracle as a Source using the Oracle database username and enable **User Impersonation** in the **Advanced Options**.
 5. Grant [source privileges](/dremio-cloud/security/privileges/#source-privileges) to the user.
 
 Now that you have enabled user impersonation, a user logging in to Dremio with their username can access the Oracle source and its datasets according to their privileges. The user also runs queries against Oracle under their username.
 
-## Configure Oracle as a Source[​](#configure-oracle-as-a-source "Direct link to Configure Oracle as a Source")
+## Configure Oracle as a Source
 
 Perform these steps to configure Oracle:
 
@@ -1075,7 +1075,7 @@ Perform these steps to configure Oracle:
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### General[​](#general "Direct link to General")
+### General
 
 The **General** tab contains the required fields to create an Oracle source.
 
@@ -1121,7 +1121,7 @@ You can only enable TLS encryption or Oracle native encryption for a given sourc
      + For **Secret Resource Url**, enter the Secret Resource URL that allows Dremio to fetch the password from [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html). The Secret Resource URL is the Amazon Resource Name (ARN) for the secret (for example, `arn:aws:secretsmanager:us-west-2:123456789012:secret:my-rds-secret-VNenFy`).
    * For **Kerebros**, choose this option when the source database has Kerebros configured.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Click **Advanced Options** in the sidebar.
 
@@ -1140,25 +1140,25 @@ All advanced options are optional.
 | **Maximum Idle Connections** | The total number of connections allowed to be idle at a given time. The default maximum idle connections is 8. |
 | **Connection Idle Time** | The amount of time (in seconds) allowed for a connection to remain idle before the connection is terminated. The default connection idle time is 60 seconds. |
 | **Use LDAP Naming Services** | To use LDAP in the authentication of the external sources that can be used rather than locally configured users within Oracle. If checked, enter a domain name in the **Set DN for LDAP Naming Services** text box. |
-| **User Impersonation** | Allows users to run queries using their credentials rather than the username provided in the source credentials. Some setup is required in Oracle to allow one user to impersonate another user. See [User Impersonation](#user-impersonation). |
+| **User Impersonation** | Allows users to run queries using their credentials rather than the username provided in the source credentials. Some setup is required in Oracle to allow one user to impersonate another user. See User Impersonation. |
 | **Encryption** | Provide the **SSL/TLS server certificate distinguished name**, otherwise, leave it blank to disable the DN match. |
 | **Connection Properties** | Custom key value pairs for the connection relevant to the source. To add a connection property, click **Add property** and add the property name and value. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 The **Reflection Refresh** tab in the sidebar allows you to set time intervals for Reflections to refresh or expire.
 
 ![](/assets/images/oracle-reflection-refresh-c3bf964a68466d3d73cfb58ecacfef56.png)
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 You can configure settings to refresh metadata and handle datasets. Click **Metadata** in the sidebar.
 
 ![](/assets/images/oracle-metadata-569297204461a37db9fda2e145263868.png)
 
-You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#metadata-refresh) parameters.
+You can configure Dataset Handling and Metadata Refresh parameters.
 
-##### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+##### Dataset Handling
 
 These are the **Dataset Handling** parameters.
 
@@ -1170,7 +1170,7 @@ All **Dataset Handling** parameters are optional.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-##### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+##### Metadata Refresh
 
 These are the **Metadata Refresh** parameters:
 
@@ -1191,7 +1191,7 @@ These are the **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 You can grant privileges to specific users or roles.
 
@@ -1202,7 +1202,7 @@ You can grant privileges to specific users or roles.
 
 Click **Save** after setting the configuration.
 
-## Edit an Oracle Source[​](#edit-an-oracle-source "Direct link to Edit an Oracle Source")
+## Edit an Oracle Source
 
 To edit an Oracle source:
 
@@ -1211,7 +1211,7 @@ To edit an Oracle source:
 3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional.
 4. Click **Save**.
 
-## Remove an Oracle Source[​](#remove-an-oracle-source "Direct link to Remove an Oracle Source")
+## Remove an Oracle Source
 
 To remove an Oracle source, perform these steps:
 
@@ -1227,7 +1227,7 @@ note
 
 Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio offloads these operations to Oracle.
 
@@ -1357,17 +1357,17 @@ Dremio supports Oracle data types, as shown in the following table which provide
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [User Impersonation](#user-impersonation)
-* [Configure Oracle as a Source](#configure-oracle-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Edit an Oracle Source](#edit-an-oracle-source)
-* [Remove an Oracle Source](#remove-an-oracle-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Prerequisites
+* User Impersonation
+* Configure Oracle as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Edit an Oracle Source
+* Remove an Oracle Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -1379,16 +1379,16 @@ On this page
 
 You can add Db2 databases as sources to Dremio.
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 Only IBM Db2 for Linux, UNIX, and Windows is supported.
 
-## Configure IBM Db2 as a Source[​](#configure-ibm-db2-as-a-source "Direct link to Configure IBM Db2 as a Source")
+## Configure IBM Db2 as a Source
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![This is the Add Source icon.](/images/icons/plus.png "This is the Add Source icon.").
 2. In the Add Data Source dialog, under **Databases**, select **IBM Db2**.
 
-### General Options[​](#general-options "Direct link to General Options")
+### General Options
 
 1. In the **Name** field, specify the name by which you want the Db2 source to appear in the **Databases** section. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 2. Under **Connection**, follow these steps:
@@ -1405,7 +1405,7 @@ Only IBM Db2 for Linux, UNIX, and Windows is supported.
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 On the Advanced Options page, you can set values for these non-required options:
 
@@ -1418,7 +1418,7 @@ On the Advanced Options page, you can set values for these non-required options:
 | **Enable external authorization plugin** | When enabled, authorizes an external plugin. |
 | **Connection Properties** | Connection properties and values for the data source. |
 
-### Reflection Refresh Options[​](#reflection-refresh-options "Direct link to Reflection Refresh Options")
+### Reflection Refresh Options
 
 On the Reflection Refresh page, set the policy that controls how often Reflections are scheduled to be refreshed automatically, as well as the time limit after which Reflections expire and are removed.
 
@@ -1429,11 +1429,11 @@ On the Reflection Refresh page, set the policy that controls how often Reflectio
 | **Never expire** | Select to prevent Reflections from expiring, default is to automatically expire after the time limit below. |
 | **Expire after** | The time limit after which Reflections expire and are removed from Dremio, specified in hours, days or weeks. This option is ignored if **Never expire** is selected. |
 
-### Metadata Options[​](#metadata-options "Direct link to Metadata Options")
+### Metadata Options
 
 On the Metadata page, you can configure settings to refresh metadata and handle datasets.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 These are the optional **Dataset Handling** parameters.
 
@@ -1441,7 +1441,7 @@ These are the optional **Dataset Handling** parameters.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -1458,7 +1458,7 @@ These are the optional **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges tab, you can grant privileges to specific users or roles. See [Privileges](/dremio-cloud/security/privileges/) for additional information about privileges.
 
@@ -1470,16 +1470,16 @@ All privileges are optional.
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update an IBM Db2 Source[​](#update-an-ibm-db2-source "Direct link to Update an IBM Db2 Source")
+## Update an IBM Db2 Source
 
 To update an IBM Db2 source:
 
 1. On the Datasets page, under **Databases** in the panel on the left, find the name of the source you want to update.
 2. Right-click the source name and select **Settings** from the list of actions. Alternatively, click the source name and then the ![The Settings icon](/images/settings-icon.png "The Settings icon") at the top right corner of the page.
-3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see [Configure IBM Db2 as a Source](#configure-ibm-db2-as-a-source).
+3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see Configure IBM Db2 as a Source.
 4. Click **Save**.
 
-## Delete an IBM Db2 Source[​](#delete-an-ibm-db2-source "Direct link to Delete an IBM Db2 Source")
+## Delete an IBM Db2 Source
 
 note
 
@@ -1500,7 +1500,7 @@ To delete an IBM Db2 source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be deleted. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being deleted. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio delegates the execution of these expressions and functions to the database being queried, often dramatically improving query performance. It can also offload entire SQL queries that include one or more of these expressions and functions.
 
@@ -1581,7 +1581,7 @@ TRUNC
 TRUNCATE  
 UPPER
 
-## Data Type Mapping[​](#data-type-mapping "Direct link to Data Type Mapping")
+## Data Type Mapping
 
 The following table shows the mappings from Db2 to Dremio data types.
 
@@ -1617,17 +1617,17 @@ If a type is not present in the table, it is not currently supported.
 
 Was this page helpful?
 
-* [Limitations](#limitations)
-* [Configure IBM Db2 as a Source](#configure-ibm-db2-as-a-source)
-  + [General Options](#general-options)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh Options](#reflection-refresh-options)
-  + [Metadata Options](#metadata-options)
-  + [Privileges](#privileges)
-* [Update an IBM Db2 Source](#update-an-ibm-db2-source)
-* [Delete an IBM Db2 Source](#delete-an-ibm-db2-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
-* [Data Type Mapping](#data-type-mapping)
+* Limitations
+* Configure IBM Db2 as a Source
+  + General Options
+  + Advanced Options
+  + Reflection Refresh Options
+  + Metadata Options
+  + Privileges
+* Update an IBM Db2 Source
+* Delete an IBM Db2 Source
+* Predicate Pushdowns
+* Data Type Mapping
 
 <div style="page-break-after: always;"></div>
 
@@ -1637,21 +1637,21 @@ Original URL: https://docs.dremio.com/dremio-cloud/bring-data/connect/databases/
 
 On this page
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 Dremio supports MongoDB 3.6 through 8.0.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that that you have the outbound port (27017 is the default port) open in your AWS or Azure security group.
 
-## Configure MongoDB as a Source[​](#configure-mongodb-as-a-source "Direct link to Configure MongoDB as a Source")
+## Configure MongoDB as a Source
 
-### General[​](#general "Direct link to General")
+### General
 
 Under **Name**, enter the name to identify the data source in Dremio. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 
-#### Connection[​](#connection "Direct link to Connection")
+#### Connection
 
 | Name | Description |
 | --- | --- |
@@ -1662,7 +1662,7 @@ Under **Name**, enter the name to identify the data source in Dremio. The name c
 * **Encrypt connection** -- Forces an encrypted connection over SSL.
 * **Read from secondaries only** -- Disables reading from primaries. Might degrade performance.
 
-#### Authentication[​](#authentication "Direct link to Authentication")
+#### Authentication
 
 * No authentication method
 * Master Authentication method (default)
@@ -1670,7 +1670,7 @@ Under **Name**, enter the name to identify the data source in Dremio. The name c
   + Password -- MongoDB password
 * Authentication database -- Database to authenticate against.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 ![](/assets/images/mongodb-adv-options-79dc1d63a1a229984f1da353ea129c52.png) !
 
@@ -1681,25 +1681,25 @@ Under **Name**, enter the name to identify the data source in Dremio. The name c
 * **Field names are case insensitive** -- When enabled, Dremio reads all known variations of a field name when determining the schema, ignoring any value set for Sample Size. All field name variations are then used when pushing an operation down to Mongo.
 * **Connection Properties** -- A list of additional MongoDB connection parameters.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 ![](/assets/images/hdfs-refresh-policy-9ae71114907887b859a9d01425390739.png) !
 
 * Never refresh -- Specifies how often to refresh based on hours, days, weeks, or never.
 * Never expire -- Specifies how often to expire based on hours, days, weeks, or never.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 !
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 * Remove dataset definitions if underlying data is unavailable (Default).  
   If this box is *not* checked and the underlying files under a folder are removed or the folder/source is not accessible,
   Dremio does not remove the dataset definitions.
   This option is useful in cases when files are temporarily deleted and put back in place with new sets of files.
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 * **Dataset Discovery** -- Refresh interval for top-level source object names such as names of DBs and tables.
   + Fetch every -- Specify fetch time based on minutes, hours, days, or weeks. Default: 1 hour
@@ -1716,7 +1716,7 @@ Under **Name**, enter the name to identify the data source in Dremio. The name c
   + Fetch every -- Specify fetch time based on minutes, hours, days, or weeks. Default: 1 hour
   + Expire after -- Specify expiration time based on minutes, hours, days, or weeks. Default: 3 hours
 
-### Share[​](#share "Direct link to Share")
+### Share
 
 ![](data:image/png;base64,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) !
 
@@ -1725,7 +1725,7 @@ You can specify which users can edit. Options include:
 * All users can edit.
 * Specific users can edit.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio offloads these operations to MongoDB:
 
@@ -1768,11 +1768,11 @@ TO\_UPPER
 TRUNC  
 YEAR
 
-## For More Information[​](#for-more-information "Direct link to For More Information")
+## For More Information
 
 For information about Dremio data types, see [Data Types](/dremio-cloud/sql/data-types/).
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 Queries that un-nest nested fields are not allowed as they would cause incorrect schemas. This may be easily circumvented by pushing filters into the subquery or by simply not referencing the alias.
 
@@ -1802,17 +1802,17 @@ The following table shows the mappings from MongoDB to Dremio data types. If the
 
 Was this page helpful?
 
-* [Supported Versions](#supported-versions)
-* [Prerequisites](#prerequisites)
-* [Configure MongoDB as a Source](#configure-mongodb-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Share](#share)
-* [Predicate Pushdowns](#predicate-pushdowns)
-* [For More Information](#for-more-information)
-* [Limitations](#limitations)
+* Supported Versions
+* Prerequisites
+* Configure MongoDB as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Share
+* Predicate Pushdowns
+* For More Information
+* Limitations
 
 <div style="page-break-after: always;"></div>
 
@@ -1824,7 +1824,7 @@ On this page
 
 [Vertica](https://www.vertica.com/) is an analytical database.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that you have the following details before configuring Vertica as a source:
 
@@ -1833,7 +1833,7 @@ Ensure that you have the following details before configuring Vertica as a sourc
 * Port
 * Outbound port (5433 is the default port) open in your AWS or Azure security group
 
-## Configure Vertica as a Source[​](#configure-vertica-as-a-source "Direct link to Configure Vertica as a Source")
+## Configure Vertica as a Source
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![This is the Add Source icon.](/images/icons/plus.png "This is the Add Source icon.").
 2. In the Add Data Source dialog, under **Databases**, select **Vertica**.
@@ -1842,11 +1842,11 @@ Ensure that you have the following details before configuring Vertica as a sourc
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### General[​](#general "Direct link to General")
+### General
 
 For **Name**, enter the name to identify the data source in Dremio. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 
-#### Connection[​](#connection "Direct link to Connection")
+#### Connection
 
 | Name | Description |
 | --- | --- |
@@ -1854,12 +1854,12 @@ For **Name**, enter the name to identify the data source in Dremio. The name can
 | Port | Vertica port number. Defaults to 5433. |
 | Database | Service name of your database. |
 
-#### Authentication[​](#authentication "Direct link to Authentication")
+#### Authentication
 
 * For **Username**, enter your Vertica username.
 * For **Password**, enter your Vertica password.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Specify advanced options with the following settings.
 
@@ -1870,7 +1870,7 @@ Specify advanced options with the following settings.
 * **Enable external authorization plugin**: When enabled, authorizes an external plugin.
 * **Connection Properties**: Connection properties and values for the data source.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 You can set the policy that controls how often Reflections are scheduled to be refreshed automatically, as well as the time limit after which Reflections expire and are removed.
 
@@ -1882,16 +1882,16 @@ You can set the policy that controls how often Reflections are scheduled to be r
 | **Never expire** | Select to prevent Reflections from expiring, default is to automatically expire after the time limit below. |
 | **Expire after** | The time limit after which Reflections expire and are removed from Dremio, specified in hours, days or weeks. This option is ignored if **Never expire** is selected. |
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Specifying metadata options is handled with the following settings.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 * Remove dataset definitions if underlying data is unavailable (Default).
 * If this box is *not* checked and the underlying files under a folder are removed or the folder/source is not accessible, Dremio does not remove the dataset definitions. This option is useful in cases when files are temporarily deleted and put back in place with new sets of files.
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -1908,7 +1908,7 @@ These are the optional **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges tab, you can grant privileges to specific users or roles. See [Access Control](/dremio-cloud/security/privileges/) for additional information about privileges.
 
@@ -1920,16 +1920,16 @@ All privileges are optional.
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update a Vertica Source[​](#update-a-vertica-source "Direct link to Update a Vertica Source")
+## Update a Vertica Source
 
 To update a Vertica source:
 
 1. On the Datasets page, under **Databases** in the panel on the left, find the name of the source you want to update.
 2. Right-click the source name and select **Settings** from the list of actions. Alternatively, click the source name and then the ![The Settings icon](/images/settings-icon.png "The Settings icon") at the top right corner of the page.
-3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see [Configure Vertica as a Source](#configure-vertica-as-a-source).
+3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see Configure Vertica as a Source.
 4. Click **Save**.
 
-## Delete a Vertica Source[​](#delete-a-vertica-source "Direct link to Delete a Vertica Source")
+## Delete a Vertica Source
 
 note
 
@@ -1950,7 +1950,7 @@ To delete a Vertica source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be deleted. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being deleted. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio delegates the execution of these expressions and functions to the database being queried, often dramatically improving query performance. It can also offload entire SQL queries that include one or more of these expressions and functions.
 
@@ -2072,16 +2072,16 @@ VARIANCE
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure Vertica as a Source](#configure-vertica-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update a Vertica Source](#update-a-vertica-source)
-* [Delete a Vertica Source](#delete-a-vertica-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Prerequisites
+* Configure Vertica as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update a Vertica Source
+* Delete a Vertica Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -2093,7 +2093,7 @@ On this page
 
 [PostgreSQL](https://www.postgresql.org/) is an open source object-relational database management system that is known for its reliability and performance.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that you have the following details before configuring PostgreSQL as a source:
 
@@ -2102,7 +2102,7 @@ Ensure that you have the following details before configuring PostgreSQL as a so
 * Port
 * Outbound port (5432 is the default port) open in your AWS or Azure security group
 
-## Configure PostgreSQL as a Source[​](#configure-postgresql-as-a-source "Direct link to Configure PostgreSQL as a Source")
+## Configure PostgreSQL as a Source
 
 Perform these steps to configure PostgreSQL:
 
@@ -2117,7 +2117,7 @@ Perform these steps to configure PostgreSQL:
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### General[​](#general "Direct link to General")
+### General
 
 The **General** tab contains the required fields to create a PostgreSQL source.
 
@@ -2139,7 +2139,7 @@ Perform these steps in the **General** tab:
      + For **Username**, enter your PostgreSQL database username.
      + For **Secret Resource Url**, enter the Secret Resource URL that allows Dremio to fetch the password from [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html). The Secret Resource URL is the Amazon Resource Name (ARN) for the secret (for example, `arn:aws:secretsmanager:us-west-2:123456789012:secret:my-rds-secret-VNenFy`).
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Click **Advanced Options** in the sidebar.
 
@@ -2157,21 +2157,21 @@ All advanced options are optional.
 | **Encryption**   **Validation Mode** | When encryption is enabled, set the validation mode as one of the following:  * **Validate certificate and hostname** (default mode) * **Validate certificate only** * **Do not validate certificate or hostname** |
 | **Connection Properties** | Custom key value pairs for the connection relevant to the source. To add a connection property, click **Add property** and add the property name and value. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 The **Reflection Refresh** tab in the sidebar allows you to set time intervals for Reflections to refresh or expire.
 
 ![](/assets/images/postgres-reflection-refresh-8bc86e0010238700aa08d8aba8a4a0fd.png)
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 You can configure settings to refresh metadata and handle datasets. Click **Metadata** in the sidebar.
 
 ![](/assets/images/postgres-metadata-e66c9225307d756198205b4c2f0d31f8.png)
 
-You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#metadata-refresh) parameters.
+You can configure Dataset Handling and Metadata Refresh parameters.
 
-##### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+##### Dataset Handling
 
 These are the **Dataset Handling** parameters.
 
@@ -2183,7 +2183,7 @@ All **Dataset Handling** parameters are optional.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-##### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+##### Metadata Refresh
 
 These are the **Metadata Refresh** parameters:
 
@@ -2204,7 +2204,7 @@ These are the **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 You can grant privileges to specific users or roles.
 
@@ -2215,7 +2215,7 @@ You can grant privileges to specific users or roles.
 
 Click **Save** after setting the configuration.
 
-## Edit a PostgreSQL Source[​](#edit-a-postgresql-source "Direct link to Edit a PostgreSQL Source")
+## Edit a PostgreSQL Source
 
 To edit a PostgreSQL source:
 
@@ -2224,7 +2224,7 @@ To edit a PostgreSQL source:
 3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional.
 4. Click **Save**.
 
-## Remove a PostgreSQL Source[​](#remove-a-postgresql-source "Direct link to Remove a PostgreSQL Source")
+## Remove a PostgreSQL Source
 
 To remove a PostgreSQL source, perform these steps:
 
@@ -2240,7 +2240,7 @@ note
 
 Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio offloads these operations to Postgres.
 
@@ -2384,16 +2384,16 @@ Dremio supports PostgreSQL data types, as shown in the following table which pro
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure PostgreSQL as a Source](#configure-postgresql-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Edit a PostgreSQL Source](#edit-a-postgresql-source)
-* [Remove a PostgreSQL Source](#remove-a-postgresql-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Prerequisites
+* Configure PostgreSQL as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Edit a PostgreSQL Source
+* Remove a PostgreSQL Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -2405,26 +2405,26 @@ On this page
 
 Dremio supports direct connections to SAP HANA using only a username and password.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 The SAP HANA source supports SAP HANA 2.0. The connector was tested against [HANA Express](https://hub.docker.com/r/saplabs/hanaexpress).
 
-## Configure SAP HANA as a Source[​](#configure-sap-hana-as-a-source "Direct link to Configure SAP HANA as a Source")
+## Configure SAP HANA as a Source
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![This is the Add Source icon.](/images/icons/plus.png "This is the Add Source icon.").
 2. In the Add Data Source dialog, under **Databases**, select **SAP HANA**.
 
-### General[​](#general "Direct link to General")
+### General
 
 Under **Name**, enter the name to identify the data source in Dremio. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 
-#### Connection[​](#connection "Direct link to Connection")
+#### Connection
 
 * Under **Host**, enter the URL or IP address for the SAP HANA instance. Example: `sap://myServer:`
 * Under **Port**, enter the port required to access the data source. Port 39017 is the default for SAP HANA.
 * Under **Schema (optional)**, enter the schema within the SAP HANA instance that you would like to connect to.
 
-#### Authentication[​](#authentication "Direct link to Authentication")
+#### Authentication
 
 Choose an authentication method:
 
@@ -2432,7 +2432,7 @@ Choose an authentication method:
   + **Username** - The username with sufficient privileges to perform read/write actions on the SAP HANA instance
   + **Password** - The password associated with the username.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 The following settings control more advanced functionalities in Dremio.
 
@@ -2445,7 +2445,7 @@ The following settings control more advanced functionalities in Dremio.
   + \*\*Name \*\* - The unique name for any custom properties.
   + \*\*Value \*\* - The value associated with the custom property.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 This tab controls the frequency of Reflection refreshes or the timespan for expiration for any queries performed using this data source.
 
@@ -2455,7 +2455,7 @@ This tab controls the frequency of Reflection refreshes or the timespan for expi
 * \*\*Never expire \*\* - Prevents any query Reflections associated with this source from expiring.
 * \*\*Expire after \*\* - Sets the time after a Reflection is created that it then expires and can no longer be used for queries. This may be set to hours, days, and weeks.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 This tab offers settings that control how dataset details are fetched and refreshed.
 
@@ -2469,7 +2469,7 @@ This tab offers settings that control how dataset details are fetched and refres
     - \*\*Fetch every \*\* - Specifies the time interval by which metadata is fetched. This can be set by minutes, hours, days, and weeks.
     - \*\*Expire after \*\* - Specifies the timespan for when dataset details expire after a dataset is queried. This can be set by minutes, hours, days, and weeks.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges tab, you can grant privileges to specific users or roles. See [Access Control](/dremio-cloud/security/privileges/) for additional information about privileges.
 
@@ -2481,7 +2481,7 @@ All privileges are optional.
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update an SAP HANA source[​](#update-an-sap-hana-source "Direct link to Update an SAP HANA source")
+## Update an SAP HANA source
 
 To update an SAP HANA source:
 
@@ -2490,7 +2490,7 @@ To update an SAP HANA source:
 3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name.
 4. Click **Save**.
 
-## Delete an SAP HANA Source[​](#delete-an-sap-hana-source "Direct link to Delete an SAP HANA Source")
+## Delete an SAP HANA Source
 
 note
 
@@ -2511,7 +2511,7 @@ To delete an SAP HANA source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be deleted. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being deleted. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio delegates the execution of these expressions and functions to the database being queried, often dramatically improving query performance. It can also offload entire SQL queries that include one or more of the following expressions and functions:
 
@@ -2606,16 +2606,16 @@ YEAR
 
 Was this page helpful?
 
-* [Supported Versions](#supported-versions)
-* [Configure SAP HANA as a Source](#configure-sap-hana-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update an SAP HANA source](#update-an-sap-hana-source)
-* [Delete an SAP HANA Source](#delete-an-sap-hana-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Supported Versions
+* Configure SAP HANA as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update an SAP HANA source
+* Delete an SAP HANA Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -2627,7 +2627,7 @@ On this page
 
 [Snowflake](http://www.snowflake.com) is a cloud data warehouse.
 
-## User Impersonation[​](#user-impersonation "Direct link to User Impersonation")
+## User Impersonation
 
 Dremio supports OAuth with impersonation for Snowflake. This allows Dremio users to authenticate via external OAuth and map to Snowflake roles securely. For reference, see [Snowflake's Create Security Integration (External OAuth) documentation](https://docs.snowflake.com/en/sql-reference/sql/create-security-integration-oauth-external).
 
@@ -2685,7 +2685,7 @@ Before configuring a Snowflake source with user impersonation, perform the follo
    ALTER SECURITY INTEGRATION snowflake_imp SET EXTERNAL_OAUTH_ANY_ROLE_MODE = 'ENABLE';
    ```
 
-## Configure Snowflake as a Source[​](#configure-snowflake-as-a-source "Direct link to Configure Snowflake as a Source")
+## Configure Snowflake as a Source
 
 1. In the bottom-left corner of the Datasets page, click **Add Source**.
 2. Under **Databases** in the Add Data Source dialog, select **Snowflake**.
@@ -2694,7 +2694,7 @@ Before configuring a Snowflake source with user impersonation, perform the follo
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### General[​](#general "Direct link to General")
+### General
 
 Perform these steps in the **General** tab:
 
@@ -2718,13 +2718,10 @@ The optional connection parameters are case-sensitive. For example, if the name 
      + For **Username**, enter your Snowflake username.
      + For **Private Key**, enter your generated Snowflake private key in Privacy Enhanced Mail (PEM) format.
      + (Optional) For **Private key passphrase**, enter the passphrase if you are using an encrypted private key.
-   * **OAuth with impersonation**: This allows Dremio users to authenticate via external OAuth and map to Snowflake roles securely. If you have not already, complete the steps in [User Impersonation](#user-impersonation] for configuring a Snowflake source with user impersonation.
-     + Choose one of the two user impersonation role modes:
-       1. Any role: Allows users to assume any role they have access to in Snowflake.
-       2. User-defined role: Restricts users to specific predefined roles. The username configured in the Dremio source must be present in the `EXTERNAL_OAUTH_ALLOWED_ROLES_LIST` specified in Step 2 under [User Impersonation](#user-impersonation).
+   * **OAuth with impersonation**: This allows Dremio users to authenticate via external OAuth and map to Snowflake roles securely. If you have not already, complete the steps in User Impersonation.
      + Set the JWT `audience` parameter to match Snowflake’s `EXTERNAL_OAUTH_AUDIENCE_LIST`. This ensures proper token validation and role mapping between Dremio and Snowflake.
 
-### Advanced[​](#advanced "Direct link to Advanced")
+### Advanced
 
 On the Advanced Options page, you can set values for these non-required options:
 
@@ -2734,7 +2731,7 @@ On the Advanced Options page, you can set values for these non-required options:
 | **Connection Idle Time** | The amount of time (in seconds) allowed for a connection to remain idle before the connection is terminated. The default connection idle time is 60 seconds. |
 | **Query Timeout** | The amount of time (in seconds) allowed to wait for the results of a query. If this time expires, the connection being used is returned to an idle state. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 On the Reflection Refresh page, set the policy that controls how often Reflections are scheduled to be refreshed automatically, as well as the time limit after which Reflections expire and are removed.
 
@@ -2745,11 +2742,11 @@ On the Reflection Refresh page, set the policy that controls how often Reflectio
 | **Never expire** | Select to prevent Reflections from expiring, default is to automatically expire after the time limit below. |
 | **Expire after** | The time limit after which Reflections expire and are removed from Dremio, specified in hours, days or weeks. This option is ignored if **Never expire** is selected. |
 
-### Metadata Options[​](#metadata-options "Direct link to Metadata Options")
+### Metadata Options
 
 On the Metadata page, you can configure settings to refresh metadata and handle datasets.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 These are the optional **Dataset Handling** parameters.
 
@@ -2757,7 +2754,7 @@ These are the optional **Dataset Handling** parameters.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -2774,7 +2771,7 @@ These are the optional **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges page, you can grant privileges to specific users or roles. See [Access Control](/dremio-cloud/security/privileges/) for additional information about user privileges.
 
@@ -2782,16 +2779,16 @@ On the Privileges page, you can grant privileges to specific users or roles. See
 2. (Optional) For the users or roles in the **Users** table, toggle the green checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Edit a Snowflake Source[​](#edit-a-snowflake-source "Direct link to Edit a Snowflake Source")
+## Edit a Snowflake Source
 
 To edit a Snowflake source:
 
 1. On the Datasets page, click **External Sources** at the bottom-left of the page. A list of sources is displayed.
 2. Hover over the external source and click the Settings ![This is the icon that represents the Source settings.](/images/icons/settings.png "Icon represents the Source settings.") icon that appears next to the source.
-3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional. For parameters and advanced options, see [Configure Snowflake as a Source](#configure-snowflake-as-a-source).
+3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional. For parameters and advanced options, see Configure Snowflake as a Source.
 4. Click **Save**.
 
-## Remove a Snowflake Source[​](#remove-a-snowflake-source "Direct link to Remove a Snowflake Source")
+## Remove a Snowflake Source
 
 To remove a Snowflake source, perform these steps:
 
@@ -2807,7 +2804,7 @@ To remove a Snowflake source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 These operations and functions are performed by Snowflake warehouses:
 
@@ -2894,16 +2891,16 @@ These operations and functions are performed by Snowflake warehouses:
 
 Was this page helpful?
 
-* [User Impersonation](#user-impersonation)
-* [Configure Snowflake as a Source](#configure-snowflake-as-a-source)
-  + [General](#general)
-  + [Advanced](#advanced)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata Options](#metadata-options)
-  + [Privileges](#privileges)
-* [Edit a Snowflake Source](#edit-a-snowflake-source)
-* [Remove a Snowflake Source](#remove-a-snowflake-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* User Impersonation
+* Configure Snowflake as a Source
+  + General
+  + Advanced
+  + Reflection Refresh
+  + Metadata Options
+  + Privileges
+* Edit a Snowflake Source
+* Remove a Snowflake Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -2915,7 +2912,7 @@ On this page
 
 Dremio's Open Catalog is a built-in lakehouse catalog powered by [Apache Polaris](https://polaris.apache.org/). It provides centralized, secure access to your Iceberg tables while automating data maintenance to keep performance optimized.
 
-## Key Capabilities[​](#key-capabilities "Direct link to Key Capabilities")
+## Key Capabilities
 
 * **Comprehensive Access Controls** – Protect your data with Role-Based Access Control (RBAC) alongside fine-grained security policies. RBAC privileges are enforced within the catalog itself, providing complete privilege enforcement as the catalog is shared with other projects or engines. Apply row filters to limit data visibility by criteria such as region, or use column masks to obfuscate sensitive information such as Social Security numbers.
 * **Automatic Table Maintenance** – Open Catalog handles Iceberg table compaction and vacuum operations automatically, so you get optimal query performance and lower storage costs without manual intervention. These table maintenance jobs run on a dedicated engine that requires no routing rules, engine configuration, or scheduling.
@@ -2924,7 +2921,7 @@ Dremio's Open Catalog is a built-in lakehouse catalog powered by [Apache Polaris
 
 Every project in your Dremio organization includes an Open Catalog by default. This catalog is automatically provisioned when you create a project and provides immediate access to your Iceberg tables with full control over security, maintenance, and data organization. Your Open Catalog is ready to use out of the box.
 
-## Create a Namespace[​](#create-a-namespace "Direct link to Create a Namespace")
+## Create a Namespace
 
 Namespaces help you organize tables logically within your Open Catalog. You might create namespaces by team (Engineering, Revenue), by domain (Finance, Marketing), or by use case.
 
@@ -2942,7 +2939,7 @@ Your namespace is now ready for tables. You can create tables within the namespa
 * Choose descriptive names that clearly indicate the namespace's purpose (e.g., `customer_analytics`, `finance_reporting`).
 * Avoid spaces or special characters that may require escaping in SQL queries.
 
-## Observe Table Maintenance[​](#observe-table-maintenance "Direct link to Observe Table Maintenance")
+## Observe Table Maintenance
 
 Open Catalog automatically performs maintenance operations such as compaction and vacuum to optimize query performance. You can monitor these jobs to understand maintenance activity.
 
@@ -2952,7 +2949,7 @@ To view maintenance jobs:
 2. Select **Internal** job type.
 3. Review jobs with engine type **MAINTENANCE**.
 
-## Add Catalogs from Other Projects[​](#add-catalogs-from-other-projects "Direct link to Add Catalogs from Other Projects")
+## Add Catalogs from Other Projects
 
 In addition to your Open Catalog, you can connect to Open Catalogs from other projects in your organization. When you add a catalog from another project, it appears as a source in your project, enabling you to access shared data assets while maintaining consistent security and governance. All Role-Based Access Control (RBAC) privileges and fine-grained access controls are enforced at the catalog level, ensuring secure data access across projects.
 
@@ -2974,7 +2971,7 @@ The catalog now appears under **Lakehouse Catalogs** in your Sources panel. You 
 
 You will only see projects in the dropdown where you have been granted access to their Open Catalog. If you do not see a project you expect, contact the project owner to request access.
 
-## Catalog Settings[​](#catalog-settings "Direct link to Catalog Settings")
+## Catalog Settings
 
 The default catalog configurations work well for most use cases. If you need to adjust them:
 
@@ -2987,22 +2984,22 @@ The default catalog configurations work well for most use cases. If you need to 
 2. Select **Settings** from the dropdown menu.
 3. Select from the available tabs for additional configurations.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 Control how often Reflections are automatically refreshed and when they expire. These settings are specific to each project using the catalog.
 
-#### Refresh Settings[​](#refresh-settings "Direct link to Refresh Settings")
+#### Refresh Settings
 
 * **Never refresh**: Prevent automatic Reflection refresh. By default, Reflections refresh automatically.
 * **Refresh every**: Set the refresh interval in hours, days, or weeks. Ignored if **Never refresh** is selected.
 * **Set refresh schedule**: Specify a daily or weekly refresh schedule.
 
-#### Expire Settings[​](#expire-settings "Direct link to Expire Settings")
+#### Expire Settings
 
 * **Never expire**: Prevent Reflections from expiring. By default, Reflections expire after the configured time limit.
 * **Expire after**: The time limit after which Reflections are removed from Dremio, specified in hours, days, or weeks. Ignored if **Never expire** is selected.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Configure how Dremio handles dataset definitions and metadata refresh. These settings are specific to each project using the catalog.
 
@@ -3011,15 +3008,15 @@ In Open Catalog, metadata refresh serves two purposes:
 * **Cache Refresh**: Dremio maintains a project-level cache of table metadata to accelerate query planning and execution. Writes from Dremio query engines automatically update this cache. However, writes from other query engines only update snapshot metadata in object storage. Metadata refresh syncs these external changes into Dremio's cache to improve subsequent query performance.
 * **Lineage Computation**: Metadata refresh recomputes lineage information to reflect the latest changes in lineage graphs.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 * **Remove dataset definitions if the underlying data is unavailable** (Default) – When selected, Dremio removes dataset definitions if the underlying files are deleted or the folder/source becomes inaccessible. When deselected, Dremio retains dataset definitions even when data is unavailable. This is useful when files are temporarily deleted and replaced with new files.
 
-#### Dataset Discovery[​](#dataset-discovery "Direct link to Dataset Discovery")
+#### Dataset Discovery
 
 * **Fetch every**: How often to refresh top-level source object names (databases and tables). Set the interval in minutes, hours, days, or weeks. Default: 1 hour.
 
-#### Dataset Details[​](#dataset-details "Direct link to Dataset Details")
+#### Dataset Details
 
 Metadata Dremio needs for query planning, including field information, types, shards, statistics, and locality.
 
@@ -3027,7 +3024,7 @@ Metadata Dremio needs for query planning, including field information, types, sh
 * **Fetch every**: How often to fetch dataset details, specified in minutes, hours, days, or weeks. Default: 1 hour.
 * **Expire after**: When dataset details expire, specified in minutes, hours, days, or weeks. Default: 3 hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 Grant access to specific users or roles. See [Privileges](/dremio-cloud/security/privileges) for additional information about privileges.
 
@@ -3037,7 +3034,7 @@ Grant access to specific users or roles. See [Privileges](/dremio-cloud/security
 2. In the **USERS/ROLES** table, toggle the checkbox for each privilege you want to grant.
 3. Click **Save** after configuring all settings.
 
-## Delete an Open Catalog Connection[​](#delete-an-open-catalog-connection "Direct link to Delete an Open Catalog Connection")
+## Delete an Open Catalog Connection
 
 To delete a catalog connection from another project:
 
@@ -3054,15 +3051,15 @@ If the source is in a bad state (for example, Dremio cannot authenticate to the 
 
 Was this page helpful?
 
-* [Key Capabilities](#key-capabilities)
-* [Create a Namespace](#create-a-namespace)
-* [Observe Table Maintenance](#observe-table-maintenance)
-* [Add Catalogs from Other Projects](#add-catalogs-from-other-projects)
-* [Catalog Settings](#catalog-settings)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Delete an Open Catalog Connection](#delete-an-open-catalog-connection)
+* Key Capabilities
+* Create a Namespace
+* Observe Table Maintenance
+* Add Catalogs from Other Projects
+* Catalog Settings
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Delete an Open Catalog Connection
 
 <div style="page-break-after: always;"></div>
 
@@ -3074,13 +3071,13 @@ On this page
 
 This topic describes how to query the data from your data lake sources by creating tables.
 
-## Overview[​](#overview "Direct link to Overview")
+## Overview
 
 Dremio allows you to query the data from your data lake sources without ingesting or copying it. After configuring your data source, you can format the data in your source as a table so that it can be queried in Dremio using SQL. You can format individual files or a folder of files, which will create one table with the data from the folder. You can query the file or folder without creating a table, but performance may be impacted.
 
 This functionality is currently only supported on object storage sources.
 
-### Supported Table and File Formats[​](#supported-table-and-file-formats "Direct link to Supported Table and File Formats")
+### Supported Table and File Formats
 
 | Format | File Limit |
 | --- | --- |
@@ -3098,7 +3095,7 @@ Formatting folders that contain a mix of file formats is not supported. All file
 
 The names of files and folders cannot include the following special characters: `/`, `:`, `[`, or `]`.
 
-## Format a File or Folder as a Table[​](#format-a-file-or-folder-as-a-table "Direct link to Format a File or Folder as a Table")
+## Format a File or Folder as a Table
 
 To format a file or folder as a table:
 
@@ -3134,21 +3131,21 @@ To format a file or folder as a table:
    | **Trim Column Names** | Select this option to trim whitespace from the left and right sides of the names of the columns. This option is checked by default. |
 6. Click **Save**. The parameter values will be auto-detected but can be altered. When you click **Save**, your table will appear in the Datasets page.
 
-## Partitioned Data[​](#partitioned-data "Direct link to Partitioned Data")
+## Partitioned Data
 
 The data in a source dataset might be partitioned into one or more levels of subfolders, one level for each partition column. In such cases, when you format the source dataset as a table, Dremio appends to the table one column per partition. The data type of the appended columns is varchar.
 
-### Examples[​](#examples "Direct link to Examples")
+### Examples
 
 ![](/images/cloud/partitioned-data.png)
 
-#### Example 1[​](#example-1 "Direct link to Example 1")
+#### Example 1
 
 The source dataset `orders` is partitioned on the column `state`. Each subfolder is named `state=<abbreviation>`, where `<abbreviation>` is the two-letter abbreviation of the name of a US state.
 
 When you format `orders` as a table, all of the columns from the Parquet files, except `state`, are included, and Dremio appends the column `dir0`, which has the data type varchar. The values in that column are `state=AK` for the rows from the file `0.parquet`, `state=AL` for the rows from the file `1.parquet`, `state=AR` for the rows from the file `2.parquet`, and so on.
 
-#### Example 2[​](#example-2 "Direct link to Example 2")
+#### Example 2
 
 The source dataset `orders` is partitioned on the columns `state` and `zipCode`. Each first-level subfolder is named `state=<abbreviation>`, where `<abbreviation>` is the two-letter abbreviation of the name of a US state. Each second-level subfolder is named `zipCode=<zip code>`.
 
@@ -3158,19 +3155,19 @@ The values in `dir0` are `state=AK` for all rows in which the value in `dir1` is
 
 The values in `dir1` are `zipCode=99502` for the rows from `0.parquet`, `zipCode=99503` for the rows from `1.parquet`, and so on.
 
-## Partition Column Inference[​](#partition-column-inference "Direct link to Partition Column Inference")
+## Partition Column Inference
 
-By default, when a source dataset uses Parquet files and the data is partitioned on one or more columns, Dremio behaves as described in [Partitioned Data](#partitioned-data). However, if you select the option **Enable partition column inference** in the advanced options for a data source, you change how Dremio handles partition columns.
+By default, when a source dataset uses Parquet files and the data is partitioned on one or more columns, Dremio behaves as described in Partitioned Data. However, if you select the option **Enable partition column inference** in the advanced options for a data source, you change how Dremio handles partition columns.
 
 In addition to appending a column named `dir<n>` for each partition level and using subfolder names for values in those columns, Dremio detects the name of the partition column, appends a column that uses that name, detects values in the names of subfolders, and uses those values in the appended column.
 
 Appended columns still use the varchar data type.
 
-### Examples[​](#examples-1 "Direct link to Examples")
+### Examples
 
 ![](/images/cloud/partitioned-data-2.png)
 
-#### Example 1[​](#example-1-1 "Direct link to Example 1")
+#### Example 1
 
 The source dataset `orders` is partitioned on the column `state`. Each subfolder is named `state=<abbreviation>`, where `<abbreviation>` is the two-letter abbreviation of the name of a US state.
 
@@ -3180,7 +3177,7 @@ The values in `dir0` are `state=AK` for the rows from the file `0.parquet`, `sta
 
 The values in `state` are `AK` for the rows from the file `0.parquet`, `AL` for the rows from the file `1.parquet`, `AR` for the rows from the file `2.parquet`, and so on.
 
-#### Example 2[​](#example-2-1 "Direct link to Example 2")
+#### Example 2
 
 The source dataset `orders` is partitioned on the columns `state` and `zipCode`. Each first-level subfolder is named `state=<abbreviation>`, where `<abbreviation>` is the two-letter abbreviation of the name of a US state. Each second-level subfolder is named `zipCode=<zip code>`.
 
@@ -3194,7 +3191,7 @@ The values in `state` are `AK` for all rows in which the value in `zipCode` is `
 
 The values in `zipCode` are `99502` for the rows from `0.parquet`, `99503` for the rows from `1.parquet`, and so on.
 
-### Requirements[​](#requirements "Direct link to Requirements")
+### Requirements
 
 For the **Enable partition column inference** option to work correctly, ensure that the names of your subfolders meet these requirements:
 
@@ -3204,9 +3201,9 @@ For the **Enable partition column inference** option to work correctly, ensure t
 * Names must not be present in data files.
 * All Parquet files in the source dataset must be in leaf subfolders.
 
-### How Dremio Handles Existing Tables[​](#how-dremio-handles-existing-tables "Direct link to How Dremio Handles Existing Tables")
+### How Dremio Handles Existing Tables
 
-If you enable the **Enable partition column inference** option, and already have one or more tables that are based on sources that use Parquet files and that are partitioned, those existing tables remain as they are until you run the `ALTER TABLE` command twice on each. The first time, you run the command to cause Dremio to forget the metadata for the table. The second time, you run the command to cause Dremio to refresh the metadata. The commands are listed in [ALTER Commands to Cause Dremio to Forget and to Refresh Metadata](#alter-commands-to-cause-dremio-to-forget-and-to-refresh-metadata) on each of those tables.
+If you enable the **Enable partition column inference** option, and already have one or more tables that are based on sources that use Parquet files and that are partitioned, those existing tables remain as they are until you run the `ALTER TABLE` command twice on each. The first time, you run the command to cause Dremio to forget the metadata for the table. The second time, you run the command to cause Dremio to refresh the metadata. The commands are listed in ALTER Commands to Cause Dremio to Forget and to Refresh Metadata on each of those tables.
 
 For example, before you enable the **Enable partition column inference** option, your `orders` table might have these columns:
 
@@ -3233,7 +3230,7 @@ As a result of the second `ALTER TABLE` command, Dremio adds the column `state`:
 
 Because Dremio appends the new column, any views that are defined on the table and that use the `dir0` column are still valid. When you define new views, you can use the appended column.
 
-### Enable Partition Column Inference[​](#enable-partition-column-inference "Direct link to Enable Partition Column Inference")
+### Enable Partition Column Inference
 
 After you follow the steps in either of these procedures, Dremio uses partition column inference for all source datasets that you format to tables.
 
@@ -3252,13 +3249,13 @@ To enable partition column inference for an existing source:
 3. In the Edit Source dialog, select **Advanced Options**.
 4. Select **Enable partition column inference**.
 5. Click **Save**.
-6. If there are existing tables that are based on datasets in the current data source, run the two ALTER commands described in [`ALTER` Commands to Cause Dremio to Forget and to Refresh Metadata](#alter-commands-to-cause-dremio-to-forget-and-to-refresh-metadata) on each of those tables.
+6. If there are existing tables that are based on datasets in the current data source, run the two ALTER commands described in `ALTER` Commands to Cause Dremio to Forget and to Refresh Metadata on each of those tables.
 
 note
 
-If you change the partitioning schema of a source dataset after enabling partition column inference, metadata refreshes of all tables defined on the source dataset fail. To resolve this problem, run the two `ALTER` commands described [here](#alter-commands-to-cause-dremio-to-forget-and-to-refresh-metadata) on each of the affected tables.
+If you change the partitioning schema of a source dataset after enabling partition column inference, metadata refreshes of all tables defined on the source dataset fail. To resolve this problem, run the two `ALTER` commands described here on each of the affected tables.
 
-### `ALTER` Commands to Cause Dremio to Forget and to Refresh Metadata[​](#alter-commands-to-cause-dremio-to-forget-and-to-refresh-metadata "Direct link to alter-commands-to-cause-dremio-to-forget-and-to-refresh-metadata")
+### `ALTER` Commands to Cause Dremio to Forget and to Refresh Metadata
 
 When you enable partition column inference on a source, you might have one or more existing tables in Dremio that are based on datasets in that source. Also, you might you enable partition column inference on a source and then change the partition schema of a source dataset that is the basis of one or more tables in Dremio.
 
@@ -3271,7 +3268,7 @@ ALTER TABLE <dataset_path> FORGET METADATA
 ALTER TABLE <dataset_path> REFRESH METADATA
 ```
 
-## Enable Automatic Formatting of Data[​](#enable-automatic-formatting-of-data "Direct link to Enable Automatic Formatting of Data")
+## Enable Automatic Formatting of Data
 
 You can configure a source to automatically format the data located in the source to tables when a user triggers a query on the data for the first time.
 
@@ -3283,7 +3280,7 @@ To configure data to be automatically formatted:
 4. In the **Metadata** tab, click the checkbox to **Automatically format files into tables when users issue queries**.
 5. Click **Save**.
 
-## Remove Formatting on Data[​](#remove-formatting-on-data "Direct link to Remove Formatting on Data")
+## Remove Formatting on Data
 
 Removing the formatting on a table will revert the table to the folder or file format that it was originally in. Removing the formatting is not supported for tables in an Open Catalog.
 
@@ -3293,15 +3290,15 @@ To remove the formatting on data:
 2. Hover over the table for which you want to remove formatting. Click the ![This is the icon that represents additional settings.](/images/cloud/more.png "Additional settings.") button and select **Remove Format**.
 3. In the **Remove Format** dialog, confirm that you want to remove formatting for the selected dataset. Any views that have been created from this table will be disconnected from the parent.
 
-## Time Zone Support[​](#time-zone-support "Direct link to Time Zone Support")
+## Time Zone Support
 
 Dremio does *not* apply any conversions to the `TIME` or `TIMESTAMP` entry that is in the datasource table. Dremio retrieves the time or timestamp value with the assumption that the time zone is in Coordinated Universal Time (UTC).
 
-### Time Zone Limitation[​](#time-zone-limitation "Direct link to Time Zone Limitation")
+### Time Zone Limitation
 
 For JSON files where the time zone for the time or timestamp values are not in UTC time, Dremio assumes and processes the values as in UTC time. For such files, we recommend that you convert these values to the UTC time zone before using in Dremio.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Apache Iceberg](/dremio-cloud/developer/data-formats/iceberg/) – Open table format designed for petabyte-scale analytics.
 
@@ -3310,22 +3307,22 @@ For JSON files where the time zone for the time or timestamp values are not in U
 
 Was this page helpful?
 
-* [Overview](#overview)
-  + [Supported Table and File Formats](#supported-table-and-file-formats)
-* [Format a File or Folder as a Table](#format-a-file-or-folder-as-a-table)
-* [Partitioned Data](#partitioned-data)
-  + [Examples](#examples)
-* [Partition Column Inference](#partition-column-inference)
-  + [Examples](#examples-1)
-  + [Requirements](#requirements)
-  + [How Dremio Handles Existing Tables](#how-dremio-handles-existing-tables)
-  + [Enable Partition Column Inference](#enable-partition-column-inference)
-  + [`ALTER` Commands to Cause Dremio to Forget and to Refresh Metadata](#alter-commands-to-cause-dremio-to-forget-and-to-refresh-metadata)
-* [Enable Automatic Formatting of Data](#enable-automatic-formatting-of-data)
-* [Remove Formatting on Data](#remove-formatting-on-data)
-* [Time Zone Support](#time-zone-support)
-  + [Time Zone Limitation](#time-zone-limitation)
-* [Related Topics](#related-topics)
+* Overview
+  + Supported Table and File Formats
+* Format a File or Folder as a Table
+* Partitioned Data
+  + Examples
+* Partition Column Inference
+  + Examples
+  + Requirements
+  + How Dremio Handles Existing Tables
+  + Enable Partition Column Inference
+  + `ALTER` Commands to Cause Dremio to Forget and to Refresh Metadata
+* Enable Automatic Formatting of Data
+* Remove Formatting on Data
+* Time Zone Support
+  + Time Zone Limitation
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -3337,16 +3334,16 @@ On this page
 
 [Apache Druid](https://druid.apache.org/) is a high performance, real-time analytics database that delivers sub-second queries on streaming and batch data at scale and under load.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that that you have the outbound port (27017 is the default port) open in your AWS or Azure security group.
 
-## Configure Apache Druid as a Source[​](#configure-apache-druid-as-a-source "Direct link to Configure Apache Druid as a Source")
+## Configure Apache Druid as a Source
 
 1. In the bottom-left corner of the Datasets page, click **Add Source**.
 2. Under **Databases** in the Add Data Source dialog, select **Apache Druid**.
 
-### General[​](#general "Direct link to General")
+### General
 
 1. In the **Name** field, specify the name by which you want the Druid source to appear in the list of data sources. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 2. Under **Connection**, follow these steps:
@@ -3360,7 +3357,7 @@ Ensure that that you have the outbound port (27017 is the default port) open in 
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 On the Advanced Options page, you can set values for these non-required options:
 
@@ -3370,7 +3367,7 @@ On the Advanced Options page, you can set values for these non-required options:
 | **Connection Idle Time** | The amount of time (in seconds) allowed for a connection to remain idle before the connection is terminated. The default connection idle time is 60 seconds. |
 | **Query Timeout** | The amount of time (in seconds) allowed to wait for the results of a query. If this time expires, the connection being used is returned to an idle state. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 On the Reflection Refresh page, set the policy that controls how often Reflections are scheduled to be refreshed automatically, as well as the time limit after which Reflections expire and are removed.
 
@@ -3381,11 +3378,11 @@ On the Reflection Refresh page, set the policy that controls how often Reflectio
 | **Never expire** | Select to prevent Reflections from expiring, default is to automatically expire after the time limit below. |
 | **Expire after** | The time limit after which Reflections expire and are removed from Dremio, specified in hours, days or weeks. This option is ignored if **Never expire** is selected. |
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 On the Metadata page, you can configure settings to refresh metadata and handle datasets.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 These are the optional **Dataset Handling** parameters.
 
@@ -3393,7 +3390,7 @@ These are the optional **Dataset Handling** parameters.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -3410,7 +3407,7 @@ These are the optional **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges page, you can grant privileges to specific users or roles. See [Privileges](/dremio-cloud/security/privileges/) for additional information about user privileges.
 
@@ -3418,17 +3415,17 @@ On the Privileges page, you can grant privileges to specific users or roles. See
 2. (Optional) For the users or roles in the **Users** table, toggle the green checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Edit a Druid Source[​](#edit-a-druid-source "Direct link to Edit a Druid Source")
+## Edit a Druid Source
 
 To edit a Druid source:
 
 1. On the Datasets page, click **Sources** > **Databases** in the panel on the left. The list of data sources appears to the right.
 2. Hover over the name of the Druid source.
 3. Click ![The Settings icon](/images/settings-icon.png "The Settings icon") to the right.
-4. In the **Source Settings** dialog, you cannot edit the name. Editing other parameters is optional. For parameters and advanced options, see [Configuring Apache Druid as a Source](#configure-apache-druid-as-a-source).
+4. In the **Source Settings** dialog, you cannot edit the name. Editing other parameters is optional. For parameters and advanced options, see Configuring Apache Druid as a Source.
 5. Click **Save**.
 
-## Remove a Druid Source[​](#remove-a-druid-source "Direct link to Remove a Druid Source")
+## Remove a Druid Source
 
 To remove a Druid source, perform these steps:
 
@@ -3445,7 +3442,7 @@ To remove a Druid source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 These operations are performed by Druid:
 
@@ -3510,16 +3507,16 @@ upper
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure Apache Druid as a Source](#configure-apache-druid-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Edit a Druid Source](#edit-a-druid-source)
-* [Remove a Druid Source](#remove-a-druid-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Prerequisites
+* Configure Apache Druid as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Edit a Druid Source
+* Remove a Druid Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -3531,30 +3528,30 @@ On this page
 
 [Amazon S3](https://aws.amazon.com/s3/) is an object storage service from AWS.
 
-## Supported Formats[​](#supported-formats "Direct link to Supported Formats")
+## Supported Formats
 
 Dremio can query data stored in S3 in file formats (including delimited, Excel (XLSX), JSON, and Parquet) and table formats (including [Apache Iceberg](/dremio-cloud/developer/data-formats/iceberg/) and [Delta Lake](/dremio-cloud/developer/data-formats/delta-lake/)).
 
-## Add an Amazon S3 Source[​](#add-an-amazon-s3-source "Direct link to Add an Amazon S3 Source")
+## Add an Amazon S3 Source
 
 To add an S3 source:
 
 1. From the Datasets page, next to Sources, click ![Add Source icon.](/images/icons/plus.png "Add Source icon.").
 2. In the Add Data Source dialog, under **Object Storage**, click **Amazon S3**.
 
-### General[​](#general "Direct link to General")
+### General
 
 To configure an S3 source:
 
 * **Name** – In the Name field, enter a name for the Amazon S3 source. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 * **Authentication** – Provide the role that Dremio will assume to gain access to the source:
-  + [Create an AWS IAM role](#create-an-aws-iam-role) in your AWS account that trusts Dremio.
-  + [Add an S3 Access Policy](#add-an-s3-access-policy-to-a-custom-role) to your custom role that provides access to your S3 source.
+  + Create an AWS IAM role in your AWS account that trusts Dremio.
+  + Add an S3 Access Policy to your custom role that provides access to your S3 source.
   + Add the **Role ARN** to the source configuration.
 * **Public Buckets** – (Optional) Click **Add bucket** and enter the public S3 bucket URL. You can add multiple public S3 buckets. AWS credentials are not necessary if you are accessing only public S3 buckets.
 * **Encrypt Connection** – (Optional) To secure the connections between the S3 buckets and Dremio, select the **Encrypt connection** checkbox.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Click **Advanced Options** in the left menu sidebar.
 
@@ -3572,7 +3569,7 @@ Under Cache Options:
 * **Enable local caching when possible** – Selected by default, along with asynchronous access for cloud caching. Uncheck the checkbox to disable this option.
 * **Max percent of total available cache space to use when possible** – Specifies the disk quota, as a percentage, that a source can use on any single executor node only when local caching is enabled. The default is 100 percent of the total disk space available on the mount point provided for caching. You can either manually enter a percentage in the value field or use the arrows to the far right to adjust the percentage.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 Click **Reflection Refresh** in the left menu sidebar. This section allows you to manage how often reflections are refreshed and how long data can be served before expiration. To learn more about reflections, refer to [Manual Reflections](/dremio-cloud/admin/performance/manual-reflections). All settings are optional.
 
@@ -3581,20 +3578,20 @@ You can set the following refresh policies for reflections:
 * **Refresh period** – Manage the refresh period by either enabling the option to never refresh or setting a refresh frequency in hours, days, or weeks. The default frequency to refresh reflections is every hour.
 * **Expiration period** – Set the expiration period for the length of time that data can be served by either enabling the option to never expire or setting an expiration time in hours, days, or weeks. The default expiration time is three hours.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Click **Metadata** in the left menu sidebar. This section allows you to configure settings to refresh metadata and enable other dataset options.
 
-You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#metadata-refresh) parameters.
+You can configure Dataset Handling and Metadata Refresh parameters.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 Select from the following options. All settings are optional.
 
 * **Remove dataset definitions if underlying data is unavailable** – By default, Dremio removes dataset definitions if underlying data is unavailable. This option is for scenarios when files are temporarily deleted and added back in the same location with new sets of files.
 * **Automatically format files into tables when users issue queries** – Enable this option to allow Dremio to automatically format files into tables when you run queries. This option is for scenarios when the data contains CSV files with non-default options.
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 The **Metadata Refresh** parameters include **Dataset Discovery** and **Dataset Details**.
 
@@ -3604,7 +3601,7 @@ The **Metadata Refresh** parameters include **Dataset Discovery** and **Dataset 
   + **Fetch every** – You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is one hour.
   + **Expire after** – You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is three hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 Click **Privileges** in the left menu sidebar. This section allows you to grant privileges to specific users or roles. To learn more about how Dremio allows for the implementation of granular-level privileges, see [Privileges](/dremio-cloud/security/privileges/). All settings are optional.
 
@@ -3618,22 +3615,22 @@ To set privileges for a user or role:
 1. In the Users table, identify the user for which you want to set privileges and click under the appropriate column (Select, Alter, Create Table, etc.) to either enable or disable that privilege. A green checkmark indicates that the privilege is enabled.
 2. Click **Save**.
 
-## Edit an Amazon S3 Source[​](#edit-an-amazon-s3-source "Direct link to Edit an Amazon S3 Source")
+## Edit an Amazon S3 Source
 
 To edit an S3 source:
 
 1. From the Datasets page, right-click on the source to edit and select **Settings**.
-2. In the Edit Source dialog box, make changes as needed. For information about the settings in each category, see [Add an Amazon S3 Source](#add-an-amazon-s3-source).
+2. In the Edit Source dialog box, make changes as needed. For information about the settings in each category, see Add an Amazon S3 Source.
 3. Click **Save**.
 
-## Remove an Amazon S3 Source[​](#remove-an-amazon-s3-source "Direct link to Remove an Amazon S3 Source")
+## Remove an Amazon S3 Source
 
 To remove an S3 source:
 
 1. From the Datasets page, right-click on the source to be removed and select **Delete**.
 2. Confirm that you want to remove the source.
 
-## Create an AWS IAM Role[​](#create-an-aws-iam-role "Direct link to Create an AWS IAM Role")
+## Create an AWS IAM Role
 
 To create an AWS IAM role that provides Dremio with access to your source:
 
@@ -3682,7 +3679,7 @@ To create an AWS IAM role that provides Dremio with access to your source:
 7. In the **Role details** section, in the Role name field, enter a name for this role.
 8. Click **Create role**.
 
-## Add an S3 Access Policy to a Custom Role[​](#add-an-s3-access-policy-to-a-custom-role "Direct link to Add an S3 Access Policy to a Custom Role")
+## Add an S3 Access Policy to a Custom Role
 
 To add the required S3 access policy to your custom role:
 
@@ -3696,17 +3693,17 @@ To add the required S3 access policy to your custom role:
 
 Was this page helpful?
 
-* [Supported Formats](#supported-formats)
-* [Add an Amazon S3 Source](#add-an-amazon-s3-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Edit an Amazon S3 Source](#edit-an-amazon-s3-source)
-* [Remove an Amazon S3 Source](#remove-an-amazon-s3-source)
-* [Create an AWS IAM Role](#create-an-aws-iam-role)
-* [Add an S3 Access Policy to a Custom Role](#add-an-s3-access-policy-to-a-custom-role)
+* Supported Formats
+* Add an Amazon S3 Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Edit an Amazon S3 Source
+* Remove an Amazon S3 Source
+* Create an AWS IAM Role
+* Add an S3 Access Policy to a Custom Role
 
 <div style="page-break-after: always;"></div>
 
@@ -3720,27 +3717,27 @@ On this page
 
 There are two different types of connection that you can make to a Redshift cluster that you add as a source:
 
-* [A secure connection to a publicly accessible Redshift cluster](#create-a-secure-connection-to-a-publicly-accessible-amazon-redshift-cluster)
-* [A secure connection to a private Redshift cluster](#create-a-secure-connection-to-a-private-amazon-redshift-cluster)
+* A secure connection to a publicly accessible Redshift cluster
+* A secure connection to a private Redshift cluster
 
-## Create a Secure Connection to a Publicly Accessible Amazon Redshift Cluster[​](#create-a-secure-connection-to-a-publicly-accessible-amazon-redshift-cluster "Direct link to Create a Secure Connection to a Publicly Accessible Amazon Redshift Cluster")
+## Create a Secure Connection to a Publicly Accessible Amazon Redshift Cluster
 
 When Dremio runs queries against the Redshift cluster, the compute engines in your VPC and the cluster communicate through a connection that consists of a NAT gateway and internet gateway in the VPC used with Dremio, the internet, and the internet gateway in the VPC used for Redshift.
 
 ![](/assets/images/aws-redshift-1-510645224a9161e8fb65f55ca09eff7a.png)
 
-### Prerequisites for the VPC that You Are Using for Your Dremio project[​](#prerequisites-for-the-vpc-that-you-are-using-for-your-dremio-project "Direct link to Prerequisites for the VPC that You Are Using for Your Dremio project")
+### Prerequisites for the VPC that You Are Using for Your Dremio project
 
 * Ensure that the compute engines are deployed in a private subnet.
 * Ensure that a NAT gateway configured in a public subnet.
 * Ensure that an internet gateway is attached to the VPC.
 
-### Prerequisites for the VPC that You Are Using for Amazon Redshift[​](#prerequisites-for-the-vpc-that-you-are-using-for-amazon-redshift "Direct link to Prerequisites for the VPC that You Are Using for Amazon Redshift")
+### Prerequisites for the VPC that You Are Using for Amazon Redshift
 
 * Ensure that the Redshift cluster is in a public subnet.
 * Ensure that you know the IP address of the NAT gateway that is in the VPC that you are using for Dremio.
 
-### Steps to Follow in Amazon Redshift[​](#steps-to-follow-in-amazon-redshift "Direct link to Steps to Follow in Amazon Redshift")
+### Steps to Follow in Amazon Redshift
 
 1. In the **Clusters** table, click the name of the Redshift cluster that you plan to use. The UI console for the cluster opens.
 2. Make the cluster publicly accessible:
@@ -3756,21 +3753,21 @@ When Dremio runs queries against the Redshift cluster, the compute engines in yo
    6. Specify the IP address for the NAT gateway in the field to the right of the **Source** field.
    7. Click **Save rules**.
 
-## Create a Secure Connection to a Private Amazon Redshift Cluster[​](#create-a-secure-connection-to-a-private-amazon-redshift-cluster "Direct link to Create a Secure Connection to a Private Amazon Redshift Cluster")
+## Create a Secure Connection to a Private Amazon Redshift Cluster
 
 When Dremio runs queries against the Redshift cluster, the compute engines in your VPC and the cluster communicate through a VPC peering connection.
 
 ![](/assets/images/aws-redshift-2-e37b3707455bf52bf327a6a3ffd0ce91.png)
 
-### Prerequisite for the VPC that You Are Using for Your Dremio project[​](#prerequisite-for-the-vpc-that-you-are-using-for-your-dremio-project "Direct link to Prerequisite for the VPC that You Are Using for Your Dremio project")
+### Prerequisite for the VPC that You Are Using for Your Dremio project
 
 Ensure that the compute engines are deployed in a private subnet.
 
-### Prerequisite for the VPC that You Are Using for Amazon Redshift[​](#prerequisite-for-the-vpc-that-you-are-using-for-amazon-redshift "Direct link to Prerequisite for the VPC that You Are Using for Amazon Redshift")
+### Prerequisite for the VPC that You Are Using for Amazon Redshift
 
 Ensure that the Redshift cluster is in a private subnet.
 
-### Steps in AWS[​](#steps-in-aws "Direct link to Steps in AWS")
+### Steps in AWS
 
 1. Create a [VPC peering connection](https://docs.aws.amazon.com/vpc/latest/peering/create-vpc-peering-connection.html) between the two VPCs.
 2. Add the Redshift cluster VPC's CIDR block as a destination in the route tables of the VPC that you are using for Dremio:
@@ -3825,15 +3822,15 @@ Ensure that the Redshift cluster is in a private subnet.
    11. Paste the IPv4 CIDR for the Redshift cluster VPC into the field to the right of the **Source** field.
    12. Click **Save rules**.
 
-## Add an Amazon Redshift Cluster as a Data Source[​](#add-an-amazon-redshift-cluster-as-a-data-source "Direct link to Add an Amazon Redshift Cluster as a Data Source")
+## Add an Amazon Redshift Cluster as a Data Source
 
 After you create a connection between the VPC that you are using with Dremio and the VPC that hosts your Redshift cluster, you can add the cluster as a data source.
 
-### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+### Prerequisites
 
 Ensure that you have the JDBC connection string of the Redshift database to add it as a source. You can find the JDBC connection URL in the AWS console.
 
-### Steps[​](#steps "Direct link to Steps")
+### Steps
 
 Perform these steps to configure Redshift:
 
@@ -3844,7 +3841,7 @@ Perform these steps to configure Redshift:
 
    The following section describes the source configuration tabs.
 
-#### General[​](#general "Direct link to General")
+#### General
 
 The **General** tab contains the required fields to create a Redshift source.
 
@@ -3865,7 +3862,7 @@ Perform these steps in the **General** tab:
      + For **Username**, enter your Redshift database username.
      + For **Secret Resource Url**, enter the Secret Resource URL that allows Dremio to fetch the password from [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html). The Secret Resource URL is the Amazon Resource Name (ARN) for the secret (for example, `arn:aws:secretsmanager:us-west-2:123456789012:secret:my-rds-secret-VNenFy`).
 
-#### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+#### Advanced Options
 
 Click **Advanced Options** in the sidebar.
 
@@ -3882,21 +3879,21 @@ All advanced options are optional.
 | **Connection Idle Time** | The amount of time (in seconds) allowed for a connection to remain idle before the connection is terminated. The default connection idle time is 60 seconds. |
 | **Connection Properties** | Custom key value pairs for the connection relevant to the source. To add a connection property, click **Add property** and add the property name and value. |
 
-#### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+#### Reflection Refresh
 
 The **Reflection Refresh** tab in the sidebar allows you to set time intervals for Reflections to refresh or expire.
 
 ![](/assets/images/redshift-reflection-refresh-a6c4875383f12d719c33f8e223326970.png)
 
-#### Metadata[​](#metadata "Direct link to Metadata")
+#### Metadata
 
 You can configure settings to refresh metadata and handle datasets. Click **Metadata** in the sidebar.
 
 ![](/assets/images/redshift-metadata-ee5821704a1a98b7c062dd1fde70a1dc.png)
 
-You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#metadata-refresh) parameters.
+You can configure Dataset Handling and Metadata Refresh parameters.
 
-###### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+###### Dataset Handling
 
 These are the **Dataset Handling** parameters.
 
@@ -3908,7 +3905,7 @@ All **Dataset Handling** parameters are optional.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-###### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+###### Metadata Refresh
 
 These are the **Metadata Refresh** parameters:
 
@@ -3929,7 +3926,7 @@ These are the **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-#### Privileges[​](#privileges "Direct link to Privileges")
+#### Privileges
 
 You can grant privileges to specific users or roles.
 
@@ -3944,7 +3941,7 @@ note
 
 Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### Edit Information About an Amazon Redshift Cluster Used as a Data Source[​](#edit-information-about-an-amazon-redshift-cluster-used-as-a-data-source "Direct link to Edit Information About an Amazon Redshift Cluster Used as a Data Source")
+### Edit Information About an Amazon Redshift Cluster Used as a Data Source
 
 To edit a Redshift source:
 
@@ -3953,7 +3950,7 @@ To edit a Redshift source:
 3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional.
 4. Click **Save**.
 
-## Remove an Amazon Redshift Cluster Used as a Data Source[​](#remove-an-amazon-redshift-cluster-used-as-a-data-source "Direct link to Remove an Amazon Redshift Cluster Used as a Data Source")
+## Remove an Amazon Redshift Cluster Used as a Data Source
 
 To remove a Redshift source, perform these steps:
 
@@ -3969,7 +3966,7 @@ To remove a Redshift source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio offloads these operations to Redshift.
 
@@ -4126,20 +4123,20 @@ Dremio supports Amazon Redshift data types, as shown in the following table whic
 
 Was this page helpful?
 
-* [Create a Secure Connection to a Publicly Accessible Amazon Redshift Cluster](#create-a-secure-connection-to-a-publicly-accessible-amazon-redshift-cluster)
-  + [Prerequisites for the VPC that You Are Using for Your Dremio project](#prerequisites-for-the-vpc-that-you-are-using-for-your-dremio-project)
-  + [Prerequisites for the VPC that You Are Using for Amazon Redshift](#prerequisites-for-the-vpc-that-you-are-using-for-amazon-redshift)
-  + [Steps to Follow in Amazon Redshift](#steps-to-follow-in-amazon-redshift)
-* [Create a Secure Connection to a Private Amazon Redshift Cluster](#create-a-secure-connection-to-a-private-amazon-redshift-cluster)
-  + [Prerequisite for the VPC that You Are Using for Your Dremio project](#prerequisite-for-the-vpc-that-you-are-using-for-your-dremio-project)
-  + [Prerequisite for the VPC that You Are Using for Amazon Redshift](#prerequisite-for-the-vpc-that-you-are-using-for-amazon-redshift)
-  + [Steps in AWS](#steps-in-aws)
-* [Add an Amazon Redshift Cluster as a Data Source](#add-an-amazon-redshift-cluster-as-a-data-source)
-  + [Prerequisites](#prerequisites)
-  + [Steps](#steps)
-  + [Edit Information About an Amazon Redshift Cluster Used as a Data Source](#edit-information-about-an-amazon-redshift-cluster-used-as-a-data-source)
-* [Remove an Amazon Redshift Cluster Used as a Data Source](#remove-an-amazon-redshift-cluster-used-as-a-data-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Create a Secure Connection to a Publicly Accessible Amazon Redshift Cluster
+  + Prerequisites for the VPC that You Are Using for Your Dremio project
+  + Prerequisites for the VPC that You Are Using for Amazon Redshift
+  + Steps to Follow in Amazon Redshift
+* Create a Secure Connection to a Private Amazon Redshift Cluster
+  + Prerequisite for the VPC that You Are Using for Your Dremio project
+  + Prerequisite for the VPC that You Are Using for Amazon Redshift
+  + Steps in AWS
+* Add an Amazon Redshift Cluster as a Data Source
+  + Prerequisites
+  + Steps
+  + Edit Information About an Amazon Redshift Cluster Used as a Data Source
+* Remove an Amazon Redshift Cluster Used as a Data Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -4151,12 +4148,12 @@ On this page
 
 Dremio supports connecting to Google BigQuery as an external source. The connector uses Google Service Account Keys as the authentication method. To know more about creating service account keys, see [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
 
-## Configure Google BigQuery as a Source[​](#configure-google-bigquery-as-a-source "Direct link to Configure Google BigQuery as a Source")
+## Configure Google BigQuery as a Source
 
 1. In the bottom-left corner of the Datasets page, click **Add Source**.
 2. Under **Databases** in the Add Data Source dialog, select **Google BigQuery**.
 
-### General[​](#general "Direct link to General")
+### General
 
 1. In the **Name** field, specify the name by which you want the Google BigQuery source to appear in the list of data sources. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 2. Under **Connection**, follow these steps:
@@ -4170,7 +4167,7 @@ Dremio supports connecting to Google BigQuery as an external source. The connect
 
    This connector assumes that the **Service Account Key** is a JSON Web Key. For more information on Google Cloud service account credentials, please see [Service account credentials](https://cloud.google.com/iam/docs/service-account-creds).
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 On the Advanced Options page, you can set values for these non-required options:
 
@@ -4181,7 +4178,7 @@ On the Advanced Options page, you can set values for these non-required options:
 | **Connection Idle Time** | The amount of time (in seconds) allowed for a connection to remain idle before the connection is terminated. The default connection idle time is `6` seconds. |
 | **Query Timeout** | The amount of time (in seconds) allowed to wait for the results of a query. If this time expires, the connection being used is returned to an idle state. Set the Query timneout to 0 for no timeout. The default Query timeout is `0`. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 On the Reflection Refresh page, set the policy that controls how often Reflections are scheduled to be refreshed automatically, as well as the time limit after which Reflections expire and are removed.
 
@@ -4193,11 +4190,11 @@ On the Reflection Refresh page, set the policy that controls how often Reflectio
 | **Never expire** | Select to prevent Reflections from expiring, otherwise, the default is to expire automatically after the time limit specified in **Expire after**. |
 | **Expire after** | The time limit after which Reflections expire and are removed from Dremio, specified in hours, days or weeks. This option is ignored if **Never expire** is selected. |
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 On the Metadata page, you can configure settings to refresh metadata and handle datasets.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 These are the optional **Dataset Handling** parameters.
 
@@ -4205,7 +4202,7 @@ These are the optional **Dataset Handling** parameters.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -4222,7 +4219,7 @@ These are the optional **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is `1` hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is `3` hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges tab, you can grant privileges to specific users or roles. See [Access Control](/dremio-cloud/security/privileges/) for additional information about privileges.
 
@@ -4234,16 +4231,16 @@ All privileges are optional.
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update a Google BigQuery Source[​](#update-a-google-bigquery-source "Direct link to Update a Google BigQuery Source")
+## Update a Google BigQuery Source
 
 To update a Google BigQuery source:
 
 1. On the Datasets page, under **Databases** in the panel on the left, find the name of the source you want to update.
 2. Right-click the source name and select **Settings** from the list of actions. Alternatively, click the source name and then the ![The Settings icon](/images/settings-icon.png "The Settings icon") at the top right corner of the page.
-3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see [Configure Google BigQuery as a Source](#configure-google-bigquery-as-a-source).
+3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see Configure Google BigQuery as a Source.
 4. Click **Save**.
 
-## Delete a Google BigQuery Source[​](#delete-a-google-bigquery-source "Direct link to Delete a Google BigQuery Source")
+## Delete a Google BigQuery Source
 
 note
 
@@ -4264,7 +4261,7 @@ To delete a Google BigQuery source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be deleted. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being deleted. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio pushes the following operations to Google BigQuery.
 
@@ -4374,15 +4371,15 @@ Dremio pushes the following operations to Google BigQuery.
 
 Was this page helpful?
 
-* [Configure Google BigQuery as a Source](#configure-google-bigquery-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update a Google BigQuery Source](#update-a-google-bigquery-source)
-* [Delete a Google BigQuery Source](#delete-a-google-bigquery-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Configure Google BigQuery as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update a Google BigQuery Source
+* Delete a Google BigQuery Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -4403,7 +4400,7 @@ Soft delete for blobs is not supported for Azure Storage accounts. Soft delete s
 
 Zero-byte files created with Iceberg tables in Azure Storage can be safely ignored—they don't impact Dremio's functionality. To prevent these files from being created, enable **Hierarchical Namespace** on your storage container. See [Azure Data Lake Storage Gen2 hierarchical namespace](https://learn.microsoft.com/en-us/azure/storage/blobs/data-lake-storage-namespace) for instructions.
 
-## Grant Permissions[​](#grant-permissions "Direct link to Grant Permissions")
+## Grant Permissions
 
 In order to use Azure Storage as a data source, the OAuth 2.0 application that you created in Azure must have appropriate permissions within the specified Azure Storage account.
 
@@ -4412,7 +4409,7 @@ To grant these permissions, you can use the built-in **Storage Blob Data Contrib
 1. In [Step 3: Select the appropriate role](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal#step-3-select-the-appropriate-role), assign the **Storage Blob Data Contributor** role.
 2. In [Step 4: Select who needs access](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal#step-4-select-who-needs-access), for **Assign access to**, select **User, group or service principal**. For **Select Members**, select the name of the application/service principal that you previously registered.
 
-## Add an Azure Storage Source[​](#add-an-azure-storage-source "Direct link to Add an Azure Storage Source")
+## Add an Azure Storage Source
 
 To add an Azure Storage source to your project:
 
@@ -4424,7 +4421,7 @@ To add an Azure Storage source to your project:
 
 Refer to the following for guidance on how to complete each section.
 
-### General[​](#general "Direct link to General")
+### General
 
 | Section | Field/Option | Description |
 | --- | --- | --- |
@@ -4435,7 +4432,7 @@ Refer to the following for guidance on how to complete each section.
 | Authentication | Shared access key | Select this option to authenticate using the Shared Access Key from the Azure portal App. |
 | Microsoft Entra ID | Select this option to use Microsoft Entra ID credentials for authentication. |
 
-#### Microsoft Entra ID Authentication[​](#microsoft-entra-id-authentication "Direct link to Microsoft Entra ID Authentication")
+#### Microsoft Entra ID Authentication
 
 To configure the Azure Storage source to use Microsoft Entra ID for authentication, provide the following values from the OAuth 2.0 application that you created in the Azure portal for this source:
 
@@ -4443,7 +4440,7 @@ To configure the Azure Storage source to use Microsoft Entra ID for authenticati
 * OAuth 2.0 Token Endpoint - The OAuth 2.0 token endpoint (v1.0), which includes the tenant ID and is used by the application in order to get an access token or a refresh token.
 * Application Secret - The secret key generated for the application.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Advanced Options include:
 
@@ -4463,7 +4460,7 @@ Under Cache Options, review the following table and edit the options to meet you
 
 Columnar Cloud Cache (C3) enables Dremio to achieve NVMe-level I/O performance on S3/ADLS by leveraging the NVMe/SSD built into cloud compute instances. C3 caches only the data required to satisfy your workloads and can even cache individual microblocks within datasets. If your table has 1,000 columns and you only query a subset of those columns and filter for data within a certain timeframe, C3 will cache only that portion of your table. By selectively caching data, C3 eliminates over 90% of S3/ADLS I/O costs, which can make up 10-15% of the costs for each query you run.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 These settings define how often Reflections are refreshed and how long data can be served before expiration. To learn more about Reflections, refer to [Optimize Performance](/dremio-cloud/admin/performance/manual-reflections). All Reflection parameters are optional.
 
@@ -4472,18 +4469,18 @@ You can set the following refresh policies for Reflections:
 * **Refresh period** – Manage the refresh period by either enabling the option to never refresh or setting a refresh frequency in hours, days, or weeks. The default frequency to refresh Reflections is every hour.
 * **Expiration period** – Set the expiration period for the length of time that data can be served by either enabling the option to never expire or setting an expiration time in hours, days, or weeks. The default expiration time is set to three hours.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Metadata settings include Dataset Handling options and Metadata Refresh options.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 You can review each option provided in the following table to set up the dataset handling options to meet your needs.
 
 * **Remove dataset definitions if underlying data is unavailable** (Default) – When selected, datasets are automatically removed if their underlying files/folders are removed from Azure Storage or if the folder or source are not accessible. If this option is *not* selected, Dremio will not remove dataset definitions if underlying files/folder are removed from Azure Storage. This may be useful if files are temporarily deleted and replaced with a new set of files.
 * **Automatically format files into physical datasets when you issue queries** – When selected, Dremio will automatically promote a folder to a table using default options. If you have CSV files, especially with non-default formatting, it might be useful to *not* select this option.
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 The **Metadata Refresh** parameters include **Dataset Details**, which is the metadata that Dremio needs for query planning such as information required for fields, types, shards, statistics, and locality. All metadata parameters are optional. The following table describes the parameters that fetch the dataset information.
 
@@ -4491,7 +4488,7 @@ The **Metadata Refresh** parameters include **Dataset Details**, which is the me
 * **Fetch every** – You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is one day.
 * **Expire after** – You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is three days.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 This section lets you grant privileges on the source to specific users or roles. All privilege parameters are optional. To learn more about how Dremio allows for the implementation of granular-level privileges, see [Privileges](/dremio-cloud/security/privileges).
 
@@ -4507,13 +4504,13 @@ To set privileges for a user or role:
 
 Was this page helpful?
 
-* [Grant Permissions](#grant-permissions)
-* [Add an Azure Storage Source](#add-an-azure-storage-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
+* Grant Permissions
+* Add an Azure Storage Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
 
 <div style="page-break-after: always;"></div>
 
@@ -4523,7 +4520,7 @@ Original URL: https://docs.dremio.com/dremio-cloud/bring-data/connect/catalogs/i
 
 On this page
 
-Dremio connects to any catalog supporting the Iceberg REST Catalog specification. See [Supported Configurations](#supported-configurations) below for ready-to-use configurations for many popular catalogs, including:
+Dremio connects to any catalog supporting the Iceberg REST Catalog specification. See Supported Configurations below for ready-to-use configurations for many popular catalogs, including:
 
 * [Apache Polaris](https://polaris.apache.org/)
 * [Project Nessie](https://projectnessie.org/)
@@ -4537,14 +4534,14 @@ In addition, Dremio provides specific connectors for:
 * [Snowflake Open Catalog](/dremio-cloud/bring-data/connect/catalogs/snowflake-open-catalog)
 * [Databricks Unity Catalog](/dremio-cloud/bring-data/connect/catalogs/databricks-unity-catalog)
 
-## Configure an Iceberg REST Catalog Source[​](#configure-an-iceberg-rest-catalog-source "Direct link to Configure an Iceberg REST Catalog Source")
+## Configure an Iceberg REST Catalog Source
 
 To add an Iceberg REST Catalog source:
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![This is the Add Source icon.](/images/icons/plus.png "Add Source icon").
 2. In the Add Data Source dialog, under **Lakehouse Catalogs**, select **Iceberg REST Catalog Source**.
 
-### General[​](#general "Direct link to General")
+### General
 
 To configure the source connection:
 
@@ -4553,7 +4550,7 @@ To configure the source connection:
 3. By default, **Use vended credentials** is turned on. This allows Dremio to connect to the catalog and receive temporary credentials for the underlying storage location. When this setting is enabled, you do not need to add storage authentication in **Advanced Options**. If you experience errors using vended credentials, turn the setting off and provide credentials via **Advanced Options** to establish a connection.
 4. (Optional) For **Allowed Namespaces**, add each namespace and check the option if you want to include their entire subtrees. Tables are organized into namespaces, which can be at the top level or nested within one another. Namespace names cannot contain periods or spaces.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 **Storage Authentication**
 
@@ -4600,7 +4597,7 @@ Dremio supports Amazon S3 and Azure Storage as object storage services. For acce
 * **Enable local caching when possible**: Selected by default. Along with asynchronous access for cloud caching, local caching can improve query performance.
 * **Max percent of total available cache space to use when possible**: Specifies the disk quota, as a percentage, that a source can use on any single executor node only when local caching is enabled. The default is 100 percent of the total disk space available on the mount point provided for caching. You can either manually enter a percentage in the value field or use the arrows to the far right to adjust the percentage.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 You can set the policy that controls how often reflections are scheduled to be refreshed automatically, as well as the time limit after which reflections expire and are removed.
 
@@ -4615,7 +4612,7 @@ You can set the policy that controls how often reflections are scheduled to be r
 * **Never expire**: Prevent reflections from expiring. By default, reflections expire after the configured time limit.
 * **Expire after**: The time limit after which reflections are removed from Dremio, specified in hours, days, or weeks. Ignored if **Never expire** is selected.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Specifying metadata options is handled with the following settings.
 
@@ -4637,7 +4634,7 @@ The metadata that Dremio needs for query planning, such as information needed fo
 * **Fetch every**: You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour.
 * **Expire after**: You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 You can grant [privileges](/dremio-cloud/security/privileges) to specific users or roles. To grant access to a user or role:
 
@@ -4645,7 +4642,7 @@ You can grant [privileges](/dremio-cloud/security/privileges) to specific users 
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source being created.
 3. Click **Save** after setting the configuration.
 
-## Update an Iceberg REST Catalog Source[​](#update-an-iceberg-rest-catalog-source "Direct link to Update an Iceberg REST Catalog Source")
+## Update an Iceberg REST Catalog Source
 
 To update an Iceberg REST Catalog:
 
@@ -4654,7 +4651,7 @@ To update an Iceberg REST Catalog:
 3. In the Source Settings dialog, edit the settings you wish to update. Dremio does not support updating the source name.
 4. Click **Save**.
 
-## Delete an Iceberg REST Catalog Source[​](#delete-an-iceberg-rest-catalog-source "Direct link to Delete an Iceberg REST Catalog Source")
+## Delete an Iceberg REST Catalog Source
 
 To delete an Iceberg REST Catalog source:
 
@@ -4667,7 +4664,7 @@ note
 
 If the source is in a bad state (for example, Dremio cannot authenticate to the source or the source is otherwise unavailable), only users who belong to the ADMIN role can delete the source.
 
-## Supported Configurations[​](#supported-configurations "Direct link to Supported Configurations")
+## Supported Configurations
 
 Select your catalog type below.
 
@@ -4800,15 +4797,15 @@ Replace the placeholders inside `<...>` with your respective values. For example
 
 Was this page helpful?
 
-* [Configure an Iceberg REST Catalog Source](#configure-an-iceberg-rest-catalog-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update an Iceberg REST Catalog Source](#update-an-iceberg-rest-catalog-source)
-* [Delete an Iceberg REST Catalog Source](#delete-an-iceberg-rest-catalog-source)
-* [Supported Configurations](#supported-configurations)
+* Configure an Iceberg REST Catalog Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update an Iceberg REST Catalog Source
+* Delete an Iceberg REST Catalog Source
+* Supported Configurations
 
 <div style="page-break-after: always;"></div>
 
@@ -4820,18 +4817,18 @@ On this page
 
 The [AWS Glue Data Catalog](https://docs.aws.amazon.com/glue/latest/dg/components-overview.html) is a metadata store that lets you store and share metadata in the AWS Cloud.
 
-## Supported Formats[​](#supported-formats "Direct link to Supported Formats")
+## Supported Formats
 
 Dremio can query data stored in S3 in file formats (including delimited, Excel (XLSX), and Parquet) and [Apache Iceberg](/dremio-cloud/developer/data-formats/iceberg/) or [Delta Lake](/dremio-cloud/developer/data-formats/delta-lake/) table formats.
 
-## Add an AWS Glue Data Catalog[​](#add-an-aws-glue-data-catalog "Direct link to Add an AWS Glue Data Catalog")
+## Add an AWS Glue Data Catalog
 
 To add an AWS Glue Data Catalog to your project:
 
 1. From the Datasets page, to the right of **Sources** in the left panel, click ![Add icon](/images/icons/plus.png "Add icon").
 2. In the Add Data Source dialog, under **Lakehouse Catalogs**, select **AWS Glue Data Catalog**.
 
-### General[​](#general "Direct link to General")
+### General
 
 To configure an AWS Glue Data Catalog source:
 
@@ -4840,14 +4837,14 @@ To configure an AWS Glue Data Catalog source:
 * **Authentication** – Provide the role that Dremio will assume to gain access to the source:
 
   + [Create an AWS IAM role](/dremio-cloud/bring-data/connect/object-storage/amazon-s3/#create-an-aws-iam-role) in your AWS account that trusts Dremio.
-  + [Add an AWS Glue Access Policy](#add-an-aws-glue-access-policy-to-a-custom-role) to your custom role that provides access to your AWS Glue Data Catalog source.
+  + Add an AWS Glue Access Policy to your custom role that provides access to your AWS Glue Data Catalog source.
   + Add the **Role ARN** to the source configuration.
 * **Allowed Databases** – (Optional) The allowed databases configuration is a post-connection filter on the databases visible from AWS Glue. When selective access to the databases within AWS Glue is required, the allowed databases filter limits access within Dremio to only the needed databases per source connection, improving data security and source metadata refresh performance.
 
   When the allowed databases filter is empty, all databases from the AWS Glue source are visible in Dremio. When a database is added to or removed from the filter, Dremio performs an asynchronous update to expose new databases and remove databases not included in the filter. Each entry in the allowed databases filter must be a valid database name; misspelled or nonexistent databases are ignored.
 * **Encrypted Connection** – (Optional) To secure the connections between AWS Glue and Dremio, select the **Encrypt connection** checkbox.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Click **Advanced Options** in the left menu sidebar.
 
@@ -4855,7 +4852,7 @@ Click **Advanced Options** in the left menu sidebar.
   1. Click **Add Property**.
   2. For Name, enter a connection property.
   3. For Value, enter the corresponding connection property value.
-* **Lake Formation** – Lake Formation provides access controls and allows administrators to define security policies. Enabling this functionality and additional details on the configuration options below are described in [AWS Lake Formation](#aws-lake-formation).
+* **Lake Formation** – Lake Formation provides access controls and allows administrators to define security policies. Enabling this functionality and additional details on the configuration options below are described in AWS Lake Formation.
   + **Enforce AWS Lake Formation access permissions on datasets** – Dremio checks any datasets included in the AWS Glue source for the required permissions to perform queries.
   + **Prefix to map Dremio users to AWS ARNs** – Leave blank to default to the end user's username, or enter a regular expression.
   + **Prefix to map Dremio groups to AWS ARNs** – Leave blank to default to the end user's group, or enter a regular expression.
@@ -4865,7 +4862,7 @@ Under Cache Options:
 * **Enable local caching when possible** – Selected by default, along with asynchronous access for cloud caching. Uncheck the checkbox to disable this option.
 * **Max percent of total available cache space to use when possible** – Specifies the disk quota, as a percentage, that a source can use on any single executor node only when local caching is enabled. The default is 100 percent of the total disk space available on the mount point provided for caching. You can either manually enter a percentage in the value field or use the arrows to the far right to adjust the percentage.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 Click **Reflection Refresh** in the source settings sidebar. This section lets you manage how often Reflections are refreshed and how long data can be served before expiration. To learn more about Reflections, see [Manual Reflections](/dremio-cloud/admin/performance/manual-reflections/). All Reflection parameters are optional.
 
@@ -4874,17 +4871,17 @@ You can set the following refresh policies for Reflections:
 * **Refresh period** – Manage the refresh period by either enabling the option to never refresh or setting a refresh frequency in hours, days, or weeks. The default frequency to refresh Reflections is every hour.
 * **Expiration period** – Set the expiration period for the length of time that data can be served by either enabling the option to never expire or setting an expiration time in hours, days, or weeks. The default expiration time is three hours.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Click **Metadata** in the left menu sidebar. This section lets you configure settings to refresh metadata and enable other dataset options. All metadata parameters are optional.
 
-You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#metadata-refresh) parameters.
+You can configure Dataset Handling and Metadata Refresh parameters.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 * **Remove dataset definitions if underlying data is unavailable** – By default, Dremio removes dataset definitions if underlying data is unavailable. This option is for scenarios when files are temporarily deleted and added back in the same location with new sets of files.
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 * **Dataset Discovery** – The refresh interval for retrieving top-level source object names such as databases and tables. Use this parameter to set the time interval. You can choose to set the frequency to collect object names in minutes, hours, days, or weeks. The default frequency to fetch object names is one hour.
 * **Dataset Details** – The metadata that Dremio needs for query planning, such as information required for fields, types, shards, statistics, and locality.
@@ -4893,7 +4890,7 @@ You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#
   + **Fetch every** – You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is one hour.
   + **Expire after** – You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is three hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 Click **Privileges** in the left menu sidebar. This section lets you grant privileges to specific users or roles. To learn more about how Dremio allows for the implementation of granular-level privileges, see [Privileges](/dremio-cloud/security/privileges).
 
@@ -4909,22 +4906,22 @@ To set privileges for a user or role:
 
 After you have connected Dremio to the AWS Glue Data Catalog, you will be able to edit the Data Catalog and remove it when it is no longer needed.
 
-## Update an AWS Glue Data Catalog Source[​](#update-an-aws-glue-data-catalog-source "Direct link to Update an AWS Glue Data Catalog Source")
+## Update an AWS Glue Data Catalog Source
 
 To update an AWS Glue Data Catalog source:
 
 1. From the Datasets page, in the **Lakehouse Catalogs** section, right-click on the source and select **Settings**.
-2. For information about these settings and guidance on the changes you can make, see [Add an AWS Glue Data Catalog](#add-an-aws-glue-data-catalog).
+2. For information about these settings and guidance on the changes you can make, see Add an AWS Glue Data Catalog.
 3. Click **Save**.
 
-## Delete an AWS Glue Data Catalog Source[​](#delete-an-aws-glue-data-catalog-source "Direct link to Delete an AWS Glue Data Catalog Source")
+## Delete an AWS Glue Data Catalog Source
 
 To remove a Data Catalog source:
 
 1. From the Datasets page, in the **Lakehouse Catalogs** section, right-click on the source and select **Delete**.
 2. Click **Delete** again to confirm.
 
-## Add an AWS Glue Access Policy to a Custom Role[​](#add-an-aws-glue-access-policy-to-a-custom-role "Direct link to Add an AWS Glue Access Policy to a Custom Role")
+## Add an AWS Glue Access Policy to a Custom Role
 
 To add the required AWS Glue access policy to your custom role:
 
@@ -5012,23 +5009,23 @@ To add the required AWS Glue access policy to your custom role:
 6. On the Review policy page, in the **Name** field, enter a name for the policy.
 7. Click **Create policy**. The policy is created and you are returned to the Roles page.
 
-## AWS Lake Formation[​](#aws-lake-formation "Direct link to AWS Lake Formation")
+## AWS Lake Formation
 
 AWS Lake Formation provides access controls for datasets in the AWS Glue Data Catalog and is used to define security policies from a centralized location that may be shared across multiple tools. Dremio may be configured to refer to this service to verify user access to contained datasets.
 
-### Requirements[​](#requirements "Direct link to Requirements")
+### Requirements
 
 * [Identity provider service](/dremio-cloud/security/authentication/idp) set up
   + (Recommended) [SAML connection](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html) with AWS
 * [Permissions set up in Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/lake-formation-permissions.html)
 * AWS Glue Data Catalog connected to Dremio
-* [User and Group ARN prefixes specified and enabled](#configure-sources-for-lake-formation)
+* User and Group ARN prefixes specified and enabled
 
-### Lake Formation Workflow[​](#lake-formation-workflow "Direct link to Lake Formation Workflow")
+### Lake Formation Workflow
 
 When Lake Formation is properly configured, Dremio adheres to the following workflow each time an end user attempts to access, edit, or query datasets with managed privileges:
 
-1. Dremio enforces [access control](/dremio-cloud/security/#access-control). See [Configure Sources for Lake Formation](#configure-sources-for-lake-formation) for access control recommendations.
+1. Dremio enforces [access control](/dremio-cloud/security/#access-control). See Configure Sources for Lake Formation for access control recommendations.
 2. Dremio checks each table to determine if those stored in the AWS Glue source are configured to use Lake Formation for security.
 
    * If one or more datasets leverage Lake Formation, Dremio determines the user ARNs to use when checking against Lake Formation.
@@ -5037,7 +5034,7 @@ When Lake Formation is properly configured, Dremio adheres to the following work
    * If the user has access to the datasets specified within the query's scope, the query proceeds.
    * If the user lacks access, the query fails with a permission error.
 
-### Configure Sources for Lake Formation[​](#configure-sources-for-lake-formation "Direct link to Configure Sources for Lake Formation")
+### Configure Sources for Lake Formation
 
 Lake Formation integration is dependent on the mapping of user/group names in Dremio to the IAM user/group ARNs used by AWS.
 
@@ -5054,34 +5051,34 @@ To configure an existing or new AWS Glue Data Catalog source, you must set the f
 
    **Best Practice:** On the Privileges tab, we recommend enabling the **Select** privilege for **All Users** to allow non-admin users to access the AWS Glue source from Dremio.
 
-### Lake Formation Cell-Level Security[​](#lake-formation-cell-level-security "Direct link to Lake Formation Cell-Level Security")
+### Lake Formation Cell-Level Security
 
 Dremio supports AWS Lake Formation [cell-level security](https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html) with row-level access permissions based on AWS Lake Formation [PartiQL expressions](https://docs.aws.amazon.com/lake-formation/latest/dg/partiql-support.html). If the user does not have read permissions on a column or cell, Dremio masks the data in that column or cell with a `NULL` value.
 
 To speed up query planning, Dremio uses the AWS Lake Formation permissions cache for each table. By default, the cache is enabled and reuses previously loaded permissions for up to 3600 seconds (1 hour).
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 * VPC-restricted S3 buckets are not supported.
 
 Was this page helpful?
 
-* [Supported Formats](#supported-formats)
-* [Add an AWS Glue Data Catalog](#add-an-aws-glue-data-catalog)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update an AWS Glue Data Catalog Source](#update-an-aws-glue-data-catalog-source)
-* [Delete an AWS Glue Data Catalog Source](#delete-an-aws-glue-data-catalog-source)
-* [Add an AWS Glue Access Policy to a Custom Role](#add-an-aws-glue-access-policy-to-a-custom-role)
-* [AWS Lake Formation](#aws-lake-formation)
-  + [Requirements](#requirements)
-  + [Lake Formation Workflow](#lake-formation-workflow)
-  + [Configure Sources for Lake Formation](#configure-sources-for-lake-formation)
-  + [Lake Formation Cell-Level Security](#lake-formation-cell-level-security)
-* [Limitations](#limitations)
+* Supported Formats
+* Add an AWS Glue Data Catalog
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update an AWS Glue Data Catalog Source
+* Delete an AWS Glue Data Catalog Source
+* Add an AWS Glue Access Policy to a Custom Role
+* AWS Lake Formation
+  + Requirements
+  + Lake Formation Workflow
+  + Configure Sources for Lake Formation
+  + Lake Formation Cell-Level Security
+* Limitations
 
 <div style="page-break-after: always;"></div>
 
@@ -5093,7 +5090,7 @@ On this page
 
 [Microsoft SQL Server](https://www.microsoft.com/en-in/sql-server/sql-server-2019) is a database server for storing and retrieving data.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that you have the following details before configuring Microsoft SQL Server as a source:
 
@@ -5102,11 +5099,11 @@ Ensure that you have the following details before configuring Microsoft SQL Serv
 * Outbound port (1433 is the default port) open in your AWS or Azure security group
 * Ensure that the database version is Microsoft SQL Server version 2012 or later
 
-## User Impersonation[​](#user-impersonation "Direct link to User Impersonation")
+## User Impersonation
 
 The Microsoft SQL Server username provided in the source configuration is the default username that is used for running queries. When queries are run against Microsoft SQL Server in Dremio, users use the privileges associated with the Microsoft SQL Server username and run queries under that username.
 
-You can change this default in Dremio by enabling user impersonation in the [Advanced Options](#advanced-options), which allows users to run queries under their own usernames and restricts their access. For example, `user_1` can run queries as `user_1` rather than `sqlsvr_svc`. Before enabling user impersonation, some setup is required in Microsoft SQL Server to allow one user to impersonate another user because the username of the user in Dremio must be the same as their username in Microsoft SQL Server and the user must be able to connect through the Microsoft SQL Server username.
+You can change this default in Dremio by enabling user impersonation in the Advanced Options, which allows users to run queries under their own usernames and restricts their access. For example, `user_1` can run queries as `user_1` rather than `sqlsvr_svc`. Before enabling user impersonation, some setup is required in Microsoft SQL Server to allow one user to impersonate another user because the username of the user in Dremio must be the same as their username in Microsoft SQL Server and the user must be able to connect through the Microsoft SQL Server username.
 
 To set up user impersonation, follow these steps:
 
@@ -5122,12 +5119,12 @@ GRANT IMPERSONATE ON USER::testuser1 TO proxyuser;
 In this example, the user can log in as `testuser1` in Dremio and in Microsoft SQL Server, and they can connect through the `proxyuser`. The `proxyuser` is the Microsoft SQL Server username provided in the source configuration.
 
 3. Log in to Dremio as a member of the ADMIN role.
-4. Follow the steps for [Configure Microsoft SQL Server as a Source](#configure-microsoft-sql-server-as-a-source) using the Microsoft SQL Server username `proxyuser` and enable **User Impersonation** in the **Advanced Options**.
+4. Follow the steps for Configure Microsoft SQL Server as a Source using the Microsoft SQL Server username `proxyuser` and enable **User Impersonation** in the **Advanced Options**.
 5. Grant [source privileges](/dremio-cloud/security/privileges/#source-privileges) to the user.
 
 Now that you have enabled user impersonation, a user who logs in to Dremio with their username can access the Microsoft SQL Server source and its datasets according to their privileges. The user can also run queries against Microsoft SQL Server under their username.
 
-## Configure Microsoft SQL Server as a Source[​](#configure-microsoft-sql-server-as-a-source "Direct link to Configure Microsoft SQL Server as a Source")
+## Configure Microsoft SQL Server as a Source
 
 Perform these steps to configure Microsoft SQL Server as a source:
 
@@ -5142,7 +5139,7 @@ Perform these steps to configure Microsoft SQL Server as a source:
 
    Sources containing a large number of files or tables may take longer to be added. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being added. Once complete, the source becomes accessible.
 
-### General[​](#general "Direct link to General")
+### General
 
 The **General** tab contains the required fields to create a Microsoft SQL Server source.
 
@@ -5160,7 +5157,7 @@ Perform these steps in the **General** tab:
 * For **Username**, enter your Microsoft SQL Server database username.
 * For **Password**, enter your Microsoft SQL Server database password.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 Click **Advanced Options** in the sidebar.
 
@@ -5175,25 +5172,25 @@ All advanced options are optional.
 | **Maximum idle connections** | The total number of connections allowed to be idle at a given time. The default maximum idle connections is 8. |
 | **Connection idle time (s)** | The amount of time (in seconds) allowed for a connection to remain idle before the connection is terminated. The default connection idle time is 60 seconds. |
 | **Query timeout (s)** | The amount of time (in seconds) allowed to wait for the results of a query. If this time expires, the connection being used is returned to an idle state. |
-| **Enable user impersonation** | Select the checkbox to allow users to run queries using their credentials rather than those of the user specified in the [Authentication](#general) configuration. Some setup is required in Microsoft SQL Server to allow one user to impersonate another user. Read [User Impersonation](#user-impersonation) for more information. |
+| **Enable user impersonation** | Select the checkbox to allow users to run queries using their credentials rather than those of the user specified in the Authentication configuration. Some setup is required in Microsoft SQL Server to allow one user to impersonate another user. Read User Impersonation for more information. |
 | **Encryption** | **Verify Server Certificate** is enabled. Add an SSL/TLS server certificate distinguished name in the text box. |
 | **Connection Properties** | Custom key value pairs for the connection relevant to the source. To add a connection property, click **Add property** and add the property name and value. |
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 The **Reflection Refresh** tab in the sidebar allows you to set time intervals for Reflections to refresh or expire.
 
 ![](/assets/images/microsoft-reflection-refresh-723c9eaee40b5e5605cdf11dc4b86d66.png)
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 You can configure settings to refresh metadata and handle datasets. Click **Metadata** in the sidebar.
 
 ![](/assets/images/microsoft-metadata-cb2b389165756ea21b84be3e0b96466c.png)
 
-You can configure [Dataset Handling](#dataset-handling) and [Metadata Refresh](#metadata-refresh) parameters.
+You can configure Dataset Handling and Metadata Refresh parameters.
 
-##### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+##### Dataset Handling
 
 These are the **Dataset Handling** parameters.
 
@@ -5205,7 +5202,7 @@ All **Dataset Handling** parameters are optional.
 | --- | --- |
 | **Remove dataset definitions if underlying data is unavailable** | By default, Dremio removes dataset definitions if underlying data is unavailable. Useful when files are temporarily deleted and added back in the same location with new sets of files. |
 
-##### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+##### Metadata Refresh
 
 These are the **Metadata Refresh** parameters:
 
@@ -5226,7 +5223,7 @@ These are the **Metadata Refresh** parameters:
   | **Fetch every** | You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour. |
   | **Expire after** | You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours. |
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 Grant privileges on the source to specific users and roles. Read [Privileges](/dremio-cloud/security/privileges) for more information about privileges.
 
@@ -5236,7 +5233,7 @@ To add source-specific privileges:
 2. For each user or role listed in the **Users/Roles** table, select the checkboxes for each privilege you want to grant on the source.
 3. Click **Save**.
 
-## Edit a Microsoft SQL Server Source[​](#edit-a-microsoft-sql-server-source "Direct link to Edit a Microsoft SQL Server Source")
+## Edit a Microsoft SQL Server Source
 
 To edit a Microsoft SQL Server source:
 
@@ -5245,7 +5242,7 @@ To edit a Microsoft SQL Server source:
 3. In the Source Settings dialog, you cannot edit the name. Editing other parameters is optional.
 4. Click **Save**.
 
-## Remove a Microsoft SQL Server Source[​](#remove-a-microsoft-sql-server-source "Direct link to Remove a Microsoft SQL Server Source")
+## Remove a Microsoft SQL Server Source
 
 To remove a Microsoft SQL Server source, perform these steps:
 
@@ -5261,7 +5258,7 @@ To remove a Microsoft SQL Server source, perform these steps:
 
    Sources containing a large number of files or tables may take longer to be removed. During this time, the source name is grayed out and shows a spinner icon, indicating the source is being removed. Once complete, the source disappears.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio offloads these operations to Microsoft SQL Server.
 
@@ -5415,17 +5412,17 @@ Dremio supports SQL Server data types, as shown in the following table which pro
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [User Impersonation](#user-impersonation)
-* [Configure Microsoft SQL Server as a Source](#configure-microsoft-sql-server-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Edit a Microsoft SQL Server Source](#edit-a-microsoft-sql-server-source)
-* [Remove a Microsoft SQL Server Source](#remove-a-microsoft-sql-server-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Prerequisites
+* User Impersonation
+* Configure Microsoft SQL Server as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Edit a Microsoft SQL Server Source
+* Remove a Microsoft SQL Server Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 
@@ -5437,18 +5434,18 @@ On this page
 
 Dremio supports Snowflake Open Catalog as an Iceberg catalog source. With this source connector, you can connect to and read from internal and external Snowflake Open Catalogs and write to external Snowflake Open Catalogs.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 You will need the catalog **Service URI**, **Client ID**, and **Client Secret** from the Snowflake setup. For a walkthrough of the Snowflake setup, refer to [Query a table in Snowflake Open Catalog using a third-party engine](https://other-docs.snowflake.com/opencatalog/query-table-using-third-party-engine).
 
-## Configure Snowflake Open Catalog as a Source[​](#configure-snowflake-open-catalog-as-a-source "Direct link to Configure Snowflake Open Catalog as a Source")
+## Configure Snowflake Open Catalog as a Source
 
 To add a Snowflake Open Catalog source:
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![Add Source icon](/images/icons/plus.png "Add Source icon").
 2. In the Add Data Source dialog, under **Lakehouse Catalogs**, select **Snowflake Open Catalog**.
 
-### General[​](#general "Direct link to General")
+### General
 
 To configure the source connection:
 
@@ -5459,7 +5456,7 @@ To configure the source connection:
 5. By default, **Use vended credentials** is enabled. This allows Dremio to connect to the catalog and receive temporary credentials to the underlying storage location. If this is enabled, you do not need to add storage authentication in Advanced Options.
 6. (Optional) For **Allowed Namespaces**, add each namespace and select the option if you want to include their entire subtrees. Tables are organized into namespaces, which can be at the top level or nested within one another. Namespace names cannot contain periods or spaces.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 **Storage Authentication**
 
@@ -5563,7 +5560,7 @@ Dremio supports Amazon S3, Azure Storage, and Google Cloud Storage (GCS) as obje
 * **Enable local caching when possible**: Selected by default. Along with asynchronous access for cloud caching, local caching can improve query performance.
 * **Max percent of total available cache space to use when possible**: Specifies the disk quota, as a percentage, that a source can use on any single executor node only when local caching is enabled. The default is 100 percent of the total disk space available on the mount point provided for caching. You can either manually enter a percentage in the value field or use the arrows to the far right to adjust the percentage.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 You can set the policy that controls how often reflections are scheduled to be refreshed automatically, as well as the time limit after which reflections expire and are removed.
 
@@ -5578,15 +5575,15 @@ You can set the policy that controls how often reflections are scheduled to be r
 * **Never expire**: Prevent Reflections from expiring. By default, Reflections expire after the configured time limit.
 * **Expire after**: The time limit after which Reflections are removed from Dremio, specified in hours, days, or weeks. Ignored if **Never expire** is selected.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Specify metadata options with the following settings.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 Remove dataset definitions if underlying data is unavailable (default).
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -5604,7 +5601,7 @@ The metadata that Dremio needs for query planning, such as information needed fo
 * **Fetch every**: You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour.
 * **Expire after**: You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 You can grant privileges to specific users or roles. See [Privileges](/dremio-cloud/security/privileges) for more information.
 
@@ -5614,16 +5611,16 @@ To grant access to a user or role:
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update a Snowflake Open Catalog Source[​](#update-a-snowflake-open-catalog-source "Direct link to Update a Snowflake Open Catalog Source")
+## Update a Snowflake Open Catalog Source
 
 To update a Snowflake Open Catalog source:
 
 1. On the Datasets page, under **Lakehouse Catalogs** in the panel on the left, find the name of the source you want to edit.
 2. Right-click the source name and select **Settings** from the list of actions. Alternatively, click the source name and then the ![Settings icon](/images/settings-icon.png "Settings icon") at the top right corner of the page.
-3. In the **Source Settings** dialog, edit the settings you want to update. Dremio does not support updating the source name. For information about the settings options, see [Configure Snowflake Open Catalog as a Source](#configure-snowflake-open-catalog-as-a-source).
+3. In the **Source Settings** dialog, edit the settings you want to update. Dremio does not support updating the source name. For information about the settings options, see Configure Snowflake Open Catalog as a Source.
 4. Click **Save**.
 
-## Delete a Snowflake Open Catalog Source[​](#delete-a-snowflake-open-catalog-source "Direct link to Delete a Snowflake Open Catalog Source")
+## Delete a Snowflake Open Catalog Source
 
 To delete a Snowflake Open Catalog source:
 
@@ -5638,15 +5635,15 @@ If the source is in a bad state (for example, Dremio cannot authenticate to the 
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure Snowflake Open Catalog as a Source](#configure-snowflake-open-catalog-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update a Snowflake Open Catalog Source](#update-a-snowflake-open-catalog-source)
-* [Delete a Snowflake Open Catalog Source](#delete-a-snowflake-open-catalog-source)
+* Prerequisites
+* Configure Snowflake Open Catalog as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update a Snowflake Open Catalog Source
+* Delete a Snowflake Open Catalog Source
 
 <div style="page-break-after: always;"></div>
 
@@ -5658,7 +5655,7 @@ On this page
 
 Connect to Delta Lake tables in Databricks Unity Catalog through Dremio. Unity Catalog acts as a centralized metastore for managing tables across your Databricks environment, and Dremio can query these tables when they use Delta Lake's Universal Format (UniForm).
 
-## UniForm Iceberg Required[​](#uniform-iceberg-required "Direct link to UniForm Iceberg Required")
+## UniForm Iceberg Required
 
 To query Delta tables through Dremio, you must enable UniForm on your tables in Databricks. UniForm provides an Iceberg metadata layer that allows Iceberg-compatible clients like Dremio to read Delta tables.
 
@@ -5669,14 +5666,14 @@ To query Delta tables through Dremio, you must enable UniForm on your tables in 
 
 UniForm tables have certain limitations. Review [Limitations](https://docs.databricks.com/en/delta/uniform.html#limitations) in the Databricks documentation before proceeding.
 
-## Configure Databricks Unity Catalog as a Source[​](#configure-databricks-unity-catalog-as-a-source "Direct link to Configure Databricks Unity Catalog as a Source")
+## Configure Databricks Unity Catalog as a Source
 
 To add a Unity Catalog source:
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![This is the Add Source icon.](/images/icons/plus.png "Add Source icon").
 2. In the Add Data Source dialog, under **Lakehouse Catalogs**, select **Unity Catalog**.
 
-### General[​](#general "Direct link to General")
+### General
 
 To configure the source connection:
 
@@ -5695,7 +5692,7 @@ To configure the source connection:
 5. By default, **Use vended credentials** is turned on. This allows Dremio to connect to the catalog and receive temporary credentials for the underlying storage location. When this option is enabled, you don't need to add the storage authentication in **Advanced Options**.
 6. (Optional) For **Allowed Namespaces**, add each namespace and check the option if you want to include their entire subtrees. Tables are organized into namespaces, which can be at the top level or nested within one another. Namespace names cannot contain periods or spaces.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 **Storage Authentication**
 
@@ -5780,7 +5777,7 @@ Dremio supports Amazon S3, Azure Storage, and Google Cloud Storage (GCS) as obje
 * **Enable local caching when possible**: Selected by default. Along with asynchronous access for cloud caching, local caching can improve query performance.
 * **Max percent of total available cache space to use when possible**: Specifies the disk quota, as a percentage, that a source can use on any single executor node only when local caching is enabled. The default is 100 percent of the total disk space available on the mount point provided for caching. You can either manually enter a percentage in the value field or use the arrows to the far right to adjust the percentage.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 You can set the policy that controls how often reflections are scheduled to be refreshed automatically, as well as the time limit after which reflections expire and are removed.
 
@@ -5795,15 +5792,15 @@ You can set the policy that controls how often reflections are scheduled to be r
 * **Never expire**: Prevent reflections from expiring. By default, reflections expire after the configured time limit.
 * **Expire after**: The time limit after which reflections are removed from Dremio, specified in hours, days, or weeks. Ignored if **Never expire** is selected.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 Specifying metadata options is handled with the following settings.
 
-#### Dataset Handling[​](#dataset-handling "Direct link to Dataset Handling")
+#### Dataset Handling
 
 Remove dataset definitions if underlying data is unavailable (default).
 
-#### Metadata Refresh[​](#metadata-refresh "Direct link to Metadata Refresh")
+#### Metadata Refresh
 
 These are the optional **Metadata Refresh** parameters:
 
@@ -5821,7 +5818,7 @@ The metadata that Dremio needs for query planning, such as information needed fo
 * **Fetch every**: You can choose to set the frequency to fetch dataset details in minutes, hours, days, or weeks. The default frequency to fetch dataset details is 1 hour.
 * **Expire after**: You can choose to set the expiry time of dataset details in minutes, hours, days, or weeks. The default expiry time of dataset details is 3 hours.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 You can grant privileges to specific users or roles. See [Privileges](/dremio-cloud/security/privileges) for additional information.
 
@@ -5831,16 +5828,16 @@ To grant access to a user or role:
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update a Databricks Unity Catalog Source[​](#update-a-databricks-unity-catalog-source "Direct link to Update a Databricks Unity Catalog Source")
+## Update a Databricks Unity Catalog Source
 
 To update a Unity Catalog source:
 
 1. On the Datasets page, under **Lakehouse Catalogs** in the panel on the left, find the name of the source you want to edit.
 2. Right-click the source name and select **Settings** from the list of actions. Alternatively, click the source name, and then click the ![The Settings icon](/images/settings-icon.png "The Settings icon") at the top-right corner of the page.
-3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see [Configure Databricks Unity Catalog as a Source](#configure-databricks-unity-catalog-as-a-source).
+3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see Configure Databricks Unity Catalog as a Source.
 4. Click **Save**.
 
-## Delete a Databricks Unity Catalog Source[​](#delete-a-databricks-unity-catalog-source "Direct link to Delete a Databricks Unity Catalog Source")
+## Delete a Databricks Unity Catalog Source
 
 To delete a Unity Catalog source:
 
@@ -5855,15 +5852,15 @@ If the source is in a bad state (for example, Dremio cannot authenticate to the 
 
 Was this page helpful?
 
-* [UniForm Iceberg Required](#uniform-iceberg-required)
-* [Configure Databricks Unity Catalog as a Source](#configure-databricks-unity-catalog-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update a Databricks Unity Catalog Source](#update-a-databricks-unity-catalog-source)
-* [Delete a Databricks Unity Catalog Source](#delete-a-databricks-unity-catalog-source)
+* UniForm Iceberg Required
+* Configure Databricks Unity Catalog as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update a Databricks Unity Catalog Source
+* Delete a Databricks Unity Catalog Source
 
 <div style="page-break-after: always;"></div>
 
@@ -5875,22 +5872,22 @@ On this page
 
 Dremio supports integrations with organizations using Azure Synapse Analytics dedicated SQL pools via the external source.
 
-## Configure Microsoft Azure Synapse Analytics as a Source[​](#configure-microsoft-azure-synapse-analytics-as-a-source "Direct link to Configure Microsoft Azure Synapse Analytics as a Source")
+## Configure Microsoft Azure Synapse Analytics as a Source
 
 1. On the Datasets page, to the right of **Sources** in the left panel, click ![This is the Add Source icon.](/images/icons/plus.png "This is the Add Source icon.").
 2. In the Add Data Source dialog, under **Databases**, select **Microsoft Azure Synapse Analytics**.
 
-### General[​](#general "Direct link to General")
+### General
 
 Under **Name**, enter the name to identify the data source in Dremio. The name cannot include the following special characters: `/`, `:`, `[`, or `]`.
 
-#### Connection[​](#connection "Direct link to Connection")
+#### Connection
 
 * Under **Host**, enter the URL for your dedicated SQL pool, which typically ends in `.sql.azuresynapse.net`.
 * Under **Port (optional)**, enter the port required to access the data source. Port 1433 is the default for Azure Synapse dedicated pools.
 * Under **Database**, enter the database's name. Only this database is accessed by Dremio.
 
-#### Authentication[​](#authentication "Direct link to Authentication")
+#### Authentication
 
 Choose an authentication method:
 
@@ -5902,7 +5899,7 @@ Choose an authentication method:
 
 Select the **Encrypt connection** option to encrypt the connection to Microsoft Azure Synapse Analytics. Clear the checkbox to disable encryption.
 
-### Advanced Options[​](#advanced-options "Direct link to Advanced Options")
+### Advanced Options
 
 The following settings control more advanced functionalities in Dremio.
 
@@ -5918,7 +5915,7 @@ The following settings control more advanced functionalities in Dremio.
   + **Name -** The unique name for any custom properties.
   + **Value -** The value associated with the custom property.
 
-### Reflection Refresh[​](#reflection-refresh "Direct link to Reflection Refresh")
+### Reflection Refresh
 
 This tab controls the frequency of Reflection refreshes or the timespan for expiration for any queries performed using this data source.
 
@@ -5928,7 +5925,7 @@ This tab controls the frequency of Reflection refreshes or the timespan for expi
 * **Never expire -** Prevents any query Reflections associated with this source from expiring.
 * **Expire after -** Sets the time after a Reflection is created that it then expires and can no longer be used for queries. This may be set to hours, days, and weeks.
 
-### Metadata[​](#metadata "Direct link to Metadata")
+### Metadata
 
 This tab offers settings that control how dataset details are fetched and refreshed.
 
@@ -5942,7 +5939,7 @@ This tab offers settings that control how dataset details are fetched and refres
     - **Fetch every -** Specifies the time interval by which metadata is fetched. This can be set by minutes, hours, days, and weeks.
     - **Expire after -** Specifies the timespan for when dataset details expire after a dataset is queried. This can be set by minutes, hours, days, and weeks.
 
-### Privileges[​](#privileges "Direct link to Privileges")
+### Privileges
 
 On the Privileges tab, you can grant privileges to specific users or roles. See [Access Controls](/dremio-cloud/security/privileges/) for additional information about privileges.
 
@@ -5954,16 +5951,16 @@ All privileges are optional.
 2. For the users or roles in the **USERS/ROLES** table, toggle the checkmark for each privilege you want to grant on the Dremio source that is being created.
 3. Click **Save** after setting the configuration.
 
-## Update a Microsoft Azure Synapse Analytics Source[​](#update-a-microsoft-azure-synapse-analytics-source "Direct link to Update a Microsoft Azure Synapse Analytics Source")
+## Update a Microsoft Azure Synapse Analytics Source
 
 To update a Microsoft Azure Synapse Analytics source:
 
 1. On the Datasets page, under **Databases** in the panel on the left, find the name of the source you want to update.
 2. Right-click the source name and select **Settings** from the list of actions. Alternatively, click the source name and then the ![The Settings icon](/images/settings-icon.png "The Settings icon") at the top right corner of the page.
-3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see [Configure Microsoft Azure Synapse Analytics as a Source](#configure-microsoft-azure-synapse-analytics-as-a-source).
+3. In the **Source Settings** dialog, edit the settings you wish to update. Dremio does not support updating the source name. For information about the settings options, see Configure Microsoft Azure Synapse Analytics as a Source.
 4. Click **Save**.
 
-## Delete a Microsoft Azure Synapse Analytics Source[​](#delete-a-microsoft-azure-synapse-analytics-source "Direct link to Delete a Microsoft Azure Synapse Analytics Source")
+## Delete a Microsoft Azure Synapse Analytics Source
 
 note
 
@@ -5980,7 +5977,7 @@ note
 
 Deleting a source causes all downstream views that depend on objects in the source to break.
 
-## Predicate Pushdowns[​](#predicate-pushdowns "Direct link to Predicate Pushdowns")
+## Predicate Pushdowns
 
 Dremio delegates the execution of these expressions and functions to the database being queried, often dramatically improving query performance. It can also offload entire SQL queries that include one or more of these expressions and functions.
 
@@ -6087,15 +6084,15 @@ YEAR
 
 Was this page helpful?
 
-* [Configure Microsoft Azure Synapse Analytics as a Source](#configure-microsoft-azure-synapse-analytics-as-a-source)
-  + [General](#general)
-  + [Advanced Options](#advanced-options)
-  + [Reflection Refresh](#reflection-refresh)
-  + [Metadata](#metadata)
-  + [Privileges](#privileges)
-* [Update a Microsoft Azure Synapse Analytics Source](#update-a-microsoft-azure-synapse-analytics-source)
-* [Delete a Microsoft Azure Synapse Analytics Source](#delete-a-microsoft-azure-synapse-analytics-source)
-* [Predicate Pushdowns](#predicate-pushdowns)
+* Configure Microsoft Azure Synapse Analytics as a Source
+  + General
+  + Advanced Options
+  + Reflection Refresh
+  + Metadata
+  + Privileges
+* Update a Microsoft Azure Synapse Analytics Source
+* Delete a Microsoft Azure Synapse Analytics Source
+* Predicate Pushdowns
 
 <div style="page-break-after: always;"></div>
 

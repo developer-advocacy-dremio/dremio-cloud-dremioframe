@@ -37,7 +37,7 @@ On this page
 
 This topic summarizes the `dremio-admin` CLI commands.
 
-## Syntax[​](#syntax "Direct link to Syntax")
+## Syntax
 
 Syntax for dremio-admin commands
 
@@ -45,14 +45,14 @@ Syntax for dremio-admin commands
 dremio-admin [--config <conf-dir>] (encrypt|set-password|upgrade|recommend-reflections|delete-user-homespace|optimize-acls|export-profiles|remove-duplicate-users|clean|remove-duplicate-roles|reset-catalog-search|backup|delete-all-users|restore|repair-acls|nessie-maintenance) [args...]
 ```
 
-## Options[​](#options "Direct link to Options")
+## Options
 
 | Option | Description |
 | --- | --- |
 | `--help, -h` | Displays usage information for the CLI commands. |
 | `--config <conf-dir>` | Used when the configuration file location is different than the `/opt/dremio/conf` default directory.  For example, if `dremio.conf`, `dremio-env`, `logbook.xml`, and `logbook-admin.xml` are located in `/etc/dremio`, you will have to run all of the `dremio-admin` commands as `./dremio-admin --config /etc/dremio <command> <arguments>`. |
 
-## Commands[​](#commands "Direct link to Commands")
+## Commands
 
 | Command | Description |
 | --- | --- |
@@ -75,7 +75,7 @@ dremio-admin [--config <conf-dir>] (encrypt|set-password|upgrade|recommend-refle
 | `set-password` | Sets passwords for Dremio users (non-LDAP). |
 | `upgrade` | Upgrades the KV store version. There are no options available for this command. |
 
-## Log Directory[​](#log-directory "Direct link to Log Directory")
+## Log Directory
 
 The default value for `DREMIO_ADMIN_LOG_DIR` is null (not set). When this parameter is *not* set, log files are *not* created.
 
@@ -91,7 +91,7 @@ note
 
 The export option must be set and access must be available for the user running the `dremio-admin` command.
 
-## Log Verbosity[​](#log-verbosity "Direct link to Log Verbosity")
+## Log Verbosity
 
 Log verbosity is used in conjunction with `DREMIO_ADMIN_LOG_DIR`. Otherwise, all the output is printed to `stdout`; there is no control on setting verbosity for `stdout`.
 
@@ -111,7 +111,7 @@ Set log verbosity
 export DREMIO_ADMIN_LOG_VERBOSITY=<value>
 ```
 
-## For More Information[​](#for-more-information "Direct link to For More Information")
+## For More Information
 
 * [Backup](/current/reference/admin-cli/backup/)
 * [Clean Metadata](/current/reference/admin-cli/metadata-cleanup/)
@@ -133,12 +133,12 @@ Dremio on Kubernetes](/current/admin/admin-dremio-kubernetes/)[Next
 
 Back up Dremio](/current/reference/admin-cli/backup)
 
-* [Syntax](#syntax)
-* [Options](#options)
-* [Commands](#commands)
-* [Log Directory](#log-directory)
-* [Log Verbosity](#log-verbosity)
-* [For More Information](#for-more-information)
+* Syntax
+* Options
+* Commands
+* Log Directory
+* Log Verbosity
+* For More Information
 
 ---
 
@@ -157,7 +157,7 @@ The Dremio REST API is organized by resource types such as `sources` and is desi
 * `PUT` updates resources
 * `DELETE` removes resources
 
-## Base URL[​](#base-url "Direct link to Base URL")
+## Base URL
 
 All API URLs referenced in this documentation have the following base URL unless otherwise specified:
 
@@ -177,13 +177,13 @@ User-supplied values in URLs
 /api/v3/source/{id}
 ```
 
-## Authentication[​](#authentication "Direct link to Authentication")
+## Authentication
 
 Each REST request requires an authorization header with a Dremio access token to authenticate the requester unless otherwise indicated. Dremio accepts three types of access tokens for authenticating REST requests.
 
-* **[OAuth access tokens](#oauth-access-tokens-enterprise)** are created in Dremio using the Dremio REST API.
-* **[Personal access tokens](#personal-access-tokens-enterprise)** are created in the Dremio console or with REST.
-* **[Authentication tokens](#dremio-authentication-tokens)** are generated from a username and password using the Dremio v2 API.
+* **OAuth access tokens** are created in Dremio using the Dremio REST API.
+* **Personal access tokens** are created in the Dremio console or with REST.
+* **Authentication tokens** are generated from a username and password using the Dremio v2 API.
 
 All Dremio access tokens are Bearer tokens and can be used in the REST authorization header of each REST request.
 
@@ -195,7 +195,7 @@ curl -X GET 'https://{hostname}/api/v3/{path_to_endpoint}' \
 --header 'Content-Type: application/json'
 ```
 
-### OAuth Access Tokens Enterprise[​](#oauth-access-tokens-enterprise "Direct link to oauth-access-tokens-enterprise")
+### OAuth Access Tokens Enterprise
 
 Users can create OAuth access tokens by exchanging a local or LDAP username and password, a PAT, or an external JWT using the `/oauth/token` REST API. Dremio provides [sample code](/current/reference/api/oauth-token) for each of these cases.
 
@@ -204,11 +204,11 @@ Dremio recommends OAuth access tokens to improve system security:
 * OAuth access tokens are typically short-lived, reducing the window of opportunity for attackers if a token is compromised.
 * Users must manually revoke compromised or suspected PATs, often leading to forgotten, unused tokens.
 
-### Personal Access Tokens Enterprise[​](#personal-access-tokens-enterprise "Direct link to personal-access-tokens-enterprise")
+### Personal Access Tokens Enterprise
 
 Any user can create personal access tokens (PATs) [in the Dremio console](/current/security/authentication/personal-access-tokens/#creating-a-pat) or [using REST](/current/reference/api/personal-access-token#creating-a-pat). Users can configure the lifetime of each personal access token, from 1 day to a maximum defined by the `auth.personal-access-token.max_lifetime_days` [support setting](/current/admin/support-settings#support-keys).
 
-### Dremio Authentication Tokens[​](#dremio-authentication-tokens "Direct link to Dremio Authentication Tokens")
+### Dremio Authentication Tokens
 
 Users can generate authentication tokens from their Dremio username and password. Authentication tokens have a nonconfigurable lifetime of 30 hours.
 
@@ -220,7 +220,7 @@ To generate an authentication token:
 
 * Send an API request to the login URL with your Dremio username and password in the request body.
 
-### Example[​](#example "Direct link to Example")
+### Example
 
 Request
 
@@ -282,7 +282,7 @@ curl -X GET 'https://{hostname}/api/v3/catalog' \
 --header 'Content-Type: application/json'
 ```
 
-## Errors[​](#errors "Direct link to Errors")
+## Errors
 
 Error messages will be sent back in the response body using the following format:
 
@@ -295,11 +295,11 @@ Error Messages Format
 }
 ```
 
-## Query Parameters[​](#query-parameters "Direct link to Query Parameters")
+## Query Parameters
 
 Dremio supports query parameters for many API endpoints. The documentation for each API lists the supported query parameters for specific endpoints, along with any default and maximum values for the query parameters for that endpoint.
 
-### pageToken Query Parameter[​](#pagetoken-query-parameter "Direct link to pageToken Query Parameter")
+### pageToken Query Parameter
 
 Use the `pageToken` query parameter to split large sets of results into multiple pages.
 
@@ -309,7 +309,7 @@ note
 
 Do not change any other query parameters included in the request URL when you use `pageToken`.
 
-#### Built-in Maximum[​](#built-in-maximum "Direct link to Built-in Maximum")
+#### Built-in Maximum
 
 If the endpoint has a built-in maximum number of results per page, responses automatically include a page token attribute when the response contains more results than the built-in maximum. Use the value for this token in the request URL as the `pageToken` value to retrieve the next page of results.
 
@@ -325,7 +325,7 @@ curl -X GET 'https://{hostname}/api/v3/reflection-summary?pageToken=BhQxNjc0Mjhl
 
 For subsequent requests, replace the `pageToken` value in the request URL with the token value from the previous response. If the response does not include a token attribute and value, you have retrieved the last page of available results.
 
-#### User-Specified Maximum[​](#user-specified-maximum "Direct link to User-Specified Maximum")
+#### User-Specified Maximum
 
 For endpoints that require users to specify a maximum number of results per page with a separate query parameter, responses only include a page token attribute if your initial request URL includes the separate query parameter and the response contains more results than the maximum you specify. Add the value for this token to the request URL as the `pageToken` value, keeping the separate query parameter as well, to retrieve the next page of results.
 
@@ -341,7 +341,7 @@ curl -X GET 'https://{hostname}/api/v3/catalog/2b1be882-7012-4a99-8d6c-82e32e456
 
 For subsequent requests, replace the `pageToken` value in the request URL with the token value from the previous response. If the response does not include a token attribute and value, you have retrieved the last page of available results.
 
-### maxResults Query Parameter[​](#maxresults-query-parameter "Direct link to maxResults Query Parameter")
+### maxResults Query Parameter
 
 Use the `maxResults` query parameter to specify the maximum number of results to retrieve in each request.
 
@@ -355,7 +355,7 @@ curl -X GET 'https://{hostname}/api/v3/reflection-summary?maxResults=25' \
 --header 'Content-Type: application/json'
 ```
 
-### filter Query Parameter[​](#filter-query-parameter "Direct link to filter Query Parameter")
+### filter Query Parameter
 
 Use the `filter` query parameter to filter responses so that they include only results with the specified attributes and values. The value for the `filter` query parameter is a URL-encoded JSON string that represents a JSON object that specifies the desired attributes and values.
 
@@ -384,7 +384,7 @@ curl -X GET 'https://{hostname}/api/v3/reflection-summary?filter=%7B%0A%20%20%22
 
 Read the endpoint-specific documentation to learn which attributes each endpoint supports for the `filter` query parameter.
 
-### orderBy Query Parameter[​](#orderby-query-parameter "Direct link to orderBy Query Parameter")
+### orderBy Query Parameter
 
 Use the `orderBy` query parameter to organize the response in ascending or descending order based on the value of the specified attribute. The default is ascending order. To specify descending order, add a `-` character before the attribute name.
 
@@ -410,7 +410,7 @@ curl -X GET 'https://{hostname}/api/v3/reflection-summary?orderBy=-reflectionNam
 
 Read the endpoint-specific documentation to learn which attributes each endpoint supports for the `orderBy` query parameter.
 
-### limit and offset Query Parameters[​](#limit-and-offset-query-parameters "Direct link to limit and offset Query Parameters")
+### limit and offset Query Parameters
 
 The `limit` query parameter allows you to retrieve a specific number of results. For endpoints that support the `limit` query parameter, you can specify the number of results to retrieve. For example, if you only want to retrieve the first 10 available results, add `?limit=10` to the request URL:
 
@@ -458,7 +458,7 @@ Continue incrementing the `offset` parameter in requests until you have retrieve
 
 Read the documentation for each API to learn about endpoint-specific support for the `limit` and `offset` query parameters.
 
-### type Query Parameter[​](#type-query-parameter "Direct link to type Query Parameter")
+### type Query Parameter
 
 Use the `type` query parameter to limit your request so that the response includes only results for the type you specify.
 
@@ -474,7 +474,7 @@ curl -X GET 'https://{hostname}/api/v3/catalog/privileges?type=SOURCE' \
 
 Read the documentation for each API to learn about endpoint-specific support for the `type` query parameter, including lists of valid values.
 
-### include and exclude Query Parameters[​](#include-and-exclude-query-parameters "Direct link to include and exclude Query Parameters")
+### include and exclude Query Parameters
 
 Some APIs exclude non-default attributes or include lengthy attributes in the default GET responses. These APIs support the `include` and `exclude` query parameters, which you can use to include or exclude certain attributes in the responses for GET endpoints.
 
@@ -500,7 +500,7 @@ curl -X GET 'https://{hostname}/api/v3/catalog/ffbe8c1d-1db7-48d1-9c58-f452838fe
 
 Read the documentation for each API to learn about endpoint-specific support for the `include` and `exclude` query parameters, including information about supported values.
 
-### createdBy Query Parameter[​](#createdby-query-parameter "Direct link to createdBy Query Parameter")
+### createdBy Query Parameter
 
 Use the `createdBy` query parameter to limit the request to objects created by a specific user.
 
@@ -514,7 +514,7 @@ curl -X GET 'https://{hostname}/api/v3/scripts?createdBy=8be516f3-04c4-4d19-824d
 --header 'Content-Type: application/json'
 ```
 
-### ownedBy Query Parameter[​](#ownedby-query-parameter "Direct link to ownedBy Query Parameter")
+### ownedBy Query Parameter
 
 Use the `ownedBy` query parameter to limit the request to objects owned by a specific user.
 
@@ -528,7 +528,7 @@ curl -X GET 'https://{hostname}/api/v3/scripts?ownedBy=8be516f3-04c4-4d19-824d-5
 --header 'Content-Type: application/json'
 ```
 
-### search Query Parameter[​](#search-query-parameter "Direct link to search Query Parameter")
+### search Query Parameter
 
 Use the `search` query parameter to limit the request to objects that contain values that include the search string.
 
@@ -544,7 +544,7 @@ curl -X GET 'https://{hostname}/api/v3/scripts?search=dev' \
 
 Read the documentation for each API to learn about endpoint-specific support for the `search` query parameter, including information about searchable attributes.
 
-### maxChildren Query Parameter[​](#maxchildren-query-parameter "Direct link to maxChildren Query Parameter")
+### maxChildren Query Parameter
 
 The `maxChildren` query parameter allows you to specify the maximum number of child objects to include in each response. This example shows a request URL that uses the `nextPageToken` query parameter with the `maxChildren` query parameter set to 25:
 
@@ -558,7 +558,7 @@ curl -X GET 'https://{hostname}/api/v3/catalog/2b1be882-7012-4a99-8d6c-82e32e456
 
 Use the `maxChildren` query parameter in concert with the [`pageToken` query parameter](/current/reference/api/#user-specified-maximum) to split large sets of results into multiple pages.
 
-## Response Headers[​](#response-headers "Direct link to Response Headers")
+## Response Headers
 
 Dremio API responses include HTTP headers that provide additional information about responses. Each header includes a case-insensitive name and a value, separated by a colon.
 
@@ -583,26 +583,26 @@ Admin CLI](/current/reference/admin-cli/)[Next
 
 Catalog](/current/reference/api/catalog/)
 
-* [Base URL](#base-url)
-* [Authentication](#authentication)
-  + [OAuth Access Tokens Enterprise](#oauth-access-tokens-enterprise)
-  + [Personal Access Tokens Enterprise](#personal-access-tokens-enterprise)
-  + [Dremio Authentication Tokens](#dremio-authentication-tokens)
-  + [Example](#example)
-* [Errors](#errors)
-* [Query Parameters](#query-parameters)
-  + [pageToken Query Parameter](#pagetoken-query-parameter)
-  + [maxResults Query Parameter](#maxresults-query-parameter)
-  + [filter Query Parameter](#filter-query-parameter)
-  + [orderBy Query Parameter](#orderby-query-parameter)
-  + [limit and offset Query Parameters](#limit-and-offset-query-parameters)
-  + [type Query Parameter](#type-query-parameter)
-  + [include and exclude Query Parameters](#include-and-exclude-query-parameters)
-  + [createdBy Query Parameter](#createdby-query-parameter)
-  + [ownedBy Query Parameter](#ownedby-query-parameter)
-  + [search Query Parameter](#search-query-parameter)
-  + [maxChildren Query Parameter](#maxchildren-query-parameter)
-* [Response Headers](#response-headers)
+* Base URL
+* Authentication
+  + OAuth Access Tokens Enterprise
+  + Personal Access Tokens Enterprise
+  + Dremio Authentication Tokens
+  + Example
+* Errors
+* Query Parameters
+  + pageToken Query Parameter
+  + maxResults Query Parameter
+  + filter Query Parameter
+  + orderBy Query Parameter
+  + limit and offset Query Parameters
+  + type Query Parameter
+  + include and exclude Query Parameters
+  + createdBy Query Parameter
+  + ownedBy Query Parameter
+  + search Query Parameter
+  + maxChildren Query Parameter
+* Response Headers
 
 ---
 
@@ -624,7 +624,7 @@ Dremio provides comprehensive SQL access to your data, no matter where it is sto
 * [Table Functions](/current/reference/sql/table-functions)
 * [Information Schema](/current/reference/sql/information-schema)
 
-## Additional Resources[​](#additional-resources "Direct link to Additional Resources")
+## Additional Resources
 
 Find out more about using SQL by enrolling in the [SQL for Data Analysts course in Dremio University](https://university.dremio.com/course/sql-data-analysts).
 
@@ -636,7 +636,7 @@ API Reference](/current/reference/api/)[Next
 
 Data Types](/current/reference/sql/data-types/)
 
-* [Additional Resources](#additional-resources)
+* Additional Resources
 
 ---
 

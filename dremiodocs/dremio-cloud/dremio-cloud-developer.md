@@ -6,7 +6,7 @@ On this page
 
 You can develop applications that connect to Dremio using Arrow Flight for high-performance data access, APIs for management operations, or by integrating with development tools and frameworks.
 
-## Build Custom Applications[​](#build-custom-applications "Direct link to Build Custom Applications")
+## Build Custom Applications
 
 Use Arrow Flight and Python SDKs to build applications that connect to Dremio:
 
@@ -15,14 +15,14 @@ Use Arrow Flight and Python SDKs to build applications that connect to Dremio:
 * [Python](/dremio-cloud/developer/python) – Build applications using Arrow Flight or REST APIs
 * [Dremio MCP Server](/dremio-cloud/developer/mcp-server) – AI Agent integration for natural language interactions
 
-## Build Pipelines and Transformations[​](#build-pipelines-and-transformations "Direct link to Build Pipelines and Transformations")
+## Build Pipelines and Transformations
 
 Use your tool of choice to build pipelines, perform transformations, and work with Dremio:
 
 * [dbt Integration](/dremio-cloud/developer/dbt) – Transform data with version control and testing
 * [VS Code Extension](/dremio-cloud/developer/vs-code) – Query Dremio from Visual Studio Code
 
-## Customize and Automate[​](#customize-and-automate "Direct link to Customize and Automate")
+## Customize and Automate
 
 Use APIs to power any type of customization or automation:
 
@@ -30,16 +30,16 @@ Use APIs to power any type of customization or automation:
 
 For sample applications, connectors, and additional integrations, see [Dremio Hub](https://github.com/dremio-hub).
 
-## Supported Data Formats[​](#supported-data-formats "Direct link to Supported Data Formats")
+## Supported Data Formats
 
 For a deep dive into open table and data formats that Dremio supports, see [Data Formats](/dremio-cloud/developer/data-formats/).
 
 Was this page helpful?
 
-* [Build Custom Applications](#build-custom-applications)
-* [Build Pipelines and Transformations](#build-pipelines-and-transformations)
-* [Customize and Automate](#customize-and-automate)
-* [Supported Data Formats](#supported-data-formats)
+* Build Custom Applications
+* Build Pipelines and Transformations
+* Customize and Automate
+* Supported Data Formats
 
 <div style="page-break-after: always;"></div>
 
@@ -53,7 +53,7 @@ dbt enables analytics engineers to transform their data using the same practices
 
 You can use Dremio's dbt connector `dbt-dremio` to transform data that is in data sources that are connected to a Dremio project.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Download the `dbt-dremio` package from <https://github.com/dremio/dbt-dremio>.
 * Ensure that Python 3.9.x or later is installed.
@@ -61,7 +61,7 @@ You can use Dremio's dbt connector `dbt-dremio` to transform data that is in dat
   + Ensure that you have the ID of the Dremio project that you want to use. See [Obtain the ID of a Project](/dremio-cloud/admin/projects/#obtain-the-id-of-a-project).
   + Ensure that you have a personal access token (PAT) for authenticating to Dremio. See [Create a PAT](/dremio-cloud/security/authentication/personal-access-token#create-a-pat).
 
-## Install[​](#install "Direct link to Install")
+## Install
 
 Install this package from PyPi by running this command:
 
@@ -75,7 +75,7 @@ note
 
 `dbt-dremio` works exclusively with dbt-core versions 1.8-1.9. Previous versions of dbt-core are outside of official support.
 
-## Initialize a dbt Project[​](#initialize-a-dbt-project "Direct link to Initialize a dbt Project")
+## Initialize a dbt Project
 
 1. Run the command `dbt init <project_name>`.
 2. Select `dremio` as the database to use.
@@ -86,7 +86,7 @@ note
 7. For `enterprise_catalog_namespace`, enter the name of an existing namespace within the catalog.
 8. For `enterprise_catalog_folder`, enter the name of a folder which already exists within the namespace.
 
-For descriptions of the configurations in the above steps, see [Configurations](#configurations).
+For descriptions of the configurations in the above steps, see Configurations.
 
 After these steps are completed, you will now have a profile for your new dbt project. This file will typically be named `profiles.yml`.
 
@@ -129,7 +129,7 @@ Specify target for dbt run command
 dbt run --target <target_name>
 ```
 
-## Configurations[​](#configurations "Direct link to Configurations")
+## Configurations
 
 | Configuration | Required | Default Value | Description |
 | --- | --- | --- | --- |
@@ -143,17 +143,17 @@ dbt run --target <target_name>
 | `use_ssl` | Yes | `true` | The value must be `true`. |
 | `user` | Yes | None | Email address used as a username in Dremio. |
 
-## Known Limitations[​](#known-limitations "Direct link to Known Limitations")
+## Known Limitations
 
 [Model contracts](https://docs.getdbt.com/docs/collaborate/govern/model-contracts) are not supported.
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Install](#install)
-* [Initialize a dbt Project](#initialize-a-dbt-project)
-* [Configurations](#configurations)
-* [Known Limitations](#known-limitations)
+* Prerequisites
+* Install
+* Initialize a dbt Project
+* Configurations
+* Known Limitations
 
 <div style="page-break-after: always;"></div>
 
@@ -165,7 +165,7 @@ On this page
 
 You can develop client applications in Python that use that use [Arrow Flight](/dremio-cloud/developer/arrow-flight/) and connect to Dremio's Arrow Flight server endpoint. For help getting started, try out the sample application.
 
-## Sample Python Arrow Flight Client Application[​](#sample-python-arrow-flight-client-application "Direct link to Sample Python Arrow Flight Client Application")
+## Sample Python Arrow Flight Client Application
 
 This lightweight sample Python client application connects to the Dremio Arrow Flight server endpoint. You can use token-based credentials for authentication. Any datasets in Dremio that are accessible by the provided Dremio user can be queried. You can change settings in a `.yaml` configuration file before running the client.
 
@@ -207,7 +207,7 @@ if __name__ == "__main__":
     print(dataframe)
 ```
 
-### Steps[​](#steps "Direct link to Steps")
+### Steps
 
 1. Install [Python 3](https://www.python.org/downloads/).
 2. Download the [Dremio Flight endpoint .whl file](https://github.com/dremio-hub/arrow-flight-client-examples/releases).
@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
     * `[-config CONFIG_REL_PATH | --config-path CONFIG_REL_PATH]`: Use either of these options to set the relative path to the config file. The default is "./config.yaml".
 
-### Config File Options[​](#config-file-options "Direct link to Config File Options")
+### Config File Options
 
 Default content of the config file
 
@@ -276,9 +276,9 @@ engine:
 
 Was this page helpful?
 
-* [Sample Python Arrow Flight Client Application](#sample-python-arrow-flight-client-application)
-  + [Steps](#steps)
-  + [Config File Options](#config-file-options)
+* Sample Python Arrow Flight Client Application
+  + Steps
+  + Config File Options
 
 <div style="page-break-after: always;"></div>
 
@@ -299,7 +299,7 @@ The VS Code extension for Dremio allows you to:
 * Query with intelligence – Write and run SQL with autocomplete, formatting, and syntax highlighting—or let AI agents generate SQL for you.
 * Explore and get insights using natural language – Use the built-in Microsoft Copilot integration to ask questions in plain English, moving from questions to insights faster, without leaving your development environment.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before you begin, ensure you have:
 
@@ -307,14 +307,14 @@ Before you begin, ensure you have:
 * Personal access token (PAT) for connectivity to your project. For instructions, see [Create a PAT](/cloud/security/authentication/personal-access-token/#creating-a-pat).
 * Visual Studio Code installed with access to the Extensions tab in the tool.
 
-## Install VS Code Extension for Dremio[​](#install-vs-code-extension-for-dremio "Direct link to Install VS Code Extension for Dremio")
+## Install VS Code Extension for Dremio
 
 1. Launch VS Code and click the Extensions button on the left navigation toolbar.
 2. Search for and click on the **Dremio** extension.
 3. On the Dremio extension page, click **Install**.
    Once the installation is complete, you're ready to start querying Dremio from VS Code.
 
-## Connect to Dremio from VS Code[​](#connect-to-dremio-from-vs-code "Direct link to Connect to Dremio from VS Code")
+## Connect to Dremio from VS Code
 
 To create a connection from VS Code:
 
@@ -325,7 +325,7 @@ To create a connection from VS Code:
 5. The connection to your Dremio Cloud project will appear on the left under **Connections**.
 6. To browse your data, click `<your_dremio_account_email>` under your connection.
 
-## Use the Copilot Integration[​](#use-the-copilot-integration "Direct link to Use the Copilot Integration")
+## Use the Copilot Integration
 
 With Copilot in VS Code set to Agent mode, you can interact with your data through plain-language queries powered by Dremio’s semantic layer. For example, try asking:
 
@@ -337,10 +337,10 @@ Behind the scenes, Copilot taps into Dremio’s AI Semantic Layer and autonomous
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Install VS Code Extension for Dremio](#install-vs-code-extension-for-dremio)
-* [Connect to Dremio from VS Code](#connect-to-dremio-from-vs-code)
-* [Use the Copilot Integration](#use-the-copilot-integration)
+* Prerequisites
+* Install VS Code Extension for Dremio
+* Connect to Dremio from VS Code
+* Use the Copilot Integration
 
 <div style="page-break-after: always;"></div>
 
@@ -352,7 +352,7 @@ On this page
 
 The [Dremio MCP Server](https://github.com/dremio/dremio-mcp) is an open-source project that enables AI chat clients or agents to securely interact with your Dremio deployment using natural language. Connecting to the Dremio-hosted MCP Server is the fastest path to enabling external AI chat clients to work with Dremio. The Dremio-hosted MCP Server provides OAuth support, which guarantees and propagates the user identity, authentication, and authorization for all interactions with Dremio. Once connected, you can use natural language to explore and query data, perform analysis and create visualizations, create views, and analyze system performance. While you can fork the open-source Dremio MCP Server for customization or install it locally for use with a personal AI chat client account we recommend using the Dremio-hosted MCP Server available to all projects for experimentation, development and production when possible.
 
-## Configure Connectivity[​](#configure-connectivity "Direct link to Configure Connectivity")
+## Configure Connectivity
 
 Review the documentation below from AI chat client providers to verify you meet the requirements for creating custom connectors before proceeding.
 
@@ -373,7 +373,7 @@ Then configure the custom connector to the Dremio-hosted MCP Server by providing
 
 Was this page helpful?
 
-* [Configure Connectivity](#configure-connectivity)
+* Configure Connectivity
 
 <div style="page-break-after: always;"></div>
 
@@ -385,7 +385,7 @@ On this page
 
 You can create client applications that use [Arrow Flight](https://arrow.apache.org/docs/format/Flight.html) to query data lakes at data-transfer speeds greater than speeds possible with ODBC and JDBC, without incurring the cost in time and CPU resources of deserializing data. As the volumes of data that are transferred increase in size, the performance benefits from the use of Apache Flight rather than ODBC or JDBC also increase.
 
-You can run queries on datasets that are in the default project of a Dremio organization. Dremio is able to determine the organization and the default project from the authentication token that a Flight client uses. To query datasets in a non-default project, you can [pass in the ID for the non-default project](#use-a-non-default-project).
+You can run queries on datasets that are in the default project of a Dremio organization. Dremio is able to determine the organization and the default project from the authentication token that a Flight client uses. To query datasets in a non-default project, you can pass in the ID for the non-default project.
 
 Dremio provides these endpoints for Arrow Flight connections:
 
@@ -394,17 +394,17 @@ Dremio provides these endpoints for Arrow Flight connections:
 
 All traffic within a control plane between Flight clients and Dremio go through the endpoint for that control plane. However, Dremio can scale up or down automatically to accommodate increasing and decreasing traffic on the endpoint.
 
-Unless you [pass in a different project ID](#use-a-non-default-project), Arrow Flight clients run queries only against datasets that are in the default project or on datasources that are associated with the default project. By default, Dremio uses the oldest project in an organization as that organization's default project.
+Unless you pass in a different project ID, Arrow Flight clients run queries only against datasets that are in the default project or on datasources that are associated with the default project. By default, Dremio uses the oldest project in an organization as that organization's default project.
 
-## Supported Versions of Apache Arrow[​](#supported-versions-of-apache-arrow "Direct link to Supported Versions of Apache Arrow")
+## Supported Versions of Apache Arrow
 
 Dremio supports client applications that use Arrow Flight in Apache Arrow version 6.0.
 
-## Supported Authentication Method[​](#supported-authentication-method "Direct link to Supported Authentication Method")
+## Supported Authentication Method
 
 Client applications can authenticate to Dremio with personal access tokens (PATs). To create a PAT, follow the steps in the section [Creating a Token](/dremio-cloud/security/authentication/personal-access-token#create-a-pat).
 
-## Flight Sessions[​](#flight-sessions "Direct link to Flight Sessions")
+## Flight Sessions
 
 A Flight session has a duration of 120 minutes during which a Flight client interacts with Dremio. A Flight client initiates a new session by passing a `getFlightInfo()` request that does not include a Cookie header that specifies a session ID that was obtained from Dremio. All requests that pass the same session ID are considered to be in the same session.
 
@@ -420,7 +420,7 @@ A Flight session has a duration of 120 minutes during which a Flight client inte
 4. Dremio returns the query results in one flight.
 5. The Flight client sends another `getFlightInfo()` request using the same session ID and bearer token. If this second request did not include the session ID that Dremio sent in response to the first request, then Dremio would send a new session ID and a new session would begin.
 
-### Use a Non-Default Project[​](#use-a-non-default-project "Direct link to Use a Non-Default Project")
+### Use a Non-Default Project
 
 To run queries on datasets and data sources in non-default projects in Dremio, the `project_id` of the projects must be passed as a session option. The `project_id` is stored in the user session, and the server responds with a `Set-Cookie` header containing the session ID. The client must include this cookie in all subsequent requests.
 
@@ -477,7 +477,7 @@ note
 
 In Dremio, the term catalog is sometimes used interchangeably with `project_id`. Therefore, using catalog instead of `project_id` will also work when selecting a non-default project. We recommend using `project_id` for clarity. Throughout this documentation, we will consistently use `project_id`.
 
-## Manage Workloads[​](#manage-workloads "Direct link to Manage Workloads")
+## Manage Workloads
 
 Dremio administrators can use the Arrow Flight server endpoint to manage query workloads by adding the following connection properties to Flight clients:
 
@@ -486,7 +486,7 @@ Dremio administrators can use the Arrow Flight server endpoint to manage query w
 | `ENGINE` | Name of the engine to use to process all queries issued during the current session. |
 | `SCHEMA` | The name of the schema (datasource or folder, including child paths, such as `mySource.folder1` and `folder1.folder2`) to use by default when a schema is not specified in a query. |
 
-## Sample Arrow Flight Client Applications[​](#sample-arrow-flight-client-applications "Direct link to Sample Arrow Flight Client Applications")
+## Sample Arrow Flight Client Applications
 
 Dremio provides sample Arrow Flight client applications in several languages at [Dremio Hub](https://github.com/dremio-hub/arrow-flight-client-examples).
 
@@ -498,12 +498,12 @@ The Python sample application only supports connecting to the default project in
 
 Was this page helpful?
 
-* [Supported Versions of Apache Arrow](#supported-versions-of-apache-arrow)
-* [Supported Authentication Method](#supported-authentication-method)
-* [Flight Sessions](#flight-sessions)
-  + [Use a Non-Default Project](#use-a-non-default-project)
-* [Manage Workloads](#manage-workloads)
-* [Sample Arrow Flight Client Applications](#sample-arrow-flight-client-applications)
+* Supported Versions of Apache Arrow
+* Supported Authentication Method
+* Flight Sessions
+  + Use a Non-Default Project
+* Manage Workloads
+* Sample Arrow Flight Client Applications
 
 <div style="page-break-after: always;"></div>
 
@@ -566,7 +566,7 @@ note
 
 At this time, you can only connect to the default project in Dremio.
 
-## Use the Sample Client[​](#use-the-sample-client "Direct link to Use the Sample Client")
+## Use the Sample Client
 
 You can download and try out the sample client from <https://github.com/dremio-hub/arrow-flight-sql-clients>. Extract the content of the file and then, in a terminal window, change to the `flight-sql-client-example` directory.
 
@@ -575,7 +575,7 @@ Before running the sample client, ensure that you have met these prerequisites:
 * Add the Samples data lake to your Dremio project by clicking the ![This is the Add Source icon.](/images/icons/plus.png "This is the Add Source icon.") icon in the **Data Lakes** section of the Datasets page.
 * Ensure that Java 8 or later (up to Java 15) is installed on the system on which you run the example commands.
 
-### Command Syntax for the Sample Client[​](#command-syntax-for-the-sample-client "Direct link to Command Syntax for the Sample Client")
+### Command Syntax for the Sample Client
 
 Use this syntax when sending commands to the sample client:
 
@@ -604,7 +604,7 @@ Usage: java -jar flight-sql-sample-client-application.jar  -host data.dremio.clo
                                           Defaults to true.
 ```
 
-### Examples[​](#examples "Direct link to Examples")
+### Examples
 
 The examples demonstrate what is returned for each of these requests:
 
@@ -617,7 +617,7 @@ note
 
 These examples use the Flight endpoint for Dremio's US control plane: `data.dremio.cloud`. To use Dremio's European control plane, use this endpoint instead: `data.eu.dremio.cloud`.
 
-#### Flight SQL Request: CommandGetDbSchemas[​](#flight-sql-request-commandgetdbschemas "Direct link to Flight SQL Request: CommandGetDbSchemas")
+#### Flight SQL Request: CommandGetDbSchemas
 
 This command submits a `CommandGetDbSchemas` request to list the schemas in a catalog.
 
@@ -637,7 +637,7 @@ null	        Samples
 null	        sys
 ```
 
-#### Flight SQL Request: CommandGetTables[​](#flight-sql-request-commandgettables "Direct link to Flight SQL Request: CommandGetTables")
+#### Flight SQL Request: CommandGetTables
 
 This command submits a `CommandGetTables` request to list the tables that are in a catalog or schema.
 
@@ -666,7 +666,7 @@ null	      INFORMATION_SCHEMA	TABLES          SYSTEM_TABLE
 null	      INFORMATION_SCHEMA	VIEWS           SYSTEM_TABLE
 ```
 
-#### Flight SQL Request: CommandGetTableTypes[​](#flight-sql-request-commandgettabletypes "Direct link to Flight SQL Request: CommandGetTableTypes")
+#### Flight SQL Request: CommandGetTableTypes
 
 This command submits a `CommandTableTypes` request to list the table types supported.
 
@@ -685,7 +685,7 @@ SYSTEM_TABLE
 VIEW
 ```
 
-#### Flight SQL Request: CommandExecute[​](#flight-sql-request-commandexecute "Direct link to Flight SQL Request: CommandExecute")
+#### Flight SQL Request: CommandExecute
 
 This command submits a `CommandExecute` request to run a single SQL statement.
 
@@ -711,9 +711,9 @@ pickup_datetime	passenger_count	trip_distance_mi fare_amount tip_amount total_am
 2013-05-27T19:02              1            11.73        32.5       8.12        41.12
 ```
 
-## Code Samples[​](#code-samples "Direct link to Code Samples")
+## Code Samples
 
-### Create a FlightSqlClient[​](#create-a-flightsqlclient "Direct link to Create a FlightSqlClient")
+### Create a FlightSqlClient
 
 Refer to [this code sample](https://github.com/dremio-hub/arrow-flight-client-examples/blob/main/java/src/main/java/com/adhoc/flight/client/AdhocFlightClient.java) to create a `FlightClient`. Then, wrap your `FlightClient` in a `FlightSqlClient`:
 
@@ -727,7 +727,7 @@ FlightSqlClient flightSqlClient = new FlightSqlClient(flightClient);
 flightSqlClient.close();
 ```
 
-### Retrieve a List of Database Schemas[​](#retrieve-a-list-of-database-schemas "Direct link to Retrieve a List of Database Schemas")
+### Retrieve a List of Database Schemas
 
 This code issues a CommandGetSchemas metadata request:
 
@@ -739,7 +739,7 @@ String dbSchemaFilterPattern = null; // The schema filter pattern. (may be null)
 FlightInfo flightInfo = flightSqlClient.getSchemas(catalog, dbSchemaFilterPattern);
 ```
 
-### Retrieve a List of Tables[​](#retrieve-a-list-of-tables "Direct link to Retrieve a List of Tables")
+### Retrieve a List of Tables
 
 This code issues a CommandGetTables metadata request:
 
@@ -754,7 +754,7 @@ boolean includeSchema = false;  // True to include the schema upon return, false
 FlightInfo flightInfo = flightSqlClient.getTables(catalog, dbSchemaFilterPattern, tableFilterPattern, tableTypes, includeSchema);
 ```
 
-### Retrieve a List of Table Types That a Database Supports[​](#retrieve-a-list-of-table-types-that-a-database-supports "Direct link to Retrieve a List of Table Types That a Database Supports")
+### Retrieve a List of Table Types That a Database Supports
 
 This code issues a CommandGetTableTypes metadata request:
 
@@ -764,7 +764,7 @@ CommandGetTableTypes metadata request
 FlightInfo flightInfo = flightSqlClient.getTableTypes();
 ```
 
-### Run a Query[​](#run-a-query "Direct link to Run a Query")
+### Run a Query
 
 This code issues a CommandExecute request:
 
@@ -774,7 +774,7 @@ CommandExecute request
 FlightInfo flightInfo = flightSqlClient.execute("SELECT * FROM Samples.\"samples.myUserName.com\".\"NYC-taxi-trips\" limit 10");
 ```
 
-### Consume Data Returned for a Query[​](#consume-data-returned-for-a-query "Direct link to Consume Data Returned for a Query")
+### Consume Data Returned for a Query
 
 Consume data returned for query
 
@@ -798,7 +798,7 @@ for (FlightEndpoint endpoint : flightInfo.getEndpoints()) {
 }
 ```
 
-## Client Interactions with Dremio[​](#client-interactions-with-dremio "Direct link to Client Interactions with Dremio")
+## Client Interactions with Dremio
 
 This diagram shows an example of how an Arrow Flight SQL client initiates a Flight session and runs a query. It also shows what messages pass between the proxy at the Arrow Flight SQL endpoint, the control plane, and the execution plane.
 
@@ -821,17 +821,17 @@ This diagram shows an example of how an Arrow Flight SQL client initiates a Flig
 
 Was this page helpful?
 
-* [Use the Sample Client](#use-the-sample-client)
-  + [Command Syntax for the Sample Client](#command-syntax-for-the-sample-client)
-  + [Examples](#examples)
-* [Code Samples](#code-samples)
-  + [Create a FlightSqlClient](#create-a-flightsqlclient)
-  + [Retrieve a List of Database Schemas](#retrieve-a-list-of-database-schemas)
-  + [Retrieve a List of Tables](#retrieve-a-list-of-tables)
-  + [Retrieve a List of Table Types That a Database Supports](#retrieve-a-list-of-table-types-that-a-database-supports)
-  + [Run a Query](#run-a-query)
-  + [Consume Data Returned for a Query](#consume-data-returned-for-a-query)
-* [Client Interactions with Dremio](#client-interactions-with-dremio)
+* Use the Sample Client
+  + Command Syntax for the Sample Client
+  + Examples
+* Code Samples
+  + Create a FlightSqlClient
+  + Retrieve a List of Database Schemas
+  + Retrieve a List of Tables
+  + Retrieve a List of Table Types That a Database Supports
+  + Run a Query
+  + Consume Data Returned for a Query
+* Client Interactions with Dremio
 
 <div style="page-break-after: always;"></div>
 
@@ -848,7 +848,7 @@ For a deeper dive into Apache Iceberg, see:
 * [Apache Iceberg: An Architectural Look Under the Covers](https://www.dremio.com/apache-iceberg-an-architectural-look-under-the-covers/)
 * [What is Apache Iceberg?](https://www.dremio.com/data-lake/apache-iceberg/)
 
-### Benefits of Iceberg Tables[​](#benefits-of-iceberg-tables "Direct link to Benefits of Iceberg Tables")
+### Benefits of Iceberg Tables
 
 Iceberg tables offer the following benefits over other formats traditionally used in the data lake, including:
 
@@ -858,9 +858,9 @@ Iceberg tables offer the following benefits over other formats traditionally use
 * **Increased performance:** Ensures data files are intelligently filtered for accelerated processing via advanced partition pruning and column-level statistics.
 * **Time travel:** Allows users to query any previous versions of the table to examine and compare data or reproduce results using previous queries.
 * **[Automatic optimization](/dremio-cloud/manage-govern/optimization):** Optimize query performance to maximize the speed and efficiency with which data is retrieved.
-* **[Version rollback](#rollbacks):** Corrects any discovered problems quickly by resetting tables to a known good state.
+* **Version rollback:** Corrects any discovered problems quickly by resetting tables to a known good state.
 
-## Clustering[​](#clustering "Direct link to Clustering")
+## Clustering
 
 Clustered Iceberg tables in Dremio makes use of Z-Ordering to provide a more intuitive data layout with comparable or better performance characteristics to Iceberg partitioning.
 
@@ -870,7 +870,7 @@ Clustering provides a general-purpose file layout that enables both efficient re
 
 A common pattern is to choose clustered columns that are either primary keys of the table or commonly used for query filters. These column choices will effectively filter the working dataset, thereby improving query times. Clustered columns are ordered in precedence of filtering or cardinality with the most commonly queried columns of highest cardinality first.
 
-#### Supported Data Types for Clustered Columns[​](#supported-data-types-for-clustered-columns "Direct link to Supported Data Types for Clustered Columns")
+#### Supported Data Types for Clustered Columns
 
 Dremio Iceberg clustering supports clustered columns of the following data types:
 
@@ -891,21 +891,21 @@ For clustered tables, [`OPTIMIZE TABLE`](/dremio-cloud/sql/commands/optimize-tab
 
 For unclustered tables, `OPTIMIZE TABLE` combines small files or splits large files to achieve an optimal file size, reducing metadata overhead and runtime file open costs.
 
-#### CTAS Behavior and Clustering[​](#ctas-behavior-and-clustering "Direct link to CTAS Behavior and Clustering")
+#### CTAS Behavior and Clustering
 
 When running a [`CREATE TABLE AS`](/dremio-cloud/sql/commands/create-table-as) statement with clustering, the data is written in an unordered way. For the best performance, you should run an `OPTIMIZE TABLE` SQL command after creating a table using a [`CREATE TABLE AS`](/dremio-cloud/sql/commands/create-table-as) statement.
 
-## Iceberg Table Management[​](#iceberg-table-management "Direct link to Iceberg Table Management")
+## Iceberg Table Management
 
 Learn how to manage Iceberg tables in Dremio with supported Iceberg features such as expiring snapshots and optimizing tables.
 
-### Vacuum[​](#vacuum "Direct link to Vacuum")
+### Vacuum
 
 Each write to an Iceberg table creates a snapshot of that table, which is a timestamped version of the table. As snapshots accumulate, data files that are no longer referenced in recent snapshots take up more and more storage. Additionally, the more snapshots a table has, the larger its metadata becomes. You can expire older snapshots to delete the data files that are unique to them and to remove them from table metadata. It is recommended that you expire snapshots regularly. For the SQL command to expire snapshots, see [`VACUUM TABLE`](/dremio-cloud/sql/commands/vacuum-table/).
 
 Sometimes failed SQL commands may leave orphan data files in the table location that are no longer referenced by any active snapshot of the table. You can remove orphan files in the table location by running `remove_orphan_files`. See [`VACUUM TABLE`](/dremio-cloud/sql/commands/vacuum-table/) for details.
 
-### Optimization[​](#optimization "Direct link to Optimization")
+### Optimization
 
 Dremio provides [automatic optimization](/dremio-cloud/manage-govern/optimization/), which automatically maintains Iceberg tables in the Open Catalog using a dedicated engine configured by Dremio. However, for immediate optimization, you can use the [`OPTIMIZE TABLE`](/dremio-cloud/sql/commands/optimize-table) SQL command and route jobs to specific engines in your project by creating a routing rule with the `query_label()` condition and the `OPTIMIZATION` label. For more information, see [Workload Management](/dremio-cloud/admin/engines/workload-management).
 
@@ -914,13 +914,13 @@ When optimizing tables manually, you can use:
 * [`FOR PARTITIONS`](/dremio-cloud/sql/commands/optimize-table/) to optimize selected partitions.
 * [`MIN_INPUT_FILES`](/dremio-cloud/sql/commands/optimize-table/) to consider the minimum number of qualified files needed for compaction. Delete files count towards determining whether the minimum threshold is reached.
 
-## Iceberg Catalogs in Dremio[​](#iceberg-catalogs-in-dremio "Direct link to Iceberg Catalogs in Dremio")
+## Iceberg Catalogs in Dremio
 
 The Apache Iceberg table format uses an Iceberg catalog service to track snapshots and ensure transactional consistency between tools. For more information about how Iceberg catalogs and tables work together, see [Iceberg Catalog](https://www.dremio.com/resources/guides/apache-iceberg-an-architectural-look-under-the-covers/#toc_item_Iceberg%20catalog).
 
 note
 
-Currently, Dremio does not support the Amazon DynamoDB nor JDBC catalogs. For additional information on limitations of Apache Iceberg as implemented in Dremio, see [Limitations](#limitations).
+Currently, Dremio does not support the Amazon DynamoDB nor JDBC catalogs. For additional information on limitations of Apache Iceberg as implemented in Dremio, see Limitations.
 
 The catalog is the source of truth for the current metadata pointer for a table. You can use [Dremio's Open Catalog](/dremio-cloud/developer/data-formats/iceberg/#iceberg-catalogs-in-dremio) as a catalog for all your tables. You can also add external Iceberg catalogs as a source in Dremio, which allows you to work with Iceberg tables that are not cataloged in Dremio's Open Catalog.The list of Iceberg catalogs that can be added as a source can be found here:
 
@@ -931,13 +931,13 @@ The catalog is the source of truth for the current metadata pointer for a table.
 
 Once a table is created with a specific catalog, you must continue using that same catalog to access the table. For example, if you create a table using AWS Glue as the catalog, you cannot later access that table by adding its S3 location as a source in Dremio. You must add the AWS Glue Data Catalog as a source and access the table through it.
 
-## Rollbacks[​](#rollbacks "Direct link to Rollbacks")
+## Rollbacks
 
 When you modify an Iceberg table using data definition language (DDL) or data manipulation language (DML), each change creates a new [snapshot](https://iceberg.apache.org/terms/#snapshot) in the table's metadata. The Iceberg [catalog](/dremio-cloud/developer/data-formats/iceberg/#iceberg-catalogs-in-dremio) tracks the current snapshot through a root pointer.
 You can use the [`ROLLBACK TABLE`](/dremio-cloud/sql/commands/rollback-table) SQL command to roll back a table by redirecting this pointer to an earlier snapshot—useful for undoing recent data errors. Rollbacks can target a specific timestamp or snapshot ID.
 When you perform a rollback, Dremio creates a new snapshot identical to the selected one. For example, if a table has snapshots (1) `first_snapshot`, (2) `second_snapshot`, and (3) `third_snapshot`, rolling back to `first_snapshot` restores the table to that state while preserving all snapshots for time travel queries.
 
-## SQL Command Compatibility[​](#sql-command-compatibility "Direct link to SQL Command Compatibility")
+## SQL Command Compatibility
 
 Dremio supports running most combinations of concurrent SQL commands on Iceberg tables. To take a few examples, two [`INSERT`](/dremio-cloud/sql/commands/insert) commands can run concurrently on the same table, as can two [`SELECT`](/dremio-cloud/sql/commands/SELECT) commands, or an [`UPDATE`](/dremio-cloud/sql/commands/update) and an [`ALTER`](/dremio-cloud/sql/commands/alter-table) command.
 
@@ -951,7 +951,7 @@ This table shows which types of SQL commands can and cannot run concurrently wit
 
 ![SQL commands that cause concurrency conflicts](/images/concurrency-table.png "SQL commands that cause concurrency conflicts")
 
-## Table Properties[​](#table-properties "Direct link to Table Properties")
+## Table Properties
 
 The following Apache Iceberg table properties are supported in Dremio. You can use these properties to configure aspects of Apache Iceberg tables:
 
@@ -986,7 +986,7 @@ Dremio uses the Iceberg default value for table properties that are not set. See
 
 In cases where Dremio has a support key for a feature covered by a table property, Dremio uses the table property instead of the support key.
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 The following are limitations with Apache Iceberg as implemented in Dremio:
 
@@ -999,7 +999,7 @@ The following are limitations with Apache Iceberg as implemented in Dremio:
 * You can run only one optimize query at a time on the selected Iceberg table partition.
 * The optimize functionality does not support sort ordering.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Automatic Optimization](/dremio-cloud/manage-govern/optimization/) – Learn how Dremio optimizes Iceberg tables automatically.
 * [Load Data Into Tables](/dremio-cloud/bring-data/load/) - Load data from CSV, JSON, or Parquet files into existing Iceberg tables.
@@ -1007,17 +1007,17 @@ The following are limitations with Apache Iceberg as implemented in Dremio:
 
 Was this page helpful?
 
-* [Benefits of Iceberg Tables](#benefits-of-iceberg-tables)
-* [Clustering](#clustering)
-* [Iceberg Table Management](#iceberg-table-management)
-  + [Vacuum](#vacuum)
-  + [Optimization](#optimization)
-* [Iceberg Catalogs in Dremio](#iceberg-catalogs-in-dremio)
-* [Rollbacks](#rollbacks)
-* [SQL Command Compatibility](#sql-command-compatibility)
-* [Table Properties](#table-properties)
-* [Limitations](#limitations)
-* [Related Topics](#related-topics)
+* Benefits of Iceberg Tables
+* Clustering
+* Iceberg Table Management
+  + Vacuum
+  + Optimization
+* Iceberg Catalogs in Dremio
+* Rollbacks
+* SQL Command Compatibility
+* Table Properties
+* Limitations
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -1029,7 +1029,7 @@ On this page
 
 This topic provides general information and recommendations for Parquet files.
 
-## Read Parquet Files[​](#read-parquet-files "Direct link to Read Parquet Files")
+## Read Parquet Files
 
 Dremio's vectorized Parquet file reader improves parallelism on columnar data, reduces latencies, and enables more efficient resource and memory usage.
 
@@ -1037,7 +1037,7 @@ Dremio supports off-heap memory buffers for reading Parquet files.
 
 Dremio supports file compression with `snappy`, `gzip`, and `zstd` for reading Parquet files.
 
-## Parquet Limitations[​](#parquet-limitations "Direct link to Parquet Limitations")
+## Parquet Limitations
 
 Take into consideration the following limitations when generating and configuring Parquet files. Failure to adhere to these restrictions may cause errors to trigger when using Parquet files with Dremio.
 
@@ -1045,7 +1045,7 @@ Take into consideration the following limitations when generating and configurin
 * **Maximum allowable elements in an array are restricted to 128.** The maximum allowable number of elements in an array may not exceed this quantity. Additional elements beyond the allowed 128 results in a query failure.
 * **Maximum footer size is restricted to 16MB.** The footer consists of metadata. This includes information about the version of the format, the schema, extra key-value pairs, and metadata for columns in the file. When the footer exceeds this size, a query failure occurs.
 
-## Recommended Configuration[​](#recommended-configuration "Direct link to Recommended Configuration")
+## Recommended Configuration
 
 When using other tools to generate Parquet files for consumption in Dremio, we recommend the following configuration:
 
@@ -1057,9 +1057,9 @@ When using other tools to generate Parquet files for consumption in Dremio, we r
 
 Was this page helpful?
 
-* [Read Parquet Files](#read-parquet-files)
-* [Parquet Limitations](#parquet-limitations)
-* [Recommended Configuration](#recommended-configuration)
+* Read Parquet Files
+* Parquet Limitations
+* Recommended Configuration
 
 <div style="page-break-after: always;"></div>
 
@@ -1078,24 +1078,24 @@ Delta Lake provides the following benefits:
 * Large-scale support: Efficient metadata handling enables applications to readily process petabyte-sized datasets with millions of files
 * Schema consistency: All applications processing a dataset operate on a consistent and shared definition of the dataset metadata such as columns, data types, partitions.
 
-## Supported Data Sources[​](#supported-data-sources "Direct link to Supported Data Sources")
+## Supported Data Sources
 
 The Delta Lake table format is supported with the following sources in the Parquet file format:
 
 * [Amazon S3](/dremio-cloud/bring-data/connect/object-storage/amazon-s3)
 * [AWS Glue Data Catalog](/dremio-cloud/bring-data/connect/catalogs/aws-glue-data-catalog)
 
-## Analyze Delta Lake Datasets[​](#analyze-delta-lake-datasets "Direct link to Analyze Delta Lake Datasets")
+## Analyze Delta Lake Datasets
 
 Dremio supports analyzing Delta Lake datasets on the sources listed above through a native and high-performance reader. It automatically identifies which datasets are saved in the Delta Lake format, and imports table information from the Delta Lake manifest files. Dataset promotion is seamless and operates the same as any other data format in Dremio, where users can promote file system directories containing a Delta Lake dataset to a table manually or automatically by querying the directory. When using Delta Lake format, Dremio supports datasets of any size including petabyte-sized datasets with billions of files.
 
 Dremio reads Delta Lake tables created or updated by another engine, such as Spark and others, with transactional consistency. Dremio automatically identifies tables that are in the Delta Lake format and selects the appropriate format for the user.
 
-### Refresh Metadata[​](#refresh-metadata "Direct link to Refresh Metadata")
+### Refresh Metadata
 
 Metadata refresh is required to query the latest version of a Delta Lake table. You can wait for an automatic refresh of metadata or manually refresh it.
 
-#### Example of Querying a Delta Lake Table[​](#example-of-querying-a-delta-lake-table "Direct link to Example of Querying a Delta Lake Table")
+#### Example of Querying a Delta Lake Table
 
 Perform the following steps to query a Delta Lake table:
 
@@ -1127,7 +1127,7 @@ REFRESH METADATA
 
 8. Run the previous query on the Delta Lake table to retrieve the results from the updated Delta Lake table.
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 * Creating Delta Lake tables is not supported.
 * DML operations are not supported.
@@ -1138,10 +1138,10 @@ REFRESH METADATA
 
 Was this page helpful?
 
-* [Supported Data Sources](#supported-data-sources)
-* [Analyze Delta Lake Datasets](#analyze-delta-lake-datasets)
-  + [Refresh Metadata](#refresh-metadata)
-* [Limitations](#limitations)
+* Supported Data Sources
+* Analyze Delta Lake Datasets
+  + Refresh Metadata
+* Limitations
 
 <div style="page-break-after: always;"></div>
 

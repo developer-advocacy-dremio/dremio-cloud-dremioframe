@@ -6,11 +6,11 @@ On this page
 
 Dremio offers extensive security measures to help protect the integrity of your data, including access control and the ability to use external identity providers (IdPs). Dremio provides flexible native security features and integration with a wide range of third-party tools so that your organization can adhere to compliance and regulatory standards, enforce fine-grained permissions for your users, and retain your existing tools for authentication and authorization.
 
-## Authentication and Identity Management[​](#authentication-and-identity-management "Direct link to Authentication and Identity Management")
+## Authentication and Identity Management
 
 Dremio supports industry-standard [authentication](/dremio-cloud/security/authentication/) and single sign-on (SSO) services, including OAuth 2.0/OpenID Connect. Organizations can configure integrated authentication (Active Directory or OpenID Connect) to centrally manage user accounts with strong password policies and SSO/multi-factor authentication (MFA).
 
-## Access Control[​](#access-control "Direct link to Access Control")
+## Access Control
 
 Dremio provides a comprehensive hierarchical privilege system for fine-grained access control across your organization.
 
@@ -20,13 +20,13 @@ Dremio provides a comprehensive hierarchical privilege system for fine-grained a
 * **Object Ownership** – Automatic ownership assignment when creating objects, with transferable ownership capabilities.
 * **Open Catalog Security** – Structured access control for managed catalog systems.
 
-## Data Protection[​](#data-protection "Direct link to Data Protection")
+## Data Protection
 
 * **Encryption in Transit** – Your content is transmitted using TLS 1.2 or higher between client and control plane, and between control plane and data plane.
 * **Encryption at Rest** – Your data is encrypted at rest within the control plane using AES-256 or higher.
 * **Customer-Managed Encryption** – Deploy and manage your encryption keys for enhanced security.
 
-## Compliance and Certifications[​](#compliance-and-certifications "Direct link to Compliance and Certifications")
+## Compliance and Certifications
 
 * **Compliance** – Review current [compliance measures](/dremio-cloud/security/compliance) and audits Dremio has completed.
 
@@ -43,10 +43,10 @@ Dremio provides a comprehensive hierarchical privilege system for fine-grained a
 
 Was this page helpful?
 
-* [Authentication and Identity Management](#authentication-and-identity-management)
-* [Access Control](#access-control)
-* [Data Protection](#data-protection)
-* [Compliance and Certifications](#compliance-and-certifications)
+* Authentication and Identity Management
+* Access Control
+* Data Protection
+* Compliance and Certifications
 
 <div style="page-break-after: always;"></div>
 
@@ -69,7 +69,7 @@ See the following role design guidelines:
 * Use prefixes such as DEPT\_, PROJ\_, or TEAM\_ for consistency.
 * Use the description field to explain each role's intent.
 
-## How Role Inheritance Works[​](#how-role-inheritance-works "Direct link to How Role Inheritance Works")
+## How Role Inheritance Works
 
 Child roles automatically inherit all privileges from their parent roles, creating a cascading effect that simplifies privilege management.
 
@@ -84,11 +84,11 @@ Data_Viewer (SELECT on public datasets only)
 
 In this example, a Data\_Engineer automatically gets all the privileges of Data\_Analyst and Data\_Viewer, plus their own additional CREATE and ALTER privileges.
 
-## System Roles[​](#system-roles "Direct link to System Roles")
+## System Roles
 
 Dremio has two predefined system roles: ADMIN and PUBLIC. These roles can be used to manage privileges.
 
-### ADMIN[​](#admin "Direct link to ADMIN")
+### ADMIN
 
 The ADMIN role is designed for administrative users who require superuser/global access. Users who are assigned this role are granted every privilege across all objects and resources in an organization. The privileges for the ADMIN role are immutable by users.
 
@@ -96,7 +96,7 @@ The first user in an organization is automatically assigned the ADMIN role.
 
 Be cautious when assigning the ADMIN role. Users with ADMIN privileges can modify any data, delete objects, and manage other users' access.
 
-### PUBLIC[​](#public "Direct link to PUBLIC")
+### PUBLIC
 
 The PUBLIC role is assigned by default to all new users added to the organization and cannot be revoked from any user. Think of PUBLIC as the baseline access level that every user in your organization receives.
 
@@ -109,20 +109,20 @@ SELECT and ALTER privileges are not granted for any sources and must be assigned
 
 Additional privileges can be granted to the PUBLIC role to provide organization-wide baseline access.
 
-## Custom Roles[​](#custom-roles "Direct link to Custom Roles")
+## Custom Roles
 
 Custom roles can be created by any user or role that has the [CREATE ROLE](/dremio-cloud/security/privileges#organization-privileges) organization privilege, or by members of the ADMIN role.
 
 You can assign a custom role to users or other roles (to create a child role). The custom role can then be assigned a set of privileges.
 
-### View All Roles[​](#view-all-roles "Direct link to View All Roles")
+### View All Roles
 
-#### Use the Dremio Console[​](#use-the-dremio-console "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
 
-#### Use SQL[​](#use-sql "Direct link to Use SQL")
+#### Use SQL
 
 ADMIN users can also list all roles using the [`sys.organization.roles`](/dremio-cloud/sql/system-tables/roles) system table:
 
@@ -138,9 +138,9 @@ LEFT JOIN sys.organization.users u ON r.owner_id = u.user_id
 ORDER BY r.role_name;
 ```
 
-### Create a Custom Role[​](#create-a-custom-role "Direct link to Create a Custom Role")
+### Create a Custom Role
 
-#### Use the Dremio Console[​](#use-the-dremio-console-1 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -149,13 +149,13 @@ ORDER BY r.role_name;
 5. (Optional) For **Description**, provide any details regarding the purpose of the role or its associated privileges.
 6. Click **Add**.
 
-#### Use SQL[​](#use-sql-1 "Direct link to Use SQL")
+#### Use SQL
 
 You can also create custom roles using the [`CREATE ROLE`](/dremio-cloud/sql/commands/create-role/) command.
 
-### Edit a Custom Role[​](#edit-a-custom-role "Direct link to Edit a Custom Role")
+### Edit a Custom Role
 
-#### Use the Dremio Console[​](#use-the-dremio-console-2 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -163,15 +163,15 @@ You can also create custom roles using the [`CREATE ROLE`](/dremio-cloud/sql/com
 4. On the Edit Role page, make any desired changes, such as adding or removing a child role and adding or removing a member.
 5. Click **Save**.
 
-#### Use SQL[​](#use-sql-2 "Direct link to Use SQL")
+#### Use SQL
 
 You can also add or remove child roles and members using the [GRANT ROLE](/dremio-cloud/sql/commands/grant-role) and [REVOKE ROLE](/dremio-cloud/sql/commands/revoke-role) SQL commands.
 
-### Remove a Custom Role[​](#remove-a-custom-role "Direct link to Remove a Custom Role")
+### Remove a Custom Role
 
 Removing a role will immediately revoke all associated privileges from its members. Ensure users have alternative access before deleting roles.
 
-#### Use the Dremio Console[​](#use-the-dremio-console-3 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -180,15 +180,15 @@ Removing a role will immediately revoke all associated privileges from its membe
 
 Once confirmed, the role is deleted and cannot be retrieved.
 
-#### Use SQL[​](#use-sql-3 "Direct link to Use SQL")
+#### Use SQL
 
 You can also remove custom roles using the [`DROP ROLE`](/dremio-cloud/sql/commands/drop-role/) command.
 
-### Add a Child Role[​](#add-a-child-role "Direct link to Add a Child Role")
+### Add a Child Role
 
 Child roles inherit all privileges from their parent roles. This creates a hierarchy where more specific roles build upon broader ones.
 
-#### Use the Dremio Console[​](#use-the-dremio-console-4 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -199,7 +199,7 @@ Child roles inherit all privileges from their parent roles. This creates a hiera
 
 The child role appears in the table along the left side of the screen.
 
-#### Use SQL[​](#use-sql-4 "Direct link to Use SQL")
+#### Use SQL
 
 You can also add child roles to parent roles using the [`GRANT ROLE`](/dremio-cloud/sql/commands/grant-role) SQL command:
 
@@ -210,9 +210,9 @@ Example Association of a Child Role
 GRANT ROLE Data_Analyst TO ROLE Analytics_Team;
 ```
 
-### Remove a Child Role[​](#remove-a-child-role "Direct link to Remove a Child Role")
+### Remove a Child Role
 
-#### Use the Dremio Console[​](#use-the-dremio-console-5 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -220,13 +220,13 @@ GRANT ROLE Data_Analyst TO ROLE Analytics_Team;
 4. Hover over the row of the role and click ![Delete](/images/icons/trash.png "Delete") that appears next to the role.
 5. Click **Save**.
 
-#### Use SQL[​](#use-sql-5 "Direct link to Use SQL")
+#### Use SQL
 
 You can also remove child roles from parent roles using the [`REVOKE ROLE`](/dremio-cloud/sql/commands/revoke-role) SQL command.
 
-### Add a Member[​](#add-a-member "Direct link to Add a Member")
+### Add a Member
 
-#### Use the Dremio Console[​](#use-the-dremio-console-6 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -235,7 +235,7 @@ You can also remove child roles from parent roles using the [`REVOKE ROLE`](/dre
 5. Click **Add** when you have selected the desired entry or entries. When a member is added, it will display below the dropdown in a list.
 6. Click **Save**.
 
-#### Use SQL[​](#use-sql-6 "Direct link to Use SQL")
+#### Use SQL
 
 You can also add members to roles using the [`GRANT ROLE`](/dremio-cloud/sql/commands/grant-role) SQL command:
 
@@ -246,11 +246,11 @@ Example creating a role member
 GRANT ROLE Data_Analyst TO USER 'jane.doe@company.com';
 ```
 
-### Remove a Member[​](#remove-a-member "Direct link to Remove a Member")
+### Remove a Member
 
 Users cannot remove themselves from the ADMIN role. If you are a member of the ADMIN role and wish to be removed from it, another user who has the necessary privileges must remove you.
 
-#### Use the Dremio Console[​](#use-the-dremio-console-7 "Direct link to Use the Dremio Console")
+#### Use the Dremio Console
 
 1. Click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and choose **Organization settings**.
 2. Select **Roles** in the organization settings sidebar.
@@ -260,30 +260,30 @@ Users cannot remove themselves from the ADMIN role. If you are a member of the A
 
 This removes them as a member of this role, and they will no longer possess the privileges associated with that role. However, the user still retains privileges associated with any other roles where they are members.
 
-#### Use SQL[​](#use-sql-7 "Direct link to Use SQL")
+#### Use SQL
 
 You can also remove members from roles using the [`REVOKE ROLE`](/dremio-cloud/sql/commands/revoke-role) SQL command.
 
-## Limits and Considerations[​](#limits-and-considerations "Direct link to Limits and Considerations")
+## Limits and Considerations
 
 * There is a limit of 10 nested roles in a hierarchy. For more information, see [Limits](/dremio-cloud/help-support/limits/).
 
 Was this page helpful?
 
-* [How Role Inheritance Works](#how-role-inheritance-works)
-* [System Roles](#system-roles)
-  + [ADMIN](#admin)
-  + [PUBLIC](#public)
-* [Custom Roles](#custom-roles)
-  + [View All Roles](#view-all-roles)
-  + [Create a Custom Role](#create-a-custom-role)
-  + [Edit a Custom Role](#edit-a-custom-role)
-  + [Remove a Custom Role](#remove-a-custom-role)
-  + [Add a Child Role](#add-a-child-role)
-  + [Remove a Child Role](#remove-a-child-role)
-  + [Add a Member](#add-a-member)
-  + [Remove a Member](#remove-a-member)
-* [Limits and Considerations](#limits-and-considerations)
+* How Role Inheritance Works
+* System Roles
+  + ADMIN
+  + PUBLIC
+* Custom Roles
+  + View All Roles
+  + Create a Custom Role
+  + Edit a Custom Role
+  + Remove a Custom Role
+  + Add a Child Role
+  + Remove a Child Role
+  + Add a Member
+  + Remove a Member
+* Limits and Considerations
 
 <div style="page-break-after: always;"></div>
 
@@ -295,60 +295,60 @@ On this page
 
 Dremio meets the IT control requirements for several compliance frameworks and certifications, as described below.
 
-## SOC 2 Type II Report[​](#soc-2-type-ii-report "Direct link to SOC 2 Type II Report")
+## SOC 2 Type II Report
 
 Dremio maintains compliance with the American Institute of Certified Public Accountants (AICPA) System and Organization Controls - Trust Services Criteria, commonly known as SOC 2.
 
-### Key Benefits[​](#key-benefits "Direct link to Key Benefits")
+### Key Benefits
 
 [SOC 2 Type II reports](https://us.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report) provide an in-depth analysis of cloud service providers regarding the safeguards used to protect data and how controls are performed. These reports are issued by independent, third-party auditors and cover the key areas of security, availability, confidentiality, and privacy.
 
 This independent assessment of Dremio provides a detailed report regarding the environments used to provide security and data privacy. The report includes descriptions of these controls, the tests performed to assess their effectiveness, the results of those tests, and an overall opinion regarding the design and operational effectiveness of the environments.
 
-## ISO 27001 Certification[​](#iso-27001-certification "Direct link to ISO 27001 Certification")
+## ISO 27001 Certification
 
 ISO 27001 is an internationally recognized specification for an Information Security Management System (ISMS). ISO 27001 is the only auditable standard that addresses the overall management of information security rather than just which technical controls to implement.
 
-### Key Benefits[​](#key-benefits-1 "Direct link to Key Benefits")
+### Key Benefits
 
 Obtaining [ISO 27001:2022 certification](https://www.iso.org/isoiec-27001-information-security.html) demonstrates that Dremio employs a comprehensive framework of legal, physical, and technical controls for information risk management.
 
-## GDPR Compliance[​](#gdpr-compliance "Direct link to GDPR Compliance")
+## GDPR Compliance
 
 Dremio is compliant with the storage and security of its data according to Article 27 of the General Data Protection Regulation (GDPR). Please see [Dremio's Privacy Policy](https://www.dremio.com/legal/privacy-policy/) for additional information regarding our appointed European Data Protection Officer (EDPO) in the EU.
 
-### Key Benefits[​](#key-benefits-2 "Direct link to Key Benefits")
+### Key Benefits
 
 As part of the European Union, specific regulations exist that require companies to [maintain compliance with GDPR](https://gdpr.org/). This regulation governs the way user data is stored, processed, and utilized on Dremio. Specifically, it prevents the exploitation of user data and standardizes the data protection laws that services must follow throughout Europe.
 
-## CCPA Compliance[​](#ccpa-compliance "Direct link to CCPA Compliance")
+## CCPA Compliance
 
 Dremio maintains compliance with the California Consumer Privacy Act (CCPA), which regulates the handling of personal data and prevents any unauthorized use or sale. Please see [Dremio's Privacy Notice for California Residents](https://www.dremio.com/legal/privacy-policy/) for additional information.
 
-### Key Benefits[​](#key-benefits-3 "Direct link to Key Benefits")
+### Key Benefits
 
 Adherence to [CCPA](https://oag.ca.gov/privacy/ccpa) by an organization ensures that California residents have the right to opt out of having their data sold to third parties, request disclosure of data collected, and request deletion of that data.
 
-## HIPAA Compliance[​](#hipaa-compliance "Direct link to HIPAA Compliance")
+## HIPAA Compliance
 
 Dremio is compliant with the Health Insurance Portability and Accountability Act (HIPAA), a series of federal regulatory standards that outline the lawful use and disclosure of protected health information in the United States. HIPAA compliance is regulated by the Department of Health and Human Services (HHS) and enforced by the Office for Civil Rights (OCR).
 
-### Key Benefits[​](#key-benefits-4 "Direct link to Key Benefits")
+### Key Benefits
 
 Adherence to [HIPAA](https://www.cdc.gov/phlp/publications/topic/hipaa.html) ensures that healthcare providers, health plans, healthcare clearinghouses, and business associates of HIPAA-covered entities must implement multiple safeguards to protect sensitive personal and health information.
 
 Was this page helpful?
 
-* [SOC 2 Type II Report](#soc-2-type-ii-report)
-  + [Key Benefits](#key-benefits)
-* [ISO 27001 Certification](#iso-27001-certification)
-  + [Key Benefits](#key-benefits-1)
-* [GDPR Compliance](#gdpr-compliance)
-  + [Key Benefits](#key-benefits-2)
-* [CCPA Compliance](#ccpa-compliance)
-  + [Key Benefits](#key-benefits-3)
-* [HIPAA Compliance](#hipaa-compliance)
-  + [Key Benefits](#key-benefits-4)
+* SOC 2 Type II Report
+  + Key Benefits
+* ISO 27001 Certification
+  + Key Benefits
+* GDPR Compliance
+  + Key Benefits
+* CCPA Compliance
+  + Key Benefits
+* HIPAA Compliance
+  + Key Benefits
 
 <div style="page-break-after: always;"></div>
 
@@ -360,13 +360,13 @@ On this page
 
 Dremio provides a range of privileges for each type of securable object. These privileges work together to control access across your organization.
 
-## Key Concepts[​](#key-concepts "Direct link to Key Concepts")
+## Key Concepts
 
-### Grants[​](#grants "Direct link to Grants")
+### Grants
 
 Dremio privileges are granted to users and roles. Users possess all the privileges granted to their user identity and their roles. See [`GRANT TO USER`](/dremio-cloud/sql/commands/grant-to-user) and [`GRANT TO ROLE`](/dremio-cloud/sql/commands/grant-to-role) for example grants.
 
-### Privilege Inheritance[​](#privilege-inheritance "Direct link to Privilege Inheritance")
+### Privilege Inheritance
 
 Dremio uses a hierarchical privilege system where most higher-level privileges apply to all objects within their scope:
 
@@ -374,15 +374,15 @@ Dremio uses a hierarchical privilege system where most higher-level privileges a
 
 When you grant a privilege at a higher level, it applies to all relevant objects at lower levels. For example, granting SELECT at the project level gives SELECT access to all datasets in that project across all sources.
 
-### Ownership and Object Creation[​](#ownership-and-object-creation "Direct link to Ownership and Object Creation")
+### Ownership and Object Creation
 
 The OWNERSHIP privilege is unique—it applies only to the specific object where it's assigned and is never inherited by nested objects. When you create any object, you automatically become its owner. This design maintains clear ownership boundaries, so a project owner doesn't automatically own every table in that project. OWNERSHIP grants full control of the specific object. Ownership can be transferred using the [`GRANT OWNERSHIP`](/dremio-cloud/sql/commands/grant-to-role) command.
 
-### Sharing Data Through Views[​](#sharing-data-through-views "Direct link to Sharing Data Through Views")
+### Sharing Data Through Views
 
 When you create a view based on a table, you become the owner of that view. Your privileges as the view owner determine whether the view can access the underlying table—creating a privilege chain. You can then grant other users access to your view, allowing them to see the table's data even though they don't have direct permission to access that table themselves. However, if you (or whoever last modified the view) lose access to the underlying table, the entire privilege chain breaks and the view stops working for everyone.
 
-## Organization Privileges[​](#organization-privileges "Direct link to Organization Privileges")
+## Organization Privileges
 
 Organization privileges are the highest level in the hierarchy and control organization-wide operations and resources.
 
@@ -397,15 +397,15 @@ Organization privileges are the highest level in the hierarchy and control organ
 | CREATE ROLE | Create and edit roles. See [Custom Roles](/dremio-cloud/security/roles#custom-roles) for details. |
 | CREATE USER | Create and edit users. See [Add a User](/dremio-cloud/admin/users#add-a-user) for details. |
 | MANAGE GRANTS | Grant or revoke privileges on the organization and all objects it contains. |
-| OWNERSHIP | [Full control](#ownership-and-object-creation) of the organization; not inherited by nested objects. |
+| OWNERSHIP | Full control of the organization; not inherited by nested objects. |
 
-## Project Privileges[​](#project-privileges "Direct link to Project Privileges")
+## Project Privileges
 
 Project privileges control access to projects and apply to different categories of objects within the project. These privileges provide broad control across all sources, catalogs, and engines in the project.
 
 | Privilege Type | Applies To | Description |
 | --- | --- | --- |
-| OWNERSHIP | Project | [Full control](#ownership-and-object-creation) of the project. |
+| OWNERSHIP | Project | Full control of the project. |
 | USAGE | Project | Access the project and its engines. Required for any other project operations. |
 | VIEW JOB HISTORY | Project | View the job history page for all users across the entire project. |
 | CREATE SOURCE | Sources | Create new data sources and modify source configurations throughout the project. |
@@ -422,7 +422,7 @@ Project privileges control access to projects and apply to different categories 
 | OPERATE | Engines | Start, stop, enable, and disable all engines in the project. |
 | MANAGE GRANTS | All Objects | Grant and revoke privileges on the project and all objects it contains. |
 
-## Open Catalog Privileges[​](#open-catalog-privileges "Direct link to Open Catalog Privileges")
+## Open Catalog Privileges
 
 [Open Catalog](/dremio-cloud/bring-data/connect/catalogs/open-catalog/) is a specialized source whose privileges control access to folders and datasets within the catalog.
 
@@ -439,14 +439,14 @@ You can grant each of these privileges at the indicated scopes:
 | ALTER REFLECTION | ✔ | ✔ | ✔ | Create, edit, and view Reflections on contained datasets, including pages, APIs, and job history. |
 | DROP | ✔ | ✔ |  | Remove contained datasets and folders. |
 | MANAGE GRANTS | ✔ | ✔ | ✔ | Grant and revoke privileges on contained objects. |
-| OWNERSHIP | ✔ | ✔ | ✔ | [Full control](#ownership-and-object-creation); not inherited by nested objects. |
+| OWNERSHIP | ✔ | ✔ | ✔ | Full control; not inherited by nested objects. |
 | READ METADATA | ✔ | ✔ | ✔ | View metadata including column information and job history, limited to jobs you have permission to see. |
 | SELECT | ✔ | ✔ | ✔ | Query contained datasets and view schema definitions, lineages, wikis, and labels. |
 | USAGE | ✔ | ✔ |  | Use the immediate namespace or folder. Must be granted on every folder in the hierarchy path. |
 | VIEW REFLECTION | ✔ | ✔ | ✔ | View Reflections on contained datasets, including pages, APIs, and job history. |
 | WRITE | ✔ | ✔ | ✔ | Execute write operations [`INSERT`](/dremio-cloud/sql/commands/insert), [`UPDATE`](/dremio-cloud/sql/commands/update), [`TRUNCATE`](/dremio-cloud/sql/commands/truncate), [`DELETE`](/dremio-cloud/sql/commands/delete) on contained Apache Iceberg tables. |
 
-## Source Privileges[​](#source-privileges "Direct link to Source Privileges")
+## Source Privileges
 
 Source privileges control access to external data sources and datasets. All sources and other catalogs utilize these privileges in Dremio.
 
@@ -467,12 +467,12 @@ You can grant each of these privileges at the indicated scopes:
 | EXTERNAL QUERY | ✔ |  |  | Run [external queries](/dremio-cloud/bring-data/connect/databases/#external-queries) on compatible sources. |
 | MANAGE GRANTS | ✔ | ✔ | ✔ | Grant and revoke privileges on contained objects. |
 | MODIFY | ✔ |  |  | Access and modify configuration settings, connection parameters, and source-level properties. |
-| OWNERSHIP | ✔ | ✔ | ✔ | [Full control](#ownership-and-object-creation); not inherited by nested objects. |
+| OWNERSHIP | ✔ | ✔ | ✔ | Full control; not inherited by nested objects. |
 | READ METADATA | ✔ | ✔ | ✔ | View metadata including column information and job history, limited to jobs you have permission to see. |
 | SELECT | ✔ | ✔ | ✔ | Query contained datasets and view schema definitions, lineages, wikis, and labels. |
 | VIEW REFLECTION | ✔ | ✔ | ✔ | View Reflections on contained datasets, including pages, APIs, and job history. |
 
-## User-Defined Function Privileges[​](#user-defined-function-privileges "Direct link to User-Defined Function Privileges")
+## User-Defined Function Privileges
 
 User-defined functions (UDFs) allow you to create reusable custom functions using SQL expressions.
 
@@ -482,9 +482,9 @@ User-defined functions (UDFs) allow you to create reusable custom functions usin
 | ALTER | Edit the function's wiki, definitions, and settings. |
 | EXECUTE | Ability to run the UDF. Use the function as row-access and column-masking policies for tables and views. |
 | MANAGE GRANTS | Grant and revoke privileges on the UDF. |
-| OWNERSHIP | [Full control](#ownership-and-object-creation) of the UDF; not inherited by nested objects. |
+| OWNERSHIP | Full control of the UDF; not inherited by nested objects. |
 
-## Engine Privileges[​](#engine-privileges "Direct link to Engine Privileges")
+## Engine Privileges
 
 Engine privileges control access to specific named engines. Use engine privileges at the project level to manage all engines collectively.
 
@@ -495,10 +495,10 @@ Engine privileges control access to specific named engines. Use engine privilege
 | MODIFY | Access and modify all engine settings including replicas, auto-stop configuration, time limits, and tags. |
 | MONITOR | View all engine settings and configuration details without modification rights. |
 | OPERATE | Start, stop, enable, and disable the engine. |
-| OWNERSHIP | [Full control](#ownership-and-object-creation) of the engine; not inherited by nested objects. |
+| OWNERSHIP | Full control of the engine; not inherited by nested objects. |
 | USAGE | Execute queries using the engine. The PUBLIC role has this privilege on all engines by default, but it can be revoked. |
 
-## Model Provider Privileges[​](#model-provider-privileges "Direct link to Model Provider Privileges")
+## Model Provider Privileges
 
 Model provider privileges control access to AI model providers configured at the organization level. These privileges determine who can use, manage, and configure model providers for your organization.
 
@@ -507,9 +507,9 @@ Model provider privileges control access to AI model providers configured at the
 | CALL MODEL | Use the AI models available. |
 | MODIFY | Access and modify all model provider settings. |
 | MANAGE GRANTS | Grant and revoke privileges on the model provider. |
-| OWNERSHIP | [Full control](#ownership-and-object-creation) of the model provider. |
+| OWNERSHIP | Full control of the model provider. |
 
-## Script Privileges[​](#script-privileges "Direct link to Script Privileges")
+## Script Privileges
 
 Script privileges enable sharing of individual saved scripts with other users and roles.
 
@@ -519,10 +519,10 @@ Script privileges enable sharing of individual saved scripts with other users an
 | DELETE | Remove the script permanently. |
 | MANAGE GRANTS | Grant and revoke privileges on the script. |
 | MODIFY | Edit the script content and settings. |
-| OWNERSHIP | [Full control](#ownership-and-object-creation) of the script; not inherited by nested objects. |
+| OWNERSHIP | Full control of the script; not inherited by nested objects. |
 | VIEW | Access, view, and execute the script. |
 
-## Identity Provider Privileges[​](#identity-provider-privileges "Direct link to Identity Provider Privileges")
+## Identity Provider Privileges
 
 [Identity provider](/dremio-cloud/security/authentication/idp) privileges control access to organization-level authentication and identity management settings.
 
@@ -531,29 +531,29 @@ Script privileges enable sharing of individual saved scripts with other users an
 | ALL | Shorthand to grant all supported privileges except OWNERSHIP. |
 | MODIFY | Access and modify identity provider settings, including configuration changes and updates. |
 | MONITOR | View all identity provider settings and configuration details without modification rights. |
-| OWNERSHIP | [Full control](#ownership-and-object-creation) of the identity provider; not inherited by nested objects. |
+| OWNERSHIP | Full control of the identity provider; not inherited by nested objects. |
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Security Pillar](/dremio-cloud/help-support/well-architected-framework/security) – See the security design principles and best practices of the Dremio Well-Architected Framework.
 
 Was this page helpful?
 
-* [Key Concepts](#key-concepts)
-  + [Grants](#grants)
-  + [Privilege Inheritance](#privilege-inheritance)
-  + [Ownership and Object Creation](#ownership-and-object-creation)
-  + [Sharing Data Through Views](#sharing-data-through-views)
-* [Organization Privileges](#organization-privileges)
-* [Project Privileges](#project-privileges)
-* [Open Catalog Privileges](#open-catalog-privileges)
-* [Source Privileges](#source-privileges)
-* [User-Defined Function Privileges](#user-defined-function-privileges)
-* [Engine Privileges](#engine-privileges)
-* [Model Provider Privileges](#model-provider-privileges)
-* [Script Privileges](#script-privileges)
-* [Identity Provider Privileges](#identity-provider-privileges)
-* [Related Topics](#related-topics)
+* Key Concepts
+  + Grants
+  + Privilege Inheritance
+  + Ownership and Object Creation
+  + Sharing Data Through Views
+* Organization Privileges
+* Project Privileges
+* Open Catalog Privileges
+* Source Privileges
+* User-Defined Function Privileges
+* Engine Privileges
+* Model Provider Privileges
+* Script Privileges
+* Identity Provider Privileges
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -585,7 +585,7 @@ PrivateLink uses a **service-based routing** approach with the following domain 
 
 `<orgAlias>.<resource>.privatelink.dremio.cloud`
 
-### Domain Components[​](#domain-components "Direct link to Domain Components")
+### Domain Components
 
 * **orgAlias** – Your organization's unique identifier that routes connections to your Dremio organization. Requirements:
   + Starts with a letter (a-z, A-Z)
@@ -604,15 +604,15 @@ PrivateLink uses a **service-based routing** approach with the following domain 
 * `acme-corp.app.privatelink.dremio.cloud` – Routes to the Dremio console at `app.dremio.cloud`
 * `acme-corp.api.privatelink.dremio.cloud` – Routes to the REST API at `api.dremio.cloud`
 
-### Network Components[​](#network-components "Direct link to Network Components")
+### Network Components
 
 PrivateLink uses a VPC endpoint in your AWS VPC to provide secure, private connectivity to Dremio services. Users and applications within the VPC connect through the VPC endpoint using your privately hosted DNS name resolution. Remote users connect via VPN to access the VPC and its resources.
 
-### Certificate Management[​](#certificate-management "Direct link to Certificate Management")
+### Certificate Management
 
 Dremio uses wildcard certificates for `*.privatelink.dremio.cloud`. No additional certificate management is required. Server certificates are managed by Dremio, and standard TLS verification applies to client vertification. All certificates are publicly logged.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before setting up PrivateLink, ensure you have:
 
@@ -627,7 +627,7 @@ Before setting up PrivateLink, ensure you have:
 * Client Requirements
   + **Arrow Flight Drivers**: All SQL clients and BI tools must use Arrow Flight-based drivers. Some clients and tools provide their own embedded drivers, but you must use the Dremio Arrow Flight JDBC and ODBC drivers in place of those embedded drivers.
 
-## Configuration Steps[​](#configuration-steps "Direct link to Configuration Steps")
+## Configuration Steps
 
 To create a PrivateLink connection:
 
@@ -678,11 +678,11 @@ To create a PrivateLink connection:
 
 Was this page helpful?
 
-* [Domain Components](#domain-components)
-* [Network Components](#network-components)
-* [Certificate Management](#certificate-management)
-* [Prerequisites](#prerequisites)
-* [Configuration Steps](#configuration-steps)
+* Domain Components
+* Network Components
+* Certificate Management
+* Prerequisites
+* Configuration Steps
 
 <div style="page-break-after: always;"></div>
 
@@ -696,21 +696,21 @@ Dremio supports multiple authentication methods for different connection types a
 
 | Use Case | Connection Type | Recommended Method |
 | --- | --- | --- |
-| **Interactive web access** | Dremio console | [Single Sign-On](#single-sign-on) or [Username/Password](#usernamepassword) |
-| **SQL clients** | JDBC/ODBC clients | [Personal Access Tokens (PAT)](#personal-access-tokens-pat) or [Username/Password](#usernamepassword) |
-| **Development & testing** | Client applications, REST API | [Personal Access Tokens (PAT)](#personal-access-tokens-pat) |
-| **Production scripts & automation** | Client applications, REST API | [OAuth access tokens](#oauth-access-tokens) via [PAT Exchange](#pat-exchange) |
-| **Custom apps with existing IdP** | Client applications, REST API | [OAuth access tokens](#oauth-access-tokens) via [External JWT Exchange](#external-jwt-exchange) |
+| **Interactive web access** | Dremio console | Single Sign-On or Username/Password |
+| **SQL clients** | JDBC/ODBC clients | Personal Access Tokens (PAT) or Username/Password |
+| **Development & testing** | Client applications, REST API | Personal Access Tokens (PAT) |
+| **Production scripts & automation** | Client applications, REST API | OAuth access tokens via PAT Exchange |
+| **Custom apps with existing IdP** | Client applications, REST API | OAuth access tokens via External JWT Exchange |
 
-### Username/Password[​](#usernamepassword "Direct link to Username/Password")
+### Username/Password
 
 Username and password authentication allows users to sign in directly to Dremio using their email address and a password managed within Dremio. This method is suitable for users who don't have access to an enterprise identity provider or need standalone accounts. Users can reset their passwords through the Dremio console or via email reset links.
 
-### Single Sign-On[​](#single-sign-on "Direct link to Single Sign-On")
+### Single Sign-On
 
 Users authenticate through configured identity providers using OIDC protocols. Dremio supports all OIDC-compliant enterprise identity providers, such as Microsoft Entra ID and Okta, as well as social identity providers like Google and GitHub. Users experience automatic login if already signed in to their identity provider.
 
-### Personal Access Tokens (PAT)[​](#personal-access-tokens-pat "Direct link to Personal Access Tokens (PAT)")
+### Personal Access Tokens (PAT)
 
 [Personal access tokens](/dremio-cloud/security/authentication/personal-access-token) are long-lived authentication credentials that allow programmatic access to Dremio without using passwords. PATs function like API keys and can be used in scripts, applications, and automated processes to authenticate requests.
 
@@ -722,11 +722,11 @@ Users authenticate through configured identity providers using OIDC protocols. D
 * Store PATs securely using environment variables or secret management systems.
 * Never include PATs in code repositories or logs.
 * Regularly rotate PATs and revoke unused tokens.
-* Consider using [PAT Exchange](#pat-exchange) for enhanced security in production environments.
+* Consider using PAT Exchange for enhanced security in production environments.
 
 Users can create and manage PATs through their Account Settings in the Dremio console.
 
-### OAuth Access Tokens[​](#oauth-access-tokens "Direct link to OAuth Access Tokens")
+### OAuth Access Tokens
 
 [OAuth access tokens](/dremio-cloud/api/oauth-token) are short-lived credentials obtained by exchanging other authentication methods (such as PATs or external JWTs). These tokens provide several security advantages:
 
@@ -739,7 +739,7 @@ Users can create and manage PATs through their Account Settings in the Dremio co
 
 OAuth access tokens are the recommended authentication method for production applications accessing Dremio's REST API and client drivers. You can obtain OAuth access tokens through [PAT Exchange](/dremio-cloud/api/oauth-token#exchange-a-pat) or [External JWT Exchange](/dremio-cloud/api/oauth-token#exchange-an-external-jwt).
 
-#### PAT Exchange[​](#pat-exchange "Direct link to PAT Exchange")
+#### PAT Exchange
 
 Converting PATs to short-lived OAuth access tokens improves security by reducing exposure windows for compromised tokens. This is the [recommended method](/dremio-cloud/api/oauth-token/#exchange-a-pat) for obtaining OAuth access tokens for REST API access.
 
@@ -750,7 +750,7 @@ The process:
 3. Use the OAuth access token for all subsequent API requests.
 4. Refresh the token before it expires (within 1 hour).
 
-#### External JWT Exchange[​](#external-jwt-exchange "Direct link to External JWT Exchange")
+#### External JWT Exchange
 
 Applications can exchange JSON Web Tokens (JWTs) from [external token providers](/dremio-cloud/security/authentication/app-authentication/external-token) for Dremio OAuth access tokens, enabling authentication without exposing user credentials. This method is useful for custom applications that need to authenticate users through their existing identity provider (such as Microsoft Entra ID or Okta) and then [access Dremio](/dremio-cloud/api/oauth-token/#exchange-an-external-jwt) on their behalf.
 
@@ -766,10 +766,10 @@ This approach allows applications to maintain a seamless authentication experien
 
 Was this page helpful?
 
-* [Username/Password](#usernamepassword)
-* [Single Sign-On](#single-sign-on)
-* [Personal Access Tokens (PAT)](#personal-access-tokens-pat)
-* [OAuth Access Tokens](#oauth-access-tokens)
+* Username/Password
+* Single Sign-On
+* Personal Access Tokens (PAT)
+* OAuth Access Tokens
 
 <div style="page-break-after: always;"></div>
 
@@ -784,14 +784,14 @@ Identity providers (IdPs) are services that store and manage digital identities.
 * Enterprise identity providers, including [Microsoft Entra ID](/dremio-cloud/security/authentication/idp/microsoft-entra-id), [Okta](/dremio-cloud/security/authentication/idp/okta), and other [OpenID Connect (OIDC) providers](/dremio-cloud/security/authentication/idp/generic-oidc-provider).
 * [Social identity providers](/dremio-cloud/security/authentication/idp/social-idp/), including GitHub, Microsoft, and Google.
 
-## View an IdP[​](#view-an-idp "Direct link to View an IdP")
+## View an IdP
 
 To view an IdP configured for Dremio:
 
 1. In the Dremio console, click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and then select **Organization settings**.
 2. Select **Authentication** from the organization settings sidebar.
 
-## Remove an IdP[​](#remove-an-idp "Direct link to Remove an IdP")
+## Remove an IdP
 
 You can only remove enterprise IdPs. Social IdPs cannot be removed as they are preconfigured with Dremio.
 
@@ -802,17 +802,17 @@ To remove an enterprise IdP:
 3. Click ![Delete](/images/icons/trash.png "Delete") on the row of the IdP to remove. Removing an activated IdP removes it as a login option for all users within your organization. You must manually reconfigure the IdP if you want to use it again as a login option.
 4. Confirm that you want to remove the IdP. The IdP is then deleted along with any associated settings.
 
-## SCIM[​](#scim "Direct link to SCIM")
+## SCIM
 
 System for Cross-domain Identity Management (SCIM) automates the synchronization of user accounts between your identity provider (IdP) and Dremio, eliminating the need for manual user management. When configured, IdPs send the credentials of assigned users securely via SCIM to your Dremio organization, automatically creating new user accounts if needed. These new users, also referred to as external users, can then log in to Dremio according to the policies set by your credential manager.
 
 You cannot reset or change an external user's email address or password from Dremio because these tasks are governed by your organization's credential manager. If you delete an external user from Dremio, the IdP automatically re-adds the user's account the next time that user attempts to log in. To properly revoke access to Dremio, follow the steps for [Microsoft Entra ID](/dremio-cloud/security/authentication/idp/microsoft-entra-id#revoke-microsoft-entra-id-sso-login-for-a-user-or-group) or [Okta](/dremio-cloud/security/authentication/idp/okta#revoke-okta-sso-login-for-a-user-or-group).
 
-### Configure Microsoft Entra ID with SCIM[​](#configure-microsoft-entra-id-with-scim "Direct link to Configure Microsoft Entra ID with SCIM")
+### Configure Microsoft Entra ID with SCIM
 
 You can use Microsoft Entra ID to securely provision external users in Dremio with SCIM. See [SCIM Provisioning with Microsoft Entra ID](/dremio-cloud/security/authentication/idp/microsoft-entra-id#configure-microsoft-entra-id-with-scim) for more information and instructions.
 
-### Configure Okta with SCIM[​](#configure-okta-with-scim "Direct link to Configure Okta with SCIM")
+### Configure Okta with SCIM
 
 Dremio supports the Okta SCIM provisioning feature, which allows you to automatically create Dremio user accounts if they do not already exist, update user attributes in Dremio, and deactivate user accounts, all from Okta.
 
@@ -820,19 +820,19 @@ Before you can configure Okta SCIM provisioning, you must configure Okta as an I
 
 After you configure Okta as an IdP, you can configure [Okta to use SCIM](/dremio-cloud/security/authentication/idp/okta#configure-okta-with-scim) for secure user provisioning.
 
-## Limits and Considerations[​](#limits-and-considerations "Direct link to Limits and Considerations")
+## Limits and Considerations
 
 * To provide a consistent experience, Dremio uses rate limits for SCIM provisioning requests. For more information, see [Limits](/dremio-cloud/help-support/limits#rate-limits).
 * Dremio allows one update to a user or group at a time. While the update is in progress, Dremio locks the user or group and rejects concurrent requests to update the same user or group.
 
 Was this page helpful?
 
-* [View an IdP](#view-an-idp)
-* [Remove an IdP](#remove-an-idp)
-* [SCIM](#scim)
-  + [Configure Microsoft Entra ID with SCIM](#configure-microsoft-entra-id-with-scim)
-  + [Configure Okta with SCIM](#configure-okta-with-scim)
-* [Limits and Considerations](#limits-and-considerations)
+* View an IdP
+* Remove an IdP
+* SCIM
+  + Configure Microsoft Entra ID with SCIM
+  + Configure Okta with SCIM
+* Limits and Considerations
 
 <div style="page-break-after: always;"></div>
 
@@ -844,21 +844,21 @@ On this page
 
 Dremio supports Okta as an enterprise identity provider. Okta administrators can enable single sign-on (SSO) authentication using Okta as the trusted third party.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Configuring OIDC SSO in Okta requires:
 
 * [Super Administrator](https://help.okta.com/en-us/Content/Topics/Security/administrators-super-admin.htm) access in Okta
 * The CONFIGURE SECURITY [organization-level privilege](/dremio-cloud/security/privileges#organization-privileges) or membership in the [ADMIN role](/dremio-cloud/security/roles#admin).
 
-## Supported Features[​](#supported-features "Direct link to Supported Features")
+## Supported Features
 
 Dremio supports the following Okta SSO features:
 
 * **Service provider-initiated (SP-initiated) SSO**: Dremio uses the [OpenID Connect (OIDC)](https://www.okta.com/openid-connect/) protocol for SP-initiated SSO. When users provide their email address to log in to Dremio, Dremio sends an authentication request to Okta. Okta then authenticates the user's identity, and the user is logged in to Dremio.
 * **SCIM**: Dremio also allows you to take advantage of Okta's System for Cross-domain Identity Management (SCIM) provisioning feature and manage Dremio user access from Okta. After you configure Okta for OIDC SSO in this guide, see [SCIM with Okta](/dremio-cloud/security/authentication/idp/okta#configure-okta-with-scim) to configure SCIM provisioning.
 
-## Configure OIDC SSO[​](#configure-oidc-sso "Direct link to Configure OIDC SSO")
+## Configure OIDC SSO
 
 To configure Okta OIDC SSO for Dremio users:
 
@@ -882,13 +882,13 @@ To configure Okta OIDC SSO for Dremio users:
 
 Okta is now configured as an enterprise authentication provider. **Log in with Okta** appears in the list of login options for your Dremio users.
 
-### Assign People and Groups to the Dremio Application[​](#assign-people-and-groups-to-the-dremio-application "Direct link to Assign People and Groups to the Dremio Application")
+### Assign People and Groups to the Dremio Application
 
 Follow the instructions in the Okta documentation to [assign people](https://help.okta.com/en-us/Content/Topics/Provisioning/lcm/lcm-assign-app-user.htm) or [assign groups](https://help.okta.com/en-us/Content/Topics/Provisioning/lcm/lcm-assign-app-groups.htm) to the Dremio application to ensure that users can use Okta for SSO login. The users you assign, whether individually or through their membership in an assigned group, can use **Log in with Okta** immediately.
 
 Use [privileges](/dremio-cloud/security/privileges/) and [roles](/dremio-cloud/security/roles/) to manage user access to objects in Dremio.
 
-### Use Okta SSO to Log In to Dremio[​](#use-okta-sso-to-log-in-to-dremio "Direct link to Use Okta SSO to Log In to Dremio")
+### Use Okta SSO to Log In to Dremio
 
 Any Okta user who is assigned to the Dremio application can log in with Okta immediately. To use Okta SSO to log in to Dremio:
 
@@ -901,7 +901,7 @@ Okta authenticates your identity and redirects you to Dremio, which then logs yo
 
 To configure Okta's SCIM provisioning feature and use Okta to manage access for Dremio users, see [SCIM with Okta](/dremio-cloud/security/authentication/idp/okta#configure-okta-with-scim).
 
-### Revoke Okta SSO Login for a User or Group[​](#revoke-okta-sso-login-for-a-user-or-group "Direct link to Revoke Okta SSO Login for a User or Group")
+### Revoke Okta SSO Login for a User or Group
 
 To revoke users' access to Okta SSO login for Dremio:
 
@@ -912,20 +912,20 @@ To revoke users' access to Okta SSO login for Dremio:
 
 Starting immediately, the deactivated users cannot use Okta OIDC SSO to log in to Dremio. To completely delete Dremio users, you must also [manually remove their user accounts in Dremio](/dremio-cloud/admin/users#remove-a-user).
 
-### Troubleshoot[​](#troubleshoot "Direct link to Troubleshoot")
+### Troubleshoot
 
 This section describes some things to keep in mind about OIDC SSO in Okta.
 
 * To add the Dremio application in Okta and configure OIDC SSO, you must be a [super administrator](https://help.okta.com/en-us/Content/Topics/Security/administrators-super-admin.htm) in the Okta organization.
 * If you revoke a user's access to use Okta SSO login in Okta, the user can still log in to Dremio with their Dremio username and password. To completely delete the user so that they cannot log in to Dremio at all, you must [manually remove their user accounts in Dremio](/dremio-cloud/admin/users#remove-a-user).
 
-## Configure Okta with SCIM[​](#configure-okta-with-scim "Direct link to Configure Okta with SCIM")
+## Configure Okta with SCIM
 
 System for Cross-domain Identity Management (SCIM) automates the synchronization of user accounts between your identity provider (IdP) and Dremio, eliminating the need for manual user management. When configured, your IdP securely sends user credentials to Dremio via SCIM, automatically creating accounts for new users as needed. These users can then log in to Dremio according to your organization's authentication policies.
 
 Before you can configure SCIM provisioning, you must configure Okta as an identity provider (IdP) in Dremio. See [Okta as an Identity Provider](/dremio-cloud/security/authentication/idp/okta/) to integrate the Dremio application in your Okta organization and add Okta as an OpenID Connect (OIDC) single sign-on (SSO) IdP in Dremio. When that is complete, follow this guide to configure Okta to use SCIM for secure user provisioning.
 
-### Prerequisites[​](#prerequisites-1 "Direct link to Prerequisites")
+### Prerequisites
 
 Configuring SCIM provisioning in Okta requires:
 
@@ -934,7 +934,7 @@ Configuring SCIM provisioning in Okta requires:
 * A Dremio [personal access token (PAT)](/dremio-cloud/security/authentication/personal-access-token/#create-a-pat)
 * You must configure [Okta as an identity provider](/dremio-cloud/security/authentication/idp/okta/) using the Dremio application **before** you proceed with SCIM provisioning.
 
-### Supported Features[​](#supported-features-1 "Direct link to Supported Features")
+### Supported Features
 
 Dremio supports the following Okta SCIM provisioning features:
 
@@ -943,7 +943,7 @@ Dremio supports the following Okta SCIM provisioning features:
 * **Deactivate Users**: Prevent users from logging in to Dremio when they are deactivated in Okta.
 * **Group Push**: Push Okta groups and their members to Dremio to automatically create Dremio roles and members.
 
-### Configure SCIM Provisioning[​](#configure-scim-provisioning "Direct link to Configure SCIM Provisioning")
+### Configure SCIM Provisioning
 
 To configure and enable SCIM provisioning in Okta:
 
@@ -962,26 +962,26 @@ To configure and enable SCIM provisioning in Okta:
 
 SCIM provisioning is now configured and enabled. You can create new users, update user attributes, and deactivate users in Dremio, all from Okta.
 
-### Create Users[​](#create-users "Direct link to Create Users")
+### Create Users
 
 After you configure Okta's SCIM provisioning and enable the *Create Users* option, Dremio automatically creates a new Dremio user account for anyone you assign to Dremio who does not already have an account. New Dremio users can log in to Dremio with Okta SSO immediately, and administrators can [view their user accounts in Dremio](/dremio-cloud/admin/users#view-all-users).
 
 * New users are automatically members of the PUBLIC role in Dremio.
 * User email addresses are controlled by Okta rather than Dremio. If a user's email address changes, you must create a new user in Okta and assign them to the Dremio application. Then, the user can use the new email address to log in to Dremio as a new user.
 
-### Update User Attributes[​](#update-user-attributes "Direct link to Update User Attributes")
+### Update User Attributes
 
 With SCIM provisioning configured, updates to user attributes in Okta are propagated to the user account in Dremio. Follow the instructions in the Okta documentation to [edit user attributes](https://help.okta.com/oie/en-us/Content/Topics/users-groups-profiles/usgp-edit-user-attributes.htm).
 
 The *First name* and *Last name* attributes are mapped to user accounts in Dremio. After you configure Okta's SCIM provisioning and enable the *Update User Attributes* option, you can change these user attributes in Okta to update the corresponding user information in Dremio.
 
-### Deactivate Users[​](#deactivate-users "Direct link to Deactivate Users")
+### Deactivate Users
 
 When you [revoke a user or group](/dremio-cloud/security/authentication/idp/okta/#revoke-okta-sso-login-for-a-user-or-group) in Okta, the affected users cannot use Okta OIDC SSO to log in to Dremio. After you configure Okta's SCIM provisioning and enable the *Deactivate Users* option, deactivated users become inactive in Dremio and cannot log in to Dremio at all, whether with Okta OIDC SSO or username and password.
 
 To completely delete Dremio users, you must also [manually remove their user accounts in Dremio](/dremio-cloud/admin/users#remove-a-user).
 
-### Group Push[​](#group-push "Direct link to Group Push")
+### Group Push
 
 If you enable the group push feature, Okta pushes your designated groups to Dremio as roles and populates the roles with the Okta group's members. Follow the instructions in the Okta documentation to [enable group push](https://help.okta.com/en-us/Content/Topics/users-groups-profiles/usgp-enable-group-push.htm).
 
@@ -991,7 +991,7 @@ Use Okta to manage any roles you create with group push. Any changes you make to
 
 To remove a Dremio role created by group push, unlink the pushed group in the Dremio application. Unlinking the pushed group deletes the corresponding role in Dremio but does not delete the group members' Dremio user accounts.
 
-### Troubleshoot[​](#troubleshoot-1 "Direct link to Troubleshoot")
+### Troubleshoot
 
 This section describes some things to keep in mind about SCIM provisioning in Okta with the Dremio application.
 
@@ -1002,22 +1002,22 @@ This section describes some things to keep in mind about SCIM provisioning in Ok
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Supported Features](#supported-features)
-* [Configure OIDC SSO](#configure-oidc-sso)
-  + [Assign People and Groups to the Dremio Application](#assign-people-and-groups-to-the-dremio-application)
-  + [Use Okta SSO to Log In to Dremio](#use-okta-sso-to-log-in-to-dremio)
-  + [Revoke Okta SSO Login for a User or Group](#revoke-okta-sso-login-for-a-user-or-group)
-  + [Troubleshoot](#troubleshoot)
-* [Configure Okta with SCIM](#configure-okta-with-scim)
-  + [Prerequisites](#prerequisites-1)
-  + [Supported Features](#supported-features-1)
-  + [Configure SCIM Provisioning](#configure-scim-provisioning)
-  + [Create Users](#create-users)
-  + [Update User Attributes](#update-user-attributes)
-  + [Deactivate Users](#deactivate-users)
-  + [Group Push](#group-push)
-  + [Troubleshoot](#troubleshoot-1)
+* Prerequisites
+* Supported Features
+* Configure OIDC SSO
+  + Assign People and Groups to the Dremio Application
+  + Use Okta SSO to Log In to Dremio
+  + Revoke Okta SSO Login for a User or Group
+  + Troubleshoot
+* Configure Okta with SCIM
+  + Prerequisites
+  + Supported Features
+  + Configure SCIM Provisioning
+  + Create Users
+  + Update User Attributes
+  + Deactivate Users
+  + Group Push
+  + Troubleshoot
 
 <div style="page-break-after: always;"></div>
 
@@ -1035,7 +1035,7 @@ A social identity provider (IdP) enables users to log in to Dremio using their e
 
 By default, these options are preconfigured and active, which means they are immediately available as login options for users unless deactivated by an admin.
 
-## Log In with a Social IdP[​](#log-in-with-a-social-idp "Direct link to Log In with a Social IdP")
+## Log In with a Social IdP
 
 Follow these steps to log in to your organization with an enabled social IdP:
 
@@ -1045,7 +1045,7 @@ Follow these steps to log in to your organization with an enabled social IdP:
    ![Social login interface](/images/cloud/social-login.png)
 3. Enter your credentials. If successful, you will be redirected to the Dremio homepage.
 
-## Activate and Deactivate Social IdPs[​](#activate-and-deactivate-social-idps "Direct link to Activate and Deactivate Social IdPs")
+## Activate and Deactivate Social IdPs
 
 You must be an admin to activate or deactivate a social IdP. Follow these steps to deactivate or activate social providers:
 
@@ -1056,8 +1056,8 @@ You must be an admin to activate or deactivate a social IdP. Follow these steps 
 
 Was this page helpful?
 
-* [Log In with a Social IdP](#log-in-with-a-social-idp)
-* [Activate and Deactivate Social IdPs](#activate-and-deactivate-social-idps)
+* Log In with a Social IdP
+* Activate and Deactivate Social IdPs
 
 <div style="page-break-after: always;"></div>
 
@@ -1083,7 +1083,7 @@ Dremio supports two primary application authentication methods that differ funda
 | **OAuth Applications** | Redirect to Dremio login, user authenticates, redirect back with token | OAuth access token from Dremio | Third-party applications, custom applications requiring standard OAuth |
 | **External Token Providers** | User authenticates with enterprise IdP, JWT used directly with Dremio | JWT from your identity provider, OAuth access token from Dremio | Enterprise SSO environments, existing JWT infrastructure |
 
-### OAuth Applications[​](#oauth-applications "Direct link to OAuth Applications")
+### OAuth Applications
 
 OAuth 2.0 provides secure, standardized authorization for third-party applications. This method is ideal when you need user consent or want to integrate with applications that already support OAuth flows.
 
@@ -1093,7 +1093,7 @@ OAuth 2.0 provides secure, standardized authorization for third-party applicatio
 * Manages granular permissions through Dremio [role-based access control](/dremio-cloud/security/privileges) and [access policies](/dremio-cloud/manage-govern/row-column-policies)
 * Logs user activity
 
-### External Token Providers[​](#external-token-providers "Direct link to External Token Providers")
+### External Token Providers
 
 External token providers allow you to use JSON Web Tokens (JWTs) issued by your existing OAuth server or identity provider. This approach is ideal for enterprises with established identity infrastructure.
 
@@ -1106,8 +1106,8 @@ External token providers allow you to use JSON Web Tokens (JWTs) issued by your 
 
 Was this page helpful?
 
-* [OAuth Applications](#oauth-applications)
-* [External Token Providers](#external-token-providers)
+* OAuth Applications
+* External Token Providers
 
 <div style="page-break-after: always;"></div>
 
@@ -1121,7 +1121,7 @@ Personal access tokens (PATs) are randomly generated tokens associated with a us
 
 When using a PAT, you have the same [privileges](/dremio-cloud/security/privileges) and [roles](/dremio-cloud/security/roles) as the user who created the token. This means a PAT can only access what the user can access.
 
-## When to Use PATs[​](#when-to-use-pats "Direct link to When to Use PATs")
+## When to Use PATs
 
 Dremio recommends using [OAuth access tokens](/dremio-cloud/api/oauth-token) for most use cases, as they provide enhanced security through shorter lifespans and centralized management. PATs should primarily be used in scenarios where OAuth tokens are not supported or practical.
 
@@ -1132,7 +1132,7 @@ PATs may be appropriate for:
 * **Development and testing:** Temporary access for development workflows.
 * **ODBC/JDBC connections:** When OAuth is not supported by the client application.
 
-## Create a PAT[​](#create-a-pat "Direct link to Create a PAT")
+## Create a PAT
 
 To create a PAT:
 
@@ -1144,9 +1144,9 @@ To create a PAT:
 6. Click **Generate**.
 7. **Important:** Copy the generated PAT immediately and save it to a secure location. The token is shown only once and cannot be retrieved later.
 
-## Manage PATs[​](#manage-pats "Direct link to Manage PATs")
+## Manage PATs
 
-### View PAT Metadata[​](#view-pat-metadata "Direct link to View PAT Metadata")
+### View PAT Metadata
 
 A PAT is shown only once during creation. However, you can view the token ID, label, creation date, and expiration status for all PATs in your account.
 
@@ -1157,7 +1157,7 @@ To view the metadata for all the PATs you have created:
 
 The Personal Access Tokens page displays all the metadata for PATs, both active and expired, for your account.
 
-### Delete a PAT[​](#delete-a-pat "Direct link to Delete a PAT")
+### Delete a PAT
 
 Each user can delete PATs in their own account.
 
@@ -1168,7 +1168,7 @@ To delete an existing PAT:
 3. On the Personal Access Tokens page, click ![Delete](/images/icons/trash.png "Delete") for the PAT that you want to delete.
 4. In the Delete Token dialog, click **Delete** to confirm. The PAT is deleted and cannot be retrieved.
 
-### Delete All PATs[​](#delete-all-pats "Direct link to Delete All PATs")
+### Delete All PATs
 
 Any user can delete all PATs from their own account. ADMIN users cannot delete PATs on behalf of other users.
 
@@ -1179,7 +1179,7 @@ To delete all PATs for your account:
 3. On the Personal Access Tokens page, click **Delete All** in the top-right corner of the screen.
 4. In the Delete All Tokens dialog, click **Delete** to confirm that you want to delete all PATs in the list. After a PAT has been deleted, it cannot be retrieved.
 
-## Use PATs[​](#use-pats "Direct link to Use PATs")
+## Use PATs
 
 PATs can be used to authenticate with various Dremio interfaces:
 
@@ -1190,7 +1190,7 @@ PATs can be used to authenticate with various Dremio interfaces:
 
 For specific connection details and examples, see the documentation for each connection method.
 
-## Limits and Considerations[​](#limits-and-considerations "Direct link to Limits and Considerations")
+## Limits and Considerations
 
 * **Self-service only:** Users can only create and manage PATs for themselves—even ADMIN users cannot create or manage PATs on behalf of other users.
 * **User permissions:** PATs are tied to user accounts—if a user is deactivated, their PATs stop working.
@@ -1199,14 +1199,14 @@ For specific connection details and examples, see the documentation for each con
 
 Was this page helpful?
 
-* [When to Use PATs](#when-to-use-pats)
-* [Create a PAT](#create-a-pat)
-* [Manage PATs](#manage-pats)
-  + [View PAT Metadata](#view-pat-metadata)
-  + [Delete a PAT](#delete-a-pat)
-  + [Delete All PATs](#delete-all-pats)
-* [Use PATs](#use-pats)
-* [Limits and Considerations](#limits-and-considerations)
+* When to Use PATs
+* Create a PAT
+* Manage PATs
+  + View PAT Metadata
+  + Delete a PAT
+  + Delete All PATs
+* Use PATs
+* Limits and Considerations
 
 <div style="page-break-after: always;"></div>
 
@@ -1218,14 +1218,14 @@ On this page
 
 Dremio supports Microsoft Entra ID as an enterprise identity provider. Microsoft Entra ID administrators can follow these instructions to enable single sign-on (SSO) authentication and allow users to log in to Dremio using Microsoft Entra ID as the trusted third party.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Configuring SSO in Microsoft Entra ID requires:
 
 * Privileges in Microsoft Entra ID that permit you to add, configure, and register applications.
 * The CONFIGURE SECURITY [organization-level privilege](/dremio-cloud/security/privileges/#organization-privileges) or membership in the [ADMIN role](/dremio-cloud/security/roles/).
 
-## Configure an Application for SSO[​](#configure-an-application-for-sso "Direct link to Configure an Application for SSO")
+## Configure an Application for SSO
 
 To configure SSO in Microsoft Entra ID for Dremio users:
 
@@ -1274,7 +1274,7 @@ To configure SSO in Microsoft Entra ID for Dremio users:
 
 Microsoft Entra ID is now configured as an enterprise authentication provider. **Log in with Microsoft Entra ID** appears in the list of login options for your Dremio users. Any Microsoft Entra ID user in your organization can use **Log in with Microsoft Entra ID** for SSO login.
 
-### Assign People and Groups to the Microsoft Entra ID Application[​](#assign-people-and-groups-to-the-microsoft-entra-id-application "Direct link to Assign People and Groups to the Microsoft Entra ID Application")
+### Assign People and Groups to the Microsoft Entra ID Application
 
 The Microsoft Entra ID application is configured to allow SSO login for any Microsoft Entra ID user in your organization. To adjust the application settings so that only users who are assigned to the app can use Microsoft Entra ID SSO to log in to Dremio:
 
@@ -1296,7 +1296,7 @@ Before the user can click **Log in with Microsoft Entra ID** in the list of logi
 
 Use [privileges](/dremio-cloud/security/privileges/) and [roles](/dremio-cloud/security/roles/) to manage user access to objects in Dremio.
 
-### Use Microsoft Entra ID SSO to Log in to Dremio[​](#use-microsoft-entra-id-sso-to-log-in-to-dremio "Direct link to Use Microsoft Entra ID SSO to Log in to Dremio")
+### Use Microsoft Entra ID SSO to Log in to Dremio
 
 To use Microsoft Entra ID SSO to log in to Dremio:
 
@@ -1309,9 +1309,9 @@ To use Microsoft Entra ID SSO to log in to Dremio:
 4. You will be redirected to the Microsoft website for authentication.
 5. Microsoft Entra ID authenticates your identity and redirects you to Dremio, which then logs you in.
 
-You can use the Microsoft Entra ID SCIM provisioning feature to sync groups and memberships from Microsoft Entra ID to Dremio and manage access for Dremio users and groups. To configure, see [Configure Microsoft Entra ID with SCIM](#configure-microsoft-entra-id-with-scim).
+You can use the Microsoft Entra ID SCIM provisioning feature to sync groups and memberships from Microsoft Entra ID to Dremio and manage access for Dremio users and groups. To configure, see Configure Microsoft Entra ID with SCIM.
 
-### Revoke Microsoft Entra ID SSO Login for a User or Group[​](#revoke-microsoft-entra-id-sso-login-for-a-user-or-group "Direct link to Revoke Microsoft Entra ID SSO Login for a User or Group")
+### Revoke Microsoft Entra ID SSO Login for a User or Group
 
 To revoke users' access to Microsoft Entra ID SSO login for Dremio:
 
@@ -1324,18 +1324,18 @@ Starting immediately, the users cannot use Microsoft Entra ID SSO to log in to D
 
 If you revoke a user's access to use Microsoft Entra ID SSO login in Microsoft Entra ID and the user has created a Dremio password for login, they can still log in to Dremio with their Dremio username and password. To completely delete Dremio users so that they cannot log in to Dremio at all, you must also delete or deactivate the user through SCIM provisioning or [manually remove their user accounts in Dremio](/dremio-cloud/admin/users#remove-a-user).
 
-## Configure Microsoft Entra ID with SCIM[​](#configure-microsoft-entra-id-with-scim "Direct link to Configure Microsoft Entra ID with SCIM")
+## Configure Microsoft Entra ID with SCIM
 
 System for Cross-domain Identity Management (SCIM) automates the synchronization of user accounts between your identity provider (IdP) and Dremio, eliminating the need for manual user management. When configured, your IdP securely sends user credentials to Dremio via SCIM, automatically creating accounts for new users as needed. These users can then log in to Dremio according to your organization's authentication policies.
 
-### Prerequisites[​](#prerequisites-1 "Direct link to Prerequisites")
+### Prerequisites
 
 Configuring SCIM provisioning in Microsoft Entra ID requires:
 
 * Privileges in Microsoft Entra ID that permit you to register and configure applications.
 * A Dremio [personal access token (PAT)](/dremio-cloud/security/authentication/personal-access-token#create-a-pat) for a Dremio user who is a member of the ADMIN role.
 
-### Configure an Application for SCIM Provisioning[​](#configure-an-application-for-scim-provisioning "Direct link to Configure an Application for SCIM Provisioning")
+### Configure an Application for SCIM Provisioning
 
 To create an application for SCIM provisioning in Microsoft Entra ID:
 
@@ -1368,30 +1368,30 @@ To create an application for SCIM provisioning in Microsoft Entra ID:
 18. Under **Provisioning Status**, toggle the setting to **On**.
 19. Click **Save**.
 
-SCIM provisioning is now configured and enabled. You can [create users](#create-users), [update user attributes](#update-user-attributes), and [deactivate users](#deactivate-users) in Dremio, all from Microsoft Entra ID.
+SCIM provisioning is now configured and enabled. You can create users, update user attributes, and deactivate users in Dremio, all from Microsoft Entra ID.
 
 Read Microsoft's documentation about [how long it takes to provision users](https://learn.microsoft.com/en-us/entra/identity/app-provisioning/application-provisioning-when-will-provisioning-finish-specific-user#how-long-will-it-take-to-provision-users) for details about Microsoft Entra ID's initial and incremental provisioning cycles.
 
 If desired, you can use Microsoft Entra ID's scoping filters to apply attribute-based rules for user provisioning. Read [Scoping users or groups to be provisioned with scoping filters](https://learn.microsoft.com/en-us/entra/identity/app-provisioning/define-conditional-rules-for-provisioning-user-accounts?pivots=app-provisioning) in the Microsoft documentation for more information.
 
-### Create Users[​](#create-users "Direct link to Create Users")
+### Create Users
 
 After you configure a Microsoft Entra ID application for SCIM provisioning, you must assign users and groups to the application. Dremio automatically creates a new Dremio user account for anyone you assign to the SCIM application who does not already have an account. Follow the instructions in the Microsoft documentation to [assign users and groups to an application](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/assign-user-or-group-access-portal?pivots=portal).
 
-### Create Roles[​](#create-roles "Direct link to Create Roles")
+### Create Roles
 
 If you add a group to your SCIM application in Microsoft Entra ID, your designated group becomes a role in Dremio populated with the group's members. Follow the instructions in the Microsoft documentation to [assign users and groups to an application](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/assign-user-or-group-access-portal?pivots=portal).
 
 Use Microsoft Entra ID to manage any roles you create with groups. Any changes you make to a role or its membership in Dremio are immediately overwritten by the next provisioning cycle from Microsoft Entra ID. Making changes in Dremio can result in synchronization errors.
 
-### Update User Attributes[​](#update-user-attributes "Direct link to Update User Attributes")
+### Update User Attributes
 
 With SCIM provisioning configured, updates to user attributes in Microsoft Entra ID are propagated to the user account in Dremio. Follow the instructions in the Microsoft documentation to [edit user profile information](https://learn.microsoft.com/en-us/entra/fundamentals/how-to-manage-user-profile-info).
 
 * **First name** and **Last name** attributes in Microsoft Entra ID are mapped to user accounts in Dremio. After you configure an application for SCIM provisioning in Microsoft Entra ID and assign users to it, you can change these user attributes in Microsoft Entra ID to update the corresponding user information in Dremio.
 * Microsoft Entra ID controls user **email addresses**. If a user's email address changes, you must create a new user in Microsoft Entra ID and assign them to the application for SCIM provisioning. Then, assign the new Microsoft Entra ID user to the SCIM application (either individually as a user or by adding them to an assigned group). Microsoft Entra ID creates a new Dremio user who can log in to Dremio with the new email address as a new user.
 
-### Deactivate Users[​](#deactivate-users "Direct link to Deactivate Users")
+### Deactivate Users
 
 When you delete a user or group from the application for SCIM provisioning in Microsoft Entra ID, the affected users become inactive in Dremio and cannot log in to Dremio at all, whether with Microsoft Entra ID SSO or username and password.
 
@@ -1413,18 +1413,18 @@ To completely delete Dremio users, you must [manually remove their user accounts
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure an Application for SSO](#configure-an-application-for-sso)
-  + [Assign People and Groups to the Microsoft Entra ID Application](#assign-people-and-groups-to-the-microsoft-entra-id-application)
-  + [Use Microsoft Entra ID SSO to Log in to Dremio](#use-microsoft-entra-id-sso-to-log-in-to-dremio)
-  + [Revoke Microsoft Entra ID SSO Login for a User or Group](#revoke-microsoft-entra-id-sso-login-for-a-user-or-group)
-* [Configure Microsoft Entra ID with SCIM](#configure-microsoft-entra-id-with-scim)
-  + [Prerequisites](#prerequisites-1)
-  + [Configure an Application for SCIM Provisioning](#configure-an-application-for-scim-provisioning)
-  + [Create Users](#create-users)
-  + [Create Roles](#create-roles)
-  + [Update User Attributes](#update-user-attributes)
-  + [Deactivate Users](#deactivate-users)
+* Prerequisites
+* Configure an Application for SSO
+  + Assign People and Groups to the Microsoft Entra ID Application
+  + Use Microsoft Entra ID SSO to Log in to Dremio
+  + Revoke Microsoft Entra ID SSO Login for a User or Group
+* Configure Microsoft Entra ID with SCIM
+  + Prerequisites
+  + Configure an Application for SCIM Provisioning
+  + Create Users
+  + Create Roles
+  + Update User Attributes
+  + Deactivate Users
 
 <div style="page-break-after: always;"></div>
 
@@ -1445,14 +1445,14 @@ To configure Microsoft Entra ID or Okta as an identity provider, see:
 
 Dremio also allows you to use System for Cross-domain Identity Management (SCIM) provisioning to manage Dremio user access from your OIDC provider. After you configure your provider for OIDC SSO, refer to your OIDC provider's documentation to configure SCIM. See [SCIM with a Generic OpenID Connect Provider](/dremio-cloud/security/authentication/idp/generic-oidc-provider/#configure-a-generic-openid-connect-provider-with-scim) to use SCIM provisioning in Dremio.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Configuring SSO in a generic OIDC provider requires:
 
 * Privileges in the OIDC provider that permit you to add, configure, and register applications.
 * The CONFIGURE SECURITY [organization-level privilege](/dremio-cloud/security/privileges#organization-privileges) or membership in the [ADMIN role](/dremio-cloud/security/roles#admin).
 
-## Configure OIDC SSO[​](#configure-oidc-sso "Direct link to Configure OIDC SSO")
+## Configure OIDC SSO
 
 To configure OIDC SSO for Dremio users:
 
@@ -1470,7 +1470,7 @@ To configure OIDC SSO for Dremio users:
 
 OIDC as an enterprise identity provider is now configured. **Log in with SSO** appears in the list of login options for your Dremio users.
 
-### Use SSO to Log In to Dremio[​](#use-sso-to-log-in-to-dremio "Direct link to Use SSO to Log In to Dremio")
+### Use SSO to Log In to Dremio
 
 Any user who is assigned to the `Dremio` application in your OIDC provider can log in with SSO immediately. To use SSO to log in to Dremio:
 
@@ -1484,7 +1484,7 @@ The OIDC provider authenticates your identity and redirects you to Dremio, which
 
 To configure SCIM provisioning to manage access for Dremio users, see [SCIM with a Generic OpenID Connect Provider](/dremio-cloud/security/authentication/idp/generic-oidc-provider/#configure-a-generic-openid-connect-provider-with-scim).
 
-### Revoke SSO Login for a User or Group[​](#revoke-sso-login-for-a-user-or-group "Direct link to Revoke SSO Login for a User or Group")
+### Revoke SSO Login for a User or Group
 
 To revoke users' access to SSO login for Dremio:
 
@@ -1496,13 +1496,13 @@ Starting immediately, the deactivated users cannot use OIDC SSO to log in to Dre
 
 To completely delete Dremio users, you must also [manually remove their user accounts in Dremio](/dremio-cloud/admin/users#remove-a-user).
 
-## Configure a Generic OpenID Connect Provider with SCIM[​](#configure-a-generic-openid-connect-provider-with-scim "Direct link to Configure a Generic OpenID Connect Provider with SCIM")
+## Configure a Generic OpenID Connect Provider with SCIM
 
 System for Cross-domain Identity Management (SCIM) automates the synchronization of user accounts between your identity provider (IdP) and Dremio, eliminating the need for manual user management. When configured, your IdP securely sends user credentials to Dremio via SCIM, automatically creating accounts for new users as needed. These users can then log in to Dremio according to your organization's authentication policies.
 
 Before you can configure SCIM provisioning, you must configure a generic OIDC provider as an enterprise identity provider in Dremio. Follow the instructions in [Generic OpenID Connect Identity Provider](/dremio-cloud/security/authentication/idp/generic-oidc-provider) to integrate a `Dremio` application in a generic OIDC provider for single sign-on (SSO) in Dremio. When that is done, follow this guide to configure SCIM for secure user provisioning.
 
-### Prerequisites[​](#prerequisites-1 "Direct link to Prerequisites")
+### Prerequisites
 
 Configuring SCIM provisioning requires:
 
@@ -1510,7 +1510,7 @@ Configuring SCIM provisioning requires:
 * The CONFIGURE SECURITY [organization-level privilege](/dremio-cloud/security/privileges#organization-privileges) or membership in the [ADMIN role](/dremio-cloud/security/roles#admin).
 * A Dremio [personal access token (PAT)](/dremio-cloud/security/authentication/personal-access-token/#create-a-pat) for a Dremio user who is a member of the ADMIN role.
 
-### Configure SCIM Provisioning[​](#configure-scim-provisioning "Direct link to Configure SCIM Provisioning")
+### Configure SCIM Provisioning
 
 The steps required to configure and enable SCIM provisioning vary for different OIDC providers. Follow the instructions in your OIDC provider's documentation.
 
@@ -1530,26 +1530,26 @@ https://scim.eu.dremio.cloud/scim/v2
 
 After SCIM provisioning is configured and enabled, you can create users, update user attributes, and deactivate users in Dremio from your OIDC provider's portal.
 
-### Create Users[​](#create-users "Direct link to Create Users")
+### Create Users
 
 After you configure SCIM provisioning, Dremio automatically creates a new Dremio user account for anyone you assign to the `Dremio` application in your OIDC provider who does not already have an account. New Dremio users can log in to Dremio with SSO immediately, and administrators can [view their user accounts in Dremio](/dremio-cloud/admin/users#view-all-users).
 
 * New users are automatically members of the PUBLIC role in Dremio.
 * User email addresses are controlled by your OIDC provider rather than Dremio. If a user's email address changes, you must create a new user in your OIDC provider and assign them to the `Dremio` application. Then, the user can use the new email address to log in to Dremio as a new user.
 
-### Update User Attributes[​](#update-user-attributes "Direct link to Update User Attributes")
+### Update User Attributes
 
 With SCIM provisioning configured, updates to user attributes in your OIDC provider are propagated to the user account in Dremio.
 
 The first name and last name attributes are mapped to user accounts in Dremio. After you configure SCIM provisioning and allow user attributes to be updated, you can change these user attributes in your OIDC provider to update the corresponding user information in Dremio.
 
-### Deactivate Users[​](#deactivate-users "Direct link to Deactivate Users")
+### Deactivate Users
 
 When you revoke a user or group in your OIDC provider, the affected users cannot use OIDC SSO to log in to Dremio. After you configure SCIM provisioning and deactivate users, they become inactive in Dremio and cannot log in to Dremio at all with SSO.
 
 To completely delete Dremio users, you must also [manually remove their user accounts in Dremio](/dremio-cloud/admin/users/#remove-a-user).
 
-## Troubleshoot[​](#troubleshoot "Direct link to Troubleshoot")
+## Troubleshoot
 
 This section describes some considerations about OIDC SSO and SCIM provisioning with the `Dremio` application in your OIDC provider.
 
@@ -1562,17 +1562,17 @@ This section describes some considerations about OIDC SSO and SCIM provisioning 
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Configure OIDC SSO](#configure-oidc-sso)
-  + [Use SSO to Log In to Dremio](#use-sso-to-log-in-to-dremio)
-  + [Revoke SSO Login for a User or Group](#revoke-sso-login-for-a-user-or-group)
-* [Configure a Generic OpenID Connect Provider with SCIM](#configure-a-generic-openid-connect-provider-with-scim)
-  + [Prerequisites](#prerequisites-1)
-  + [Configure SCIM Provisioning](#configure-scim-provisioning)
-  + [Create Users](#create-users)
-  + [Update User Attributes](#update-user-attributes)
-  + [Deactivate Users](#deactivate-users)
-* [Troubleshoot](#troubleshoot)
+* Prerequisites
+* Configure OIDC SSO
+  + Use SSO to Log In to Dremio
+  + Revoke SSO Login for a User or Group
+* Configure a Generic OpenID Connect Provider with SCIM
+  + Prerequisites
+  + Configure SCIM Provisioning
+  + Create Users
+  + Update User Attributes
+  + Deactivate Users
+* Troubleshoot
 
 <div style="page-break-after: always;"></div>
 
@@ -1597,7 +1597,7 @@ Before setting up OAuth applications, ensure you have:
 * Dremio admin privileges or the CONFIGURE SECURITY privilege.
 * An OIDC-compliant Identity Provider (IDP) configured in Dremio if OAuth applications will rely on external authentication.
 
-## Add an OAuth App[​](#add-an-oauth-app "Direct link to Add an OAuth App")
+## Add an OAuth App
 
 To add a new OAuth application in Dremio:
 
@@ -1610,7 +1610,7 @@ To add a new OAuth application in Dremio:
 
 Upon creating the application, the dialog will refresh with a new field: **Client ID**. Copy this value, as it is needed to link with the third-party OAuth application. Include this string where the **Client ID** is required by your respective OAuth application.
 
-## Edit an OAuth App[​](#edit-an-oauth-app "Direct link to Edit an OAuth App")
+## Edit an OAuth App
 
 To edit an existing OAuth application in Dremio:
 
@@ -1621,8 +1621,8 @@ To edit an existing OAuth application in Dremio:
 
 Was this page helpful?
 
-* [Add an OAuth App](#add-an-oauth-app)
-* [Edit an OAuth App](#edit-an-oauth-app)
+* Add an OAuth App
+* Edit an OAuth App
 
 <div style="page-break-after: always;"></div>
 
@@ -1652,19 +1652,19 @@ Example: External JWT Claims from Microsoft Entra ID
 }
 ```
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Before setting up External Token Providers, ensure you have:
 
 * Dremio admin privileges or the CONFIGURE SECURITY privilege.
 * An OIDC-compliant Identity Provider configured with an application registration for your client.
 * Access to the following information from your IDP:
-  + [**Audience**](#audience) – Application ID or resource URI
-  + [**User claim mapping**](#user-claim-mapping) – The claim containing the Dremio username
-  + [**Issuer URL**](#issuer-url) – Identity provider identification
-  + [**JWKS URL**](#jwks-url) – Optional location of public keys
+  + **Audience** – Application ID or resource URI
+  + **User claim mapping** – The claim containing the Dremio username
+  + **Issuer URL** – Identity provider identification
+  + **JWKS URL** – Optional location of public keys
 
-## Define an External Token Provider[​](#define-an-external-token-provider "Direct link to Define an External Token Provider")
+## Define an External Token Provider
 
 Dremio requires the following configuration values from your OIDC identity provider.
 
@@ -1672,7 +1672,7 @@ tip
 
 The examples below are specific to Microsoft Entra ID. Your identity provider may require additional configuration of a client application registration that depends on the OAuth authorization flow used between your client and your provider. To configure your application registration, consult your identity provider documentation.
 
-### Audience[​](#audience "Direct link to Audience")
+### Audience
 
 The audience value identifies the intended recipients of the external JWT. It can generally be an array of case-sensitive strings or URI values. The audience is contained in the `aud` claim in the external JWT.
 
@@ -1684,7 +1684,7 @@ Example Audience Claim with Microsoft Entra ID Application ID
 "aud": "0853fce0-c748-4c54-aa58-f5b9af279840"
 ```
 
-### User Claim Mapping[​](#user-claim-mapping "Direct link to User Claim Mapping")
+### User Claim Mapping
 
 The user claim mapping identifies the claim in the external JWT that contains the Dremio username.
 
@@ -1702,7 +1702,7 @@ Example: UPN Claim from Microsoft Entra ID
 
 The `user claim mapping` field of the external token provider requires the name of the claim used in the JWT, which in this case is `upn`.
 
-### Issuer URL[​](#issuer-url "Direct link to Issuer URL")
+### Issuer URL
 
 The issuer URL identifies the identity provider that issued the JWT. It is contained in the external JWT's `iss` claim. When using Microsoft Entra ID, [the issuer claim](https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference) includes the Microsoft Entra ID tenant identifier. Only one external token provider in the system should use the combination of a given audience and issuer.
 
@@ -1712,7 +1712,7 @@ Example Issuer Claim with Microsoft Entra ID
 "iss": "https://login.microsoftonline.com/3e334762-b0c6-4c36-9faf-93800f0d6c71/v2.0"
 ```
 
-### JWKS URL[​](#jwks-url "Direct link to JWKS URL")
+### JWKS URL
 
 The JWKS URL is an endpoint that hosts the [JWK Set (JWKS)](https://datatracker.ietf.org/doc/html/rfc7517), a set of public keys used for verifying the JWT signature. This value is optional; if you do not provide a JWKS URL value when configuring the external token provider, Dremio retrieves the JWKS URL from `{issuer URL}/.well-known/openid-configuration`.
 
@@ -1724,42 +1724,42 @@ Example: JWKS URL from Microsoft Entra ID
 https://login.microsoftonline.com/58a43618-7933-4e0d-906e-1c1a2a867ad6/discovery/v2.0/keys
 ```
 
-## Manage External Token Providers[​](#manage-external-token-providers "Direct link to Manage External Token Providers")
+## Manage External Token Providers
 
 The Dremio administrator or a user with the [CONFIGURE SECURITY](/dremio-cloud/security/privileges#organization-privileges) privilege can view and manage external token providers in Dremio.
 
-### View External Token Providers[​](#view-external-token-providers "Direct link to View External Token Providers")
+### View External Token Providers
 
 To view external token providers:
 
 1. In the Dremio console, click ![Settings](/images/icons/settings.png "Settings") on the left navigation bar, and select **Organization settings**.
 2. Click **External Token Providers**. The External Token Providers page lists the external token providers configured for Dremio.
 
-### Add an External Token Provider[​](#add-an-external-token-provider "Direct link to Add an External Token Provider")
+### Add an External Token Provider
 
 To add an external token provider:
 
 1. In the Dremio console, click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar, and select **Organization settings**.
 2. Click **External Token Providers**.
 3. Click **Add Provider** at the top-right corner of the External Token Providers page.
-4. In the Add Provider dialog, complete the configuration using the fields described in [Define an External Token Provider](#define-an-external-token-provider).
+4. In the Add Provider dialog, complete the configuration using the fields described in Define an External Token Provider.
 5. Click **Add**.
 
 When you add an external token provider, Dremio automatically enables it. To deactivate it, toggle the Enabled switch on the External Token Providers page.
 
 Each external token provider must use a different combination of issuer and audience. If multiple external token providers share the same issuer and audience, authentication will fail regardless of whether the token providers are enabled.
 
-### Edit an External Token Provider[​](#edit-an-external-token-provider "Direct link to Edit an External Token Provider")
+### Edit an External Token Provider
 
 To edit an external token provider:
 
 1. In the Dremio console, click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar, and select **Organization settings**.
 2. Click **External Token Providers**.
 3. On the External Token Providers page, find the row for the external token provider you want to edit and click ![Edit](/images/icons/edit.png "Edit") at the right side of the row.
-4. In the Edit Provider dialog, update the values using the fields described in [Define an External Token Provider](#define-an-external-token-provider).
+4. In the Edit Provider dialog, update the values using the fields described in Define an External Token Provider.
 5. Click **Save**.
 
-### Delete an External Token Provider[​](#delete-an-external-token-provider "Direct link to Delete an External Token Provider")
+### Delete an External Token Provider
 
 To delete an external token provider:
 
@@ -1768,9 +1768,9 @@ To delete an external token provider:
 3. On the External Token Providers page, find the row for the external token provider you want to delete and click ![Delete](/images/icons/trash.png "Delete") at the right side of the row.
 4. In the Delete External Provider dialog, click **Delete**.
 
-## Use the External Token Provider[​](#use-the-external-token-provider "Direct link to Use the External Token Provider")
+## Use the External Token Provider
 
-### Retrieve an External JWT[​](#retrieve-an-external-jwt "Direct link to Retrieve an External JWT")
+### Retrieve an External JWT
 
 This sample application uses the [Microsoft Authentication Library](https://learn.microsoft.com/en-us/entra/identity-platform/msal-overview) to authenticate a user with the OAuth authorization code flow.
 
@@ -1819,26 +1819,26 @@ else:
     print("Error: no auth code")
 ```
 
-### Exchange a JWT[​](#exchange-a-jwt "Direct link to Exchange a JWT")
+### Exchange a JWT
 
 The client must use the Dremio `/oauth/token` REST API to [exchange the JWT for an OAuth access token](/dremio-cloud/api/oauth-token#exchange-an-external-jwt).
 
 Was this page helpful?
 
-* [Prerequisites](#prerequisites)
-* [Define an External Token Provider](#define-an-external-token-provider)
-  + [Audience](#audience)
-  + [User Claim Mapping](#user-claim-mapping)
-  + [Issuer URL](#issuer-url)
-  + [JWKS URL](#jwks-url)
-* [Manage External Token Providers](#manage-external-token-providers)
-  + [View External Token Providers](#view-external-token-providers)
-  + [Add an External Token Provider](#add-an-external-token-provider)
-  + [Edit an External Token Provider](#edit-an-external-token-provider)
-  + [Delete an External Token Provider](#delete-an-external-token-provider)
-* [Use the External Token Provider](#use-the-external-token-provider)
-  + [Retrieve an External JWT](#retrieve-an-external-jwt)
-  + [Exchange a JWT](#exchange-a-jwt)
+* Prerequisites
+* Define an External Token Provider
+  + Audience
+  + User Claim Mapping
+  + Issuer URL
+  + JWKS URL
+* Manage External Token Providers
+  + View External Token Providers
+  + Add an External Token Provider
+  + Edit an External Token Provider
+  + Delete an External Token Provider
+* Use the External Token Provider
+  + Retrieve an External JWT
+  + Exchange a JWT
 
 <div style="page-break-after: always;"></div>
 

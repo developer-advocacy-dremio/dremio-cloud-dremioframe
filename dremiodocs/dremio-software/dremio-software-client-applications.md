@@ -32,17 +32,17 @@ Dremio supports a broad range of clients including the following applications:
 * [Superset](/current/client-applications/superset)
 * [Tableau](/current/client-applications/tableau)
 
-## Drivers[​](#drivers "Direct link to Drivers")
+## Drivers
 
 * [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver)
 * [Dremio JDBC (Legacy)](/current/client-applications/drivers/jdbc)
 * [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver)
 
-## Developing Custom Applications[​](#developing-custom-applications "Direct link to Developing Custom Applications")
+## Developing Custom Applications
 
 To create a connection to Dremio and run queries, you can use [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver). You can also use [PyArrow](/current/developer/python).
 
-## Client Encryption[​](#client-encryption "Direct link to Client Encryption")
+## Client Encryption
 
 Transport Layer Security (TLS) communication is supported for encrypting communication between JDBC client applications and Dremio servers. See the configuration of client TLS for [Dremio on Kubernetes](/current/deploy-dremio/configuring-kubernetes/#transport-level-security) or [Dremio standalone clusters](/current/deploy-dremio/other-options/standalone/dremio-config/dremio-conf/wire-encryption-config/#legacy-jdbc-and-power-bi-clients-with-legacy-odbc-driver-enterprise) for more information.
 
@@ -56,9 +56,9 @@ Wikis and Tags](/current/data-products/govern/wikis-tags)[Next
 
 Alteryx Designer](/current/client-applications/alteryx-designer)
 
-* [Drivers](#drivers)
-* [Developing Custom Applications](#developing-custom-applications)
-* [Client Encryption](#client-encryption)
+* Drivers
+* Developing Custom Applications
+* Client Encryption
 
 ---
 
@@ -72,17 +72,17 @@ On this page
 
 You can use Alteryx Designer to quickly prepare, blend, conform, and analyze data from datasets in Dremio.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 Alteryx Designer 10.6+
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Ensure that your operating system is 64-bit Windows 10 or later.
 * Download, install, and configure the [Arrow Flight SQL ODBC driver](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/).
 * If you want to authenticate to Dremio by using a personal access token (PAT), rather than by using a password, generate a PAT. See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for the steps.
 
-## Selecting Dremio as a Data Source[​](#selecting-dremio-as-a-data-source "Direct link to Selecting Dremio as a Data Source")
+## Selecting Dremio as a Data Source
 
 1. In Alteryx Designer, select **File** > **New Workflow**.
 2. Drag the **Input Data** tool from the tool palette on to the workflow canvas.
@@ -133,9 +133,9 @@ Connect Client Applications](/current/client-applications/)[Next
 
 Apache Superset](/current/client-applications/superset)
 
-* [Supported Versions](#supported-versions)
-* [Prerequisites](#prerequisites)
-* [Selecting Dremio as a Data Source](#selecting-dremio-as-a-data-source)
+* Supported Versions
+* Prerequisites
+* Selecting Dremio as a Data Source
 
 ---
 
@@ -149,12 +149,12 @@ On this page
 
 You can use [Superset](https://superset.apache.org/) to query and visualize data.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 * Superset 1.5.3 and later
 * Dremio SQLAlchemy connector 3.0.2 and later
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 * Use the username and password of an account in your Dremio cluster.
 * Use the username of an account in your Dremio cluster and a personal access token (PAT) created in Dremio. To create a PAT, follow the steps in [Creating a PAT](/current/security/authentication/personal-access-tokens#creating-a-pat). After you obtain a PAT, it is recommended that you URL-encode it. To encode it locally on your system, you can follow these steps:
@@ -162,11 +162,11 @@ You can use [Superset](https://superset.apache.org/) to query and visualize data
   2. In the top bar of the inspection pane, click **Console**.
   3. Type `encodeURIComponent("<PAT>")`, where `<PAT>` is the personal access token. The URL-encoded PAT appears in red on the next line. You can highlight it and copy it to your clipboard.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 If you installed Superset according to [the instructions for installing from scratch](https://superset.apache.org/docs/installation/installing-superset-from-scratch), install the Dremio SQLAlchemy Connector on the system or in the VM where Apache Superset is running. Instructions are in the [sqlalchemy\_dremio repository](https://github.com/narendrans/sqlalchemy_dremio) in GitHub.
 
-## Creating a Connection[​](#creating-a-connection "Direct link to Creating a Connection")
+## Creating a Connection
 
 1. If you are using a version of Superset earlier than 2.1.0, follow these steps:
    1. Select **Data** > **Databases** in the menu bar at the top of the screen.
@@ -190,7 +190,7 @@ If you installed Superset according to [the instructions for installing from scr
       * `<host>`: The hostname or IP address of the coordinator node of the Dremio cluster.
       * `<port>`: The port to connect to on the coordinator node. Unless explicitly changed on the node, the port is 32010.
       * `<schema>`: The name of the database schema to use by default when a schema is not given in a query. Providing a schema is optional. Specifying a schema does not prevent queries from being issued for other schemas; such queries must explicitly include the schema.
-      * `[?option1=value[&,...]]`: One or more optional properties, separated by ampersands (`&`). See [SSL Connection Properties](#ssl-connection-properties) and [Advanced Properties](#advanced-properties).Example URI with username and password authentication
+      * `[?option1=value[&,...]]`: One or more optional properties, separated by ampersands (`&`). See SSL Connection Properties and Advanced Properties.Example URI with username and password authentication
 
       ```
       dremio+flight://myUserID:myPassword@myHost:32010/Samples?UseEncryption=false
@@ -203,11 +203,11 @@ If you installed Superset according to [the instructions for installing from scr
       ```
 
       * `<username>`: The username of the Dremio account to use.
-      * `<PAT>`: The URL-encoded personal access token that you obtained from Dremio Cloud. See [Supported Authentication Methods](#supported-authentication-methods).
+      * `<PAT>`: The URL-encoded personal access token that you obtained from Dremio Cloud. See Supported Authentication Methods.
       * `<host>`: The hostname or IP address of the coordinator node of the Dremio cluster.
       * `<port>`: The port to connect to on the coordinator node. Unless explicitly changed on the node, the port is 32010.
       * `<schema>`: The name of the database schema to use by default when a schema is not given in a query. Providing a schema is optional. Specifying a schema does not prevent queries from being issued for other schemas; such queries must explicitly include the schema.
-      * `[?option=value[;...]]`: One or more optional properties, separated by semicolons. See [SSL Connection Properties](#ssl-connection-properties) and [Advanced Properties](#advanced-properties).Example URI with PAT authentication
+      * `[?option=value[;...]]`: One or more optional properties, separated by semicolons. See SSL Connection Properties and Advanced Properties.Example URI with PAT authentication
 
       ```
       dremio+flight://myUserID:myPAT@myHost:32010/Samples?UseEncryption=false
@@ -215,7 +215,7 @@ If you installed Superset according to [the instructions for installing from scr
    5. Test the connection. If the test fails, check the syntax and values in the connection URI.
    6. Click **Connect**.
 
-## SSL Connection Parameters[​](#ssl-connection-parameters "Direct link to SSL Connection Parameters")
+## SSL Connection Parameters
 
 Use the following parameters to configure SSL encryption and verification methods:
 
@@ -225,7 +225,7 @@ Use the following parameters to configure SSL encryption and verification method
 | disableCertificateVerification | integer | Specifies whether to verify the host certificate against the trust store. Accepted values: `false`, verifies the certificate against the trust store; `true`, does not verify the certificate against the trust store. | false |
 | trustedCerts | string | The full path of the .pem file containing certificates trusted by a CA, for the purpose of verifying the server. If this option is not set, defaults to using the trusted CA certificates .pem file. The TLS connection fails if you do not specify a value when UseEncryption is true and disableCertificateVerification is false. | N/A |
 
-## Advanced Parameters[​](#advanced-parameters "Direct link to Advanced Parameters")
+## Advanced Parameters
 
 | Name | Type | Description | Default Value |
 | --- | --- | --- | --- |
@@ -240,12 +240,12 @@ Alteryx Designer](/current/client-applications/alteryx-designer)[Next
 
 DataGrip](/current/client-applications/datagrip)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Prerequisites](#prerequisites)
-* [Creating a Connection](#creating-a-connection)
-* [SSL Connection Parameters](#ssl-connection-parameters)
-* [Advanced Parameters](#advanced-parameters)
+* Supported Versions
+* Supported Authentication Methods
+* Prerequisites
+* Creating a Connection
+* SSL Connection Parameters
+* Advanced Parameters
 
 ---
 
@@ -259,19 +259,19 @@ On this page
 
 You can run SQL from [DataGrip](https://www.jetbrains.com/datagrip/) to explore your data through Dremio. DataGrip supports connections to Dremio through the Arrow Flight SQL JDBC driver.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 Dremio connectivity is supported from DataGrip running on Windows, macOS, or Linux. It is recommended that you use the latest available version of DataGrip.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 You can authenticate your connection to Dremio using your Dremio username and password.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Download the [Arrow Flight SQL JDBC driver](https://www.dremio.com/drivers/jdbc/).
 
-## Connecting to Dremio[​](#connecting-to-dremio "Direct link to Connecting to Dremio")
+## Connecting to Dremio
 
 Follow the steps below to connect to Dremio:
 
@@ -319,10 +319,10 @@ Apache Superset](/current/client-applications/superset)[Next
 
 DBeaver](/current/client-applications/dbeaver)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Prerequisites](#prerequisites)
-* [Connecting to Dremio](#connecting-to-dremio)
+* Supported Versions
+* Supported Authentication Methods
+* Prerequisites
+* Connecting to Dremio
 
 ---
 
@@ -340,16 +340,16 @@ note
 
 If you want to use DBeaver with the legacy JDBC driver, see the instructions [here](/current/client-applications/dbeaver-legacy/).
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 You can use your Dremio username and password, or you can use a personal access token (PAT) that you obtained from Dremio.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Download the [Arrow Flight SQL JDBC driver](https://www.dremio.com/drivers/jdbc/).
 * If you want to authenticate your connection to Dremio by using a personal access token, see [Creating a PAT](/current/security/authentication/personal-access-tokens/#creating-a-pat) for the steps to obtain one.
 
-## Connecting to Dremio[​](#connecting-to-dremio "Direct link to Connecting to Dremio")
+## Connecting to Dremio
 
 1. In DBeaver, add the JDBC driver as a new driver. You need to do this only once, and can skip this step if DBeaver already lists this driver in its Driver Manager dialog:
 
@@ -401,9 +401,9 @@ DataGrip](/current/client-applications/datagrip)[Next
 
 DbVisualizer](/current/client-applications/dbvisualizer)
 
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Prerequisites](#prerequisites)
-* [Connecting to Dremio](#connecting-to-dremio)
+* Supported Authentication Methods
+* Prerequisites
+* Connecting to Dremio
 
 ---
 
@@ -417,20 +417,20 @@ On this page
 
 [DbVisualizer](https://www.dbvis.com/) is a SQL runner that works with any JDBC-compliant data source. You can run SQL from it to explore your data in your data lakes and relational databases through Dremio and the Arrow Flight SQL JDBC driver.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 You can use any version of DbVisualizer, as long as you use Dremio 21 or later.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 You can use your Dremio username and password, or you can use a personal access token (PAT) that you obtained from Dremio.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Download the [Arrow Flight SQL JDBC driver](https://www.dremio.com/drivers/jdbc/).
 * If you want to authenticate your connection to Dremio by using a personal access token, see [Creating a PAT](/current/security/authentication/personal-access-tokens/#creating-a-pat) for the steps to obtain one.
 
-## Connecting to Dremio[​](#connecting-to-dremio "Direct link to Connecting to Dremio")
+## Connecting to Dremio
 
 1. Add the Arrow Flight SQL JDBC driver to DbVisualizer's Driver Manager. You need to do this only once, and can skip this step if DbVisualizer already lists this driver in its Driver Manager dialog:
 
@@ -493,10 +493,10 @@ DBeaver](/current/client-applications/dbeaver)[Next
 
 Domo](/current/client-applications/domo)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Prerequisites](#prerequisites)
-* [Connecting to Dremio](#connecting-to-dremio)
+* Supported Versions
+* Supported Authentication Methods
+* Prerequisites
+* Connecting to Dremio
 
 ---
 
@@ -510,12 +510,12 @@ On this page
 
 [Domo](https://www.domo.com/) is a cloud-based platform designed to provide direct, simplified, real-time access to business data for decision makers across the company with minimal IT involvement.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 * Use the username and password of an account in your Dremio cluster.
 * Use a username and a personal access token (PAT). To create one, see [Creating a PAT](/current/security/authentication/personal-access-tokens/#creating-a-pat).
 
-## Creating a Cloud Integration with Dremio Software[​](#creating-a-cloud-integration-with-dremio-software "Direct link to Creating a Cloud Integration with Dremio Software")
+## Creating a Cloud Integration with Dremio Software
 
 1. Click the **Data** tab to open the Datasets page.
 2. Click the **Federated** tab to open the **Amplify existing cloud warehouses** dialog.
@@ -552,8 +552,8 @@ DbVisualizer](/current/client-applications/dbvisualizer)[Next
 
 IBM Cognos Analytics](/current/client-applications/cognos)
 
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Creating a Cloud Integration with Dremio Software](#creating-a-cloud-integration-with-dremio-software)
+* Supported Authentication Methods
+* Creating a Cloud Integration with Dremio Software
 
 ---
 
@@ -567,13 +567,13 @@ On this page
 
 You can run SQL from [Cognos Analytics](https://www.ibm.com/products/cognos-analytics) to explore your data through Dremio. Cognos Analytics Dynamic Query supports connections to Dremio through the Dremio JDBC driver.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 To find out which versions of Dremio are supported with IBM Cognos 11.2.x, see [DQM testing of vendor-supported client driver versions for each Cognos Analytics 11.2.x release](https://www.ibm.com/support/pages/node/6441017#11.2.4fp2r).
 
 To find out which versions of Dremio are supported with IBM Cognos 12.0.x, see [DQM testing of vendor-supported client driver versions for each Cognos Analytics 12.0.x release](https://www.ibm.com/support/pages/node/6989513#12.0.2r).
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 You can use your Dremio username and password, a personal access token (PAT), or an access token from an identity provider that supports OpenID.
 
@@ -584,7 +584,7 @@ If you want to use a PAT, follow these steps before creating a connection to you
 
 If you want to use an access token from an identity provider that supports OpenID, ensure that your Dremio administrator has followed the steps in [OpenID Authentication](/current/security/authentication/identity-providers/oidc).
 
-## Creating a Connection[​](#creating-a-connection "Direct link to Creating a Connection")
+## Creating a Connection
 
 1. Launch Cognos Analytics.
 2. Navigate to **Manage** > **Data Server Connections**.
@@ -612,9 +612,9 @@ Domo](/current/client-applications/domo)[Next
 
 Looker](/current/client-applications/looker)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Creating a Connection](#creating-a-connection)
+* Supported Versions
+* Supported Authentication Methods
+* Creating a Connection
 
 ---
 
@@ -628,14 +628,14 @@ On this page
 
 You can use [Looker](https://looker.com/) to query and visualize data by means of Dremio.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 There are two methods of authenticating that you can choose from when you connect from Looker to Dremio:
 
 * Use a username and password for your Dremio cluster.
 * Use a personal access token (PAT) obtained from Dremio. To create a PAT, follow the steps in [Creating a PAT](/current/security/authentication/personal-access-tokens#creating-a-pat).
 
-## Creating a Connection[​](#creating-a-connection "Direct link to Creating a Connection")
+## Creating a Connection
 
 1. Log into Looker.
 2. In the menu bar at the top of the page, select **Admin**, and then select **Connections** under **Database**.
@@ -665,8 +665,8 @@ IBM Cognos Analytics](/current/client-applications/cognos)[Next
 
 Microsoft Excel](/current/client-applications/microsoft-excel/)
 
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Creating a Connection](#creating-a-connection)
+* Supported Authentication Methods
+* Creating a Connection
 
 ---
 
@@ -678,22 +678,22 @@ On this page
 
 # Microsoft Excel
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 warning
 
-Microsoft Excel version 16.95 (25030928) for Mac introduces a change that causes Excel to crash when using the Arrow Flight SQL ODBC driver. The crash occurs immediately after authentication, before the query/source selection dialog appears. This issue only affects Excel 16.95 on macOS. Excel on Windows is not impacted. See [Hiding the SQL Tables Listing](#hiding-the-sql-tables-listing) for a fix.
+Microsoft Excel version 16.95 (25030928) for Mac introduces a change that causes Excel to crash when using the Arrow Flight SQL ODBC driver. The crash occurs immediately after authentication, before the query/source selection dialog appears. This issue only affects Excel 16.95 on macOS. Excel on Windows is not impacted. See Hiding the SQL Tables Listing for a fix.
 
 Microsoft Excel in Microsoft 365
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Ensure that you are using Dremio v22.0 or later.
 * Ensure that your operating system is 64-bit Windows 10 or later.
 * Download, install, and configure the [Arrow Flight SQL ODBC driver](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/).
 * If you want to authenticate to Dremio by using a personal access token (PAT), rather than by using a password, generate a PAT. See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for the steps.
 
-## Connecting to Dremio[​](#connecting-to-dremio "Direct link to Connecting to Dremio")
+## Connecting to Dremio
 
 1. In Excel, select **Data** from the menu bar.
 2. Click **Get Data**.
@@ -704,7 +704,7 @@ Microsoft Excel in Microsoft 365
 7. In the Navigator dialog, select a dataset.
 8. Click **Load**.
 
-## Hiding the SQL Tables Listing[​](#hiding-the-sql-tables-listing "Direct link to Hiding the SQL Tables Listing")
+## Hiding the SQL Tables Listing
 
 You can prevent Excel from crashing by enabling the `hideSQLTablesListing` flag to hide the list of available sources in the query/source selection dialog. This flag can be used for Mac computers with an Apple silicon or an Intel processor.
 
@@ -715,7 +715,7 @@ To set the configuration:
 3. Change the value of the `hideSQLTablesListing` keyword to `true`.
 4. Click **OK**.
 
-## Using the Extended Flight SQL Buffer[​](#using-the-extended-flight-sql-buffer "Direct link to Using the Extended Flight SQL Buffer")
+## Using the Extended Flight SQL Buffer
 
 Apple Silicon Not Supported
 
@@ -729,11 +729,11 @@ Looker](/current/client-applications/looker)[Next
 
 Microsoft Excel PowerPivot](/current/client-applications/microsoft-excel/microsoft-excel-powerpivot)
 
-* [Supported Versions](#supported-versions)
-* [Prerequisites](#prerequisites)
-* [Connecting to Dremio](#connecting-to-dremio)
-* [Hiding the SQL Tables Listing](#hiding-the-sql-tables-listing)
-* [Using the Extended Flight SQL Buffer](#using-the-extended-flight-sql-buffer)
+* Supported Versions
+* Prerequisites
+* Connecting to Dremio
+* Hiding the SQL Tables Listing
+* Using the Extended Flight SQL Buffer
 
 ---
 
@@ -750,19 +750,19 @@ Connect [Microsoft Power BI](https://www.microsoft.com/en-us/power-platform/prod
 You can connect Power BI to Dremio in one of the following ways:
 
 * Configure a reusable connection to use in Power BI Desktop, Power BI Gateway, or Power BI Service. Power BI Service can connect to Dremio through DirectQuery or through Power BI Gateway.
-* [Connect to a specific dataset](#create-a-live-connection-to-a-dataset-from-dremio) by downloading the `.pbids` file from Dremio and opening it in Power BI Desktop.
+* Connect to a specific dataset by downloading the `.pbids` file from Dremio and opening it in Power BI Desktop.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 From Power BI, you can authenticate to Dremio with one of the following methods:
 
 * **Username and password**: Use your Dremio credentials.
 * **Personal access token (PAT)**: For details, see [Personal Access Tokens](/current/security/authentication/personal-access-tokens/).
-* **Single sign-on (SSO) through OAuth 2.0**: For steps on how to configure SSO, see [Enable SSO to Dremio from Power BI](#enable-sso-to-dremio-from-power-bi).
+* **Single sign-on (SSO) through OAuth 2.0**: For steps on how to configure SSO, see Enable SSO to Dremio from Power BI.
 
-## Connect to Dremio from Power BI[​](#connect-to-dremio-from-power-bi "Direct link to Connect to Dremio from Power BI")
+## Connect to Dremio from Power BI
 
-The Power BI connector for Dremio now supports connectivity through the open-source [Arrow Database Connectivity (ADBC) driver](https://arrow.apache.org/docs/format/ADBC.html), which Dremio highly recommends using to connect to Dremio. To enable reports to use ADBC, see [Enable Connectivity with ADBC](#enable-connectivity-with-adbc).
+The Power BI connector for Dremio now supports connectivity through the open-source [Arrow Database Connectivity (ADBC) driver](https://arrow.apache.org/docs/format/ADBC.html), which Dremio highly recommends using to connect to Dremio. To enable reports to use ADBC, see Enable Connectivity with ADBC.
 
 Existing connections will continue to work, but we recommend using the embedded ADBC driver for all new reports and migrating existing reports to ADBC to benefit from improved performance and supportability.
 
@@ -787,13 +787,13 @@ note
 
 Creating Dataflows through Power BI Service is also supported. To create a dataflow, click **New** > **Dataflow**. For the data source connection, follow the steps above.
 
-### Create a Live Connection to a Dataset from Dremio[​](#create-a-live-connection-to-a-dataset-from-dremio "Direct link to Create a Live Connection to a Dataset from Dremio")
+### Create a Live Connection to a Dataset from Dremio
 
 You can generate a Microsoft Power BI Data Source (`.pbids`) file that represents a live connection to a dataset that is in Dremio. No actual data is stored in this file, and you can think of it as a shortcut to a Power BI Desktop session with a preconfigured view of your data.
 
 note
 
-The `.pbids` file download option must be enabled for users to have access to this feature. To enable this feature, see [Enable the `.pbids` file download](#enable-the-pbids-file-download-in-dremio).
+The `.pbids` file download option must be enabled for users to have access to this feature. To enable this feature, see Enable the `.pbids` file download.
 
 To create a live connection to a dataset:
 
@@ -803,20 +803,20 @@ To create a live connection to a dataset:
 4. Open the downloaded file in Power BI Desktop.
 5. Authenticate using your preferred method.
 
-## Power BI Gateway[​](#power-bi-gateway "Direct link to Power BI Gateway")
+## Power BI Gateway
 
 To enable Power BI users to connect to Dremio via Power BI Gateway:
 
 1. Install and configure [Power BI Gateway](https://docs.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) on a machine that can connect to your Dremio cluster.
 2. In the Power BI Gateway configuration, add Dremio as a data source using the same connection details as above.
 
-## Advanced Configuration[​](#advanced-configuration "Direct link to Advanced Configuration")
+## Advanced Configuration
 
-### Enable Connectivity with ADBC[​](#enable-connectivity-with-adbc "Direct link to Enable Connectivity with ADBC")
+### Enable Connectivity with ADBC
 
 Dremio supports connectivity through Arrow Database Connectivity (ADBC). To enable this for Power BI Service, see the following options.
 
-#### Enable the ADBC Option for a New Connection[​](#enable-the-adbc-option-for-a-new-connection "Direct link to Enable the ADBC Option for a New Connection")
+#### Enable the ADBC Option for a New Connection
 
 1. In Power BI Desktop, click **Get data**.
 2. In the Get Data dialog, locate and select **Dremio Software**, and click **Connect**.
@@ -825,14 +825,14 @@ Dremio supports connectivity through Arrow Database Connectivity (ADBC). To enab
 5. Click **OK**.
 6. Authenticate using your preferred method, and click **Connect**.
 
-#### Enable the ADBC Option for an Existing Connection[​](#enable-the-adbc-option-for-an-existing-connection "Direct link to Enable the ADBC Option for an Existing Connection")
+#### Enable the ADBC Option for an Existing Connection
 
 1. In Power BI Desktop, go to **Data source settings**, select your source, and click **Change source**.
 2. In the Dremio Software dialog, update the **Server** field by adding the `adbc://` prefix before the hostname. Example: `adbc://acme-company.dremio.com`. If you're unable to edit the source this way, click **Transform data**, then click **Advanced Editor** in the **Home** tab. In the dialog that appears, update the hostname/server with the `adbc://` prefix, and click **Done**.
 3. Click **OK**.
 4. Reauthenticate using your preferred method, and click **Connect**.
 
-### Enable the `.pbids` File Download in the Dremio Console[​](#enable-the-pbids-file-download-in-the-dremio-console "Direct link to enable-the-pbids-file-download-in-the-dremio-console")
+### Enable the `.pbids` File Download in the Dremio Console
 
 To enable the `.pbids` file download feature:
 
@@ -840,7 +840,7 @@ To enable the `.pbids` file download feature:
 2. In the **Support** section, enable **Allow downloading of .pbids files**.
 3. Click **Save**.
 
-### Enable SSO to Dremio from Power BI[​](#enable-sso-to-dremio-from-power-bi "Direct link to Enable SSO to Dremio from Power BI")
+### Enable SSO to Dremio from Power BI
 
 SSO is supported only for datasets that use DirectQuery.
 
@@ -871,7 +871,7 @@ The following steps configure the Power BI side of SSO. These steps assume your 
 
 To enable SSO for Power BI reports:
 
-#### Enable SSO for a DirectQuery Report[​](#enable-sso-for-a-directquery-report "Direct link to Enable SSO for a DirectQuery Report")
+#### Enable SSO for a DirectQuery Report
 
 To enable SSO for a report that uses DirectQuery:
 
@@ -884,7 +884,7 @@ To enable SSO for a report that uses DirectQuery:
 7. Select the check box **Report viewers can only access this data source with their own Power BI identities using DirectQuery**.
 8. Click **Sign in**.
 
-#### Enable SSO for Reports with Power BI Gateway[​](#enable-sso-for-reports-with-power-bi-gateway "Direct link to Enable SSO for Reports with Power BI Gateway")
+#### Enable SSO for Reports with Power BI Gateway
 
 To enable SSO when you are using Power BI Gateway:
 
@@ -910,7 +910,7 @@ note
 
 SSO requires the OAuth2 authentication method. Basic authentication and personal access tokens do not support SSO when used through Power BI Gateway.
 
-## Arrow Database Connectivity (ADBC) Limitations[​](#arrow-database-connectivity-adbc-limitations "Direct link to Arrow Database Connectivity (ADBC) Limitations")
+## Arrow Database Connectivity (ADBC) Limitations
 
 * ADBC is not enabled by default. It must be enabled by the owner of the report.
 * NativeQuery is not supported.
@@ -919,20 +919,20 @@ SSO requires the OAuth2 authentication method. Basic authentication and personal
 * Complex data types such as `MAP` and `INTERVAL` are not supported.
 * When using DirectQuery, chaining functions is supported, but some complex scenarios may not work as expected. Complex optional parameters for functions are not supported.
 
-## Troubleshoot Power BI[​](#troubleshoot-power-bi "Direct link to Troubleshoot Power BI")
+## Troubleshoot Power BI
 
-### Cached Data Issues[​](#cached-data-issues "Direct link to Cached Data Issues")
+### Cached Data Issues
 
 If you have previously installed older versions of Power BI Desktop, cached data may interfere with the newer versions of the Flight SQL drivers resulting in connection errors.
 
-#### Problem[​](#problem "Direct link to Problem")
+#### Problem
 
 For example, when using Flight SQL ADBC, cached connection data in Power BI could cause the following errors:
 
 * `ADBC: IOError [] [FlightSQL] [FlightSQL] unresolved address (Unavailable; GetObjects(GetDBSchemas))`
 * `ADBC: IOError [] [FlightSQL] [FlightSQL] connection error: desc = "transport: authentication handshake failed: credentials: cannot check peer: missing selected ALPN property. If you upgraded from a grpc-go version earlier than 1.67, your TLS connections may have stopped working due to ALPN enforcement. For more details, see: https://github.com/grpc/grpc-go/issues/434" (Unavailable; GetObjects(GetDBSchemas))"`
 
-#### Solution[​](#solution "Direct link to Solution")
+#### Solution
 
 Clear the Power BI Desktop cache and any cached data source permissions involving Dremio connections by following these steps:
 
@@ -943,15 +943,15 @@ Clear the Power BI Desktop cache and any cached data source permissions involvin
 
 After completing these steps, try reconnecting to Dremio using the instructions above.
 
-### Large Result Sets[​](#large-result-sets "Direct link to Large Result Sets")
+### Large Result Sets
 
-#### Problem[​](#problem-1 "Direct link to Problem")
+#### Problem
 
 When fetching data from Dremio with ADBC you may see the following error:
 
 * `Unexpected error: [FlightSQL] grpc: received message larger than max (43747370 vs. 16777216) (ResourceExhausted; DoGet: endpoint 0: [])`
 
-#### Solution[​](#solution-1 "Direct link to Solution")
+#### Solution
 
 By default, the ADBC driver accepts only messages up to 16 MiB in size. This can be fixed by updating the Power BI M expression to customize the connection as follows:
 
@@ -974,18 +974,18 @@ Microsoft Excel PowerPivot](/current/client-applications/microsoft-excel/microso
 
 Microstrategy Workstation](/current/client-applications/microstrategy)
 
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Connect to Dremio from Power BI](#connect-to-dremio-from-power-bi)
-  + [Create a Live Connection to a Dataset from Dremio](#create-a-live-connection-to-a-dataset-from-dremio)
-* [Power BI Gateway](#power-bi-gateway)
-* [Advanced Configuration](#advanced-configuration)
-  + [Enable Connectivity with ADBC](#enable-connectivity-with-adbc)
-  + [Enable the `.pbids` File Download in the Dremio Console](#enable-the-pbids-file-download-in-the-dremio-console)
-  + [Enable SSO to Dremio from Power BI](#enable-sso-to-dremio-from-power-bi)
-* [Arrow Database Connectivity (ADBC) Limitations](#arrow-database-connectivity-adbc-limitations)
-* [Troubleshoot Power BI](#troubleshoot-power-bi)
-  + [Cached Data Issues](#cached-data-issues)
-  + [Large Result Sets](#large-result-sets)
+* Supported Authentication Methods
+* Connect to Dremio from Power BI
+  + Create a Live Connection to a Dataset from Dremio
+* Power BI Gateway
+* Advanced Configuration
+  + Enable Connectivity with ADBC
+  + Enable the `.pbids` File Download in the Dremio Console
+  + Enable SSO to Dremio from Power BI
+* Arrow Database Connectivity (ADBC) Limitations
+* Troubleshoot Power BI
+  + Cached Data Issues
+  + Large Result Sets
 
 ---
 
@@ -999,16 +999,16 @@ On this page
 
 [MicroStrategy Workstation](https://www2.microstrategy.com/producthelp/Current/Workstation/en-us/Content/home_workstation.htm) makes it easy to build compelling visualizations and interactive dossiers in a matter of minutes and then easily share those dossiers with others.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 Microstrategy Workstation 2021 Update 9 and later.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 * Use a Dremio username and password.
 * Use a Dremio username and a personal access token (PAT) that you obtained from Dremio.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Install the latest version of Dremio's legacy JDBC driver:
   1. [Download the driver](https://download.dremio.com/jdbc-driver/dremio-jdbc-driver-LATEST.jar).
@@ -1018,7 +1018,7 @@ Microstrategy Workstation 2021 Update 9 and later.
 * If you want to authenticate your connection to Dremio by using a PAT, see [Creating a PAT](/current/security/authentication/personal-access-tokens/#creating-a-pat) for the steps to obtain one.
 * In Microstrategy Workstation, select **Help** > **Enable New Data Import Experience**.
 
-## Creating an Environment-level Integration with Dremio[​](#creating-an-environment-level-integration-with-dremio "Direct link to Creating an Environment-level Integration with Dremio")
+## Creating an Environment-level Integration with Dremio
 
 You can create an integration with Dremio that can be used in more than one dossier.
 
@@ -1058,10 +1058,10 @@ Microsoft Power BI](/current/client-applications/microsoft-power-bi/)[Next
 
 Preset](/current/client-applications/preset)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Prerequisites](#prerequisites)
-* [Creating an Environment-level Integration with Dremio](#creating-an-environment-level-integration-with-dremio)
+* Supported Versions
+* Supported Authentication Methods
+* Prerequisites
+* Creating an Environment-level Integration with Dremio
 
 ---
 
@@ -1075,7 +1075,7 @@ On this page
 
 You can use [Preset](https://preset.io/), a cloud service for Superset, to query and visualize data.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 * Use the username and password of an account in your Dremio cluster.
 * Use the username of an account in your Dremio cluster and a personal access token (PAT) created in Dremio. To create a PAT, follow the steps in [Creating a PAT](/current/security/authentication/personal-access-tokens#creating-a-pat). After you obtain a PAT, it is recommended that you URL-encode it. To encode it locally on your system, you can follow these steps:
@@ -1083,7 +1083,7 @@ You can use [Preset](https://preset.io/), a cloud service for Superset, to query
   2. In the top bar of the inspection pane, click **Console**.
   3. Type `encodeURIComponent("<PAT>")`, where `<PAT>` is the personal access token. The URL-encoded PAT appears in red on the next line. You can highlight it and copy it to your clipboard.
 
-## Creating a Connection[​](#creating-a-connection "Direct link to Creating a Connection")
+## Creating a Connection
 
 1. Click **Settings** in the top-right corner, and select **Database Connections** under **Data**.
 2. Click the **+Database** button in the top-right corner.
@@ -1104,7 +1104,7 @@ You can use [Preset](https://preset.io/), a cloud service for Superset, to query
       * `<password>`: The password of the Dremio account to use.
       * `<host>`: The hostname or IP address of the coordinator node of the Dremio cluster.
       * `<port>`: The port to connect to on the coordinator node. Unless explicitly changed on the node, the port is 31010.
-      * `[/option=value[;...]]`: One or more optional properties, separated by semicolons. See [SSL Connection Properties](#ssl-connection-properties) and [Advanced Properties](#advanced-properties).Example URI with username and password authentication
+      * `[/option=value[;...]]`: One or more optional properties, separated by semicolons. See SSL Connection Properties and Advanced Properties.Example URI with username and password authentication
 
       ```
       dremio://myUserID:myPassword@myHost:31010/ssl=true;schema=Samples;routing_tag=thisTag
@@ -1121,7 +1121,7 @@ You can use [Preset](https://preset.io/), a cloud service for Superset, to query
       * `<PAT>`: The personal access token to use.
       * `<host>`: The hostname or IP address of the coordinator node of the Dremio cluster.
       * `<port>`: The port to connect to on the coordinator node. Unless explicitly changed on the node, the port is 31010.
-      * `[/option=value[;...]]`: One or more optional properties, separated by semicolons. See [SSL Connection Properties](#ssl-connection-properties) and [Advanced Properties](#advanced-properties).Example URI with PAT authentication
+      * `[/option=value[;...]]`: One or more optional properties, separated by semicolons. See SSL Connection Properties and Advanced Properties.Example URI with PAT authentication
 
       ```
       dremio://myUserID:myPAT@myHost:31010/ssl=true;schema=Samples;routing_tag=thisTag
@@ -1129,7 +1129,7 @@ You can use [Preset](https://preset.io/), a cloud service for Superset, to query
    5. Test the connection. If the test fails, check the syntax and values in the connection URI.
    6. Click **Connect**.
 
-## SSL Connection Properties[​](#ssl-connection-properties "Direct link to SSL Connection Properties")
+## SSL Connection Properties
 
 Use the following properties to configure SSL encryption and verification methods:
 
@@ -1139,7 +1139,7 @@ Use the following properties to configure SSL encryption and verification method
 | disableCertificateVerification | integer | Specifies whether to verify the host certificate against the trust store. Accepted values: `false`, verifies the certificate against the trust store; `true`, does not verify the certificate against the trust store. | false |
 | trustedCerts | string | The full path of the .pem file containing certificates trusted by a CA, for the purpose of verifying the server. If this option is not set, defaults to using the trusted CA certificates .pem file.The TLS connection fails if you do not specify a value when UseEncryption is true and disableCertificateVerification is false. | N/A |
 
-## Advanced Properties[​](#advanced-properties "Direct link to Advanced Properties")
+## Advanced Properties
 
 | Name | Type | Description | Default Value |
 | --- | --- | --- | --- |
@@ -1154,10 +1154,10 @@ Microstrategy Workstation](/current/client-applications/microstrategy)[Next
 
 SAP Business Objects](/current/client-applications/business-objects)
 
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Creating a Connection](#creating-a-connection)
-* [SSL Connection Properties](#ssl-connection-properties)
-* [Advanced Properties](#advanced-properties)
+* Supported Authentication Methods
+* Creating a Connection
+* SSL Connection Properties
+* Advanced Properties
 
 ---
 
@@ -1169,14 +1169,14 @@ On this page
 
 # SAP Business Objects
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Dremio Business Objects integration requires:
 
 * SAP Business Objects 4.0+
 * Download, install, and configure the [Arrow Flight SQL ODBC driver](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/).
 
-## Connecting to a Dremio cluster using Information Design Tool[​](#connecting-to-a-dremio-cluster-using-information-design-tool "Direct link to Connecting to a Dremio cluster using Information Design Tool")
+## Connecting to a Dremio cluster using Information Design Tool
 
 1. Open Information Design Tool and a new project.
 2. Create a new Relational Connection using the Generic ODBC3 datasource driver.
@@ -1184,7 +1184,7 @@ Dremio Business Objects integration requires:
 
 Dremio schemas and tables are now available.
 
-## Using Dremio datasets in Web Intelligence Reports[​](#using-dremio-datasets-in-web-intelligence-reports "Direct link to Using Dremio datasets in Web Intelligence Reports")
+## Using Dremio datasets in Web Intelligence Reports
 
 1. In Information Design Tool, publish the Dremio connection to a repository.
 2. Create a new Data Foundation.
@@ -1203,9 +1203,9 @@ Preset](/current/client-applications/preset)[Next
 
 Tableau](/current/client-applications/tableau)
 
-* [Prerequisites](#prerequisites)
-* [Connecting to a Dremio cluster using Information Design Tool](#connecting-to-a-dremio-cluster-using-information-design-tool)
-* [Using Dremio datasets in Web Intelligence Reports](#using-dremio-datasets-in-web-intelligence-reports)
+* Prerequisites
+* Connecting to a Dremio cluster using Information Design Tool
+* Using Dremio datasets in Web Intelligence Reports
 
 ---
 
@@ -1222,27 +1222,27 @@ Connect [Tableau](https://www.tableau.com/) to Dremio to derive powerful insight
 You can connect your Tableau application to Dremio in one of two ways:
 
 * Configure a reusable connection in Tableau Desktop, Tableau Server, or Tableau Cloud.
-* [Connect to a specific dataset](#creating-a-live-connection-to-a-dataset-from-dremio) by downloading the `.tds` file from Dremio and opening it in Tableau Desktop.
+* Connect to a specific dataset by downloading the `.tds` file from Dremio and opening it in Tableau Desktop.
 
-## Supported Tableau Versions[​](#supported-tableau-versions "Direct link to Supported Tableau Versions")
+## Supported Tableau Versions
 
 | Product | Supported Versions |
 | --- | --- |
-| [Tableau Desktop](#tableau-desktop) | 2022.1 and later |
-| [Tableau Server](#tableau-server) | 2022.1 and later |
-| [Tableau Cloud](#tableau-cloud) | Latest version deployed by Tableau |
+| Tableau Desktop | 2022.1 and later |
+| Tableau Server | 2022.1 and later |
+| Tableau Cloud | Latest version deployed by Tableau |
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 From Tableau, you can authenticate to Dremio with a username and password, or with a [personal access token (PAT)](/current/security/authentication/personal-access-tokens/#creating-a-pat) that can be obtained from the Dremio console.
 
-You can also configure single sign-on (SSO) through OAuth 2.0. For steps on how to configure SSO, see [Enabling SSO to Dremio from Tableau](#enabling-sso-to-dremio-from-tableau-enterprise).
+You can also configure single sign-on (SSO) through OAuth 2.0. For steps on how to configure SSO, see Enabling SSO to Dremio from Tableau.
 
-## Tableau Desktop[​](#tableau-desktop "Direct link to Tableau Desktop")
+## Tableau Desktop
 
 Tableau Desktop includes a native connector that you can use to connect to Dremio.
 
-### Prerequisites for Using the Dremio JDBC Driver (Legacy)[​](#prerequisites-for-using-the-dremio-jdbc-driver-legacy "Direct link to Prerequisites for Using the Dremio JDBC Driver (Legacy)")
+### Prerequisites for Using the Dremio JDBC Driver (Legacy)
 
 To connect to Dremio, you'll also need to install the Dremio JDBC driver. Download the Dremio JDBC driver and copy it to Tableau Desktop's `Drivers` folder.
 
@@ -1258,7 +1258,7 @@ Download driver for Windows by running this command in a PowerShell window
 Invoke-WebRequest -Uri "https://download.dremio.com/jdbc-driver/dremio-jdbc-driver-LATEST.jar" -OutFile "C:\Program Files\Tableau\Drivers\dremio-jdbc-driver-LATEST.jar"
 ```
 
-### Prerequisites for Using the Arrow Flight SQL JDBC Driver[​](#prerequisites-for-using-the-arrow-flight-sql-jdbc-driver "Direct link to Prerequisites for Using the Arrow Flight SQL JDBC Driver")
+### Prerequisites for Using the Arrow Flight SQL JDBC Driver
 
 The Tableau Desktop 2025.1+ connector for Dremio supports Arrow Flight SQL JDBC in place of the Dremio JDBC driver (Legacy). To change the driver, download the Arrow Flight SQL JDBC driver, copy it to Tableau Desktop's `Drivers` folder, and select the **Use Arrow Flight SQL Driver (preview)** option in the **Advanced** tab of the connection dialog.
 
@@ -1274,7 +1274,7 @@ Download driver for Windows by running this command in a PowerShell window
 Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/org/apache/arrow/flight-sql-jdbc-driver/18.3.0/flight-sql-jdbc-driver-18.3.0.jar" -OutFile "C:\Program Files\Tableau\Drivers\flight-sql-jdbc-driver-18.3.0.jar"
 ```
 
-### Steps for Connecting[​](#steps-for-connecting "Direct link to Steps for Connecting")
+### Steps for Connecting
 
 To create a Dremio source in Tableau Desktop:
 
@@ -1289,17 +1289,17 @@ To create a Dremio source in Tableau Desktop:
      + If your Dremio cluster does not use SSL: `http://<dremio-host>:9047`
      + If your Dremio cluster does use SSL: `https://<dremio-host>:9047`
 7. (Optional) If your Dremio cluster is configured for secure connections, select the **Require SSL** option.
-8. (Optional for Tableau 2025.1+) If you are using the Arrow Flight SQL JDBC driver, in the **Advanced** tab, select the **Use Arrow Flight SQL Driver (preview)** option. Ensure that you have the Arrow Flight SQL JDBC driver [downloaded](#arrow-flight-sql-jdbc-driver).
+8. (Optional for Tableau 2025.1+) If you are using the Arrow Flight SQL JDBC driver, in the **Advanced** tab, select the **Use Arrow Flight SQL Driver (preview)** option. Ensure that you have the Arrow Flight SQL JDBC driver downloaded.
 9. (Optional) In the **Advanced** tab, specify the **Engine**, **Queue**, and **Tag**. For information about how these values are used, see [Workload Management](/current/admin/workloads/workload-management/).
 10. Click **Sign In**.
 
-### Creating a Live Connection to a Dataset from Dremio[​](#creating-a-live-connection-to-a-dataset-from-dremio "Direct link to Creating a Live Connection to a Dataset from Dremio")
+### Creating a Live Connection to a Dataset from Dremio
 
 You can generate a Tableau Datasource (`.tds`) file that represents a live connection to a dataset that is in Dremio. No actual data is stored in this file, and you can think of it as a shortcut to a Tableau session with a preconfigured view of your data.
 
 note
 
-* The `.tds` file download option must be enabled for users to have access to this feature. To enable this feature, see [Enabling the .tds file download](#enabling-the-tds-file-download-in-the-dremio-console).
+* The `.tds` file download option must be enabled for users to have access to this feature. To enable this feature, see Enabling the .tds file download.
 
 To download a `.tds` file:
 
@@ -1310,11 +1310,11 @@ To download a `.tds` file:
    1. Sign into your identity provider. You are taken to the sign-in screen only the first time that you log into Dremio during a session in Tableau.
    2. Click **Accept** in the Authorize App dialog. This dialog appears only the first time that you authenticate from Tableau through your identity provider.
 
-## Tableau Server[​](#tableau-server "Direct link to Tableau Server")
+## Tableau Server
 
 Tableau Server includes a native connector that you can use to connect to Dremio.
 
-### Prerequisites for Using the Dremio JDBC Driver (Legacy)[​](#prerequisites-for-using-the-dremio-jdbc-driver-legacy-1 "Direct link to Prerequisites for Using the Dremio JDBC Driver (Legacy)")
+### Prerequisites for Using the Dremio JDBC Driver (Legacy)
 
 To connect to Dremio, you'll need to install the Dremio JDBC driver. Download the Dremio JDBC driver and copy it to the `Drivers` folder.
 
@@ -1330,7 +1330,7 @@ Download driver for Linux by running this command in a command-line window
 curl -L https://download.dremio.com/jdbc-driver/dremio-jdbc-driver-LATEST.jar -o /opt/tableau/tableau_driver/jdbc/dremio-jdbc-driver-LATEST.jar
 ```
 
-### Prerequisites for Using the Arrow Flight SQL JDBC Driver[​](#prerequisites-for-using-the-arrow-flight-sql-jdbc-driver-1 "Direct link to Prerequisites for Using the Arrow Flight SQL JDBC Driver")
+### Prerequisites for Using the Arrow Flight SQL JDBC Driver
 
 The Tableau Server 2025.1+ connector for Dremio supports Arrow Flight SQL JDBC in place of the Dremio JDBC driver (Legacy). To change the driver, download the Arrow Flight SQL JDBC driver, copy it to the `Drivers` folder, and select the **Use Arrow Flight SQL Driver (preview)** option in the **Advanced** tab of the connection dialog.
 
@@ -1346,7 +1346,7 @@ Download driver for Linux by running this command in a command-line window
 curl -L https://repo1.maven.org/maven2/org/apache/arrow/flight-sql-jdbc-driver/16.1.0/flight-sql-jdbc-driver-16.1.0.jar -o /opt/tableau/tableau_driver/jdbc/flight-sql-jdbc-driver-16.1.0.jar
 ```
 
-### Steps for Connecting[​](#steps-for-connecting-1 "Direct link to Steps for Connecting")
+### Steps for Connecting
 
 To create a Dremio source in Tableau Server:
 
@@ -1362,11 +1362,11 @@ To create a Dremio source in Tableau Server:
      + If your Dremio cluster does not use SSL: `http://<dremio-host>:9047`
      + If your Dremio cluster does use SSL: `https://<dremio-host>:9047`
 8. (Optional) If your Dremio cluster is configured for secure connections, select the **Require SSL** option.
-9. (Optional for Tableau 2025.1+) If you are using the Arrow Flight SQL JDBC driver, in the **Advanced** tab, select the **Use Arrow Flight SQL Driver (preview)** option. Ensure that you have the Arrow Flight SQL JDBC driver [downloaded](#arrow-flight-sql-jdbc-driver-1).
+9. (Optional for Tableau 2025.1+) If you are using the Arrow Flight SQL JDBC driver, in the **Advanced** tab, select the **Use Arrow Flight SQL Driver (preview)** option. Ensure that you have the Arrow Flight SQL JDBC driver downloaded.
 10. (Optional) In the **Advanced** tab, you can specify the **Engine**, **Queue**, and **Tag**.
 11. Click **Sign In**.
 
-## Tableau Cloud[​](#tableau-cloud "Direct link to Tableau Cloud")
+## Tableau Cloud
 
 Tableau Cloud includes a native connector that you can use to connect to Dremio.
 
@@ -1374,7 +1374,7 @@ note
 
 The Tableau Cloud 2025.1 connector for Dremio has an option to use the [Arrow Flight SQL JDBC](/cloud/sonar/client-apps/drivers/arrow-flight-sql-jdbc) driver in place of the Dremio JDBC driver to power the connection to Dremio. In the **Advanced** tab, select the **Use Arrow Flight SQL Driver (preview)** option.
 
-### Steps for Connecting[​](#steps-for-connecting-2 "Direct link to Steps for Connecting")
+### Steps for Connecting
 
 To create a Dremio source in Tableau Cloud:
 
@@ -1397,9 +1397,9 @@ To create a Dremio source in Tableau Cloud:
     1. Sign into your identity provider. You are taken to the sign-in screen only the first time that you log into Dremio during a session in Tableau Cloud.
     2. Click **Accept** in the Authorize App dialog. This dialog appears only the first time that you authenticate from Tableau Cloud through your identity provider.
 
-## Advanced Configuration[​](#advanced-configuration "Direct link to Advanced Configuration")
+## Advanced Configuration
 
-### Enabling the `.tds` File Download in the Dremio console[​](#enabling-the-tds-file-download-in-the-dremio-console "Direct link to enabling-the-tds-file-download-in-the-dremio-console")
+### Enabling the `.tds` File Download in the Dremio console
 
 `ADMIN` privileges are required to make updates to this setting.
 
@@ -1413,7 +1413,7 @@ To enable users to download `.tds` files for datasets in Dremio, follow these st
 
 After the organization administrator completes these steps, refresh your browser window.
 
-### Enabling SSO to Dremio from Tableau Enterprise[​](#enabling-sso-to-dremio-from-tableau-enterprise "Direct link to enabling-sso-to-dremio-from-tableau-enterprise")
+### Enabling SSO to Dremio from Tableau Enterprise
 
 SSO using OAuth 2.0 is supported by Tableau Desktop 2022.3 or later, Tableau Server, and Tableau Cloud.
 
@@ -1421,10 +1421,10 @@ Users of Tableau Desktop will use SSO authentication whether connecting directly
 
 To enable SSO to Dremio from Tableau, ensure that your Dremio cluster has SSO configured with [Microsoft Entra ID](/current/security/authentication/identity-providers/microsoft-entra-id) or an [OIDC identity provider](/current/security/authentication/identity-providers/oidc) and follow these steps:
 
-1. For Tableau Server only, [follow the configuration steps](#configuring-sso-for-tableau-server).
-2. Follow the steps to [enable SSO to Dremio from Tableau](#configuring-dremio).
+1. For Tableau Server only, follow the configuration steps.
+2. Follow the steps to enable SSO to Dremio from Tableau.
 
-#### Configuring SSO for Tableau Server[​](#configuring-sso-for-tableau-server "Direct link to Configuring SSO for Tableau Server")
+#### Configuring SSO for Tableau Server
 
 To configure SSO using [OAuth for Tableau Server](https://tableau.github.io/connector-plugin-sdk/docs/oauth), follow these steps:
 
@@ -1437,7 +1437,7 @@ To configure SSO using [OAuth for Tableau Server](https://tableau.github.io/conn
    ```
 2. To apply the changes to Tableau Server, run the command `tsm pending-changes apply`.
 
-#### Configuring Dremio[​](#configuring-dremio "Direct link to Configuring Dremio")
+#### Configuring Dremio
 
 To enable SSO authentication to Dremio from Tableau:
 
@@ -1452,15 +1452,15 @@ To enable SSO authentication to Dremio from Tableau:
    https://<tableau-server>/auth/add_oauth_token
    ```
 
-#### Configuring an Identity Provider[​](#configuring-an-identity-provider "Direct link to Configuring an Identity Provider")
+#### Configuring an Identity Provider
 
 Register an additional redirect URI: `https://<dremio-host>:xxxx/oauth/callback` or `http://<dremio-host>:xxxx/oauth/callback` in the SSO application configured in your identity provider. See the configuration instructions for [Microsoft Entra ID](/current/security/authentication/identity-providers/microsoft-entra-id#configuring-microsoft-entra-id) or [OpenID Identity Providers](/current/security/authentication/identity-providers/oidc#configuring-openid) for additional information.
 
-### Customizing the Connection String[​](#customizing-the-connection-string "Direct link to Customizing the Connection String")
+### Customizing the Connection String
 
 To add JDBC parameters to the JDBC URL that Tableau generates for connections to Dremio using the parameters from the connection dialog, see [Use a Properties file to customize a JDBC connection](https://help.tableau.com/current/pro/desktop/en-us/connect_customize.htm#use-a-properties-file-to-customize-a-jdbc-connection) in the Tableau documentation.
 
-### Manually Installing the Dremio Connector[​](#manually-installing-the-dremio-connector "Direct link to Manually Installing the Dremio Connector")
+### Manually Installing the Dremio Connector
 
 If you are previewing a feature that hasn't been released or you have been provided a `.taco` file with a fix that hasn't been released, you can manually install this version of the Dremio connector for temporary use.
 
@@ -1506,9 +1506,9 @@ To manually install the connector:
    ```
    mv <download-location>/dremio-jdbc-driver-LATEST.jar /opt/tableau/tableau_driver/jdbc/dremio-jdbc-driver-LATEST.jar
    ```
-4. Now you can connect to Dremio from [Tableau Desktop](#steps-for-connecting) or [Tableau Server](#steps-for-connecting-1).
+4. Now you can connect to Dremio from Tableau Desktop or Tableau Server.
 
-### Exporting a Dremio Dataset with SSL Placeholder[​](#exporting-a-dremio-dataset-with-ssl-placeholder "Direct link to Exporting a Dremio Dataset with SSL Placeholder")
+### Exporting a Dremio Dataset with SSL Placeholder
 
 If you have SSL enabled on Dremio, and you want to export a `.tds` file to use in a Tableau application for quickly connecting to a dataset,
 you can do so by add the support key `export.tableau.extra-native-connection-properties` and set the value to `SSL=true`.
@@ -1516,13 +1516,13 @@ This property allows you to set the JDBC connection string when exporting a `.td
 
 To know how to set the `export.tableau.extra-native-connection-properties` support key, see [Support Keys](/current/help-support/support-settings/#support-keys).
 
-#### Changing the Hostname[​](#changing-the-hostname "Direct link to Changing the Hostname")
+#### Changing the Hostname
 
 You can use the `export.bi.hostname` support key to change the default hostname of the SQL endpoint for generating TDS files.
 
 To know how to set the `export.bi.hostname` support key, see [Support Keys](/current/help-support/support-settings/#support-keys).
 
-#### Example: SSL setting[​](#example-ssl-setting "Direct link to Example: SSL setting")
+#### Example: SSL setting
 
 In the following example, SSL is enabled in the **dremio.conf** file. See [Using Wire Encryption](/current/what-is-dremio/architecture/encrypting-dremio/#odbcjdbc-client-encryption--enterprise-edition-only)
 for more information.
@@ -1534,7 +1534,7 @@ services.coordinator.client-endpoint.ssl.enabled: true
 services.coordinator.client-endpoint.ssl.auto-certificate.enabled: true
 ```
 
-#### Example: export.tableau.extra-native-connection-properties value[​](#example-exporttableauextra-native-connection-properties-value "Direct link to Example: export.tableau.extra-native-connection-properties value")
+#### Example: export.tableau.extra-native-connection-properties value
 
 Example SSL property value
 
@@ -1542,7 +1542,7 @@ Example SSL property value
 SSL=true
 ```
 
-## Limitations[​](#limitations "Direct link to Limitations")
+## Limitations
 
 * When using Tableau with Dremio, avoid using periods in space or dataset names. Due to differences in hierarchy support, periods in paths are treated as separators, resulting in errors when navigating or selecting spaces or datasets with periods in their names.
 
@@ -1554,26 +1554,26 @@ SAP Business Objects](/current/client-applications/business-objects)[Next
 
 ThoughtSpot](/current/client-applications/thoughtspot)
 
-* [Supported Tableau Versions](#supported-tableau-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Tableau Desktop](#tableau-desktop)
-  + [Prerequisites for Using the Dremio JDBC Driver (Legacy)](#prerequisites-for-using-the-dremio-jdbc-driver-legacy)
-  + [Prerequisites for Using the Arrow Flight SQL JDBC Driver](#prerequisites-for-using-the-arrow-flight-sql-jdbc-driver)
-  + [Steps for Connecting](#steps-for-connecting)
-  + [Creating a Live Connection to a Dataset from Dremio](#creating-a-live-connection-to-a-dataset-from-dremio)
-* [Tableau Server](#tableau-server)
-  + [Prerequisites for Using the Dremio JDBC Driver (Legacy)](#prerequisites-for-using-the-dremio-jdbc-driver-legacy-1)
-  + [Prerequisites for Using the Arrow Flight SQL JDBC Driver](#prerequisites-for-using-the-arrow-flight-sql-jdbc-driver-1)
-  + [Steps for Connecting](#steps-for-connecting-1)
-* [Tableau Cloud](#tableau-cloud)
-  + [Steps for Connecting](#steps-for-connecting-2)
-* [Advanced Configuration](#advanced-configuration)
-  + [Enabling the `.tds` File Download in the Dremio console](#enabling-the-tds-file-download-in-the-dremio-console)
-  + [Enabling SSO to Dremio from Tableau Enterprise](#enabling-sso-to-dremio-from-tableau-enterprise)
-  + [Customizing the Connection String](#customizing-the-connection-string)
-  + [Manually Installing the Dremio Connector](#manually-installing-the-dremio-connector)
-  + [Exporting a Dremio Dataset with SSL Placeholder](#exporting-a-dremio-dataset-with-ssl-placeholder)
-* [Limitations](#limitations)
+* Supported Tableau Versions
+* Supported Authentication Methods
+* Tableau Desktop
+  + Prerequisites for Using the Dremio JDBC Driver (Legacy)
+  + Prerequisites for Using the Arrow Flight SQL JDBC Driver
+  + Steps for Connecting
+  + Creating a Live Connection to a Dataset from Dremio
+* Tableau Server
+  + Prerequisites for Using the Dremio JDBC Driver (Legacy)
+  + Prerequisites for Using the Arrow Flight SQL JDBC Driver
+  + Steps for Connecting
+* Tableau Cloud
+  + Steps for Connecting
+* Advanced Configuration
+  + Enabling the `.tds` File Download in the Dremio console
+  + Enabling SSO to Dremio from Tableau Enterprise
+  + Customizing the Connection String
+  + Manually Installing the Dremio Connector
+  + Exporting a Dremio Dataset with SSL Placeholder
+* Limitations
 
 ---
 
@@ -1587,15 +1587,15 @@ On this page
 
 You can use [ThoughtSpot](https://www.thoughtspot.com/) to search directly against your data in Dremio for live analytics and actionable insights.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 Dremio supports ThoughtSpot cloud 8.3 and ThoughtSpot software 7.2.1.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 You can use your Dremio username and password.
 
-## Creating a Connection[​](#creating-a-connection "Direct link to Creating a Connection")
+## Creating a Connection
 
 note
 
@@ -1635,9 +1635,9 @@ Tableau](/current/client-applications/tableau)[Next
 
 Drivers](/current/client-applications/drivers/)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Creating a Connection](#creating-a-connection)
+* Supported Versions
+* Supported Authentication Methods
+* Creating a Connection
 
 ---
 
@@ -1674,20 +1674,20 @@ On this page
 
 You can use the legacy Dremio JDBC driver to run [DbVisualizer](https://www.dbvis.com/), a SQL runner that works with any JDBC-compliant data source.
 
-## Supported Versions[​](#supported-versions "Direct link to Supported Versions")
+## Supported Versions
 
 You can use any version of DbVisualizer, if you use the legacy Dremio JDBC Driver 14.0.0 or later.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 You can use your Dremio username and password, or you can use a personal access token (PAT) that you obtained from Dremio.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Download the [legacy Dremio JDBC driver](/current/client-applications/drivers/jdbc/).
 * If you want to authenticate your connection to Dremio by using a personal access token, see [Creating a PAT](/current/security/authentication/personal-access-tokens/#creating-a-pat) for the steps to obtain one.
 
-## Connecting to Dremio[​](#connecting-to-dremio "Direct link to Connecting to Dremio")
+## Connecting to Dremio
 
 1. Add the legacy Dremio JDBC Driver to DbVisualizer's Driver Manager. You need to do this only once, and can skip this step if DbVisualizer already lists this driver in its Driver Manager dialog:
 
@@ -1741,10 +1741,10 @@ Dremio JDBC Driver (Legacy)](/current/client-applications/drivers/jdbc)[Next
 
 Accelerate Queries](/current/acceleration/)
 
-* [Supported Versions](#supported-versions)
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Prerequisites](#prerequisites)
-* [Connecting to Dremio](#connecting-to-dremio)
+* Supported Versions
+* Supported Authentication Methods
+* Prerequisites
+* Connecting to Dremio
 
 ---
 
@@ -1756,14 +1756,14 @@ On this page
 
 # Microsoft Excel PowerPivot
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * Ensure that you are using Dremio v22.0 or later.
 * Ensure that your operating system is 64-bit Windows 10 or later.
 * Download, install, and configure the [Arrow Flight SQL ODBC driver](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/).
 * If you want to authenticate to Dremio by using a personal access token (PAT), rather than by using a password, generate a PAT. See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for the steps.
 
-## Updating the DSN Configuration[​](#updating-the-dsn-configuration "Direct link to Updating the DSN Configuration")
+## Updating the DSN Configuration
 
 1. Launch ODBC Data Sources on your Windows system.
 2. Select the **System DSN** tab.
@@ -1773,7 +1773,7 @@ On this page
    * **Key:** quoting
    * **Value:** BRACKET
 
-## Connecting to Dremio[​](#connecting-to-dremio "Direct link to Connecting to Dremio")
+## Connecting to Dremio
 
 1. Open Excel.
 2. Click the **Power Pivot** tab and then click **Manage**.
@@ -1809,9 +1809,9 @@ Microsoft Excel](/current/client-applications/microsoft-excel/)[Next
 
 Microsoft Power BI](/current/client-applications/microsoft-power-bi/)
 
-* [Prerequisites](#prerequisites)
-* [Updating the DSN Configuration](#updating-the-dsn-configuration)
-* [Connecting to Dremio](#connecting-to-dremio)
+* Prerequisites
+* Updating the DSN Configuration
+* Connecting to Dremio
 
 ---
 
@@ -1828,19 +1828,19 @@ Connect [Microsoft Power BI](https://www.microsoft.com/en-us/power-platform/prod
 You can connect Power BI to Dremio in one of the following ways:
 
 * Configure a reusable connection to use in Power BI Desktop, Power BI Gateway, or Power BI Service. Power BI Service can connect to Dremio through DirectQuery or through Power BI Gateway.
-* [Connect to a specific dataset](#create-a-live-connection-to-a-dataset-from-dremio) by downloading the `.pbids` file from Dremio and opening it in Power BI Desktop.
+* Connect to a specific dataset by downloading the `.pbids` file from Dremio and opening it in Power BI Desktop.
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 From Power BI, you can authenticate to Dremio with one of the following methods:
 
 * **Username and password**: Use your Dremio credentials.
 * **Personal access token (PAT)**: For details, see [Personal Access Tokens](/current/security/authentication/personal-access-tokens/).
-* **Single sign-on (SSO) through OAuth 2.0**: For steps on how to configure SSO, see [Enable SSO to Dremio from Power BI](#enable-sso-to-dremio-from-power-bi).
+* **Single sign-on (SSO) through OAuth 2.0**: For steps on how to configure SSO, see Enable SSO to Dremio from Power BI.
 
-## Connect to Dremio from Power BI[​](#connect-to-dremio-from-power-bi "Direct link to Connect to Dremio from Power BI")
+## Connect to Dremio from Power BI
 
-The Power BI connector for Dremio now supports connectivity through the open-source [Arrow Database Connectivity (ADBC) driver](https://arrow.apache.org/docs/format/ADBC.html), which Dremio highly recommends using to connect to Dremio. To enable reports to use ADBC, see [Enable Connectivity with ADBC](#enable-connectivity-with-adbc).
+The Power BI connector for Dremio now supports connectivity through the open-source [Arrow Database Connectivity (ADBC) driver](https://arrow.apache.org/docs/format/ADBC.html), which Dremio highly recommends using to connect to Dremio. To enable reports to use ADBC, see Enable Connectivity with ADBC.
 
 Existing connections will continue to work, but we recommend using the embedded ADBC driver for all new reports and migrating existing reports to ADBC to benefit from improved performance and supportability.
 
@@ -1865,13 +1865,13 @@ note
 
 Creating Dataflows through Power BI Service is also supported. To create a dataflow, click **New** > **Dataflow**. For the data source connection, follow the steps above.
 
-### Create a Live Connection to a Dataset from Dremio[​](#create-a-live-connection-to-a-dataset-from-dremio "Direct link to Create a Live Connection to a Dataset from Dremio")
+### Create a Live Connection to a Dataset from Dremio
 
 You can generate a Microsoft Power BI Data Source (`.pbids`) file that represents a live connection to a dataset that is in Dremio. No actual data is stored in this file, and you can think of it as a shortcut to a Power BI Desktop session with a preconfigured view of your data.
 
 note
 
-The `.pbids` file download option must be enabled for users to have access to this feature. To enable this feature, see [Enable the `.pbids` file download](#enable-the-pbids-file-download-in-dremio).
+The `.pbids` file download option must be enabled for users to have access to this feature. To enable this feature, see Enable the `.pbids` file download.
 
 To create a live connection to a dataset:
 
@@ -1881,20 +1881,20 @@ To create a live connection to a dataset:
 4. Open the downloaded file in Power BI Desktop.
 5. Authenticate using your preferred method.
 
-## Power BI Gateway[​](#power-bi-gateway "Direct link to Power BI Gateway")
+## Power BI Gateway
 
 To enable Power BI users to connect to Dremio via Power BI Gateway:
 
 1. Install and configure [Power BI Gateway](https://docs.microsoft.com/en-us/power-bi/connect-data/service-gateway-onprem) on a machine that can connect to your Dremio cluster.
 2. In the Power BI Gateway configuration, add Dremio as a data source using the same connection details as above.
 
-## Advanced Configuration[​](#advanced-configuration "Direct link to Advanced Configuration")
+## Advanced Configuration
 
-### Enable Connectivity with ADBC[​](#enable-connectivity-with-adbc "Direct link to Enable Connectivity with ADBC")
+### Enable Connectivity with ADBC
 
 Dremio supports connectivity through Arrow Database Connectivity (ADBC). To enable this for Power BI Service, see the following options.
 
-#### Enable the ADBC Option for a New Connection[​](#enable-the-adbc-option-for-a-new-connection "Direct link to Enable the ADBC Option for a New Connection")
+#### Enable the ADBC Option for a New Connection
 
 1. In Power BI Desktop, click **Get data**.
 2. In the Get Data dialog, locate and select **Dremio Software**, and click **Connect**.
@@ -1903,14 +1903,14 @@ Dremio supports connectivity through Arrow Database Connectivity (ADBC). To enab
 5. Click **OK**.
 6. Authenticate using your preferred method, and click **Connect**.
 
-#### Enable the ADBC Option for an Existing Connection[​](#enable-the-adbc-option-for-an-existing-connection "Direct link to Enable the ADBC Option for an Existing Connection")
+#### Enable the ADBC Option for an Existing Connection
 
 1. In Power BI Desktop, go to **Data source settings**, select your source, and click **Change source**.
 2. In the Dremio Software dialog, update the **Server** field by adding the `adbc://` prefix before the hostname. Example: `adbc://acme-company.dremio.com`. If you're unable to edit the source this way, click **Transform data**, then click **Advanced Editor** in the **Home** tab. In the dialog that appears, update the hostname/server with the `adbc://` prefix, and click **Done**.
 3. Click **OK**.
 4. Reauthenticate using your preferred method, and click **Connect**.
 
-### Enable the `.pbids` File Download in the Dremio Console[​](#enable-the-pbids-file-download-in-the-dremio-console "Direct link to enable-the-pbids-file-download-in-the-dremio-console")
+### Enable the `.pbids` File Download in the Dremio Console
 
 To enable the `.pbids` file download feature:
 
@@ -1918,7 +1918,7 @@ To enable the `.pbids` file download feature:
 2. In the **Support** section, enable **Allow downloading of .pbids files**.
 3. Click **Save**.
 
-### Enable SSO to Dremio from Power BI[​](#enable-sso-to-dremio-from-power-bi "Direct link to Enable SSO to Dremio from Power BI")
+### Enable SSO to Dremio from Power BI
 
 SSO is supported only for datasets that use DirectQuery.
 
@@ -1949,7 +1949,7 @@ The following steps configure the Power BI side of SSO. These steps assume your 
 
 To enable SSO for Power BI reports:
 
-#### Enable SSO for a DirectQuery Report[​](#enable-sso-for-a-directquery-report "Direct link to Enable SSO for a DirectQuery Report")
+#### Enable SSO for a DirectQuery Report
 
 To enable SSO for a report that uses DirectQuery:
 
@@ -1962,7 +1962,7 @@ To enable SSO for a report that uses DirectQuery:
 7. Select the check box **Report viewers can only access this data source with their own Power BI identities using DirectQuery**.
 8. Click **Sign in**.
 
-#### Enable SSO for Reports with Power BI Gateway[​](#enable-sso-for-reports-with-power-bi-gateway "Direct link to Enable SSO for Reports with Power BI Gateway")
+#### Enable SSO for Reports with Power BI Gateway
 
 To enable SSO when you are using Power BI Gateway:
 
@@ -1988,7 +1988,7 @@ note
 
 SSO requires the OAuth2 authentication method. Basic authentication and personal access tokens do not support SSO when used through Power BI Gateway.
 
-## Arrow Database Connectivity (ADBC) Limitations[​](#arrow-database-connectivity-adbc-limitations "Direct link to Arrow Database Connectivity (ADBC) Limitations")
+## Arrow Database Connectivity (ADBC) Limitations
 
 * ADBC is not enabled by default. It must be enabled by the owner of the report.
 * NativeQuery is not supported.
@@ -1997,20 +1997,20 @@ SSO requires the OAuth2 authentication method. Basic authentication and personal
 * Complex data types such as `MAP` and `INTERVAL` are not supported.
 * When using DirectQuery, chaining functions is supported, but some complex scenarios may not work as expected. Complex optional parameters for functions are not supported.
 
-## Troubleshoot Power BI[​](#troubleshoot-power-bi "Direct link to Troubleshoot Power BI")
+## Troubleshoot Power BI
 
-### Cached Data Issues[​](#cached-data-issues "Direct link to Cached Data Issues")
+### Cached Data Issues
 
 If you have previously installed older versions of Power BI Desktop, cached data may interfere with the newer versions of the Flight SQL drivers resulting in connection errors.
 
-#### Problem[​](#problem "Direct link to Problem")
+#### Problem
 
 For example, when using Flight SQL ADBC, cached connection data in Power BI could cause the following errors:
 
 * `ADBC: IOError [] [FlightSQL] [FlightSQL] unresolved address (Unavailable; GetObjects(GetDBSchemas))`
 * `ADBC: IOError [] [FlightSQL] [FlightSQL] connection error: desc = "transport: authentication handshake failed: credentials: cannot check peer: missing selected ALPN property. If you upgraded from a grpc-go version earlier than 1.67, your TLS connections may have stopped working due to ALPN enforcement. For more details, see: https://github.com/grpc/grpc-go/issues/434" (Unavailable; GetObjects(GetDBSchemas))"`
 
-#### Solution[​](#solution "Direct link to Solution")
+#### Solution
 
 Clear the Power BI Desktop cache and any cached data source permissions involving Dremio connections by following these steps:
 
@@ -2021,15 +2021,15 @@ Clear the Power BI Desktop cache and any cached data source permissions involvin
 
 After completing these steps, try reconnecting to Dremio using the instructions above.
 
-### Large Result Sets[​](#large-result-sets "Direct link to Large Result Sets")
+### Large Result Sets
 
-#### Problem[​](#problem-1 "Direct link to Problem")
+#### Problem
 
 When fetching data from Dremio with ADBC you may see the following error:
 
 * `Unexpected error: [FlightSQL] grpc: received message larger than max (43747370 vs. 16777216) (ResourceExhausted; DoGet: endpoint 0: [])`
 
-#### Solution[​](#solution-1 "Direct link to Solution")
+#### Solution
 
 By default, the ADBC driver accepts only messages up to 16 MiB in size. This can be fixed by updating the Power BI M expression to customize the connection as follows:
 
@@ -2052,18 +2052,18 @@ Microsoft Excel PowerPivot](/current/client-applications/microsoft-excel/microso
 
 Microstrategy Workstation](/current/client-applications/microstrategy)
 
-* [Supported Authentication Methods](#supported-authentication-methods)
-* [Connect to Dremio from Power BI](#connect-to-dremio-from-power-bi)
-  + [Create a Live Connection to a Dataset from Dremio](#create-a-live-connection-to-a-dataset-from-dremio)
-* [Power BI Gateway](#power-bi-gateway)
-* [Advanced Configuration](#advanced-configuration)
-  + [Enable Connectivity with ADBC](#enable-connectivity-with-adbc)
-  + [Enable the `.pbids` File Download in the Dremio Console](#enable-the-pbids-file-download-in-the-dremio-console)
-  + [Enable SSO to Dremio from Power BI](#enable-sso-to-dremio-from-power-bi)
-* [Arrow Database Connectivity (ADBC) Limitations](#arrow-database-connectivity-adbc-limitations)
-* [Troubleshoot Power BI](#troubleshoot-power-bi)
-  + [Cached Data Issues](#cached-data-issues)
-  + [Large Result Sets](#large-result-sets)
+* Supported Authentication Methods
+* Connect to Dremio from Power BI
+  + Create a Live Connection to a Dataset from Dremio
+* Power BI Gateway
+* Advanced Configuration
+  + Enable Connectivity with ADBC
+  + Enable the `.pbids` File Download in the Dremio Console
+  + Enable SSO to Dremio from Power BI
+* Arrow Database Connectivity (ADBC) Limitations
+* Troubleshoot Power BI
+  + Cached Data Issues
+  + Large Result Sets
 
 ---
 
@@ -2087,7 +2087,7 @@ tip
 
 Query planning is done on the specified node. To distribute query planning for JDBC connections, configure [secondary coordinator nodes](/current/deploy-dremio/other-options/standalone/dremio-config/dremio-conf/#dremio-coordinators) for your deployment.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * One of the following operating systems: Windows, MacOS, or Linux
 * Supported Java versions: Java 11+
@@ -2100,25 +2100,25 @@ Query planning is done on the specified node. To distribute query planning for J
   --add-opens=java.base/java.nio=ALL-UNNAMED
   ```
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
 * Use the username and password of the Dremio account that you want to connect with.
 * Use a username and personal access token (PAT).
 * Use an OAuth Access Token
 
-### Username and Password[​](#username-and-password "Direct link to Username and Password")
+### Username and Password
 
 Pass a username and password with the `user` and `password` properties.
 
-### Personal Access Tokens Enterprise[​](#personal-access-tokens-enterprise "Direct link to personal-access-tokens-enterprise")
+### Personal Access Tokens Enterprise
 
-Pass a username and personal access token (PAT) with the `user` and `password` properties. You must URL-encode PATs that you include in JDBC URLs. To encode a PAT locally on your system, you can follow the steps in [URL-encoding Values](#url-encoding-values). See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for enabling and creating PATs.
+Pass a username and personal access token (PAT) with the `user` and `password` properties. You must URL-encode PATs that you include in JDBC URLs. To encode a PAT locally on your system, you can follow the steps in URL-encoding Values. See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for enabling and creating PATs.
 
 tip
 
-Dremio recommends [OAuth access tokens](#oauth-access-tokens-enterprise) to improve security by reducing the risk of compromised passwords or personal access tokens.
+Dremio recommends OAuth access tokens to improve security by reducing the risk of compromised passwords or personal access tokens.
 
-### OAuth Access Tokens Enterprise[​](#oauth-access-tokens-enterprise "Direct link to oauth-access-tokens-enterprise")
+### OAuth Access Tokens Enterprise
 
 To create a connection with an OAuth access token, configure the following properties:
 
@@ -2140,7 +2140,7 @@ jdbc_arrow_flight_conn = jaydebeapi.connect("org.apache.arrow.driver.jdbc.ArrowF
 
 Users can create OAuth access tokens using a local or LDAP username and password, a PAT, or an external JWT. Dremio provides [sample code](/current/reference/api/oauth-token/) for each of these cases.
 
-## Connecting to Databases[​](#connecting-to-databases "Direct link to Connecting to Databases")
+## Connecting to Databases
 
 * Use this template to create a direct connection to a database that has enabled an Apache Arrow Flight SQL endpoint:
 
@@ -2162,21 +2162,21 @@ Users can create OAuth access tokens using a local or LDAP username and password
 
   + `<Dremio_coordinator>`: The hostname or IP address of the coordinator node in your Dremio cluster.
   + `<optional_schema>`: The name of the schema (datasource or space, including child paths, such as `myDatasource.folder1` and `mySpace.folder1.folder2`) to use by default when a schema is not specified in a query.
-  + `<properties>`: A list of JDBC properties. Values must be URL-encoded. See [URL-encoding Values](#url-encoding-values) for suggested steps.
+  + `<properties>`: A list of JDBC properties. Values must be URL-encoded. See URL-encoding Values for suggested steps.
 
-## Downloading the Driver[​](#downloading-the-driver "Direct link to Downloading the Driver")
+## Downloading the Driver
 
 To download the driver, go to [Apache Arrow Flight SQL JDBC](https://www.dremio.com/drivers/jdbc/).
 
-## Integrating the driver[​](#integrating-the-driver "Direct link to Integrating the driver")
+## Integrating the driver
 
 To integrate the driver into your development environment, add it to your classpath.
 
-## Name of the Class[​](#name-of-the-class "Direct link to Name of the Class")
+## Name of the Class
 
 The name of the class is `org.apache.arrow.driver.jdbc.ArrowFlightJdbcDriver`.
 
-## JDBC Properties for Dremio Wire Encryption[​](#jdbc-properties-for-dremio-wire-encryption "Direct link to JDBC Properties for Dremio Wire Encryption")
+## JDBC Properties for Dremio Wire Encryption
 
 If you are setting up encrypted communication between your JDBC client applications and the Dremio server, use the SSL JDBC connection parameters and fully qualified hostname to
 configure the JDBC connection string and connect to Dremio.
@@ -2197,9 +2197,9 @@ This driver does not yet support these features:
 | `useSystemTrustStore` | `true` or `false` | [Optional] | By default, the value is `true`. Bypasses trustStoreType and automatically picks the correct Truststore based on the operating system: Keychain on MacOS, [Local Machine and Current User Certificate Stores](https://docs.microsoft.com/en-us/windows-hardware/drivers/install/local-machine-and-current-user-certificate-stores) on Windows, and default truststore on other operating systems. If you are using an operating system other than MacOS or Windows, you must use the `trustStorePassword` property to pass the password of the truststore. Here is an example of a connection string for Linux:  `jdbc:arrow-flight-sql://localhost:32010?trustStorePassword=Pc0_lL'Opjn$vSDcv:%Q0@@buc` |
 | `trustStorePassword` | string | [Optional] | Password to the truststore. |
 
-## Parameterized Queries with Prepared Statements[​](#parameterized-queries-with-prepared-statements "Direct link to Parameterized Queries with Prepared Statements")
+## Parameterized Queries with Prepared Statements
 
-Prepared statements allow you to dynamically pass parameters to SQL queries using placeholders, ensuring safer query execution by separating the query structure from the values in parameters. With a prepared statement, you can set parameters (`?`) at runtime using [set methods](#supported-data-types-and-set-methods) to reuse queries with different values.
+Prepared statements allow you to dynamically pass parameters to SQL queries using placeholders, ensuring safer query execution by separating the query structure from the values in parameters. With a prepared statement, you can set parameters (`?`) at runtime using set methods to reuse queries with different values.
 
 note
 
@@ -2229,7 +2229,7 @@ preparedStatement.setDouble(2, 75000);
 int rowsUpdated = preparedStatement.executeUpdate();
 ```
 
-### Supported Data Types and Set Methods[​](#supported-data-types-and-set-methods "Direct link to Supported Data Types and Set Methods")
+### Supported Data Types and Set Methods
 
 | **Column Data Type** | **Supported Set Methods** |
 | --- | --- |
@@ -2247,11 +2247,11 @@ int rowsUpdated = preparedStatement.executeUpdate();
 | Date | `setNull()` |
 | VarBinary | `setBytes()`, `setNull()` |
 
-### Limitations[​](#limitations "Direct link to Limitations")
+### Limitations
 
 The JDBC client does not support the `setDate()` method due to mismatched date encoding formats between the Arrow Flight JDBC client and Dremio.
 
-## Managing Workloads[​](#managing-workloads "Direct link to Managing Workloads")
+## Managing Workloads
 
 Dremio administrators can use the Arrow Flight server endpoint to [manage query workloads](/current/admin/workloads/workload-management) by adding the following properties to connections created by Flight clients:
 
@@ -2262,7 +2262,7 @@ Dremio administrators can use the Arrow Flight server endpoint to [manage query 
 | `ROUTING_TAG` | Tag name associated with all queries executed within a Flight session. Used only during authentication. |
 | `SCHEMA` | Default schema path to the dataset that the user wants to query. |
 
-## URL-encoding Values[​](#url-encoding-values "Direct link to URL-encoding Values")
+## URL-encoding Values
 
 To encode a personal access token (PAT) or property value locally on your system, you can follow these steps:
 
@@ -2270,7 +2270,7 @@ To encode a personal access token (PAT) or property value locally on your system
 2. Click **Console**.
 3. Type `encodeURIComponent("<PAT-or-value>")`, where `<PAT-or-value>` is the personal access token that you obtained from Dremio or the value of a supported JDBC property. The URL-encoded PAT or value appears on the next line. You can highlight it and copy it to your clipboard.
 
-## Differences between the Arrow Flight SQL JDBC Driver and the Legacy Dremio JDBC Driver[​](#differences-between-the-arrow-flight-sql-jdbc-driver-and-the-legacy-dremio-jdbc-driver "Direct link to Differences between the Arrow Flight SQL JDBC Driver and the Legacy Dremio JDBC Driver")
+## Differences between the Arrow Flight SQL JDBC Driver and the Legacy Dremio JDBC Driver
 
 The Arrow Flight SQL JDBC driver differs from the Dremio JDBC driver (legacy) in the following:
 
@@ -2291,11 +2291,11 @@ note
 
 Calling `DatabaseMetadata.getCatalog()` when connected to Dremio returns empty. Other `DatabaseMetadata` methods return null values in the `TABLE_CAT` column. This is expected behavior because Dremio does not have a catalog.
 
-## Limitations[​](#limitations-1 "Direct link to Limitations")
+## Limitations
 
 Impersonation is not supported.
 
-## Supported Conversions from Dremio Datatypes to JDBC Datatypes[​](#supported-conversions-from-dremio-datatypes-to-jdbc-datatypes "Direct link to Supported Conversions from Dremio Datatypes to JDBC Datatypes")
+## Supported Conversions from Dremio Datatypes to JDBC Datatypes
 
 | **DREMIO TYPE** | **JDBCARROW TYPE** |
 | --- | --- |
@@ -2327,24 +2327,24 @@ Drivers](/current/client-applications/drivers/)[Next
 
 Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver)
 
-* [Prerequisites](#prerequisites)
-* [Supported Authentication Methods](#supported-authentication-methods)
-  + [Username and Password](#username-and-password)
-  + [Personal Access Tokens Enterprise](#personal-access-tokens-enterprise)
-  + [OAuth Access Tokens Enterprise](#oauth-access-tokens-enterprise)
-* [Connecting to Databases](#connecting-to-databases)
-* [Downloading the Driver](#downloading-the-driver)
-* [Integrating the driver](#integrating-the-driver)
-* [Name of the Class](#name-of-the-class)
-* [JDBC Properties for Dremio Wire Encryption](#jdbc-properties-for-dremio-wire-encryption)
-* [Parameterized Queries with Prepared Statements](#parameterized-queries-with-prepared-statements)
-  + [Supported Data Types and Set Methods](#supported-data-types-and-set-methods)
-  + [Limitations](#limitations)
-* [Managing Workloads](#managing-workloads)
-* [URL-encoding Values](#url-encoding-values)
-* [Differences between the Arrow Flight SQL JDBC Driver and the Legacy Dremio JDBC Driver](#differences-between-the-arrow-flight-sql-jdbc-driver-and-the-legacy-dremio-jdbc-driver)
-* [Limitations](#limitations-1)
-* [Supported Conversions from Dremio Datatypes to JDBC Datatypes](#supported-conversions-from-dremio-datatypes-to-jdbc-datatypes)
+* Prerequisites
+* Supported Authentication Methods
+  + Username and Password
+  + Personal Access Tokens Enterprise
+  + OAuth Access Tokens Enterprise
+* Connecting to Databases
+* Downloading the Driver
+* Integrating the driver
+* Name of the Class
+* JDBC Properties for Dremio Wire Encryption
+* Parameterized Queries with Prepared Statements
+  + Supported Data Types and Set Methods
+  + Limitations
+* Managing Workloads
+* URL-encoding Values
+* Differences between the Arrow Flight SQL JDBC Driver and the Legacy Dremio JDBC Driver
+* Limitations
+* Supported Conversions from Dremio Datatypes to JDBC Datatypes
 
 ---
 
@@ -2364,7 +2364,7 @@ The legacy [Dremio JDBC driver](https://download.dremio.com/jdbc-driver/?_ga=2.1
 
 A new version of the JDBC driver is made available with every release of Dremio software. However, this doesn't mean changes or new features were introduced in a driver release. Only when actual changes are made to a driver will the [JDBC driver release notes](/current/release-notes/arrow-flight-sql-jdbc) be published.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 * As of Dremio JDBC driver 25.0+, supported Java versions: Java 11+
 * Supported JDK versions: 11, 17, and 21
@@ -2376,21 +2376,21 @@ A new version of the JDBC driver is made available with every release of Dremio 
   --add-opens=java.base/java.nio=ALL-UNNAMED
   ```
 
-## Supported Authentication Methods[​](#supported-authentication-methods "Direct link to Supported Authentication Methods")
+## Supported Authentication Methods
 
-### Username and Password[​](#username-and-password "Direct link to Username and Password")
+### Username and Password
 
 Use the username and password of the Dremio account that you want to connect with.
 
-### Personal Access Tokens Enterprise[​](#personal-access-tokens-enterprise "Direct link to personal-access-tokens-enterprise")
+### Personal Access Tokens Enterprise
 
 Use a username and personal access token (PAT). To generate a PAT, see [Creating a PAT](/current/security/authentication/personal-access-tokens/#creating-a-pat).
 
 tip
 
-Dremio recommends [OAuth access tokens](#oauth-access-tokens-enterprise) to improve security by reducing the risk of compromised passwords or personal access tokens.
+Dremio recommends OAuth access tokens to improve security by reducing the risk of compromised passwords or personal access tokens.
 
-### OAuth Access Tokens Enterprise[​](#oauth-access-tokens-enterprise "Direct link to oauth-access-tokens-enterprise")
+### OAuth Access Tokens Enterprise
 
 To create a connection with an OAuth access token, configure the following properties:
 
@@ -2413,7 +2413,7 @@ jdbc_conn = jaydebeapi.connect("com.dremio.jdbc.Driver",
 
 Users can create OAuth access tokens using a local or LDAP username and password, a PAT, or an external JWT. Dremio provides [sample code](/current/reference/api/oauth-token) for each of these cases.
 
-### External JWT[​](#external-jwt "Direct link to External JWT")
+### External JWT
 
 To use an external JWT directly from an [external token provider](/current/security/authentication/application-authentication/external-token), configure the following properties:
 
@@ -2425,9 +2425,9 @@ Dremio provides [sample code](/current/security/authentication/application-authe
 
 tip
 
-Dremio recommends [OAuth access tokens](#oauth-access-tokens-enterprise) obtained through token exchange over an external JWT. The Dremio OAuth access token is typically smaller than an external JWT and verification is faster.
+Dremio recommends OAuth access tokens obtained through token exchange over an external JWT. The Dremio OAuth access token is typically smaller than an external JWT and verification is faster.
 
-## Setup[​](#setup "Direct link to Setup")
+## Setup
 
 You can set up the JDBC driver in the following manner:
 
@@ -2436,7 +2436,7 @@ You can set up the JDBC driver in the following manner:
 
 **Tip:** To distribute query planning for JDBC connections, configure [secondary coordinator nodes](/current/deploy-dremio/other-options/standalone/dremio-config/dremio-conf/#dremio-coordinators) for your deployment.
 
-#### Connecting directly to Dremio[​](#connecting-directly-to-dremio "Direct link to Connecting directly to Dremio")
+#### Connecting directly to Dremio
 
 The following configuration establishes a direct connection to a Dremio coordinator node.
 Planning is done on the specified node.
@@ -2447,7 +2447,7 @@ Connect directly to Dremio coordinator node
 jdbc:dremio:direct=<DREMIO_COORDINATOR>:31010[;schema=<OPTIONAL_SCHEMA>]
 ```
 
-#### Connecting to ZooKeeper[​](#connecting-to-zookeeper "Direct link to Connecting to ZooKeeper")
+#### Connecting to ZooKeeper
 
 The following configuration establishes a distributed connection to Dremio coordinator nodes through a
 Zookeeper quorum. Planning is distributed across the available coordinator nodes.
@@ -2472,7 +2472,7 @@ Cluster B
 jdbc:dremio:zk=<ZOOKEEPER_QUORUM>:2181/path/to/ClusterB
 ```
 
-## Construct a Prepared Statement with Dynamic Parameters[​](#construct-a-prepared-statement-with-dynamic-parameters "Direct link to Construct a Prepared Statement with Dynamic Parameters")
+## Construct a Prepared Statement with Dynamic Parameters
 
 Dremio supports using parameters in prepared statements for SELECT queries.
 
@@ -2545,7 +2545,7 @@ public class HelloWorld {
 }
 ```
 
-### Set Methods for Prepared Statements with Parameters[​](#set-methods-for-prepared-statements-with-parameters "Direct link to Set Methods for Prepared Statements with Parameters")
+### Set Methods for Prepared Statements with Parameters
 
 To execute a prepared statement, you must set the parameter marker with one of the supported set methods listed in the table below.
 
@@ -2565,7 +2565,7 @@ To execute a prepared statement, you must set the parameter marker with one of t
 | Date | setDate(), setNull() |
 | VarBinary | setNull(), setBytes() |
 
-## JDBC Parameters for Dremio Wire Encryption[​](#jdbc-parameters-for-dremio-wire-encryption "Direct link to JDBC Parameters for Dremio Wire Encryption")
+## JDBC Parameters for Dremio Wire Encryption
 
 If you are setting up encrypted communication between your JDBC client applications and the Dremio server,
 use the SSL JDBC connection parameters and a fully qualified host name to
@@ -2581,16 +2581,16 @@ configure the JDBC connection string and connect to Dremio:
 | disableHostVerification | true/false | [Optional] | If true, Dremio does not verify that the host in the certificate is the host we are connecting to. False by default.   (Hostname verification follows the specification in RFC2818) |
 | disableCertificateVerification | true/false | [Optional] | If true, Dremio does not verify the host certificate against the truststore. False by default. |
 
-## Optional Advanced JDBC Driver Properties[​](#optional-advanced-jdbc-driver-properties "Direct link to Optional Advanced JDBC Driver Properties")
+## Optional Advanced JDBC Driver Properties
 
 | Parameter | Value | Description |
 | --- | --- | --- |
 | impersonation\_target | string | When inbound impersonation is configured, `impersonation_target` is used for authorization, so it must have permission to the queried datasets, and `impersonation_target` appears as the identity that submitted the queries. The username used to establish the connection must be mapped to `impersonation_target` in the impersonation policy for the Dremio service, otherwise, the connection fails with an authorization error. In the policy, the user used to establish the connection is the `proxy_principle` and `impersonation_target` is its `target_principle`. For more information on configuring policies, see [Inbound Impersonation](/current/security/rbac/inbound-impersonation). |
 | routing\_queue | string | Specifies the queue to use for processing queries while a connection is open. For more information, see [Query Tagging & Direct Routing Configuration](/current/admin/workloads/workload-management/#query-tagging--direct-routing-configuration). |
 | routing\_tag | string | Sets a tag for rule processing. The specified tag is associated with all queries executed while a connection is open. Rules can check for the presence of a tag with the function `tag()`. For more information, see [Query Tagging & Direct Routing Configuration](/current/admin/workloads/workload-management/#query-tagging--direct-routing-configuration). |
-| token\_type | string | The type of the token in the `password` field. Valid values are `jwt` for [external tokens](/current/security/authentication/application-authentication/external-token), `access_token` for [OAuth access token](#oauth-access-tokens-enterprise), or `personal_access_token` for [personal access tokens](/current/security/authentication/personal-access-tokens/). If you are using your Dremio password, omit the `token_type` property. |
+| token\_type | string | The type of the token in the `password` field. Valid values are `jwt` for [external tokens](/current/security/authentication/application-authentication/external-token), `access_token` for OAuth access token, or `personal_access_token` for [personal access tokens](/current/security/authentication/personal-access-tokens/). If you are using your Dremio password, omit the `token_type` property. |
 
-## SOCKS Proxy Connection Parameters[​](#socks-proxy-connection-parameters "Direct link to SOCKS Proxy Connection Parameters")
+## SOCKS Proxy Connection Parameters
 
 If you want to connect to Dremio Cloud through a SOCKS proxy, use these connection parameters:
 
@@ -2607,18 +2607,18 @@ Was this page helpful?
 
 Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver)
 
-* [Prerequisites](#prerequisites)
-* [Supported Authentication Methods](#supported-authentication-methods)
-  + [Username and Password](#username-and-password)
-  + [Personal Access Tokens Enterprise](#personal-access-tokens-enterprise)
-  + [OAuth Access Tokens Enterprise](#oauth-access-tokens-enterprise)
-  + [External JWT](#external-jwt)
-* [Setup](#setup)
-* [Construct a Prepared Statement with Dynamic Parameters](#construct-a-prepared-statement-with-dynamic-parameters)
-  + [Set Methods for Prepared Statements with Parameters](#set-methods-for-prepared-statements-with-parameters)
-* [JDBC Parameters for Dremio Wire Encryption](#jdbc-parameters-for-dremio-wire-encryption)
-* [Optional Advanced JDBC Driver Properties](#optional-advanced-jdbc-driver-properties)
-* [SOCKS Proxy Connection Parameters](#socks-proxy-connection-parameters)
+* Prerequisites
+* Supported Authentication Methods
+  + Username and Password
+  + Personal Access Tokens Enterprise
+  + OAuth Access Tokens Enterprise
+  + External JWT
+* Setup
+* Construct a Prepared Statement with Dynamic Parameters
+  + Set Methods for Prepared Statements with Parameters
+* JDBC Parameters for Dremio Wire Encryption
+* Optional Advanced JDBC Driver Properties
+* SOCKS Proxy Connection Parameters
 
 ---
 
@@ -2632,7 +2632,7 @@ On this page
 
 Starting with Dremio v22.0, you can use the Arrow Flight SQL ODBC driver to connect to Dremio from ODBC client applications. This driver is licensed under [GNU Library General Public License, Version 2](https://github.com/dremio/warpdrive/blob/master/license.txt).
 
-## Supported Operating Systems[​](#supported-operating-systems "Direct link to Supported Operating Systems")
+## Supported Operating Systems
 
 You can use the driver on systems that run the following 64-bit operating systems:
 
@@ -2644,23 +2644,23 @@ Apple Silicon Compatibility
 
 The Arrow Flight SQL ODBC driver is not supported on Apple Silicon M1, M2, and M3 processors. While previous workarounds using Rosetta may have been available, they are no longer reliable and may not work with current versions. For Apple Silicon Mac computers, consider using alternative connection methods such as the [Arrow Flight SQL JDBC driver](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/).
 
-## Authentication Methods[​](#authentication-methods "Direct link to Authentication Methods")
+## Authentication Methods
 
 Dremio supports several authentication methods for client connections.
 
-### Username and Password[​](#username-and-password "Direct link to Username and Password")
+### Username and Password
 
 Pass a username and password with the **UID** and **PWD** properties.
 
-### Personal Access Tokens Enterprise[​](#personal-access-tokens-enterprise "Direct link to personal-access-tokens-enterprise")
+### Personal Access Tokens Enterprise
 
 Pass a username and personal access token (PAT) with the **UID** and **PWD** properties, respectively. See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for enabling and creating PATs.
 
 tip
 
-Dremio recommends [OAuth access tokens](#oauth-access-tokens-enterprise) to improve security by reducing the risk of compromised passwords or personal access tokens.
+Dremio recommends OAuth access tokens to improve security by reducing the risk of compromised passwords or personal access tokens.
 
-### OAuth Access Tokens Enterprise[​](#oauth-access-tokens-enterprise "Direct link to oauth-access-tokens-enterprise")
+### OAuth Access Tokens Enterprise
 
 To create a connection with an OAuth access token, configure the **TOKEN** property with the value of the OAuth access token.
 
@@ -2685,13 +2685,13 @@ with pyodbc.connect(
 
 Users can create OAuth access tokens using a local or LDAP username and password, a PAT, or an external JWT. Dremio provides [sample code](/current/reference/api/oauth-token/) for each of these cases.
 
-## Downloading and Installing[​](#downloading-and-installing "Direct link to Downloading and Installing")
+## Downloading and Installing
 
-* [Windows](#downloading-and-installing-on-windows)
-* [Linux](#downloading-and-installing-on-linux)
-* [macOS](#downloading-and-installing-on-macos)
+* Windows
+* Linux
+* macOS
 
-### Downloading and Installing on Windows[​](#downloading-and-installing-on-windows "Direct link to Downloading and Installing on Windows")
+### Downloading and Installing on Windows
 
 note
 
@@ -2711,9 +2711,9 @@ To download and install the Arrow Flight SQL ODBC driver:
 6. In the **Installation Complete** page, click **Next**.
 7. In the **Completing Arrow Flight SQL ODBC Driver Setup Wizard** page, click **Finish**.
 
-Next, [configure the driver](#configuring-on-windows).
+Next, configure the driver.
 
-### Downloading and Installing on Linux[​](#downloading-and-installing-on-linux "Direct link to Downloading and Installing on Linux")
+### Downloading and Installing on Linux
 
 To download and install the Arrow Flight SQL ODBC driver:
 
@@ -2726,9 +2726,9 @@ To download and install the Arrow Flight SQL ODBC driver:
    sudo yum localinstall <dremio-odbc-rpm-path>
    ```
 
-Next, [configure the driver](#configuring-on-linux).
+Next, configure the driver.
 
-### Downloading and Installing on macOS[​](#downloading-and-installing-on-macos "Direct link to Downloading and Installing on macOS")
+### Downloading and Installing on macOS
 
 To download and install the Arrow Flight SQL ODBC driver:
 
@@ -2744,11 +2744,11 @@ This driver only supports Intel-based Macs. It is not compatible with Apple Sili
 6. In the **Installer is trying to install new software** dialog, specify your macOS password. Then, click **Install Software**.
 7. After the installation is complete, click **Close**.
 
-Next, [configure the driver](#configuring-on-macos).
+Next, configure the driver.
 
-## Configuring[​](#configuring "Direct link to Configuring")
+## Configuring
 
-### Configuring on Windows[​](#configuring-on-windows "Direct link to Configuring on Windows")
+### Configuring on Windows
 
 To configure the System DSN:
 
@@ -2774,14 +2774,14 @@ If you want to use a personal access token (PAT), rather than a password, for au
    | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 7. In the **UseEncryption** field, specify one of these values:
 
-   * `true`, if Dremio is configured for [encrypted communication](#tls-connection-parameters) with your Arrow Flight SQL ODBC client applications.
+   * `true`, if Dremio is configured for encrypted communication with your Arrow Flight SQL ODBC client applications.
    * `false`, if Dremio is not configured for encrypted communication with your Arrow Flight SQL ODBC client applications. Dremio is unencrypted by default.
 
-For additional parameters, see [Connection Parameters](#connection-parameters).
+For additional parameters, see Connection Parameters.
 
 If you ever need to enable tracing for troubleshooting problems with the driver, click the **Tracing** tab in the **ODBC Data Source Administrator (64-bit)** dialog, set the log-file path, and then click **Start Tracing Now**.
 
-### Configuring on Linux[​](#configuring-on-linux "Direct link to Configuring on Linux")
+### Configuring on Linux
 
 note
 
@@ -2801,10 +2801,10 @@ To configure the properties in the odbc.ini file:
    | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 4. In the **UseEncryption** field, specify one of these values:
 
-   * `true`, if Dremio is configured for [encrypted communication](#tls-connection-parameters) with your Arrow Flight SQL ODBC client applications.
+   * `true`, if Dremio is configured for encrypted communication with your Arrow Flight SQL ODBC client applications.
    * `false`, if Dremio is not configured for encrypted communication with your Arrow Flight SQL ODBC client applications. Dremio is unencrypted by default.
 
-For additional parameters, see [Connection Parameters](#connection-parameters).
+For additional parameters, see Connection Parameters.
 
 note
 
@@ -2816,7 +2816,7 @@ odbcinst -j
 
 If you ever need to enable tracing for troubleshooting problems with the driver, see the help for unixODBC.
 
-### Configuring on macOS[​](#configuring-on-macos "Direct link to Configuring on macOS")
+### Configuring on macOS
 
 note
 
@@ -2836,16 +2836,16 @@ Before configuring, ensure that [ODBC Manager](http://www.odbcmanager.net/) is i
    | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 7. In the **UseEncryption** field, specify one of these values:
 
-   * `true`, if Dremio is configured for [encrypted communication](#tls-connection-parameters) with your Arrow Flight SQL ODBC client applications.
+   * `true`, if Dremio is configured for encrypted communication with your Arrow Flight SQL ODBC client applications.
    * `false`, if Dremio is not configured for encrypted communication with your Arrow Flight SQL ODBC client applications. Dremio is unencrypted by default.
 
-For additional parameters, see [Connection Parameters](#connection-parameters).
+For additional parameters, see Connection Parameters.
 
 If you ever need to enable tracing for troubleshooting problems with the driver, see the help for your driver manager.
 
-## Connection Parameters[​](#connection-parameters "Direct link to Connection Parameters")
+## Connection Parameters
 
-### Primary Connection Parameters[​](#primary-connection-parameters "Direct link to Primary Connection Parameters")
+### Primary Connection Parameters
 
 Use these parameters to configure basic connection details such as what data source to connect with.
 
@@ -2867,7 +2867,7 @@ Specify client information in the appropriate fields for your authentication typ
 | **PWD** | Password | Personal access token | Do not specify |
 | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 
-### TLS Connection Parameters[​](#tls-connection-parameters "Direct link to TLS Connection Parameters")
+### TLS Connection Parameters
 
 Use the following parameters to configure TLS encryption and verification methods for regular connections.
 
@@ -2879,7 +2879,7 @@ Use the following parameters to configure TLS encryption and verification method
 | trustedCerts | string | The full path of the `.pem` file containing certificates trusted by a CA, for the purpose of verifying the server. If this option is not set, the driver defaults to using the trusted CA certificates `.pem` file installed by the driver. The exact file path varies according to the operating system on which the driver is installed. The path for the Windows driver differs from the path set for the macOS driver. The TLS connection fails if you do not specify a value when `useEncryption` is `true` and `disableCertificateVerification` is `false`. | N/A |
 | hideSQLTablesListing | boolean | Prevents Microsoft Excel 16.95+ from crashing by hiding the list of available sources in Microsoft Excel’s Query Dialog. Set to `true` to enable. Only for Intel-based Mac computers. | `false` |
 
-### Advanced Parameters[​](#advanced-parameters "Direct link to Advanced Parameters")
+### Advanced Parameters
 
 | Name | Type | Description | Default Value |
 | --- | --- | --- | --- |
@@ -2888,7 +2888,7 @@ Use the following parameters to configure TLS encryption and verification method
 | routing\_tag | string | When this parameter is set, the specified tag is associated with all queries executed within a session. Rules can check for the presence of a tag with the function "tag()". For more information, see [Workload Management](/current/admin/workloads/workload-management/). | N/A |
 | stringColumnLength | string | The maximum length of data in columns of the STRING datatype and of complex datatypes. The range is 1 to 2147483647. | 1024. |
 
-## Logging[​](#logging "Direct link to Logging")
+## Logging
 
 You can inspect and extract client-side driver logs through the macOS logging infrastructure, because every macOS installation comes with an embedded Console application that allows you to filter by log types. This feature is only available for Intel-based Mac computers, and the log activity of the ODBC driver mostly consists of ODBC API calls.
 
@@ -2900,7 +2900,7 @@ To start logging:
    ![Filter by Excel and ODBC for logs in the Console application.](/images/odbc-driver-log-excel-filter.png "Logging Filter")
 3. Click **Start**.
 
-## Supported Conversions from Dremio Datatypes to ODBC Datatypes[​](#supported-conversions-from-dremio-datatypes-to-odbc-datatypes "Direct link to Supported Conversions from Dremio Datatypes to ODBC Datatypes")
+## Supported Conversions from Dremio Datatypes to ODBC Datatypes
 
 | Dremio Data Types | SQL\_C\_BINARY | SQL\_C\_BIT | SQL\_C\_CHAR | SQL\_C\_WCHAR | SQL\_C\_STINYINT | SQL\_C\_UTINYINT | SQL\_C\_SSHORT | SQL\_C\_USHORT | SQL\_C\_SLONG | SQL\_C\_ULONG | SQL\_C\_SBIGINT | SQL\_C\_UBIGINT | SQL\_C\_FLOAT | SQL\_C\_DOUBLE | SQL\_C\_NUMERIC | SQL\_C\_DATE | SQL\_C\_TIME | SQL\_C\_TIMESTAMP | SQL\_C\_GUID | SQL\_C\_INTERVAL\_\* |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -2928,25 +2928,25 @@ Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdb
 
 Dremio JDBC Driver (Legacy)](/current/client-applications/drivers/jdbc)
 
-* [Supported Operating Systems](#supported-operating-systems)
-* [Authentication Methods](#authentication-methods)
-  + [Username and Password](#username-and-password)
-  + [Personal Access Tokens Enterprise](#personal-access-tokens-enterprise)
-  + [OAuth Access Tokens Enterprise](#oauth-access-tokens-enterprise)
-* [Downloading and Installing](#downloading-and-installing)
-  + [Downloading and Installing on Windows](#downloading-and-installing-on-windows)
-  + [Downloading and Installing on Linux](#downloading-and-installing-on-linux)
-  + [Downloading and Installing on macOS](#downloading-and-installing-on-macos)
-* [Configuring](#configuring)
-  + [Configuring on Windows](#configuring-on-windows)
-  + [Configuring on Linux](#configuring-on-linux)
-  + [Configuring on macOS](#configuring-on-macos)
-* [Connection Parameters](#connection-parameters)
-  + [Primary Connection Parameters](#primary-connection-parameters)
-  + [TLS Connection Parameters](#tls-connection-parameters)
-  + [Advanced Parameters](#advanced-parameters)
-* [Logging](#logging)
-* [Supported Conversions from Dremio Datatypes to ODBC Datatypes](#supported-conversions-from-dremio-datatypes-to-odbc-datatypes)
+* Supported Operating Systems
+* Authentication Methods
+  + Username and Password
+  + Personal Access Tokens Enterprise
+  + OAuth Access Tokens Enterprise
+* Downloading and Installing
+  + Downloading and Installing on Windows
+  + Downloading and Installing on Linux
+  + Downloading and Installing on macOS
+* Configuring
+  + Configuring on Windows
+  + Configuring on Linux
+  + Configuring on macOS
+* Connection Parameters
+  + Primary Connection Parameters
+  + TLS Connection Parameters
+  + Advanced Parameters
+* Logging
+* Supported Conversions from Dremio Datatypes to ODBC Datatypes
 
 ---
 
@@ -2960,7 +2960,7 @@ On this page
 
 Starting with Dremio v22.0, you can use the Arrow Flight SQL ODBC driver to connect to Dremio from ODBC client applications. This driver is licensed under [GNU Library General Public License, Version 2](https://github.com/dremio/warpdrive/blob/master/license.txt).
 
-## Supported Operating Systems[​](#supported-operating-systems "Direct link to Supported Operating Systems")
+## Supported Operating Systems
 
 You can use the driver on systems that run the following 64-bit operating systems:
 
@@ -2972,23 +2972,23 @@ Apple Silicon Compatibility
 
 The Arrow Flight SQL ODBC driver is not supported on Apple Silicon M1, M2, and M3 processors. While previous workarounds using Rosetta may have been available, they are no longer reliable and may not work with current versions. For Apple Silicon Mac computers, consider using alternative connection methods such as the [Arrow Flight SQL JDBC driver](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/).
 
-## Authentication Methods[​](#authentication-methods "Direct link to Authentication Methods")
+## Authentication Methods
 
 Dremio supports several authentication methods for client connections.
 
-### Username and Password[​](#username-and-password "Direct link to Username and Password")
+### Username and Password
 
 Pass a username and password with the **UID** and **PWD** properties.
 
-### Personal Access Tokens Enterprise[​](#personal-access-tokens-enterprise "Direct link to personal-access-tokens-enterprise")
+### Personal Access Tokens Enterprise
 
 Pass a username and personal access token (PAT) with the **UID** and **PWD** properties, respectively. See [Personal Access Tokens](/current/security/authentication/personal-access-tokens/) for enabling and creating PATs.
 
 tip
 
-Dremio recommends [OAuth access tokens](#oauth-access-tokens-enterprise) to improve security by reducing the risk of compromised passwords or personal access tokens.
+Dremio recommends OAuth access tokens to improve security by reducing the risk of compromised passwords or personal access tokens.
 
-### OAuth Access Tokens Enterprise[​](#oauth-access-tokens-enterprise "Direct link to oauth-access-tokens-enterprise")
+### OAuth Access Tokens Enterprise
 
 To create a connection with an OAuth access token, configure the **TOKEN** property with the value of the OAuth access token.
 
@@ -3013,13 +3013,13 @@ with pyodbc.connect(
 
 Users can create OAuth access tokens using a local or LDAP username and password, a PAT, or an external JWT. Dremio provides [sample code](/current/reference/api/oauth-token/) for each of these cases.
 
-## Downloading and Installing[​](#downloading-and-installing "Direct link to Downloading and Installing")
+## Downloading and Installing
 
-* [Windows](#downloading-and-installing-on-windows)
-* [Linux](#downloading-and-installing-on-linux)
-* [macOS](#downloading-and-installing-on-macos)
+* Windows
+* Linux
+* macOS
 
-### Downloading and Installing on Windows[​](#downloading-and-installing-on-windows "Direct link to Downloading and Installing on Windows")
+### Downloading and Installing on Windows
 
 note
 
@@ -3039,9 +3039,9 @@ To download and install the Arrow Flight SQL ODBC driver:
 6. In the **Installation Complete** page, click **Next**.
 7. In the **Completing Arrow Flight SQL ODBC Driver Setup Wizard** page, click **Finish**.
 
-Next, [configure the driver](#configuring-on-windows).
+Next, configure the driver.
 
-### Downloading and Installing on Linux[​](#downloading-and-installing-on-linux "Direct link to Downloading and Installing on Linux")
+### Downloading and Installing on Linux
 
 To download and install the Arrow Flight SQL ODBC driver:
 
@@ -3054,9 +3054,9 @@ To download and install the Arrow Flight SQL ODBC driver:
    sudo yum localinstall <dremio-odbc-rpm-path>
    ```
 
-Next, [configure the driver](#configuring-on-linux).
+Next, configure the driver.
 
-### Downloading and Installing on macOS[​](#downloading-and-installing-on-macos "Direct link to Downloading and Installing on macOS")
+### Downloading and Installing on macOS
 
 To download and install the Arrow Flight SQL ODBC driver:
 
@@ -3072,11 +3072,11 @@ This driver only supports Intel-based Macs. It is not compatible with Apple Sili
 6. In the **Installer is trying to install new software** dialog, specify your macOS password. Then, click **Install Software**.
 7. After the installation is complete, click **Close**.
 
-Next, [configure the driver](#configuring-on-macos).
+Next, configure the driver.
 
-## Configuring[​](#configuring "Direct link to Configuring")
+## Configuring
 
-### Configuring on Windows[​](#configuring-on-windows "Direct link to Configuring on Windows")
+### Configuring on Windows
 
 To configure the System DSN:
 
@@ -3102,14 +3102,14 @@ If you want to use a personal access token (PAT), rather than a password, for au
    | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 7. In the **UseEncryption** field, specify one of these values:
 
-   * `true`, if Dremio is configured for [encrypted communication](#tls-connection-parameters) with your Arrow Flight SQL ODBC client applications.
+   * `true`, if Dremio is configured for encrypted communication with your Arrow Flight SQL ODBC client applications.
    * `false`, if Dremio is not configured for encrypted communication with your Arrow Flight SQL ODBC client applications. Dremio is unencrypted by default.
 
-For additional parameters, see [Connection Parameters](#connection-parameters).
+For additional parameters, see Connection Parameters.
 
 If you ever need to enable tracing for troubleshooting problems with the driver, click the **Tracing** tab in the **ODBC Data Source Administrator (64-bit)** dialog, set the log-file path, and then click **Start Tracing Now**.
 
-### Configuring on Linux[​](#configuring-on-linux "Direct link to Configuring on Linux")
+### Configuring on Linux
 
 note
 
@@ -3129,10 +3129,10 @@ To configure the properties in the odbc.ini file:
    | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 4. In the **UseEncryption** field, specify one of these values:
 
-   * `true`, if Dremio is configured for [encrypted communication](#tls-connection-parameters) with your Arrow Flight SQL ODBC client applications.
+   * `true`, if Dremio is configured for encrypted communication with your Arrow Flight SQL ODBC client applications.
    * `false`, if Dremio is not configured for encrypted communication with your Arrow Flight SQL ODBC client applications. Dremio is unencrypted by default.
 
-For additional parameters, see [Connection Parameters](#connection-parameters).
+For additional parameters, see Connection Parameters.
 
 note
 
@@ -3144,7 +3144,7 @@ odbcinst -j
 
 If you ever need to enable tracing for troubleshooting problems with the driver, see the help for unixODBC.
 
-### Configuring on macOS[​](#configuring-on-macos "Direct link to Configuring on macOS")
+### Configuring on macOS
 
 note
 
@@ -3164,16 +3164,16 @@ Before configuring, ensure that [ODBC Manager](http://www.odbcmanager.net/) is i
    | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 7. In the **UseEncryption** field, specify one of these values:
 
-   * `true`, if Dremio is configured for [encrypted communication](#tls-connection-parameters) with your Arrow Flight SQL ODBC client applications.
+   * `true`, if Dremio is configured for encrypted communication with your Arrow Flight SQL ODBC client applications.
    * `false`, if Dremio is not configured for encrypted communication with your Arrow Flight SQL ODBC client applications. Dremio is unencrypted by default.
 
-For additional parameters, see [Connection Parameters](#connection-parameters).
+For additional parameters, see Connection Parameters.
 
 If you ever need to enable tracing for troubleshooting problems with the driver, see the help for your driver manager.
 
-## Connection Parameters[​](#connection-parameters "Direct link to Connection Parameters")
+## Connection Parameters
 
-### Primary Connection Parameters[​](#primary-connection-parameters "Direct link to Primary Connection Parameters")
+### Primary Connection Parameters
 
 Use these parameters to configure basic connection details such as what data source to connect with.
 
@@ -3195,7 +3195,7 @@ Specify client information in the appropriate fields for your authentication typ
 | **PWD** | Password | Personal access token | Do not specify |
 | **TOKEN** | Do not specify | Do not specify | OAuth access token |
 
-### TLS Connection Parameters[​](#tls-connection-parameters "Direct link to TLS Connection Parameters")
+### TLS Connection Parameters
 
 Use the following parameters to configure TLS encryption and verification methods for regular connections.
 
@@ -3207,7 +3207,7 @@ Use the following parameters to configure TLS encryption and verification method
 | trustedCerts | string | The full path of the `.pem` file containing certificates trusted by a CA, for the purpose of verifying the server. If this option is not set, the driver defaults to using the trusted CA certificates `.pem` file installed by the driver. The exact file path varies according to the operating system on which the driver is installed. The path for the Windows driver differs from the path set for the macOS driver. The TLS connection fails if you do not specify a value when `useEncryption` is `true` and `disableCertificateVerification` is `false`. | N/A |
 | hideSQLTablesListing | boolean | Prevents Microsoft Excel 16.95+ from crashing by hiding the list of available sources in Microsoft Excel’s Query Dialog. Set to `true` to enable. Only for Intel-based Mac computers. | `false` |
 
-### Advanced Parameters[​](#advanced-parameters "Direct link to Advanced Parameters")
+### Advanced Parameters
 
 | Name | Type | Description | Default Value |
 | --- | --- | --- | --- |
@@ -3216,7 +3216,7 @@ Use the following parameters to configure TLS encryption and verification method
 | routing\_tag | string | When this parameter is set, the specified tag is associated with all queries executed within a session. Rules can check for the presence of a tag with the function "tag()". For more information, see [Workload Management](/current/admin/workloads/workload-management/). | N/A |
 | stringColumnLength | string | The maximum length of data in columns of the STRING datatype and of complex datatypes. The range is 1 to 2147483647. | 1024. |
 
-## Logging[​](#logging "Direct link to Logging")
+## Logging
 
 You can inspect and extract client-side driver logs through the macOS logging infrastructure, because every macOS installation comes with an embedded Console application that allows you to filter by log types. This feature is only available for Intel-based Mac computers, and the log activity of the ODBC driver mostly consists of ODBC API calls.
 
@@ -3228,7 +3228,7 @@ To start logging:
    ![Filter by Excel and ODBC for logs in the Console application.](/images/odbc-driver-log-excel-filter.png "Logging Filter")
 3. Click **Start**.
 
-## Supported Conversions from Dremio Datatypes to ODBC Datatypes[​](#supported-conversions-from-dremio-datatypes-to-odbc-datatypes "Direct link to Supported Conversions from Dremio Datatypes to ODBC Datatypes")
+## Supported Conversions from Dremio Datatypes to ODBC Datatypes
 
 | Dremio Data Types | SQL\_C\_BINARY | SQL\_C\_BIT | SQL\_C\_CHAR | SQL\_C\_WCHAR | SQL\_C\_STINYINT | SQL\_C\_UTINYINT | SQL\_C\_SSHORT | SQL\_C\_USHORT | SQL\_C\_SLONG | SQL\_C\_ULONG | SQL\_C\_SBIGINT | SQL\_C\_UBIGINT | SQL\_C\_FLOAT | SQL\_C\_DOUBLE | SQL\_C\_NUMERIC | SQL\_C\_DATE | SQL\_C\_TIME | SQL\_C\_TIMESTAMP | SQL\_C\_GUID | SQL\_C\_INTERVAL\_\* |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -3256,22 +3256,22 @@ Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdb
 
 Dremio JDBC Driver (Legacy)](/current/client-applications/drivers/jdbc)
 
-* [Supported Operating Systems](#supported-operating-systems)
-* [Authentication Methods](#authentication-methods)
-  + [Username and Password](#username-and-password)
-  + [Personal Access Tokens Enterprise](#personal-access-tokens-enterprise)
-  + [OAuth Access Tokens Enterprise](#oauth-access-tokens-enterprise)
-* [Downloading and Installing](#downloading-and-installing)
-  + [Downloading and Installing on Windows](#downloading-and-installing-on-windows)
-  + [Downloading and Installing on Linux](#downloading-and-installing-on-linux)
-  + [Downloading and Installing on macOS](#downloading-and-installing-on-macos)
-* [Configuring](#configuring)
-  + [Configuring on Windows](#configuring-on-windows)
-  + [Configuring on Linux](#configuring-on-linux)
-  + [Configuring on macOS](#configuring-on-macos)
-* [Connection Parameters](#connection-parameters)
-  + [Primary Connection Parameters](#primary-connection-parameters)
-  + [TLS Connection Parameters](#tls-connection-parameters)
-  + [Advanced Parameters](#advanced-parameters)
-* [Logging](#logging)
-* [Supported Conversions from Dremio Datatypes to ODBC Datatypes](#supported-conversions-from-dremio-datatypes-to-odbc-datatypes)
+* Supported Operating Systems
+* Authentication Methods
+  + Username and Password
+  + Personal Access Tokens Enterprise
+  + OAuth Access Tokens Enterprise
+* Downloading and Installing
+  + Downloading and Installing on Windows
+  + Downloading and Installing on Linux
+  + Downloading and Installing on macOS
+* Configuring
+  + Configuring on Windows
+  + Configuring on Linux
+  + Configuring on macOS
+* Connection Parameters
+  + Primary Connection Parameters
+  + TLS Connection Parameters
+  + Advanced Parameters
+* Logging
+* Supported Conversions from Dremio Datatypes to ODBC Datatypes

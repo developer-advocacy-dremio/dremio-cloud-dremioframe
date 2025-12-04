@@ -48,25 +48,25 @@ On this page
 
 Dremio supports several types of authentication for identity providers, client connections, and user types, including both regular users and service users.
 
-## Authentication Methods by Application Type[​](#authentication-methods-by-application-type "Direct link to Authentication Methods by Application Type")
+## Authentication Methods by Application Type
 
 | App Type | [Enterprise OIDC Provider](/current/security/authentication/identity-providers/#openid-connect-oidc-providers) | [LDAP](/current/security/authentication/identity-providers/#ldap-lightweight-directory-access-protocol) or Dremio Local Provider |
 | --- | --- | --- |
-| **Dremio Console** | * [Single Sign-On](#single-sign-on) * [Personal Access Token](#personal-access-token) | * [Username and Password](#username-and-password) * [Personal Access Token](#personal-access-token) |
-| **User Clients & Applications** | * [Personal Access Token](#personal-access-token) * **OAuth-based authentication**: [External JWT Exchange](#external-jwt-exchange) or [External JWT with Legacy JDBC](#external-jwt) | * [Personal Access Token](#personal-access-token) * [Username and Password with JDBC/ODBC](#username-and-password) |
-| **M2M Applications** | * [Service Users with External Service Principals](#external-service-principal-authentication) | * [OAuth Client Credentials](#oauth-client-credentials) * **Legacy Migration**: [PAT Exchange](#pat-exchange) or [Obtaining OAuth Tokens with Username and Password](#obtain-oauth-access-tokens-with-username-and-password) |
+| **Dremio Console** | * Single Sign-On * Personal Access Token | * Username and Password * Personal Access Token |
+| **User Clients & Applications** | * Personal Access Token * **OAuth-based authentication**: External JWT Exchange or External JWT with Legacy JDBC | * Personal Access Token * Username and Password with JDBC/ODBC |
+| **M2M Applications** | * Service Users with External Service Principals | * OAuth Client Credentials * **Legacy Migration**: PAT Exchange or Obtaining OAuth Tokens with Username and Password |
 
-## Dremio Console Authentication Methods[​](#dremio-console-authentication-methods "Direct link to Dremio Console Authentication Methods")
+## Dremio Console Authentication Methods
 
-### Single Sign-On[​](#single-sign-on "Direct link to Single Sign-On")
+### Single Sign-On
 
 The user is authenticated by the configured OIDC identity provider, including automatic authentication if the user is already signed in to the identity provider.
 
-### Username and Password[​](#username-and-password "Direct link to Username and Password")
+### Username and Password
 
 The user provides a username and password combination for authentication. See [User Management](/current/security/user-management/) for information on adding and managing local and external users.
 
-### Personal Access Token[​](#personal-access-token "Direct link to Personal Access Token")
+### Personal Access Token
 
 A personal access token (PAT) is used in place of a user password. PATs provide a convenient way to create a client connection without exposing a user's password, but can pose a security risk if not properly managed. PATs can be configured with long lifetimes, and lost or compromised tokens may allow access to sensitive data until the token expires. Before use, the administrator must [activate PATs](/current/security/authentication/personal-access-tokens/) for the Dremio cluster.
 
@@ -75,13 +75,13 @@ To use a PAT, the user must follow these steps:
 1. [Create a PAT](/current/security/authentication/personal-access-tokens/#creating-a-token) in the Dremio console. Users can create additional PATs using the Dremio console or the [PAT creation](/current/api-reference/dremio-rest-api/#tag/Personal-Access-Tokens) REST API.
 2. Use the PAT to connect with the Dremio console, [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/), [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/), [Legacy JDBC](/current/client-applications/drivers/jdbc/), or [Dremio REST](/current/api-reference/dremio-rest-api/).
 
-## User Applications Authentication Methods[​](#user-applications-authentication-methods "Direct link to User Applications Authentication Methods")
+## User Applications Authentication Methods
 
-### External JWT[​](#external-jwt "Direct link to External JWT")
+### External JWT
 
 Client apps can request OAuth 2.0 JSON Web Tokens (JWTs) from external token providers, allowing users to authenticate through custom or third-party applications without exposing their credentials to the client application.
 
-After obtaining an external JWT, the client app can create connections to Dremio using the [Legacy JDBC driver](/current/client-applications/drivers/jdbc/). However, Dremio recommends [external JWT token exchange](#external-jwt-exchange) because Dremio OAuth access tokens are smaller and verification is faster.
+After obtaining an external JWT, the client app can create connections to Dremio using the [Legacy JDBC driver](/current/client-applications/drivers/jdbc/). However, Dremio recommends external JWT token exchange because Dremio OAuth access tokens are smaller and verification is faster.
 
 To use an external JWT, the administrator must configure Dremio to use the Enterprise OIDC provider as an [external token provider](/current/security/authentication/application-authentication/external-token-providers/).
 
@@ -90,7 +90,7 @@ After configuration, a client application performs the following steps:
 1. A user authenticates with the external token provider and the client [receives a JWT](/current/security/authentication/application-authentication/external-token-providers/#retrieving-an-external-jwt).
 2. Create a connection to Dremio using the [Legacy JDBC](/current/client-applications/drivers/jdbc/) and the external JWT.
 
-### External JWT Exchange[​](#external-jwt-exchange "Direct link to External JWT Exchange")
+### External JWT Exchange
 
 Exchanging the external JWT for an OAuth access token enables additional connection choices after authenticating with the external token provider. A client application performs the following steps:
 
@@ -98,9 +98,9 @@ Exchanging the external JWT for an OAuth access token enables additional connect
 2. Use the `/oauth/token` [REST API](/current/reference/api/oauth-token) to [exchange the JWT for an OAuth access token](/current/security/authentication/oauth-token-exchange/).
 3. Create a connection to Dremio using [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/), [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/), [Legacy JDBC](/current/client-applications/drivers/jdbc/), or [Dremio REST](/current/api-reference/dremio-rest-api/) and the OAuth access token.
 
-## M2M Applications Authentication Methods[​](#m2m-applications-authentication-methods "Direct link to M2M Applications Authentication Methods")
+## M2M Applications Authentication Methods
 
-### OAuth Client Credentials[​](#oauth-client-credentials "Direct link to OAuth Client Credentials")
+### OAuth Client Credentials
 
 Service users authenticate using the OAuth 2.0 client credentials flow, where a client ID and client secret are exchanged for access tokens. This is the primary authentication method for service users and provides:
 
@@ -115,7 +115,7 @@ To use OAuth client credentials:
 2. Use the `/oauth/token` [REST API](/current/reference/api/oauth-token) to exchange the client ID and client secret for an OAuth access token.
 3. Create a connection to Dremio using [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/), [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/), [Legacy JDBC](/current/client-applications/drivers/jdbc/), or [Dremio REST](/current/api-reference/dremio-rest-api/) and the OAuth access token.
 
-### External Service Principal Authentication[​](#external-service-principal-authentication "Direct link to External Service Principal Authentication")
+### External Service Principal Authentication
 
 You can configure Dremio [service users](/current/security/authentication/users#user-types) to authenticate using service principals from Microsoft Entra ID or another OIDC provider. This allows service users to authenticate using JWTs from external identity providers, which are then exchanged for Dremio OAuth access tokens.
 
@@ -132,9 +132,9 @@ To use external service principal authentication:
 3. Use the `/oauth/token` [REST API](/current/reference/api/oauth-token) to exchange the external JWT for an OAuth access token.
 4. Create a connection to Dremio using [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/), [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/), [Legacy JDBC](/current/client-applications/drivers/jdbc/), or [Dremio REST](/current/api-reference/dremio-rest-api/) and the OAuth access token.
 
-## Legacy Authentication Methods[​](#legacy-authentication-methods "Direct link to Legacy Authentication Methods")
+## Legacy Authentication Methods
 
-### Obtain OAuth Access Tokens with Username and Password[​](#obtain-oauth-access-tokens-with-username-and-password "Direct link to Obtain OAuth Access Tokens with Username and Password")
+### Obtain OAuth Access Tokens with Username and Password
 
 Organizations transitioning to OAuth-based authentication can use a username and password from a traditional user account to obtain an OAuth access token. This method allows teams to implement OAuth-based authentication immediately while planning their migration to dedicated service users and any associated configuration of an external identity provider.
 
@@ -144,7 +144,7 @@ Users follow these steps to exchange a username and password:
 2. Create a connection to Dremio using [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/), [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/), [Legacy JDBC](/current/client-applications/drivers/jdbc/), or [Dremio REST](/current/api-reference/dremio-rest-api/) and the OAuth access token.
 3. Use the optional [refresh token to create OAuth access tokens](/current/reference/api/oauth-token#exchange-a-refresh-token) to obtain fresh OAuth access tokens as they expire.
 
-### PAT Exchange[​](#pat-exchange "Direct link to PAT Exchange")
+### PAT Exchange
 
 PAT Exchange serves as a migration bridge for existing applications that currently use PATs but need to integrate with systems expecting OAuth access tokens. This method allows organizations to maintain existing PAT-based workflows while transitioning to proper service user authentication.
 
@@ -154,7 +154,7 @@ Users follow these steps to exchange a PAT:
 2. Use the `/oauth/token` [REST API](/current/reference/api/oauth-token#exchange-a-pat) to exchange the PAT for an OAuth access token.
 3. Create a connection to Dremio using [Arrow Flight SQL JDBC](/current/client-applications/drivers/arrow-flight-sql-jdbc-driver/), [Arrow Flight SQL ODBC](/current/client-applications/drivers/arrow-flight-sql-odbc-driver/), [Legacy JDBC](/current/client-applications/drivers/jdbc/), or [Dremio REST](/current/api-reference/dremio-rest-api/) and the OAuth access token.
 
-### Dremio Authentication Token[​](#dremio-authentication-token "Direct link to Dremio Authentication Token")
+### Dremio Authentication Token
 
 Dremio authentication tokens are generated from your Dremio username and password. This authentication method uses the prior generation `/apiv2/login` endpoint, now internal and subject to change without notice. See [Dremio Authentication Tokens](/current/security/authentication/dremio-authentication-tokens/) for additional information.
 
@@ -166,21 +166,21 @@ Security and Compliance](/current/security/)[Next
 
 Manage Users](/current/security/authentication/users)
 
-* [Authentication Methods by Application Type](#authentication-methods-by-application-type)
-* [Dremio Console Authentication Methods](#dremio-console-authentication-methods)
-  + [Single Sign-On](#single-sign-on)
-  + [Username and Password](#username-and-password)
-  + [Personal Access Token](#personal-access-token)
-* [User Applications Authentication Methods](#user-applications-authentication-methods)
-  + [External JWT](#external-jwt)
-  + [External JWT Exchange](#external-jwt-exchange)
-* [M2M Applications Authentication Methods](#m2m-applications-authentication-methods)
-  + [OAuth Client Credentials](#oauth-client-credentials)
-  + [External Service Principal Authentication](#external-service-principal-authentication)
-* [Legacy Authentication Methods](#legacy-authentication-methods)
-  + [Obtain OAuth Access Tokens with Username and Password](#obtain-oauth-access-tokens-with-username-and-password)
-  + [PAT Exchange](#pat-exchange)
-  + [Dremio Authentication Token](#dremio-authentication-token)
+* Authentication Methods by Application Type
+* Dremio Console Authentication Methods
+  + Single Sign-On
+  + Username and Password
+  + Personal Access Token
+* User Applications Authentication Methods
+  + External JWT
+  + External JWT Exchange
+* M2M Applications Authentication Methods
+  + OAuth Client Credentials
+  + External Service Principal Authentication
+* Legacy Authentication Methods
+  + Obtain OAuth Access Tokens with Username and Password
+  + PAT Exchange
+  + Dremio Authentication Token
 
 ---
 
@@ -210,15 +210,15 @@ A wide range of SQL commands are also available:
 * [Roles SQL Commands](/current/reference/sql/commands/roles/)
 * [Users SQL Commands](/current/reference/sql/commands/users/)
 
-## Object Hierarchy[​](#object-hierarchy "Direct link to Object Hierarchy")
+## Object Hierarchy
 
 Each object resides within a container in a hierarchy of containers. The upper-most container exists as the system user, or administrator account. All other objects are contained within sources or spaces, organized into folders. The hierarchy of these objects is illustrated below.
 
 ![](/assets/images/rbac-object-hierarchy-a829e25a2980a7f00d7cc2a85ccbbf00.png)
 
-## Inheritance[​](#inheritance "Direct link to Inheritance")
+## Inheritance
 
-The objects to which privileges are granted depend on the inheritance model. In other words, granting access to a parent object, such as a folder, also gives that user access to any existing and future datasets contained in that folder. For example, giving a user privileges to ALL DATASETS will only grant the user access to existing datasets, not the folders that contain the datasets. In comparison, granting privileges at the source level will extend that user's access to the source's existing and future folders/schema and datasets. The object to which a user's privileges are applied is also [known as the scope](#scope), and follow a parent-child relationship.
+The objects to which privileges are granted depend on the inheritance model. In other words, granting access to a parent object, such as a folder, also gives that user access to any existing and future datasets contained in that folder. For example, giving a user privileges to ALL DATASETS will only grant the user access to existing datasets, not the folders that contain the datasets. In comparison, granting privileges at the source level will extend that user's access to the source's existing and future folders/schema and datasets. The object to which a user's privileges are applied is also known as the scope, and follow a parent-child relationship.
 
 By the rules of inheritance, user or group access may be granted as high or low in the object hierarchy as you wish for access to reach.
 
@@ -230,11 +230,11 @@ Consider the image above, which shows an example of object structure in Dremio. 
 
 note
 
-If a user has privileges for a single table, they may create views based on that dataset, but with the user now having `ALTER` and `MANAGE GRANTS` privileges for any view. However, the user still retains the same privileges as before with the original dataset. For more information, read [View Delegation](#view-delegation).
+If a user has privileges for a single table, they may create views based on that dataset, but with the user now having `ALTER` and `MANAGE GRANTS` privileges for any view. However, the user still retains the same privileges as before with the original dataset. For more information, read View Delegation.
 
-## Scope[​](#scope "Direct link to Scope")
+## Scope
 
-Scope is a concept used to describe what objects a user or group has access to. Privileges are assigned by object, which ultimately determines what a grantee may perform set functions upon. For example, you may set a user's scope to `FolderA`, which will give the user access to all existing and future datasets contained in the folder, as well as the datasets' wikis. But they will not have access to any other folders or the source. The object a user is granted access to is dependent on [the inheritance model](#inheritance), which means based on the object type, it may contain child objects. For example, if a user is granted privilege to a folder, the user's access also extends to all existing and future datasets contained in that folder.
+Scope is a concept used to describe what objects a user or group has access to. Privileges are assigned by object, which ultimately determines what a grantee may perform set functions upon. For example, you may set a user's scope to `FolderA`, which will give the user access to all existing and future datasets contained in the folder, as well as the datasets' wikis. But they will not have access to any other folders or the source. The object a user is granted access to is dependent on the inheritance model, which means based on the object type, it may contain child objects. For example, if a user is granted privilege to a folder, the user's access also extends to all existing and future datasets contained in that folder.
 
 For example, `user1` is granted the `SELECT` privilege to the folder `FolderC`. This object contains multiple datasets, which the user may now access. However, there exists a parent folder and another subfolder with its own datasets.
 
@@ -242,28 +242,28 @@ For example, `user1` is granted the `SELECT` privilege to the folder `FolderC`. 
 
 Because of the established scope, `user1` may not access `FolderD` because they were only granted access to `FolderC`'s objects.
 
-### Current vs. Future Objects[​](#current-vs-future-objects "Direct link to Current vs. Future Objects")
+### Current vs. Future Objects
 
-Based on the selected scope, you may restrict a user's access to future and existing datasets. For example, if you select a single table as the scope of a user's privilege, then that user may only perform that action to the existing dataset, as well as any future views they create using that table. However, they may not access any views created from a table by another user ([see the example below](#example-single-dataset)). However, if the scope is instead set at the folder level, then the user may perform the granted privilege to all tables and views contained in that folder ([see the example below](#example-scope)).
+Based on the selected scope, you may restrict a user's access to future and existing datasets. For example, if you select a single table as the scope of a user's privilege, then that user may only perform that action to the existing dataset, as well as any future views they create using that table. However, they may not access any views created from a table by another user (see the example below). However, if the scope is instead set at the folder level, then the user may perform the granted privilege to all tables and views contained in that folder (see the example below).
 
-## Ownership[​](#ownership "Direct link to Ownership")
+## Ownership
 
 Object ownership is a security feature used to control access to an object. In Dremio, each object must have an owner, and may have only one owner. Ownership is automatically granted to the user who initially created the object. For example, when `user1` creates an S3 data source, Dremio automatically assigns ownership of the source to `user1`.
 
 The privileges included in object ownership depend on your configuration.
 
-* By default, ownership includes all privileges for that object. The object owner can grant or revoke access privileges to the object and its child objects, modify an object's settings, and delete the object as desired. See [Granting Privileges Using SQL Commands](#granting-privileges-using-sql-commands) for more information.
-* Managed access spaces centralize the administration of access privileges in shared spaces to a limited set of users and roles, including the space owner. By limiting privilege grant authority, managed access spaces help ensure consistent and controlled access policies and reduce the risk of unauthorized access. See [Managed Access Spaces](#managed-access-spaces).
+* By default, ownership includes all privileges for that object. The object owner can grant or revoke access privileges to the object and its child objects, modify an object's settings, and delete the object as desired. See Granting Privileges Using SQL Commands for more information.
+* Managed access spaces centralize the administration of access privileges in shared spaces to a limited set of users and roles, including the space owner. By limiting privilege grant authority, managed access spaces help ensure consistent and controlled access policies and reduce the risk of unauthorized access. See Managed Access Spaces.
 
 The following behaviors and limitations apply to ownership:
 
 * Each object may only have one owner.
 * An object's creator is automatically granted ownership.
 * Object ownership may be assigned or modified to a new user or role with the [`GRANT OWNERSHIP`](/current/reference/sql/commands/rbac) command.
-* The object's access control settings may not work if the owner is deleted or removed. See [View Delegation](#view-delegation).
+* The object's access control settings may not work if the owner is deleted or removed. See View Delegation.
 * Object owners may be identified by querying the [`sys."tables"`](/current/reference/sql/system-tables/tables) table or [`sys.views`](/current/reference/sql/system-tables/views) table. If an object has no owner, the `owner_id` will display as `$unowned`.
 
-### Managed Access Spaces[​](#managed-access-spaces "Direct link to Managed Access Spaces")
+### Managed Access Spaces
 
 Managed access spaces centralize the administration of access privileges to a limited set of users and roles, including:
 
@@ -292,7 +292,7 @@ Managed access spaces do not override a MANAGE GRANT privilege granted at system
 
 The Dremio administrator can activate managed access spaces by setting the `security.access-control.managed-access-spaces.enabled` [support key](/current/help-support/support-settings/#support-keys) on the Support Settings page.
 
-### View Delegation[​](#view-delegation "Direct link to View Delegation")
+### View Delegation
 
 View delegation means that the data in tables with restricted access may be available to other Dremio users by creating views. View delegation is the critical capability of the Dremio semantic layer that allows users to run queries without accessing the underlying tables and views directly.
 
@@ -307,12 +307,12 @@ A shared view selects from the underlying dataset using the view owner's permiss
 
 View delegation is different from privilege assignment. View delegation is an implicit delegation of the SELECT privilege on underlying objects, which means that users who run queries on a view must have access privileges on the view but do not need privileges on underlying tables. Privilege assignment is an explicit delegation providing direct access to an object.
 
-#### Example 1: View Delegation[​](#example-1-view-delegation "Direct link to Example 1: View Delegation")
+#### Example 1: View Delegation
 
 `user1` has the SELECT privilege on `table1` and creates `view1` to filter and transform data in `table1`. `user2` asks for access privileges to run queries on `view1` as well. `user2` may obtain the SELECT privilege for `view1` from the following authorized users:
 
 * By default, view owners such as `user1` can grant and revoke privileges to other users, as appropriate.
-* A limited set of users and roles, such as the space owner, can grant or revoke privileges in [managed access spaces](#managed-access-spaces).
+* A limited set of users and roles, such as the space owner, can grant or revoke privileges in managed access spaces.
 * Dremio administrators or other users with the MANAGE GRANTS privilege can grant privileges to other users.
 
 If access for `user2` is appropriate, the authorized user runs `GRANT SELECT ON VIEW view1 TO USER user2` to grant the SELECT privilege to `user2`. After `user2` obtains the SELECT privilege, they can run queries on `view1`, utilizing the privilege of `user1` as owner to `view1` to SELECT from `table1`.
@@ -334,7 +334,7 @@ The following table describes the actions that each user may perform based on th
 
 *Tasks by user in Example 1*
 
-#### Example 2: View Delegation with Revoked Access to the Original Table[​](#example-2-view-delegation-with-revoked-access-to-the-original-table "Direct link to Example 2: View Delegation with Revoked Access to the Original Table")
+#### Example 2: View Delegation with Revoked Access to the Original Table
 
 To continue the previous example, `user1` has SELECT access to `table1`, which gives `user1` access through `view1`. An administrator revokes the SELECT access of `user1` on `table1`.
 
@@ -355,7 +355,7 @@ The following table describes the actions that each user may perform based on th
 
 *Tasks by user in Example 2*
 
-## Privileges[​](#privileges "Direct link to Privileges")
+## Privileges
 
 Privileges refer to the defined levels of access or permissions that are assigned to roles or users within Dremio. Privileges determine the operations a user or role can perform on securable objects. Examples of privileges in Dremio include SELECT on a table or view, INSERT on a table, DELETE on a table, CREATE TABLE on a folder, and MANAGE GRANTS on any object.
 
@@ -365,7 +365,7 @@ Privileges can be managed using SQL, APIs, or the Dremio Console.
 
 For more information, please refer to [Privileges](/current/security/rbac/privileges).
 
-### Granting Privileges Using the Dremio Console[​](#granting-privileges-using-the-dremio-console "Direct link to Granting Privileges Using the Dremio Console")
+### Granting Privileges Using the Dremio Console
 
 You can share catalog objects with others in your organization by granting privileges on the objects to users and roles as follows:
 
@@ -394,7 +394,7 @@ For each entry in the **Add User/Role** field that matches a user or role in Dre
 7. (Optional) Repeat steps 4-6 if you want to add more users or roles and grant them privileges.
 8. When finished, click **Save**.
 
-### Revoking Privileges Using the Dremio Console[​](#revoking-privileges-using-the-dremio-console "Direct link to Revoking Privileges Using the Dremio Console")
+### Revoking Privileges Using the Dremio Console
 
 To revoke user and role privileges, complete the following steps:
 
@@ -424,9 +424,9 @@ tip
 
 You can also grant or revoke privileges using [SQL commands](/current/reference/sql/commands/rbac/) or [APIs](/current/reference/api/catalog/grants/).
 
-### Granting Privileges Using SQL Commands[​](#granting-privileges-using-sql-commands "Direct link to Granting Privileges Using SQL Commands")
+### Granting Privileges Using SQL Commands
 
-When granting privileges to users and roles with SQL commands, you may follow one of three methods: [granting to a single dataset](#granting-to-a-single-dataset), [granting to ALL DATASETS](#granting-to-all-datasets), and [granting to a scope](#granting-to-a-scope). Examples of these methods may be found under each section.
+When granting privileges to users and roles with SQL commands, you may follow one of three methods: granting to a single dataset, granting to ALL DATASETS, and granting to a scope. Examples of these methods may be found under each section.
 
 Each example includes an SQL command. For more information about command syntax, review the [Privileges (GRANT/REVOKE) SQL commands](/current/reference/sql/commands/rbac).
 
@@ -434,7 +434,7 @@ note
 
 Because all users are members of the PUBLIC role, you can use the PUBLIC role to grant privileges to all users.
 
-#### Granting to a Single Dataset[​](#granting-to-a-single-dataset "Direct link to Granting to a Single Dataset")
+#### Granting to a Single Dataset
 
 When you have a user that needs access to only one table and no other objects, then you would simply assign them privileges for that dataset (see the example scenario outlined below).
 
@@ -444,7 +444,7 @@ note
 
 If you're granting the user access to a table, then remember that they'll be able to create views based on that dataset, which that user can then grant access to other users.
 
-##### Example: Single Dataset[​](#example-single-dataset "Direct link to Example: Single Dataset")
+##### Example: Single Dataset
 
 You have a user that you only want to give access to an individual table. You would need to navigate to the *Privileges* screen from that dataset's settings and grant the user the `SELECT` privilege, or perform the following command from the SQL Editor:
 
@@ -460,13 +460,13 @@ The image below illustrates the objects `user1` now has access to.
 
 This restricts `user1` so that they may only access the `TableA1` table, not any other datasets contained in the same folder. However, `user1` may still create views based on `TableA1`.
 
-#### Granting to ALL DATASETS[​](#granting-to-all-datasets "Direct link to Granting to ALL DATASETS")
+#### Granting to ALL DATASETS
 
 When you have a user that needs access to all existing datasets, then you would use the SQL syntax `ON ALL DATASETS` (see the example scenario outlined below). This gives the user access to all existing datasets. The user would not, however, automatically receive access to any future datasets created by other users.
 
 You should use this method of privilege assignment if you want to restrict a user's access to parent objects, but still wish for them to have access to all existing datasets.
 
-##### Example: All Datasets[​](#example-all-datasets "Direct link to Example: All Datasets")
+##### Example: All Datasets
 
 You have a specific user that needs access to all datasets in a specific folder, but they do not require privileges for the folders containing these tables. You would then execute the following command from the SQL Editor:
 
@@ -482,13 +482,13 @@ The image below illustrates the objects `user1` now has access to.
 
 This command restricts the scope of `user1` to all datasets presently found in `source1`, such as `TableC1` and `TableD1`. Should additional datasets be created in the future, `user1` will not have access to them.
 
-#### Granting to a Scope[​](#granting-to-a-scope "Direct link to Granting to a Scope")
+#### Granting to a Scope
 
 When you want to grant a user access to a parent object, such as a folder, this will also grant the user access to any datasets contained (see the example scenario outlined below).
 
 You should use this method of privilege management if you wanted to grant a user access to all existing and future datasets contained under a parent object.
 
-##### Example: Scope[​](#example-scope "Direct link to Example: Scope")
+##### Example: Scope
 
 This method grants a user access to all existing and future datasets contained under a specified object. To accomplish this, you need to navigate to the *Privileges* screen from that folder's settings and grant the user the `SELECT` privilege, or execute the following command from the SQL Editor:
 
@@ -512,17 +512,17 @@ Personal Access Tokens](/current/security/authentication/personal-access-tokens)
 
 Privileges](/current/security/rbac/privileges)
 
-* [Object Hierarchy](#object-hierarchy)
-* [Inheritance](#inheritance)
-* [Scope](#scope)
-  + [Current vs. Future Objects](#current-vs-future-objects)
-* [Ownership](#ownership)
-  + [Managed Access Spaces](#managed-access-spaces)
-  + [View Delegation](#view-delegation)
-* [Privileges](#privileges)
-  + [Granting Privileges Using the Dremio Console](#granting-privileges-using-the-dremio-console)
-  + [Revoking Privileges Using the Dremio Console](#revoking-privileges-using-the-dremio-console)
-  + [Granting Privileges Using SQL Commands](#granting-privileges-using-sql-commands)
+* Object Hierarchy
+* Inheritance
+* Scope
+  + Current vs. Future Objects
+* Ownership
+  + Managed Access Spaces
+  + View Delegation
+* Privileges
+  + Granting Privileges Using the Dremio Console
+  + Revoking Privileges Using the Dremio Console
+  + Granting Privileges Using SQL Commands
 
 ---
 
@@ -584,11 +584,11 @@ For organizations subject to compliance and regulation where auditing is regular
 
 Audit logging is enabled by default and is available only to users with administrative rights at the System level.
 
-## Audit Log Location[​](#audit-log-location "Direct link to Audit Log Location")
+## Audit Log Location
 
 The log-file location may be configured via the `dremio.log.path` property in the [`dremio-env` file](/current/deploy-dremio/other-options/standalone/dremio-config/dremio-env/). You can specify their location, size, and rotation schedule.
 
-## Tracked Events and Actions[​](#tracked-events-and-actions "Direct link to Tracked Events and Actions")
+## Tracked Events and Actions
 
 Dremio supports audit logging for the following objects (event types) and actions:
 
@@ -616,7 +616,7 @@ Dremio supports audit logging for the following objects (event types) and action
 | VIRTUAL\_DATASET | CREATE, RENAME, UPDATE, DELETE |
 | WIKI | CREATE, EDIT, DELETE |
 
-## Audit Log Format[​](#audit-log-format "Direct link to Audit Log Format")
+## Audit Log Format
 
 Audit logs include the following information in JSON format:
 
@@ -630,7 +630,7 @@ Audit logs include the following information in JSON format:
 | `action` | The actual activity performed within the specified scope.  This varies based on the `eventType`, but most often would be `CREATE`, `DELETE`, and `UPDATE`. |
 | `details` | The data altered or created.  This varies based on the `eventType`. |
 
-### Audit Log Examples[​](#audit-log-examples "Direct link to Audit Log Examples")
+### Audit Log Examples
 
 The following examples show the types of audit records that Dremio captures and the information included in an audit entry for each event type.
 
@@ -798,10 +798,10 @@ HashiCorp Vault](/current/security/secrets-management/hashicorp-vault)[Next
 
 Compliance](/current/security/compliance)
 
-* [Audit Log Location](#audit-log-location)
-* [Tracked Events and Actions](#tracked-events-and-actions)
-* [Audit Log Format](#audit-log-format)
-  + [Audit Log Examples](#audit-log-examples)
+* Audit Log Location
+* Tracked Events and Actions
+* Audit Log Format
+  + Audit Log Examples
 
 ---
 
@@ -817,45 +817,45 @@ Dremio meets the IT control requirements for several compliance frameworks and c
 
 As the [Dremio Shared Responsibility Models](/responsibility) outline, compliance is a shared responsibility between Dremio and you. The Shared Responsibility Models lay out Dremio's responsibilities for providing standards and compliance and your responsibilities for adhering to those standards.
 
-## SOC 2 Type II Report[​](#soc-2-type-ii-report "Direct link to SOC 2 Type II Report")
+## SOC 2 Type II Report
 
 Dremio maintains compliance with the American Institute of Certified Public Accountants (AICPA) System and Organization Controls - Trust Services Criteria, commonly known as SOC 2.
 
-### Key Benefits[​](#key-benefits "Direct link to Key Benefits")
+### Key Benefits
 
 [SOC 2 Type II reports](https://us.aicpa.org/interestareas/frc/assuranceadvisoryservices/aicpasoc2report) provide an in-depth analysis of cloud service providers regarding the safeguards a company uses to protect customer data and how these controls are performing overall. These reports are issued by independent, third-party auditors and cover the key points of Security, Availability, Confidentiality, and Privacy.
 
 This independent assessment of Dremio Software provides a detailed report regarding the environments used to provide security and privacy of customer data overall. The report provide descriptions of these controls, the tests performed to assess their effectiveness, the results of said tests, and then an overall opinion regarding the design and operational effectiveness of the environments.
 
-## ISO 27001 Certification[​](#iso-27001-certification "Direct link to ISO 27001 Certification")
+## ISO 27001 Certification
 
 ISO 27001 is an internationally recognized specification for an Information Security Management System (ISMS). ISO 27001 is the only auditable standard that deals with the overall management of information security, rather than just which technical controls to implement.
 
-### Key Benefits[​](#key-benefits-1 "Direct link to Key Benefits")
+### Key Benefits
 
 Obtaining [ISO 27001:2022 certification](https://www.iso.org/isoiec-27001-information-security.html) demonstrates that Dremio employs a comprehensive framework of legal, physical, and technical controls for information risk management.
 
-## GDPR Compliance[​](#gdpr-compliance "Direct link to GDPR Compliance")
+## GDPR Compliance
 
 Dremio is compliant with the storage and security of its data according to Article 27 of the General Data Protection Regulation (GDPR). Please see [Dremio's Privacy Policy](https://www.dremio.com/legal/privacy-policy/) for additional information regarding our appointed European Data Protection Office (EDPO) in the EU.
 
-### Key Benefits[​](#key-benefits-2 "Direct link to Key Benefits")
+### Key Benefits
 
 As part of the European Union, specific regulations exist that require companies to [maintain compliance with GDPR](https://gdpr.org/). This governs the way user data is stored, processed, and utilized on Dremio Software. Specifically, this prevents the exploitation of user data and standardizes the data protection laws that services must follow throughout Europe.
 
-## CCPA Compliance[​](#ccpa-compliance "Direct link to CCPA Compliance")
+## CCPA Compliance
 
 Dremio maintains compliance with the California Consumer Privacy Act (CCPA), which regulates the handling of personal data and prevents any unauthorized use or sale. Please see [Dremio's Privacy Notice For California Residents](https://www.dremio.com/legal/privacy-policy/) for additional information.
 
-### Key Benefits[​](#key-benefits-3 "Direct link to Key Benefits")
+### Key Benefits
 
 Adherence to [CCPA](https://oag.ca.gov/privacy/ccpa) by an organization ensures that California residents have the right to opt out of having their data sold to third parties, request disclosure of data collected, and request deletion of said data.
 
-## HIPAA Compliance[​](#hipaa-compliance "Direct link to HIPAA Compliance")
+## HIPAA Compliance
 
 Dremio is compliant with the Health Insurance Portability and Accountability Act (HIPAA), a series of federal regulatory standards that outline the lawful use and disclosure of protected health information in the United States. HIPAA compliance is regulated by the Department of Health and Human Services (HHS) and enforced by the Office for Civil Rights (OCR).
 
-### Key Benefits[​](#key-benefits-4 "Direct link to Key Benefits")
+### Key Benefits
 
 Adherence to [HIPAA](https://www.cdc.gov/phlp/publications/topic/hipaa.html) ensures that healthcare providers, health plans, healthcare clearinghouses, and business associates of HIPAA-covered entities must implement multiple safeguards to protect sensitive personal and health information.
 
@@ -867,16 +867,16 @@ Audit Logging](/current/security/auditing/)[Next
 
 Administration](/current/admin/)
 
-* [SOC 2 Type II Report](#soc-2-type-ii-report)
-  + [Key Benefits](#key-benefits)
-* [ISO 27001 Certification](#iso-27001-certification)
-  + [Key Benefits](#key-benefits-1)
-* [GDPR Compliance](#gdpr-compliance)
-  + [Key Benefits](#key-benefits-2)
-* [CCPA Compliance](#ccpa-compliance)
-  + [Key Benefits](#key-benefits-3)
-* [HIPAA Compliance](#hipaa-compliance)
-  + [Key Benefits](#key-benefits-4)
+* SOC 2 Type II Report
+  + Key Benefits
+* ISO 27001 Certification
+  + Key Benefits
+* GDPR Compliance
+  + Key Benefits
+* CCPA Compliance
+  + Key Benefits
+* HIPAA Compliance
+  + Key Benefits
 
 ---
 
@@ -906,15 +906,15 @@ A wide range of SQL commands are also available:
 * [Roles SQL Commands](/current/reference/sql/commands/roles/)
 * [Users SQL Commands](/current/reference/sql/commands/users/)
 
-## Object Hierarchy[​](#object-hierarchy "Direct link to Object Hierarchy")
+## Object Hierarchy
 
 Each object resides within a container in a hierarchy of containers. The upper-most container exists as the system user, or administrator account. All other objects are contained within sources or spaces, organized into folders. The hierarchy of these objects is illustrated below.
 
 ![](/assets/images/rbac-object-hierarchy-a829e25a2980a7f00d7cc2a85ccbbf00.png)
 
-## Inheritance[​](#inheritance "Direct link to Inheritance")
+## Inheritance
 
-The objects to which privileges are granted depend on the inheritance model. In other words, granting access to a parent object, such as a folder, also gives that user access to any existing and future datasets contained in that folder. For example, giving a user privileges to ALL DATASETS will only grant the user access to existing datasets, not the folders that contain the datasets. In comparison, granting privileges at the source level will extend that user's access to the source's existing and future folders/schema and datasets. The object to which a user's privileges are applied is also [known as the scope](#scope), and follow a parent-child relationship.
+The objects to which privileges are granted depend on the inheritance model. In other words, granting access to a parent object, such as a folder, also gives that user access to any existing and future datasets contained in that folder. For example, giving a user privileges to ALL DATASETS will only grant the user access to existing datasets, not the folders that contain the datasets. In comparison, granting privileges at the source level will extend that user's access to the source's existing and future folders/schema and datasets. The object to which a user's privileges are applied is also known as the scope, and follow a parent-child relationship.
 
 By the rules of inheritance, user or group access may be granted as high or low in the object hierarchy as you wish for access to reach.
 
@@ -926,11 +926,11 @@ Consider the image above, which shows an example of object structure in Dremio. 
 
 note
 
-If a user has privileges for a single table, they may create views based on that dataset, but with the user now having `ALTER` and `MANAGE GRANTS` privileges for any view. However, the user still retains the same privileges as before with the original dataset. For more information, read [View Delegation](#view-delegation).
+If a user has privileges for a single table, they may create views based on that dataset, but with the user now having `ALTER` and `MANAGE GRANTS` privileges for any view. However, the user still retains the same privileges as before with the original dataset. For more information, read View Delegation.
 
-## Scope[​](#scope "Direct link to Scope")
+## Scope
 
-Scope is a concept used to describe what objects a user or group has access to. Privileges are assigned by object, which ultimately determines what a grantee may perform set functions upon. For example, you may set a user's scope to `FolderA`, which will give the user access to all existing and future datasets contained in the folder, as well as the datasets' wikis. But they will not have access to any other folders or the source. The object a user is granted access to is dependent on [the inheritance model](#inheritance), which means based on the object type, it may contain child objects. For example, if a user is granted privilege to a folder, the user's access also extends to all existing and future datasets contained in that folder.
+Scope is a concept used to describe what objects a user or group has access to. Privileges are assigned by object, which ultimately determines what a grantee may perform set functions upon. For example, you may set a user's scope to `FolderA`, which will give the user access to all existing and future datasets contained in the folder, as well as the datasets' wikis. But they will not have access to any other folders or the source. The object a user is granted access to is dependent on the inheritance model, which means based on the object type, it may contain child objects. For example, if a user is granted privilege to a folder, the user's access also extends to all existing and future datasets contained in that folder.
 
 For example, `user1` is granted the `SELECT` privilege to the folder `FolderC`. This object contains multiple datasets, which the user may now access. However, there exists a parent folder and another subfolder with its own datasets.
 
@@ -938,28 +938,28 @@ For example, `user1` is granted the `SELECT` privilege to the folder `FolderC`. 
 
 Because of the established scope, `user1` may not access `FolderD` because they were only granted access to `FolderC`'s objects.
 
-### Current vs. Future Objects[​](#current-vs-future-objects "Direct link to Current vs. Future Objects")
+### Current vs. Future Objects
 
-Based on the selected scope, you may restrict a user's access to future and existing datasets. For example, if you select a single table as the scope of a user's privilege, then that user may only perform that action to the existing dataset, as well as any future views they create using that table. However, they may not access any views created from a table by another user ([see the example below](#example-single-dataset)). However, if the scope is instead set at the folder level, then the user may perform the granted privilege to all tables and views contained in that folder ([see the example below](#example-scope)).
+Based on the selected scope, you may restrict a user's access to future and existing datasets. For example, if you select a single table as the scope of a user's privilege, then that user may only perform that action to the existing dataset, as well as any future views they create using that table. However, they may not access any views created from a table by another user (see the example below). However, if the scope is instead set at the folder level, then the user may perform the granted privilege to all tables and views contained in that folder (see the example below).
 
-## Ownership[​](#ownership "Direct link to Ownership")
+## Ownership
 
 Object ownership is a security feature used to control access to an object. In Dremio, each object must have an owner, and may have only one owner. Ownership is automatically granted to the user who initially created the object. For example, when `user1` creates an S3 data source, Dremio automatically assigns ownership of the source to `user1`.
 
 The privileges included in object ownership depend on your configuration.
 
-* By default, ownership includes all privileges for that object. The object owner can grant or revoke access privileges to the object and its child objects, modify an object's settings, and delete the object as desired. See [Granting Privileges Using SQL Commands](#granting-privileges-using-sql-commands) for more information.
-* Managed access spaces centralize the administration of access privileges in shared spaces to a limited set of users and roles, including the space owner. By limiting privilege grant authority, managed access spaces help ensure consistent and controlled access policies and reduce the risk of unauthorized access. See [Managed Access Spaces](#managed-access-spaces).
+* By default, ownership includes all privileges for that object. The object owner can grant or revoke access privileges to the object and its child objects, modify an object's settings, and delete the object as desired. See Granting Privileges Using SQL Commands for more information.
+* Managed access spaces centralize the administration of access privileges in shared spaces to a limited set of users and roles, including the space owner. By limiting privilege grant authority, managed access spaces help ensure consistent and controlled access policies and reduce the risk of unauthorized access. See Managed Access Spaces.
 
 The following behaviors and limitations apply to ownership:
 
 * Each object may only have one owner.
 * An object's creator is automatically granted ownership.
 * Object ownership may be assigned or modified to a new user or role with the [`GRANT OWNERSHIP`](/current/reference/sql/commands/rbac) command.
-* The object's access control settings may not work if the owner is deleted or removed. See [View Delegation](#view-delegation).
+* The object's access control settings may not work if the owner is deleted or removed. See View Delegation.
 * Object owners may be identified by querying the [`sys."tables"`](/current/reference/sql/system-tables/tables) table or [`sys.views`](/current/reference/sql/system-tables/views) table. If an object has no owner, the `owner_id` will display as `$unowned`.
 
-### Managed Access Spaces[​](#managed-access-spaces "Direct link to Managed Access Spaces")
+### Managed Access Spaces
 
 Managed access spaces centralize the administration of access privileges to a limited set of users and roles, including:
 
@@ -988,7 +988,7 @@ Managed access spaces do not override a MANAGE GRANT privilege granted at system
 
 The Dremio administrator can activate managed access spaces by setting the `security.access-control.managed-access-spaces.enabled` [support key](/current/help-support/support-settings/#support-keys) on the Support Settings page.
 
-### View Delegation[​](#view-delegation "Direct link to View Delegation")
+### View Delegation
 
 View delegation means that the data in tables with restricted access may be available to other Dremio users by creating views. View delegation is the critical capability of the Dremio semantic layer that allows users to run queries without accessing the underlying tables and views directly.
 
@@ -1003,12 +1003,12 @@ A shared view selects from the underlying dataset using the view owner's permiss
 
 View delegation is different from privilege assignment. View delegation is an implicit delegation of the SELECT privilege on underlying objects, which means that users who run queries on a view must have access privileges on the view but do not need privileges on underlying tables. Privilege assignment is an explicit delegation providing direct access to an object.
 
-#### Example 1: View Delegation[​](#example-1-view-delegation "Direct link to Example 1: View Delegation")
+#### Example 1: View Delegation
 
 `user1` has the SELECT privilege on `table1` and creates `view1` to filter and transform data in `table1`. `user2` asks for access privileges to run queries on `view1` as well. `user2` may obtain the SELECT privilege for `view1` from the following authorized users:
 
 * By default, view owners such as `user1` can grant and revoke privileges to other users, as appropriate.
-* A limited set of users and roles, such as the space owner, can grant or revoke privileges in [managed access spaces](#managed-access-spaces).
+* A limited set of users and roles, such as the space owner, can grant or revoke privileges in managed access spaces.
 * Dremio administrators or other users with the MANAGE GRANTS privilege can grant privileges to other users.
 
 If access for `user2` is appropriate, the authorized user runs `GRANT SELECT ON VIEW view1 TO USER user2` to grant the SELECT privilege to `user2`. After `user2` obtains the SELECT privilege, they can run queries on `view1`, utilizing the privilege of `user1` as owner to `view1` to SELECT from `table1`.
@@ -1030,7 +1030,7 @@ The following table describes the actions that each user may perform based on th
 
 *Tasks by user in Example 1*
 
-#### Example 2: View Delegation with Revoked Access to the Original Table[​](#example-2-view-delegation-with-revoked-access-to-the-original-table "Direct link to Example 2: View Delegation with Revoked Access to the Original Table")
+#### Example 2: View Delegation with Revoked Access to the Original Table
 
 To continue the previous example, `user1` has SELECT access to `table1`, which gives `user1` access through `view1`. An administrator revokes the SELECT access of `user1` on `table1`.
 
@@ -1051,7 +1051,7 @@ The following table describes the actions that each user may perform based on th
 
 *Tasks by user in Example 2*
 
-## Privileges[​](#privileges "Direct link to Privileges")
+## Privileges
 
 Privileges refer to the defined levels of access or permissions that are assigned to roles or users within Dremio. Privileges determine the operations a user or role can perform on securable objects. Examples of privileges in Dremio include SELECT on a table or view, INSERT on a table, DELETE on a table, CREATE TABLE on a folder, and MANAGE GRANTS on any object.
 
@@ -1061,7 +1061,7 @@ Privileges can be managed using SQL, APIs, or the Dremio Console.
 
 For more information, please refer to [Privileges](/current/security/rbac/privileges).
 
-### Granting Privileges Using the Dremio Console[​](#granting-privileges-using-the-dremio-console "Direct link to Granting Privileges Using the Dremio Console")
+### Granting Privileges Using the Dremio Console
 
 You can share catalog objects with others in your organization by granting privileges on the objects to users and roles as follows:
 
@@ -1090,7 +1090,7 @@ For each entry in the **Add User/Role** field that matches a user or role in Dre
 7. (Optional) Repeat steps 4-6 if you want to add more users or roles and grant them privileges.
 8. When finished, click **Save**.
 
-### Revoking Privileges Using the Dremio Console[​](#revoking-privileges-using-the-dremio-console "Direct link to Revoking Privileges Using the Dremio Console")
+### Revoking Privileges Using the Dremio Console
 
 To revoke user and role privileges, complete the following steps:
 
@@ -1120,9 +1120,9 @@ tip
 
 You can also grant or revoke privileges using [SQL commands](/current/reference/sql/commands/rbac/) or [APIs](/current/reference/api/catalog/grants/).
 
-### Granting Privileges Using SQL Commands[​](#granting-privileges-using-sql-commands "Direct link to Granting Privileges Using SQL Commands")
+### Granting Privileges Using SQL Commands
 
-When granting privileges to users and roles with SQL commands, you may follow one of three methods: [granting to a single dataset](#granting-to-a-single-dataset), [granting to ALL DATASETS](#granting-to-all-datasets), and [granting to a scope](#granting-to-a-scope). Examples of these methods may be found under each section.
+When granting privileges to users and roles with SQL commands, you may follow one of three methods: granting to a single dataset, granting to ALL DATASETS, and granting to a scope. Examples of these methods may be found under each section.
 
 Each example includes an SQL command. For more information about command syntax, review the [Privileges (GRANT/REVOKE) SQL commands](/current/reference/sql/commands/rbac).
 
@@ -1130,7 +1130,7 @@ note
 
 Because all users are members of the PUBLIC role, you can use the PUBLIC role to grant privileges to all users.
 
-#### Granting to a Single Dataset[​](#granting-to-a-single-dataset "Direct link to Granting to a Single Dataset")
+#### Granting to a Single Dataset
 
 When you have a user that needs access to only one table and no other objects, then you would simply assign them privileges for that dataset (see the example scenario outlined below).
 
@@ -1140,7 +1140,7 @@ note
 
 If you're granting the user access to a table, then remember that they'll be able to create views based on that dataset, which that user can then grant access to other users.
 
-##### Example: Single Dataset[​](#example-single-dataset "Direct link to Example: Single Dataset")
+##### Example: Single Dataset
 
 You have a user that you only want to give access to an individual table. You would need to navigate to the *Privileges* screen from that dataset's settings and grant the user the `SELECT` privilege, or perform the following command from the SQL Editor:
 
@@ -1156,13 +1156,13 @@ The image below illustrates the objects `user1` now has access to.
 
 This restricts `user1` so that they may only access the `TableA1` table, not any other datasets contained in the same folder. However, `user1` may still create views based on `TableA1`.
 
-#### Granting to ALL DATASETS[​](#granting-to-all-datasets "Direct link to Granting to ALL DATASETS")
+#### Granting to ALL DATASETS
 
 When you have a user that needs access to all existing datasets, then you would use the SQL syntax `ON ALL DATASETS` (see the example scenario outlined below). This gives the user access to all existing datasets. The user would not, however, automatically receive access to any future datasets created by other users.
 
 You should use this method of privilege assignment if you want to restrict a user's access to parent objects, but still wish for them to have access to all existing datasets.
 
-##### Example: All Datasets[​](#example-all-datasets "Direct link to Example: All Datasets")
+##### Example: All Datasets
 
 You have a specific user that needs access to all datasets in a specific folder, but they do not require privileges for the folders containing these tables. You would then execute the following command from the SQL Editor:
 
@@ -1178,13 +1178,13 @@ The image below illustrates the objects `user1` now has access to.
 
 This command restricts the scope of `user1` to all datasets presently found in `source1`, such as `TableC1` and `TableD1`. Should additional datasets be created in the future, `user1` will not have access to them.
 
-#### Granting to a Scope[​](#granting-to-a-scope "Direct link to Granting to a Scope")
+#### Granting to a Scope
 
 When you want to grant a user access to a parent object, such as a folder, this will also grant the user access to any datasets contained (see the example scenario outlined below).
 
 You should use this method of privilege management if you wanted to grant a user access to all existing and future datasets contained under a parent object.
 
-##### Example: Scope[​](#example-scope "Direct link to Example: Scope")
+##### Example: Scope
 
 This method grants a user access to all existing and future datasets contained under a specified object. To accomplish this, you need to navigate to the *Privileges* screen from that folder's settings and grant the user the `SELECT` privilege, or execute the following command from the SQL Editor:
 
@@ -1208,17 +1208,17 @@ Personal Access Tokens](/current/security/authentication/personal-access-tokens)
 
 Privileges](/current/security/rbac/privileges)
 
-* [Object Hierarchy](#object-hierarchy)
-* [Inheritance](#inheritance)
-* [Scope](#scope)
-  + [Current vs. Future Objects](#current-vs-future-objects)
-* [Ownership](#ownership)
-  + [Managed Access Spaces](#managed-access-spaces)
-  + [View Delegation](#view-delegation)
-* [Privileges](#privileges)
-  + [Granting Privileges Using the Dremio Console](#granting-privileges-using-the-dremio-console)
-  + [Revoking Privileges Using the Dremio Console](#revoking-privileges-using-the-dremio-console)
-  + [Granting Privileges Using SQL Commands](#granting-privileges-using-sql-commands)
+* Object Hierarchy
+* Inheritance
+* Scope
+  + Current vs. Future Objects
+* Ownership
+  + Managed Access Spaces
+  + View Delegation
+* Privileges
+  + Granting Privileges Using the Dremio Console
+  + Revoking Privileges Using the Dremio Console
+  + Granting Privileges Using SQL Commands
 
 ---
 
@@ -1232,31 +1232,31 @@ On this page
 
 Lake Formation provides access controls for datasets in the AWS Glue Data Catalog and is used to define security policies from a centralized location that may be shared across multiple tools. Dremio may be configured to refer to this service to verify access for a user to contained datasets.
 
-## Requirements[​](#requirements "Direct link to Requirements")
+## Requirements
 
 * [Dremio v19.0+](/current/release-notes/version-1900-release-notes/#lake-formation)
 * Identity Provider service (e.g., Microsoft Entra ID, [LDAP](/current/security/authentication/ldap/)) set up
   + (Recommended) [SAML connection](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html) with AWS
 * [Permissions set up in Lake Formation](https://docs.aws.amazon.com/lake-formation/latest/dg/lake-formation-permissions.html)
 * [AWS Glue Data Catalog](/current/data-sources/lakehouse-catalogs/aws-glue-catalog/) connected to Dremio
-  + [User and Group ARN prefixes specified and enabled](#configuring-the-glue-source-for-lake-formation)
+  + User and Group ARN prefixes specified and enabled
 
-## Lake Formation Workflow[​](#lake-formation-workflow "Direct link to Lake Formation Workflow")
+## Lake Formation Workflow
 
 When Lake Formation is properly configured, Dremio adheres to the following workflow each time an end user attempts to access, edit, or query datasets with managed privileges:
 
-1. Dremio enforces [access control](/current/security/rbac/). See [Configuring Sources for Lake Formation](#configuring-sources-for-lake-formation) below for access control recommendations.
+1. Dremio enforces [access control](/current/security/rbac/). See Configuring Sources for Lake Formation below for access control recommendations.
 2. Dremio checks each table to determine if those stored in the AWS Glue source are configured to use Lake Formation for security.
    * If one or more datasets leverage Lake Formation, Dremio determines the user ARNs to use when checking against Lake Formation.
 3. Dremio queries Lake Formation to determine a user's access level to the datasets using the user/group ARNs.
    * If the user has access to the datasets specified within the query's scope, the query proceeds.
    * If the user lacks access, the query fails with a permission error.
 
-## Demoing Lake Formation[​](#demoing-lake-formation "Direct link to Demoing Lake Formation")
+## Demoing Lake Formation
 
-[Demo files and a walkthrough](/current/security/integrations/lake-formation/lake-formation-demo/) are available to help you test Lake Formation functionality. The demo files and walkthrough are intended for users who have not configured all of the [requirements](#requirements) listed above.
+[Demo files and a walkthrough](/current/security/integrations/lake-formation/lake-formation-demo/) are available to help you test Lake Formation functionality. The demo files and walkthrough are intended for users who have not configured all of the requirements listed above.
 
-## Configuring Sources for Lake Formation[​](#configuring-sources-for-lake-formation "Direct link to Configuring Sources for Lake Formation")
+## Configuring Sources for Lake Formation
 
 Lake Formation integration is dependent on the mapping of user/group names in Dremio to the IAM user/group ARNs used by AWS.
 
@@ -1273,7 +1273,7 @@ To configure an existing or new AWS Glue source, you must set the following opti
    Best Practice: On the Privileges tab, we recommend enabling the **Select** privilege for **All Users** to allow non-admin users to access the AWS Glue source from Dremio.
 4. Click **Save**.
 
-## Lake Formation Cell-Level Security[​](#lake-formation-cell-level-security "Direct link to Lake Formation Cell-Level Security")
+## Lake Formation Cell-Level Security
 
 Dremio supports AWS Lake Formation [cell-level security](https://docs.aws.amazon.com/lake-formation/latest/dg/data-filtering.html) with row-level access permissions based on AWS Lake Formation [PartiQL expressions](https://docs.aws.amazon.com/lake-formation/latest/dg/partiql-support.html). If the user does not have read permissions on a column or cell, Dremio masks the data in that column or cell with a `NULL` value.
 
@@ -1294,11 +1294,11 @@ Integrations](/current/security/integrations/)[Next
 
 Lake Formation Demo](/current/security/integrations/lake-formation/lake-formation-demo)
 
-* [Requirements](#requirements)
-* [Lake Formation Workflow](#lake-formation-workflow)
-* [Demoing Lake Formation](#demoing-lake-formation)
-* [Configuring Sources for Lake Formation](#configuring-sources-for-lake-formation)
-* [Lake Formation Cell-Level Security](#lake-formation-cell-level-security)
+* Requirements
+* Lake Formation Workflow
+* Demoing Lake Formation
+* Configuring Sources for Lake Formation
+* Lake Formation Cell-Level Security
 
 ---
 
@@ -1320,14 +1320,14 @@ note
 
 When using the Privacera plugin for Dremio, no additional or external tools should be used for the policy synchronization between Privacera and Dremio.
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## Prerequisites
 
 Ensure that you meet the following prerequisites before you begin the integration:
 
 * An on-premise or SaaS Privacera Manager host that is running Privacera services
 * A deployment of Dremio Enterprise Edition 24.1 or later -- Community Edition and Dremio Cloud *are not* supported at this time
 
-## Installation[​](#installation "Direct link to Installation")
+## Installation
 
 Refer to the [Privacera documentation](https://docs.privacera.com/latest/platform/pm-ig/dremio/) to learn how to install and configure Privacera's plugin for Dremio.
 
@@ -1343,8 +1343,8 @@ Lake Formation Demo](/current/security/integrations/lake-formation/lake-formatio
 
 Apache Ranger](/current/security/integrations/row-column-policies-ranger)
 
-* [Prerequisites](#prerequisites)
-* [Installation](#installation)
+* Prerequisites
+* Installation
 
 ---
 
@@ -1356,17 +1356,17 @@ On this page
 
 # Apache Ranger: Row-Level Filtering & Column-Masking Enterprise
 
-Dremio offers both Apache Ranger security policy support and [built-in SQL functions](#using-dremios-built-in-filteringmasking) for applying row-level filtering and column-masking.
+Dremio offers both Apache Ranger security policy support and built-in SQL functions for applying row-level filtering and column-masking.
 
-## Column-Masking Overview[​](#column-masking-overview "Direct link to Column-Masking Overview")
+## Column-Masking Overview
 
-Column-masking is a secure and flexible resource-based solution to hiding sensitive information rapidly on a Hive source. Via [Apache-Ranger-based security policies](#mask-conditions) or using [Dremio's built-in masking](#using-dremios-built-in-filteringmasking), you may mask or scramble private data at the column-level in a dynamic fashion for Hive query outputs. Utilizing masking methods, you may set a column to only display the year of a data, the first or last four digits of a value, and more.
+Column-masking is a secure and flexible resource-based solution to hiding sensitive information rapidly on a Hive source. Via Apache-Ranger-based security policies or using Dremio's built-in masking, you may mask or scramble private data at the column-level in a dynamic fashion for Hive query outputs. Utilizing masking methods, you may set a column to only display the year of a data, the first or last four digits of a value, and more.
 
 Utilizing services like Apache Ranger allow you to apply access policies to a Hive source so that filters may be based upon specific users, groups, and conditions. Thus, sensitive information never leaves the source and no changes are required by the source. This likewise removes the need to produce a secondary set of data with protected information manually removed.
 
 The following conditions apply to column-masking:
 
-* [Multiple masking types](#mask-conditions) are available
+* Multiple masking types are available
 * Masks may be applied to users, groups, and conditions
 * Each column must have its own masking policy
 * Masks are evaluated in the order they are presented in a query or on a security policy
@@ -1374,11 +1374,11 @@ The following conditions apply to column-masking:
 
 For Apache Ranger implementations, additional use cases may be found at [3. Use cases: data-masking](https://cwiki.apache.org/confluence/display/RANGER/Row-level+filtering+and+column-masking+using+Apache+Ranger+policies+in+Apache+Hive).
 
-### Row-Level Filtering Overview[​](#row-level-filtering-overview "Direct link to Row-Level Filtering Overview")
+### Row-Level Filtering Overview
 
-Row-level filtering both simplifies queries and adds a layer of security to the data returned for user/role queries. Either [SQL functions](#using-dremios-built-in-filteringmasking) or [Apache-Ranger-based security policies](#using-apache-ranger-security-policies) limit access down to the dataset layer, which then affects how queries are handled upon execution. Row-level security on supported tables helps reduce exposure of sensitive data to specific users or groups. Row segmentation and restricted access together ensures that upon query completion, only specific rows based on both the user's characteristics (username or group/role) and the runtime context of the query are displayed from Dremio's SQL Editor.
+Row-level filtering both simplifies queries and adds a layer of security to the data returned for user/role queries. Either SQL functions or Apache-Ranger-based security policies limit access down to the dataset layer, which then affects how queries are handled upon execution. Row-level security on supported tables helps reduce exposure of sensitive data to specific users or groups. Row segmentation and restricted access together ensures that upon query completion, only specific rows based on both the user's characteristics (username or group/role) and the runtime context of the query are displayed from Dremio's SQL Editor.
 
-Row-level restrictions may be set by user, group/role, and other conditions (conditions only available for Ranger implementations, as described further under [Row Filter Conditions](#row-filter-conditions)).
+Row-level restrictions may be set by user, group/role, and other conditions (conditions only available for Ranger implementations, as described further under Row Filter Conditions).
 
 The following examples serve as use cases where row-level filtering would prove beneficial:
 
@@ -1388,18 +1388,18 @@ The following examples serve as use cases where row-level filtering would prove 
 
 For Apache Ranger implementations, additional use cases may be found at [2. Use cases: row-level filters](https://cwiki.apache.org/confluence/display/RANGER/Row-level+filtering+and+column-masking+using+Apache+Ranger+policies+in+Apache+Hive).
 
-## Using Apache Ranger Security Policies[​](#using-apache-ranger-security-policies "Direct link to Using Apache Ranger Security Policies")
+## Using Apache Ranger Security Policies
 
 For organizations configured to use [Apache Ranger](/current/data-sources/lakehouse-catalogs/hive/hive-ranger) and Hive sources, support automatically exists in Dremio to handle security policies set from Ranger. Based on the user, group/role, and conditions set externally, Dremio automatically applies restrictions to a user's query and applies row-level filtering and column-masking in the background. Upon query completion, you will then only see the results for rows and columns you have access to, without any visual indication that rows have been removed from view.
 
-### Requirements[​](#requirements "Direct link to Requirements")
+### Requirements
 
 * [Dremio 20.0+](/current/release-notes/version-200-release/#ranger-row-filtering--column-masking)
 * [Apache Ranger](/current/help-support/advanced-topics/hive-ranger/) configured
   + Admin privileges to add access control policies
 * [Hive source](/current/data-sources/lakehouse-catalogs/hive/)
 
-## How It Works[​](#how-it-works "Direct link to How It Works")
+## How It Works
 
 Ranger-based row filtering and column-masking functions as an "implicit view," replacing a table/view reference in an SQL statement prior to processing the statement. This implicit view is created through an examination of user permissions. For example, consider a user with access to `table_1`, while also having a mask applied on `table_1.column_1`, effectively translating the column to "xxx." Simultaneously, a row filter exists for `table_1.column_2`.
 
@@ -1429,7 +1429,7 @@ FROM filtered_and_masked_table_1
 WHERE column_3;
 ```
 
-## Setting Policies in Apache Ranger[​](#setting-policies-in-apache-ranger "Direct link to Setting Policies in Apache Ranger")
+## Setting Policies in Apache Ranger
 
 For organizations currently utilizing Apache Ranger and configured to apply policies to Dremio, the application of row-level filtering and column-masking is automatic. However, in order to apply these security measures, you must also create security policies from Ranger, which will then propagate down to Dremio when the affected users perform a query.
 
@@ -1444,7 +1444,7 @@ To create a security policy in Apache Ranger:
 
 Now you are at the **Add Policy** screen. The sections below describe the elements contained on that page.
 
-### Policy Details[​](#policy-details "Direct link to Policy Details")
+### Policy Details
 
 The following table describes the **Policy Details** section of the *Create Policy* screen.
 
@@ -1459,7 +1459,7 @@ The following table describes the **Policy Details** section of the *Create Poli
 | normal/override | YES | Controls how the policy is prioritized against other existing security policies. If set to **override**, this policy will ignore other policies that may restrict or grant access beyond the scope specified here. |
 | Audit Logging | YES | Controls whether auditing is enabled and is set to **YES** by default. Auditing tracks all user actions impacted by this policy. |
 
-### Row Filter Conditions[​](#row-filter-conditions "Direct link to Row Filter Conditions")
+### Row Filter Conditions
 
 The following table describes the **Row Filter Conditions** section of the *Create Policy* screen.
 
@@ -1472,7 +1472,7 @@ The following table describes the **Row Filter Conditions** section of the *Crea
 | Access Types | The action which the specified group(s) or user(s) may utilize from the Dremio SQL Editor. Currently, the only type available is select. This is used in tandem with the WHERE clause as specified in the Row Level Filter field. |
 | Row Level Filter | A valid WHERE clause as entered in the Enter filter expression pop-up upon clicking the Add Row Filter button. To allow full SELECT access to users without row-level filtering, do not click this button. Filters are applied based on top-down order, meaning the filter at the top is applied first, then the second filter, and so on. |
 
-### Mask Conditions[​](#mask-conditions "Direct link to Mask Conditions")
+### Mask Conditions
 
 ![](/assets/images/ranger-masking-1-2043318099b6431a5a3145350a8743b2.png)
 
@@ -1483,7 +1483,7 @@ The following table describes the **Row Filter Conditions** section of the *Crea
 | Access Types | The action which the specified group(s) or user(s) may utilize from the Dremio SQL Editor. Currently, the only type available is select. This is used in tandem with the WHERE clause as specified in the Row Level Filter field. |
 | Select Masking Type | The type of column-masking behavior to apply to the associated users/groups when they query the table specified on this policy.  * **Redact -** Replaces all alphabetic characters with `x` and all numeric characters with `n`. * **Partial mask: show last 4 -** Displays only the last four characters of the full column value's. * **Partial mask: show first 4 -** Displays only the first four characters of the full column value's. * **Hash -** Replaces all characters with a hash of the entire cell's value. * **Nullify -** Replaces all characters in the cell with a `NULL` value. * **Unmasked (retain original value) -** No masking is applied to the cell. * **Date: show only year -** Displays the year portion of a date string, defaulting the month and day to `01/01`. * **Custom -** Specifies a custom column masked value or valid Dremio expression. Custom masking may not use [Hive UDFs]<https://cwiki.apache.org/confluence/display/hive/languagemanual+udf#LanguageManualUDF-DataMaskingFunctions>.   Masks are applied based on top-down order, meaning the mask at the top is applied first, then the second mask, and so on. |
 
-## Adding a Row-Level Filter Policy[​](#adding-a-row-level-filter-policy "Direct link to Adding a Row-Level Filter Policy")
+## Adding a Row-Level Filter Policy
 
 This section outlines how to create a row-level filter policy from the Apache Ranger console.
 
@@ -1497,7 +1497,7 @@ To create a policy that enforces row-level access control, perform the following
 ![](/assets/images/ranger-row-tab-816339a932b061bab4a17d81e77be873.png)
 
 3. Click **Add New Policy**.
-4. From the *Create Policy* page, provide values for the [**Policy Details**](#policy-details) and [**Row Filter Conditions**](#row-filter-conditions) sections.
+4. From the *Create Policy* page, provide values for the **Policy Details** and **Row Filter Conditions** sections.
 5. Add any desired conditions, or else leave the **Row Filter Conditions** section blank to apply no filtering.
 
 ![](/assets/images/ranger-row-filter-2-7445a72be0f63c9cf236b7ddd3d9de9d.png)
@@ -1505,7 +1505,7 @@ To create a policy that enforces row-level access control, perform the following
 6. To move a condition under the **Row Filter Conditions** section, click the dotted icon on the left-hand side of the row, and then drag it to the desired new location,
 7. Click **Add** to save the new policy.
 
-## Adding a Column-Masking Policy[​](#adding-a-column-masking-policy "Direct link to Adding a Column-Masking Policy")
+## Adding a Column-Masking Policy
 
 This section outlines how to create a column-masking policy from the Apache Ranger console.
 
@@ -1519,7 +1519,7 @@ To create a policy that enforces row-level access control, perform the following
 ![](/assets/images/ranger-masking-tab-1713107d595300f3d5cbd4ff21f4ad70.png)
 
 3. Click **Add New Policy**.
-4. From the *Create Policy* page, provide values for the [**Policy Details**](#policy-details) and [**Mask Conditions**](#row-filter-conditions) sections.
+4. From the *Create Policy* page, provide values for the **Policy Details** and **Mask Conditions** sections.
 5. Create any desired masking conditions under the **Mask Conditions** section, or else select **Unmasked (retain original value)** to not apply masking for a user or group.
 
 ![](/assets/images/ranger-masking-1-2043318099b6431a5a3145350a8743b2.png)
@@ -1527,15 +1527,15 @@ To create a policy that enforces row-level access control, perform the following
 5. To move a condition under the **Mask Conditions** section, click the dotted icon on the left-hand side of the row, and then drag it to the desired new location,
 6. Click **Add** to save the new policy.
 
-## Using Dremio's Built-In Filtering/Masking[​](#using-dremios-built-in-filteringmasking "Direct link to Using Dremio's Built-In Filtering/Masking")
+## Using Dremio's Built-In Filtering/Masking
 
-For organizations not using Apache Ranger, Dremio offers column-masking and row-level filtering for views via SQL functions. However, this implementation is limited in comparison to the security policies possible with [Ranger implementations](/current/help-support/advanced-topics/hive-ranger/). Where possible, utilize this service to enforce row-level permissions and column-masking [as described above](#using-apache-ranger-security-policies).
+For organizations not using Apache Ranger, Dremio offers column-masking and row-level filtering for views via SQL functions. However, this implementation is limited in comparison to the security policies possible with [Ranger implementations](/current/help-support/advanced-topics/hive-ranger/). Where possible, utilize this service to enforce row-level permissions and column-masking as described above.
 
 note
 
 We recommend using [Dremio 20.0+](/current/release-notes/version-200-release/#ranger-row-filtering--column-masking) in tandem with Apache Ranger to apply [user/role-based](/current/security/rbac/) security policies across all datasets while querying a table/view. Otherwise, you may utilize Dremio's built-in SQL functions (as describe below) to manually enforce filtering and masking.
 
-### Creating a View with Column-Masking[​](#creating-a-view-with-column-masking "Direct link to Creating a View with Column-Masking")
+### Creating a View with Column-Masking
 
 By using the [query\_user()](/current/reference/sql/sql-functions/functions/QUERY_USER/) or `is_member()` SQL functions, a view can be configured manually to allow selective masking of columns for different [users/roles](/current/security/rbac/) without the need to create multiple datasets.
 
@@ -1554,7 +1554,7 @@ FROM ss.crm.dbo.employees
 
 The SQL function `is_member()` is case-insensitive by default. This may be circumvented by adding a boolean `is_member(groupname, <case-sensitivity boolean>)` to control case-sensitivity. Simply set it to `true` to enable case-sensitivity or `false` to disable. If omitted from the SQL command, the boolean defaults to `false`.
 
-### Creating a View with Row-Level Permissions[​](#creating-a-view-with-row-level-permissions "Direct link to Creating a View with Row-Level Permissions")
+### Creating a View with Row-Level Permissions
 
 By using the [query\_user()](/current/reference/sql/sql-functions/functions/QUERY_USER/) or `is_member()` SQL functions, a view can be configured to allow manual selective filtering of rows for different [users/roles](/current/security/rbac/) without the need to create multiple datasets.
 
@@ -1581,20 +1581,20 @@ Privacera](/current/security/integrations/privacera)[Next
 
 Secrets Management](/current/security/secrets-management/)
 
-* [Column-Masking Overview](#column-masking-overview)
-  + [Row-Level Filtering Overview](#row-level-filtering-overview)
-* [Using Apache Ranger Security Policies](#using-apache-ranger-security-policies)
-  + [Requirements](#requirements)
-* [How It Works](#how-it-works)
-* [Setting Policies in Apache Ranger](#setting-policies-in-apache-ranger)
-  + [Policy Details](#policy-details)
-  + [Row Filter Conditions](#row-filter-conditions)
-  + [Mask Conditions](#mask-conditions)
-* [Adding a Row-Level Filter Policy](#adding-a-row-level-filter-policy)
-* [Adding a Column-Masking Policy](#adding-a-column-masking-policy)
-* [Using Dremio's Built-In Filtering/Masking](#using-dremios-built-in-filteringmasking)
-  + [Creating a View with Column-Masking](#creating-a-view-with-column-masking)
-  + [Creating a View with Row-Level Permissions](#creating-a-view-with-row-level-permissions)
+* Column-Masking Overview
+  + Row-Level Filtering Overview
+* Using Apache Ranger Security Policies
+  + Requirements
+* How It Works
+* Setting Policies in Apache Ranger
+  + Policy Details
+  + Row Filter Conditions
+  + Mask Conditions
+* Adding a Row-Level Filter Policy
+* Adding a Column-Masking Policy
+* Using Dremio's Built-In Filtering/Masking
+  + Creating a View with Column-Masking
+  + Creating a View with Row-Level Permissions
 
 ---
 
@@ -1606,11 +1606,11 @@ On this page
 
 # LDAP Enterprise
 
-## Configuring Dremio for LDAP[​](#configuring-dremio-for-ldap "Direct link to Configuring Dremio for LDAP")
+## Configuring Dremio for LDAP
 
 To configure Dremio for LDAP, perform the following steps:
 
-1. Create a new `ad.json` file that contains your LDAP server configuration. See the [LDAP Properties](#ldap-properties) below for more information.
+1. Create a new `ad.json` file that contains your LDAP server configuration. See the LDAP Properties below for more information.
 2. Adding your configuration:
 
    * Kubernetes
@@ -1619,7 +1619,7 @@ To configure Dremio for LDAP, perform the following steps:
    1. Update the `coordinator.web.auth.type` configuration in your `values-overrides.yaml` with the value `ldap`. See the configuration of [Identity Providers](/current/deploy-dremio/configuring-kubernetes/#identity-provider).
    2. Optionally, to configure Dremio to use TLS when connecting to LDAP, perform the following steps:
 
-      1. Configure the LDAP `connectionMode` in `ad.json` for the required level of TLS functionality. See [LDAP Connection Mode](#ldap-connection-mode).
+      1. Configure the LDAP `connectionMode` in `ad.json` for the required level of TLS functionality. See LDAP Connection Mode.
       2. To configure a truststore for the validation of TLS LDAP certificates, add the following to `values-override.yaml`
 
          New configuration for TLS to LDAP
@@ -1656,7 +1656,7 @@ To configure Dremio for LDAP, perform the following steps:
       ```
    2. Optionally, to configure Dremio to use TLS when connecting to LDAP, perform the following steps:
 
-      1. Configure the LDAP `connectionMode` in `ad.json` for the required level of TLS functionality. See [LDAP Connection Mode](#ldap-connection-mode).
+      1. Configure the LDAP `connectionMode` in `ad.json` for the required level of TLS functionality. See LDAP Connection Mode.
       2. To configure a truststore for the validation of LDAP TLS certificates, update `dremio.conf` with `javax.net.ssl` settings for the trustStore and trustStorePassword.
 
           Example Truststore Configuration 
@@ -1673,7 +1673,7 @@ To configure Dremio for LDAP, perform the following steps:
 
    When using [scale-out coordinators](/current/what-is-dremio/architecture/#scale-out-coordinators), you must ensure that both the `dremio.conf` configuration and the `ad.json` file are present on every coordinator node. Scale-out coordinators require the authentication configuration even when `coordinator.web.enabled: false` is set.
 
-## LDAP Properties[​](#ldap-properties "Direct link to LDAP Properties")
+## LDAP Properties
 
 The `ad.json` file is a JSON-formatted config file that defines how Dremio connects to and communicates with your LDAP/AD server, including how it finds users, groups, and handles secure authentication.
 
@@ -1716,7 +1716,7 @@ The `ad.json` file is a JSON-formatted config file that defines how Dremio conne
 }
 ```
 
-### LDAP Connection Mode[​](#ldap-connection-mode "Direct link to LDAP Connection Mode")
+### LDAP Connection Mode
 
 The `connectionMode` property configures how Dremio establishes connections to the LDAP/Active Directory servers. The two main secure options — ANY\_SSL and TRUSTED\_SSL — both use SSL/TLS but differ in how SSL certificates are validated. The modes are:
 
@@ -1724,24 +1724,24 @@ The `connectionMode` property configures how Dremio establishes connections to t
 * `ANY_SSL`: Encrypts the connection using SSL/TLS. This mode does not validate the LDAP server's SSL certificate, so it is useful for testing or internal environments where strict certificate checks are not required.
 * `TRUSTED_SSL`: This mode encrypts the connection using SSL/TLS and validates the LDAP server’s SSL certificate against the Java truststore. This mode requires additional configuration in `dremio.conf` with the location of the trust store and its password.
 
-### LDAP Server Configuration[​](#ldap-server-configuration "Direct link to LDAP Server Configuration")
+### LDAP Server Configuration
 
 The `servers` section of an `ad.json` file defines the LDAP servers that Dremio can use for authentication and directory lookups. Each server accepts the following properties:
 
 * `hostname`: The Fully Qualified Domain Name or IP address of the LDAP server.
 * `port`: The port where the LDAP server accepts connections. Port 389 is the default LDAP when the `connectionMode` is `PLAIN`; port 636 is the default port when using SSL/TLS.
 
-### LDAP User and Groups[​](#ldap-user-and-groups "Direct link to LDAP User and Groups")
+### LDAP User and Groups
 
 The `names` section maps LDAP attributes to Dremio’s internal user and group fields. LDAP `names` are defined using the following properties:
 
 | Property | Required | Description |
 | --- | --- | --- |
-| `autoAdminFirstUser` | No | The first valid LDAP user to log in to Dremio is given the Admin role by default. This behavior, defined by `autoAdminFirstUser: true`, is included in the `ad.json` file. Alternatively, you can specify a list of users and/or groups to be given the Admin role during initial login; it is used for bootstrapping only. See [Admin Users](#admin-users) for additional configuration information. |
+| `autoAdminFirstUser` | No | The first valid LDAP user to log in to Dremio is given the Admin role by default. This behavior, defined by `autoAdminFirstUser: true`, is included in the `ad.json` file. Alternatively, you can specify a list of users and/or groups to be given the Admin role during initial login; it is used for bootstrapping only. See Admin Users for additional configuration information. |
 | `baseDN` | Yes | A base distinguished name is the search's root path. If `userAttributes.baseDNs` or `groupAttributes.baseDNs` are specified, they override `baseDN` for search purposes. |
 | `bindDN` | No | A bind distinguished name is a client's username to authenticate (bind) to the LDAP directory server. This property is not required when using a `bindMethod` of `ANONYMOUS`. In particular, `CN=admin,DC=drem,DC=io` must not be used. |
 | `bindMethod` | No | The authentication method:  * `ANONYMOUS`: Connect anonymously to the LDAP server. When authenticating to Dremio, empty passwords for users are not allowed. * `SIMPLE_BIND`: Default. Connect and authenticate to the LDAP server using `bindDN` and `bindPassword`. * `UNAUTHENTICATED`: Connect to the LDAP server using an unauthenticated bind. `bindDN` is required. |
-| `bindPassword` | No | Password credential for the user who connects from the Dremio LDAP client to the LDAP server. `bindPassword` can be encrypted using the `dremio-admin encrypt` CLI command. This property must not be present if you are using `ANONYMOUS` or `UNAUTHENTICATED` for `bindMethod` mode. See [Bind Password Options](#bind-password-options) for additional configuration information. |
+| `bindPassword` | No | Password credential for the user who connects from the Dremio LDAP client to the LDAP server. `bindPassword` can be encrypted using the `dremio-admin encrypt` CLI command. This property must not be present if you are using `ANONYMOUS` or `UNAUTHENTICATED` for `bindMethod` mode. See Bind Password Options for additional configuration information. |
 | `email` | No | Attribute for the email address. |
 | `firstname` | No | Attribute for the first name. |
 | `groupAttributes` | No | A mapping of LDAP group attributes to Dremio group attributes. The `baseDN`, `searchScope`, and `id` properties are used. |
@@ -1757,9 +1757,9 @@ The `names` section maps LDAP attributes to Dremio’s internal user and group f
 | `userFilter` | Yes | LDAP filter for validating users. Only users who fit the specific criteria are allowed to authenticate. |
 | `userGroupRelationship` | No | Determines whether you are implementing lists based on users or groups.  * `GROUP_ENTRY_LISTS_USERS`: Specifies whether the group entry in LDAP lists the users that belong to it. * `USER_ENTRY_LISTS_GROUPS`: Default. Specifies whether the user entry in LDAP lists the groups to which the user belongs. The group attribute in LDAP is configured by the `groupMembership` property. |
 
-#### Defining Users[​](#defining-users "Direct link to Defining Users")
+#### Defining Users
 
-##### Using User Distinguished Names[​](#using-user-distinguished-names "Direct link to Using User Distinguished Names")
+##### Using User Distinguished Names
 
 This approach specifies a list of templates for `userDN`. The placeholder `{0}` is replaced with the username entered by the user, and that Distinguished Name (DN) is used during LDAP bind. In the specified order, Dremio attempts to bind to the provided `userDN`. In the DN-based approach, the `baseDN`, `searchScope`, and `id` properties cannot be specified under `userAttributes`.
 
@@ -1774,7 +1774,7 @@ userDNs example
 }
 ```
 
-##### Using User Attributes[​](#using-user-attributes "Direct link to Using User Attributes")
+##### Using User Attributes
 
 In this approach, you map LDAP user attributes to Dremio user attributes. The `userDN` field must not be specified in the attribute-based approach. Do not change the value of `id` in the `ad.conf` file after you start Dremio. Changing the value can result in the loss of user privileges.
 
@@ -1793,7 +1793,7 @@ userAttributes example
 }
 ```
 
-##### Using userFilter[​](#using-userfilter "Direct link to Using userFilter")
+##### Using userFilter
 
 The following example uses the `userFilter` property to limit access to engineering group members.
 
@@ -1803,9 +1803,9 @@ userFilter example
 "userFilter": "&(objectClass=user)(memberOf=cn=engineering,OU=Groups,OU=ad,DC=drem,DC=io)",
 ```
 
-#### Defining Groups[​](#defining-groups "Direct link to Defining Groups")
+#### Defining Groups
 
-##### Using Group Distinguished Names[​](#using-group-distinguished-names "Direct link to Using Group Distinguished Names")
+##### Using Group Distinguished Names
 
 This approach specifies a list of templates for group Distinguished Names (DNs). The placeholder `{0}` is replaced with the group name entered by the user. Dremio attempts to search for the given `groupDNs` in the specified order. The `groupAttributes` property must not be specified in the DN-based approach.
 
@@ -1815,7 +1815,7 @@ Example using Group Distinguised Names
 "groupDNs": ["cn={0},OU=engg,OU=test,OU=ad,DC=drem,DC=io"]
 ```
 
-##### Using Group Attributes[​](#using-group-attributes "Direct link to Using Group Attributes")
+##### Using Group Attributes
 
 In this method, use the `groupAttributes` property to specify a list of `baseDNs` and group name IDs. These properties map LDAP group attributes to Dremio group attributes. The `baseDNs`, `searchScope`, and `id` properties are required. The `groupDNs` field must not be specified in the attribute-based approach.
 
@@ -1829,14 +1829,14 @@ groupAttributes example
 }
 ```
 
-#### Defining User-Group Relationships[​](#defining-user-group-relationships "Direct link to Defining User-Group Relationships")
+#### Defining User-Group Relationships
 
 The relationship between users and groups can be defined with one of the following methods:
 
 * Group memberships
 * Group lists
 
-##### Group Membership Method[​](#group-membership-method "Direct link to Group Membership Method")
+##### Group Membership Method
 
 The group membership method implements user entries in LDAP that list the groups to which the user belongs. The user entries in LDAP are configured to list their group membership via the internal field `memberOf`.
 
@@ -1899,7 +1899,7 @@ Example Group Membership Configuration
 }
 ```
 
-##### Group List Method[​](#group-list-method "Direct link to Group List Method")
+##### Group List Method
 
 The group list method implements user-group relationships where the group entry lists the users that belong to that group.
 
@@ -1964,11 +1964,11 @@ Example Group List Configuration
 }
 ```
 
-### Bind Password Options[​](#bind-password-options "Direct link to Bind Password Options")
+### Bind Password Options
 
 Dremio offers several options for managing the bind password.
 
-#### Encryption[​](#encryption "Direct link to Encryption")
+#### Encryption
 
 For customers with stringent security standards and requirements, password encryption provides a secure method for communicating key information with the LDAP service. Encryption is accomplished using the CLI command [`dremio-admin encrypt`](/current/reference/admin-cli/encryption/).
 
@@ -1994,7 +1994,7 @@ To encrypt the bind password, follow these steps:
 2. Copy the entire output to `bindPassword` in `ad.json`.
 3. Copy the modified `ad.json` file to every coordinator node in the Dremio cluster.
 
-#### Other Bind Password Options[​](#other-bind-password-options "Direct link to Other Bind Password Options")
+#### Other Bind Password Options
 
 Other options are available for `bindPassword`:
 
@@ -2004,7 +2004,7 @@ Other options are available for `bindPassword`:
 
 Options `env` and `file` apply to the local node. If you use a multi-coordinator configuration, you must do this for each coordinator node. However, this method contains the raw secret in the `env` scheme and file. Only `secret` uses an encrypted secret.
 
-### Admin Users[​](#admin-users "Direct link to Admin Users")
+### Admin Users
 
 To specify users/groups as administrators up-front, during initial login:
 
@@ -2053,22 +2053,22 @@ Identity Providers](/current/security/authentication/identity-providers/)[Next
 
 Microsoft Entra ID](/current/security/authentication/identity-providers/microsoft-entra-id)
 
-* [Configuring Dremio for LDAP](#configuring-dremio-for-ldap)
-* [LDAP Properties](#ldap-properties)
-  + [LDAP Connection Mode](#ldap-connection-mode)
-  + [LDAP Server Configuration](#ldap-server-configuration)
-  + [LDAP User and Groups](#ldap-user-and-groups)
-    - [Defining Users](#defining-users)
-      * [Using User Distinguished Names](#using-user-distinguished-names)
-      * [Using User Attributes](#using-user-attributes)
-      * [Using userFilter](#using-userfilter)
-    - [Defining Groups](#defining-groups)
-      * [Using Group Distinguished Names](#using-group-distinguished-names)
-      * [Using Group Attributes](#using-group-attributes)
-    - [Defining User-Group Relationships](#defining-user-group-relationships)
-      * [Group Membership Method](#group-membership-method)
-      * [Group List Method](#group-list-method)
-  + [Bind Password Options](#bind-password-options)
-    - [Encryption](#encryption)
-    - [Other Bind Password Options](#other-bind-password-options)
-  + [Admin Users](#admin-users)
+* Configuring Dremio for LDAP
+* LDAP Properties
+  + LDAP Connection Mode
+  + LDAP Server Configuration
+  + LDAP User and Groups
+    - Defining Users
+      * Using User Distinguished Names
+      * Using User Attributes
+      * Using userFilter
+    - Defining Groups
+      * Using Group Distinguished Names
+      * Using Group Attributes
+    - Defining User-Group Relationships
+      * Group Membership Method
+      * Group List Method
+  + Bind Password Options
+    - Encryption
+    - Other Bind Password Options
+  + Admin Users

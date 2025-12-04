@@ -6,13 +6,13 @@ On this page
 
 Dremio administration covers organization-wide and project-level management. Use these tools to configure your environment, manage users and resources, and monitor system performance.
 
-## Organization Management[​](#organization-management "Direct link to Organization Management")
+## Organization Management
 
 * [Manage Your Subscription](/dremio-cloud/admin/subscription/) – Upgrade from a free trial to a paid subscription, manage billing and payment methods, and track your organization's usage and costs.
 * [Manage Users](/dremio-cloud/admin/users) – Add users to your organization, configure authentication methods (local or SSO), manage user roles and privileges, and control access to Dremio resources.
 * [Configure Model Providers](/dremio-cloud/admin/model-providers) – Configure AI model providers for Dremio's AI Agent, enabling natural language queries and data exploration across your organization.
 
-## Project Management[​](#project-management "Direct link to Project Management")
+## Project Management
 
 * [Manage Projects](/dremio-cloud/admin/projects/) – Create new projects to isolate compute and data resources for different teams. Configure storage options (Dremio-managed or your own S3 bucket) and manage project-level settings.
 * [Manage Engines](/dremio-cloud/admin/engines/) – Set up and configure query engines that provide the compute resources for running queries. Choose engine sizes, configure auto-scaling, and manage multiple engine replicas for your projects.
@@ -20,15 +20,15 @@ Dremio administration covers organization-wide and project-level management. Use
 * [Monitor Jobs and Audit Logs](/dremio-cloud/admin/monitor/) – Monitor system health, query performance, and resource utilization. View metrics, logs, and alerts to ensure your Dremio environment is running optimally.
 * [Optimize Performance](/dremio-cloud/admin/performance/) – Improve query performance and resource efficiency through Reflection management and the results cache.
 
-## Shared Responsibility Model[​](#shared-responsibility-model "Direct link to Shared Responsibility Model")
+## Shared Responsibility Model
 
 Dremio operates on a shared responsibility model. For detailed information about responsibilities in each area, download the [Dremio Shared Responsibility Model](https://docs-3063.dremio-documentation.pages.dev/assets/files/Dremio-Cloud-Shared-Responsibility-Model-15f76b24f0b48153532ca15b25d831c4.pdf).
 
 Was this page helpful?
 
-* [Organization Management](#organization-management)
-* [Project Management](#project-management)
-* [Shared Responsibility Model](#shared-responsibility-model)
+* Organization Management
+* Project Management
+* Shared Responsibility Model
 
 <div style="page-break-after: always;"></div>
 
@@ -42,7 +42,7 @@ Manage user access to your Dremio organization through internal authentication o
 
 All users in Dremio are identified by their email address, which serves as their username. Invitations are sent to users' email addresses to set up their accounts.
 
-## User Types[​](#user-types "Direct link to User Types")
+## User Types
 
 Dremio supports two user types with different authentication and management workflows:
 
@@ -53,19 +53,19 @@ Dremio supports two user types with different authentication and management work
 | **Provisioning** | Manual invitation | Manual invitation or SCIM automated |
 | **Password Reset** | Self-service or admin-initiated | Through IdP only |
 
-### Local Users[​](#local-users "Direct link to Local Users")
+### Local Users
 
 Local users authenticate with passwords managed directly in Dremio. These users must be invited manually. Use local users when you need standalone accounts for contractors, external partners, or testing and development environments.
 
-### SSO Users[​](#sso-users "Direct link to SSO Users")
+### SSO Users
 
 SSO users authenticate through your organization's identity provider (IdP) like Microsoft Entra ID or Okta, or through social identity providers like Google or GitHub. These users can be invited manually or provisioned automatically via System for Cross-domain Identity Management (SCIM).
 
-#### What is SCIM?[​](#what-is-scim "Direct link to What is SCIM?")
+#### What is SCIM?
 
 SCIM is an open standard protocol that automates user provisioning between your identity provider and Dremio. Instead of manually creating and managing users in multiple systems, SCIM keeps everything synchronized automatically. When you add, update, or remove a user in your IdP, those changes propagate to Dremio without manual intervention.
 
-#### SCIM Provisioning Benefits[​](#scim-provisioning-benefits "Direct link to SCIM Provisioning Benefits")
+#### SCIM Provisioning Benefits
 
 When SCIM is configured, Dremio stays synchronized with your IdP. Deleting a user in your IdP automatically reflects in Dremio. Additional benefits of SCIM integration include:
 
@@ -79,9 +79,9 @@ To learn more:
 * [Configure SCIM with Okta](/dremio-cloud/security/authentication/idp/okta)
 * [Configure SCIM with a generic OIDC provider](/dremio-cloud/security/authentication/idp/generic-oidc-provider)
 
-## Manage Your Account[​](#manage-your-account "Direct link to Manage Your Account")
+## Manage Your Account
 
-### Update Your Password[​](#update-your-password "Direct link to Update Your Password")
+### Update Your Password
 
 **Local users** can reset passwords using either method:
 
@@ -102,7 +102,7 @@ Changing your password ends all existing Dremio web sessions.
 
 **SSO users** must reset passwords through their organization's identity provider. Contact your authentication administrator for assistance.
 
-### Update Your Name[​](#update-your-name "Direct link to Update Your Name")
+### Update Your Name
 
 You can change your display name at any time:
 
@@ -111,18 +111,18 @@ You can change your display name at any time:
 3. On the **General Information** page, edit **First Name** and **Last Name**.
 4. Click **Save**.
 
-## Administrative Tasks[​](#administrative-tasks "Direct link to Administrative Tasks")
+## Administrative Tasks
 
 The following tasks require administrator privileges or the [CREATE USER](/dremio-cloud/security/privileges#organization-privileges) privilege.
 
-### View All Users[​](#view-all-users "Direct link to View All Users")
+### View All Users
 
 1. Click ![Settings](/images/icons/settings.png "Settings") on the left navigation bar and choose **Organization settings**.
 2. Select **Users** in the organization settings sidebar.
 
 The table displays all local and SSO users with access to your Dremio instance.
 
-### Add a User[​](#add-a-user "Direct link to Add a User")
+### Add a User
 
 **SSO users** are added automatically when you configure [SCIM provisioning](/dremio-cloud/security/authentication/idp#scim).
 
@@ -141,7 +141,7 @@ A user's email address serves as their unique identifier and cannot be changed a
 
 If invited users don't receive the email, check spam folders and verify the email addresses are correct.
 
-### Edit a User[​](#edit-a-user "Direct link to Edit a User")
+### Edit a User
 
 You can modify a user's name and role assignments. Email addresses cannot be edited—if a user's email changes, you must create a new account.
 
@@ -154,7 +154,7 @@ You can modify a user's name and role assignments. Email addresses cannot be edi
    * **Remove roles:** Hover over a role and click **Remove**.
 6. Click **Save**.
 
-### Reset a User's Password[​](#reset-a-users-password "Direct link to Reset a User's Password")
+### Reset a User's Password
 
 This option is only available for local users. SSO users must reset passwords through their identity provider. To send a password reset email to a local user:
 
@@ -165,7 +165,7 @@ This option is only available for local users. SSO users must reset passwords th
 
 The user receives an immediate email with reset instructions.
 
-### Remove a User[​](#remove-a-user "Direct link to Remove a User")
+### Remove a User
 
 **To remove an SSO user:**
 
@@ -180,7 +180,7 @@ The user receives an immediate email with reset instructions.
 4. Click ![Remove icon](/images/icons/trash.png) to remove.
 5. Confirm the deletion.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Roles](/dremio-cloud/security/roles)
 * [Privileges](/dremio-cloud/security/privileges)
@@ -188,19 +188,19 @@ The user receives an immediate email with reset instructions.
 
 Was this page helpful?
 
-* [User Types](#user-types)
-  + [Local Users](#local-users)
-  + [SSO Users](#sso-users)
-* [Manage Your Account](#manage-your-account)
-  + [Update Your Password](#update-your-password)
-  + [Update Your Name](#update-your-name)
-* [Administrative Tasks](#administrative-tasks)
-  + [View All Users](#view-all-users)
-  + [Add a User](#add-a-user)
-  + [Edit a User](#edit-a-user)
-  + [Reset a User's Password](#reset-a-users-password)
-  + [Remove a User](#remove-a-user)
-* [Related Topics](#related-topics)
+* User Types
+  + Local Users
+  + SSO Users
+* Manage Your Account
+  + Update Your Password
+  + Update Your Name
+* Administrative Tasks
+  + View All Users
+  + Add a User
+  + Edit a User
+  + Reset a User's Password
+  + Remove a User
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -216,7 +216,7 @@ When you signed up for Dremio, an organization and a project were automatically 
 
 If an engine is created with a minimum replica of 0, it remains idle until the first query runs. No executor instances run initially. When you run a query, Dremio allocates executors to your project and starts the engine. Engines automatically start and stop based on query load.
 
-## Sizes[​](#sizes "Direct link to Sizes")
+## Sizes
 
 Dremio provides a standard executor, which is used in all of our query engine sizes. Query engine sizes are differentiated by the number of executors in a replica. For each size, Dremio provides a default query concurrency, as shown in the table below.
 
@@ -231,7 +231,7 @@ Dremio provides a standard executor, which is used in all of our query engine si
 | 2XLarge | 32 | 960 | 16 | 160 |
 | 3XLarge | 64 | 1920 | 20 | 200 |
 
-## States[​](#states "Direct link to States")
+## States
 
 An engine can be in one of the following states.
 
@@ -247,7 +247,7 @@ An engine can be in one of the following states.
 | Stopped |  | Represents an enabled engine that has been stopped (zero replicas running). |
 | Deleting |  | Represents an engine that is being deleted. |
 
-## Autoscaling[​](#autoscaling "Direct link to Autoscaling")
+## Autoscaling
 
 The autoscaling capability dynamically manages query workload for you based on parameters that you set for the engine. Engine replicas are started and stopped as required to provide a seamless query execution by monitoring the engine replica health.
 
@@ -264,18 +264,18 @@ The following table describes the engine parameters along with their role in aut
 
 For a query that is submitted to execute on an engine, the control plane assigns an engine replica to that query. Replicas are dynamically created and assigned to queries based on the query workload. The control plane observes the query workload and current active engine replicas to determine whether to scale up or scale down replicas. Replica is assigned to the query until the query execution is done. For a given engine, Dremio Cloud does not scale up replicas beyond the configured maximum replicas and it does not scale them down below the configured minimum replicas.
 
-### Monitor Engine Health[​](#monitor-engine-health "Direct link to Monitor Engine Health")
+### Monitor Engine Health
 
 The Dremio Cloud control plane monitors the engines health and manages unhealthy replicas to provide a seamless query execution experience. The replica nodes send periodic heartbeats to the control plane, which determines their liveness. If a periodic heartbeat is not returned from a replica node, the control plane marks that node as unhealthy and replaces it with a healthy one.
 
-## View All Engines[​](#view-all-engines "Direct link to View All Engines")
+## View All Engines
 
 To view engines:
 
 1. In the Dremio Cloud application, click the Project Settings ![This is the icon that represents the Project Settings.](/images/icons/project-settings.png "Icon represents the Project Settings.") icon in the side navigation bar.
 2. Select **Engines** in the project settings sidebar to see the list of engines in the project. On the **Engines** page, you can also see engines as per the status. Click the **Status** dropdown list to see the different statuses.
 
-## Add an Engine[​](#add-an-engine "Direct link to Add an Engine")
+## Add an Engine
 
 To add a new engine:
 
@@ -315,7 +315,7 @@ You should not set the enqueued time limit to less than one minutes, which is th
 15. For **Drain Time Limit**, enter the time (in minutes) that an engine replica continues to run after the engine is resized, disabled, or deleted before it is terminated and the running queries fail. The default value is 30 minutes. If there are no queries running on a replica, the engine is terminated without waiting for the drain time limit.
 16. Click **Save and Launch**. This action saves the configuration, enables this engine, and allocates the executors.
 
-## Edit an Engine[​](#edit-an-engine "Direct link to Edit an Engine")
+## Edit an Engine
 
 To edit an engine:
 
@@ -356,7 +356,7 @@ You should not set the enqueued time limit to less than one minutes, which is th
 14. For **Drain Time Limit**, enter the time (in minutes) that an engine replica continues to run after the engine is resized, disabled, or deleted before it is terminated and any running queries fail. The default value is 30 minutes. If no queries are running on a replica, the engine is terminated without waiting for the drain time limit.
 15. Click **Save**.
 
-## Disable an Engine[​](#disable-an-engine "Direct link to Disable an Engine")
+## Disable an Engine
 
 You can disable an engine that is not being used:
 
@@ -366,7 +366,7 @@ To disable the engine:
 2. Disable the engine by using the toggle in the **Enabled** column.
 3. Confirm that you want to disable the engine.
 
-## Enable an Engine[​](#enable-an-engine "Direct link to Enable an Engine")
+## Enable an Engine
 
 To enable a disabled engine:
 
@@ -374,7 +374,7 @@ To enable a disabled engine:
 2. Enable the engine by using the toggle in the **Enabled** column.
 3. Confirm that you want to enable the engine.
 
-## Delete an Engine[​](#delete-an-engine "Direct link to Delete an Engine")
+## Delete an Engine
 
 You can permanently delete an engine if it is not in use (this action is irreversible). If queries are running on the engine, then Dremio waits for the drain-time-limit for the running queries to complete before deleting the engine.
 
@@ -388,7 +388,7 @@ To delete an engine:
 2. On the **Engines** page, hover over the row of the engine that you want to delete and click the Delete ![This is the icon that represents the Delete settings.](/images/icons/trash.png "Icon represents the Delete settings.") icon that appears next to the engine.
 3. Confirm that you want to delete the engine.
 
-## Troubleshoot[​](#troubleshoot "Direct link to Troubleshoot")
+## Troubleshoot
 
 If your engines are not scaling up or down as expected, you can reference the engine events to see the error that is causing the issue.
 
@@ -401,17 +401,17 @@ To view engine events:
 
 Was this page helpful?
 
-* [Sizes](#sizes)
-* [States](#states)
-* [Autoscaling](#autoscaling)
-  + [Monitor Engine Health](#monitor-engine-health)
-* [View All Engines](#view-all-engines)
-* [Add an Engine](#add-an-engine)
-* [Edit an Engine](#edit-an-engine)
-* [Disable an Engine](#disable-an-engine)
-* [Enable an Engine](#enable-an-engine)
-* [Delete an Engine](#delete-an-engine)
-* [Troubleshoot](#troubleshoot)
+* Sizes
+* States
+* Autoscaling
+  + Monitor Engine Health
+* View All Engines
+* Add an Engine
+* Edit an Engine
+* Disable an Engine
+* Enable an Engine
+* Delete an Engine
+* Troubleshoot
 
 <div style="page-break-after: always;"></div>
 
@@ -421,13 +421,13 @@ Original URL: https://docs.dremio.com/dremio-cloud/admin/monitor/
 
 On this page
 
-As an administrator, you can monitor catalog usage and jobs in the [Dremio console](#monitor-the-dremio-console). You can also use the [Dremio APIs and SQL](#monitor-with-dremio-apis-and-sql) to retrieve information about jobs and events for the projects in your organization.
+As an administrator, you can monitor catalog usage and jobs in the Dremio console. You can also use the Dremio APIs and SQL to retrieve information about jobs and events for the projects in your organization.
 
-### Monitor the Dremio Console[​](#monitor-the-dremio-console "Direct link to Monitor the Dremio Console")
+### Monitor the Dremio Console
 
 The Monitor page in the Dremio console allows you to monitor usage across your project, making it easier to observe patterns, analyze the resources being consumed by your data platform, and understand the impact on your users. You must be a member of the `ADMIN` role to access the Monitor page.
 
-#### Catalog Usage[​](#catalog-usage "Direct link to Catalog Usage")
+#### Catalog Usage
 
 The data visualizations on the Monitor page point you to the most queried data and folders in a catalog.
 
@@ -444,7 +444,7 @@ All datasets are assessed in the metrics on the Monitor page except for datasets
 
 The metrics on the Monitor page analyze only user queries. Refreshes of data Reflections and metadata refreshes are excluded.
 
-#### Jobs[​](#jobs "Direct link to Jobs")
+#### Jobs
 
 The data visualizations on the Monitor page show the metrics for queries executed in your project, including statistics about performance and utilization.
 
@@ -463,7 +463,7 @@ To examine all jobs and the details of specific jobs, see [Viewing Jobs](/dremio
 
 You can create reports of jobs in other BI tools by leveraging the [`sys.project.history.jobs` table](/dremio-cloud/sql/system-tables/jobs-historical).
 
-### Monitor with Dremio APIs and SQL[​](#monitor-with-dremio-apis-and-sql "Direct link to Monitor with Dremio APIs and SQL")
+### Monitor with Dremio APIs and SQL
 
 Administrators can use the Dremio APIs and SQL to retrieve information about the jobs and events in every project in the organization. This information is useful for further monitoring and analysis.
 
@@ -471,7 +471,7 @@ Before you begin, make sure that you are assigned to the ADMIN role for the orga
 
 The code examples in this section are written in Python.
 
-The procedure below provides individual code examples for retrieving project IDs, retrieving information for jobs and events, saving query results to Parquet files, and uploading the Parquet files to an AWS S3 bucket. See the [combined example](#combined-example) for a single code example that combines all of the steps.
+The procedure below provides individual code examples for retrieving project IDs, retrieving information for jobs and events, saving query results to Parquet files, and uploading the Parquet files to an AWS S3 bucket. See the combined example for a single code example that combines all of the steps.
 
 1. Get the IDs for all projects in the organization. In the code example for this step, the `get_projects` method uses the [Projects](/dremio-cloud/api/projects) API to get the project IDs.
 
@@ -660,7 +660,7 @@ def upload_file(file_name: str, bucket: str, folder: str):
    return True
 ```
 
-#### Combined Example[​](#combined-example "Direct link to Combined Example")
+#### Combined Example
 
 The following code example combines the steps above to get all jobs and events from all projects during a specific period, save the query results to Parquet files, and upload the Parquet files to an AWS S3 bucket. The parameter `start` is the start timestamp (inclusive) and the parameter `end` is the end timestamp (exclusive).
 
@@ -716,8 +716,8 @@ if __name__ == "__main__":
 
 Was this page helpful?
 
-* [Monitor the Dremio Console](#monitor-the-dremio-console)
-* [Monitor with Dremio APIs and SQL](#monitor-with-dremio-apis-and-sql)
+* Monitor the Dremio Console
+* Monitor with Dremio APIs and SQL
 
 <div style="page-break-after: always;"></div>
 
@@ -738,7 +738,7 @@ For details on pricing, see [How Storage Usage Is Calculated](/dremio-cloud/admi
 
 Each project in your organization contains a preview engine. Each new project has a preview engine. The preview engine, by default, will scale down after 1 hour without a query. As the name suggests, it provides previews of queries and datasets. Unlike other engines, the preview engine cannot be disabled, ensuring that many core Dremio functions that require an engine can always run.
 
-## View All Projects[​](#view-all-projects "Direct link to View All Projects")
+## View All Projects
 
 To view all projects:
 
@@ -756,7 +756,7 @@ The Projects page displays the status of all projects in your organization. Poss
 * Archived
 * Restoring
 
-## Grant Access to a Project[​](#grant-access-to-a-project "Direct link to Grant Access to a Project")
+## Grant Access to a Project
 
 New projects are private by default. In the projects page, users can see only the projects for which they have USAGE or OWNERSHIP [privileges](/dremio-cloud/security/privileges). The projects page is empty for users without USAGE or OWNERSHIP privileges on any projects. The projects dropdown list shares this behavior.
 
@@ -764,7 +764,7 @@ Similarly, the [Projects API](/dremio-cloud/api/projects) returns an HTTP 403 Fo
 
 To allow users to access a project, use the [`GRANT TO ROLE`](/dremio-cloud/sql/commands/grant-to-role) or [`GRANT TO USER`](/dremio-cloud/sql/commands/grant-to-user) SQL command or the [Grants API](/dremio-cloud/api/catalog/grants) to grant them the USAGE privilege on the project. For users who do not own the project, USAGE is the minimum privilege required to perform any operation on the project and the objects the project contains. For example, if you are using `GRANT TO USER`, you can run `GRANT USAGE ON PROJECT TO USER <username>`.
 
-## Obtain the ID of a Project[​](#obtain-the-id-of-a-project "Direct link to Obtain the ID of a Project")
+## Obtain the ID of a Project
 
 A BI client application might require the ID of a project as part of the information for creating a connection to Dremio. You can obtain the ID from the General Information page of a project's settings.
 
@@ -774,7 +774,7 @@ To obtain a project ID:
 2. Select **General Information** in the project settings sidebar.
 3. Copy the value in the **Project ID** field.
 
-## Set the Default Project[​](#set-the-default-project "Direct link to Set the Default Project")
+## Set the Default Project
 
 When your data consumers connect to Dremio from BI tools, they must connect to the projects where their datasets reside. They can either connect to the default project or select a different project.
 
@@ -793,7 +793,7 @@ To specify the default project for your organization:
 3. In the **Default Project** field, select the project that you want data consumers to connect to by default through their BI tools.
 4. Click **Save**.
 
-## Create a Project[​](#create-a-project "Direct link to Create a Project")
+## Create a Project
 
 If you're planning on using your own bucket, you will need create a role for Dremio granting access, this must be done prior to creating a project, see [Bring Your Own Project Store](/dremio-cloud/admin/projects/your-own-project-storage) for instructions. To avoid having to do this simply use Dremio-managed storage.
 
@@ -809,7 +809,7 @@ To add a project:
    * For **Dremio managed storage**, Dremio will create and manage object storage for your use.
    * For **your own storage**, you will need to provide Dremio the bucket URI and Role ARN previously created.
 
-## Activate a Project[​](#activate-a-project "Direct link to Activate a Project")
+## Activate a Project
 
 Dremio automatically deactivates any project that has not been accessed in the last 15 days. Dremio sends a courtesy email to project owners three days prior to deactivation. Inactive projects are displayed in the project selector in the side navigation bar and on the Projects page. An inactive project will be activated automatically when any user tries to access it via the Dremio console, an ODBC or JDBC connection, or an API call.
 
@@ -827,7 +827,7 @@ To activate a project from the Projects page:
 
 The project status will change to *Activating* while the project is activated. You can access the project after the status changes to *Active*.
 
-## Archive a Project[​](#archive-a-project "Direct link to Archive a Project")
+## Archive a Project
 
 Users with OWNERSHIP privileges or users assigned to the ADMIN role can archive a project. Archived projects are displayed only on the Projects page.
 
@@ -843,7 +843,7 @@ To archive a project:
 
 The project status will change to *Archiving* while the project is archived. When archiving is complete, the status changes to *Archived*.
 
-## Restore an Archived Project[​](#restore-an-archived-project "Direct link to Restore an Archived Project")
+## Restore an Archived Project
 
 An archived project will not be restored automatically if a user tries to access it and can only be restored manually by a user with OWNERSHIP privileges on the project or users assigned to the ADMIN role. It takes a few minutes to restore an archived project.
 
@@ -855,9 +855,9 @@ To restore an archived project:
 
 The project status will change to *Restoring* while the project is restored. You can access the project after the status changes to *Active*.
 
-## Delete a Project[​](#delete-a-project "Direct link to Delete a Project")
+## Delete a Project
 
-Default projects cannot be deleted. If you want to delete the default project, you must first set another project as the default. See [Set the Default Project](#set-the-default-project).
+Default projects cannot be deleted. If you want to delete the default project, you must first set another project as the default. See Set the Default Project.
 
 To delete a project:
 
@@ -868,15 +868,15 @@ To delete a project:
 
 Was this page helpful?
 
-* [View All Projects](#view-all-projects)
-* [Grant Access to a Project](#grant-access-to-a-project)
-* [Obtain the ID of a Project](#obtain-the-id-of-a-project)
-* [Set the Default Project](#set-the-default-project)
-* [Create a Project](#create-a-project)
-* [Activate a Project](#activate-a-project)
-* [Archive a Project](#archive-a-project)
-* [Restore an Archived Project](#restore-an-archived-project)
-* [Delete a Project](#delete-a-project)
+* View All Projects
+* Grant Access to a Project
+* Obtain the ID of a Project
+* Set the Default Project
+* Create a Project
+* Activate a Project
+* Archive a Project
+* Restore an Archived Project
+* Delete a Project
 
 <div style="page-break-after: always;"></div>
 
@@ -894,7 +894,7 @@ note
 
 This is a subset of the events that Dremio supports.
 
-## Organization Events[​](#organization-events "Direct link to Organization Events")
+## Organization Events
 
 Dremio supports audit logging for the following organization event types and actions. The [`sys.project.history.events`](/dremio-cloud/sql/system-tables/events-historical) table contains these events in the default project.
 
@@ -944,7 +944,7 @@ Dremio supports audit logging for the following organization event types and act
 | USER\_ACCOUNT | PASSWORD\_CHANGE | A user updated their account password. |
 | USER\_ACCOUNT | UPDATE | A user updated user account metadata. |
 
-## Project Events[​](#project-events "Direct link to Project Events")
+## Project Events
 
 | Event Type | Actions | Description |
 | --- | --- | --- |
@@ -975,7 +975,7 @@ Dremio supports audit logging for the following organization event types and act
 | UDF | UPDATE | A user modified the SQL definition of a user-defined function. |
 | WIKI | EDIT | A user created or updated a wiki. |
 
-## Open Catalog Events[​](#open-catalog-events "Direct link to Open Catalog Events")
+## Open Catalog Events
 
 These events appear in the [`sys.project.history.events`](/dremio-cloud/sql/system-tables/events-historical) table of the project where the catalog is designated as the primary catalog.
 
@@ -993,7 +993,7 @@ These events appear in the [`sys.project.history.events`](/dremio-cloud/sql/syst
 | VIEW | READ | A user read a view in the catalog. |
 | VIEW | UPDATE | A user updated a view definition in the catalog. |
 
-## Source Events[​](#source-events "Direct link to Source Events")
+## Source Events
 
 These events appear in the [`sys.project.history.events`](/dremio-cloud/sql/system-tables/events-historical) table for any source in the project.
 
@@ -1010,10 +1010,10 @@ These events appear in the [`sys.project.history.events`](/dremio-cloud/sql/syst
 
 Was this page helpful?
 
-* [Organization Events](#organization-events)
-* [Project Events](#project-events)
-* [Open Catalog Events](#open-catalog-events)
-* [Source Events](#source-events)
+* Organization Events
+* Project Events
+* Open Catalog Events
+* Source Events
 
 <div style="page-break-after: always;"></div>
 
@@ -1045,7 +1045,7 @@ All jobs run in Dremio are listed on a separate page, showing the job ID, type, 
 
 To navigate to the Jobs page, click ![This is the icon that represents the Jobs page.](/images/cloud/jobs-page-icon.png "Icon represents the Jobs page.") in the side navigation bar.
 
-## Search Filters and Columns[​](#search-filters-and-columns "Direct link to Search Filters and Columns")
+## Search Filters and Columns
 
 By default, the Jobs page lists the jobs run within the last 30 days and the jobs are filtered by **UI, External Tools** job types. To change these defaults for your account, you can filter on values and manage columns directly on the Jobs page, as shown in this image:
 
@@ -1057,13 +1057,13 @@ b. **Start Time** allows you to pick the date and time at which the job began.
 
 c. **Status** represents one or more job states. For descriptions, see [Job States and Statuses](.#job-states-and-statuses).
 
-d. **Type** includes Accelerator, Downloads, External Tools, Internal, and UI. For descriptions, see [Job Properties](#job-properties).
+d. **Type** includes Accelerator, Downloads, External Tools, Internal, and UI. For descriptions, see Job Properties.
 
 e. **User** can be searched by typing the username or checking the box next to the username in the dropdown.
 
 f. **Manage Columns** by checking the boxes next to additional columns that you want to see in the Jobs list. The grayed out checkboxes show the columns that are required by default. You can also rearrange the column order by clicking directly on a column to drag and drop.
 
-## Job Properties[​](#job-properties "Direct link to Job Properties")
+## Job Properties
 
 Each job has the following properties, which can appear as columns in the list of jobs on the Jobs page or as details on the Job Overview page:
 
@@ -1084,12 +1084,12 @@ Each job has the following properties, which can appear as columns in the list o
 | Rows Scanned | Number of input records. |
 | SQL | The SQL query that was submitted for the job. |
 | Start Time | The date and time which the job began. |
-| Status | Represents one or more job states. For descriptions, see [Job States and Statuses](#job-states-and-statuses). |
+| Status | Represents one or more job states. For descriptions, see Job States and Statuses. |
 | Total Memory | Provides statistics about the actual cost of the query operations in terms of memory. |
 | User | Username of the user who ran the query and initiated the job. |
 | Wait on Client | The length of time (in seconds) that is waiting on the client. |
 
-## Job States and Statuses[​](#job-states-and-statuses "Direct link to Job States and Statuses")
+## Job States and Statuses
 
 Each job passes through a sequence of states until it is complete, though the sequence can be interrupted if a query is canceled or if there is an error during a state. In this diagram, the states that a job passes through are in white, and the possible end states are in dark gray.
 
@@ -1111,7 +1111,7 @@ This table lists the statuses that the UI lets you filter on and shows how they 
 |  | Completed | Completed | Represents a terminal state that indicates that the query is successfully completed. |
 |  | Failed | Failed | Represents a terminal state that indicates that the query has failed due to an error. |
 
-## View Job Details[​](#view-job-details "Direct link to View Job Details")
+## View Job Details
 
 You can view the details of a specific job by viewing the Job Overview, SQL, Visual Profile, and Raw Profile pages.
 
@@ -1121,15 +1121,15 @@ To navigate to the job details:
 2. On the Jobs page, click a job that you would like to see the job overview for.
 3. The Job Overview page then replaces the list of jobs.
 
-### Explain SQL[​](#explain-sql "Direct link to Explain SQL")
+### Explain SQL
 
 Use the **Explain SQL** option in the SQL Runner to analyze and optimize your SQL queries with assistance from the AI Agent. In the SQL Runner, highlight the SQL you want to review, right-click, and select **Explain SQL**. This prompts the AI Agent to examine the query, datasets, and underlying architecture to identify potential optimizations. The AI Agent uses Dremio’s SQL Parser—the same logic used during query execution—to identify referenced tables, schemas, and relationships. Based on this analysis, the Agent provides insights and recommendations to improve query performance and structure. You can continue interacting with the AI Agent to refine the analysis and iterate on the SQL. The AI Agent applies SQL best practices when suggesting improvements and may execute revised queries to validate quality before presenting recommendations.
 
-### Explain Job[​](#explain-job "Direct link to Explain Job")
+### Explain Job
 
 Use the **Explain Job** option on the Job Details page to analyze job performance and identify opportunities for optimization. From the Job Details page, click **Explain Job** to prompt the AI Agent to review the job’s query profile, planning, and execution details to compare with the AI Agents’s internal understanding of optimal performance characteristics. The AI Agent generates a detailed analysis that highlights key performance metrics such as data skew, memory usage, threading efficiency, and network utilization. Based on this assessment, it recommends potential optimizations to improve performance and resource utilization. You can continue the conversation with the AI Agent to explore the job in greater depth or reference additional job IDs to extend the investigation and compare results.
 
-### Job Overview[​](#job-overview "Direct link to Job Overview")
+### Job Overview
 
 You can view the details of a specific job on the Job Overview page.
 
@@ -1142,15 +1142,15 @@ The main components of the Job Overview page are numbered below:
 
 ![This is a screenshot showing the main components of the Job Overview page.](/images/cloud/job-overview-page-cloud.png "This is a screenshot showing the main components of the Job Overview page.")
 
-#### 1. Summary[​](#1-summary "Direct link to 1. Summary")
+#### 1. Summary
 
 Each job is summarized.
 
-#### 2. Total Execution Time[​](#2-total-execution-time "Direct link to 2. Total Execution Time")
+#### 2. Total Execution Time
 
-The total execution time is the length of time for the total execution and the job state durations in the order they occur. Only the duration of the Engine Start state is in minutes and seconds. If the engine is stopped, it takes time to restart for the executors to be active. If the engine is already started, then Engine Start duration does not have a value. For descriptions, see [Job States and Statuses](#job-states-and-statuses).
+The total execution time is the length of time for the total execution and the job state durations in the order they occur. Only the duration of the Engine Start state is in minutes and seconds. If the engine is stopped, it takes time to restart for the executors to be active. If the engine is already started, then Engine Start duration does not have a value. For descriptions, see Job States and Statuses.
 
-#### 3. Download Profile[​](#3-download-profile "Direct link to 3. Download Profile")
+#### 3. Download Profile
 
 To download the query profile, click the **Download Profile** button in the bottom-left corner of the Job Overview page. The profile will help you see more granular details about the job.
 
@@ -1160,27 +1160,27 @@ The profile downloads as a **ZIP** file. When you extract the **ZIP** file, you 
 * header.json: This file provides the full list of Dremio coordinators and executors, data sets, and sources.
   This information is useful when you are using REST calls.
 
-#### 4. Submitted SQL[​](#4-submitted-sql "Direct link to 4. Submitted SQL")
+#### 4. Submitted SQL
 
 The SQL query for the selected job.
 
-#### 5. Queried Datasets[​](#5-queried-datasets "Direct link to 5. Queried Datasets")
+#### 5. Queried Datasets
 
 The datasets queried for the selected job. These can be views or tables.
 
-#### 6. Scans[​](#6-scans "Direct link to 6. Scans")
+#### 6. Scans
 
 Scan details include the source type, scan thread count, IO wait time (in milliseconds), and the number of rows scanned.
 
-#### 7. Acceleration[​](#7-acceleration "Direct link to 7. Acceleration")
+#### 7. Acceleration
 
 Only if the job was accelerated, the Acceleration section appears and Reflections data is provided. See [Optimize Performance](/dremio-cloud/admin/performance/) for more information.
 
-#### 8. Results[​](#8-results "Direct link to 8. Results")
+#### 8. Results
 
 To see the job results, click the **Open Results** link in the top-right corner of the Job Overview page. As long as the engine that ran the job is up, the **Open Results** link is visible in the UI. It disappears when the engine that ran the job shuts down and is only visible for the jobs that are run through the UI.
 
-### Job SQL[​](#job-sql "Direct link to Job SQL")
+### Job SQL
 
 Next to the Job Overview page is a tab for the SQL page, which shows the Submitted SQL and Dataset Graph.
 
@@ -1188,21 +1188,21 @@ You can view the SQL statement that was used for the selected job. Although the 
 
 A dataset graph only appears if there is a queried dataset for the selected job. The dataset graph is a visual representation of the datasets used in the SQL statement.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Profiles](/dremio-cloud/admin/monitor/jobs/profiles) – See the visual profiles and raw profiles of jobs.
 
 Was this page helpful?
 
-* [Search Filters and Columns](#search-filters-and-columns)
-* [Job Properties](#job-properties)
-* [Job States and Statuses](#job-states-and-statuses)
-* [View Job Details](#view-job-details)
-  + [Explain SQL](#explain-sql)
-  + [Explain Job](#explain-job)
-  + [Job Overview](#job-overview)
-  + [Job SQL](#job-sql)
-* [Related Topics](#related-topics)
+* Search Filters and Columns
+* Job Properties
+* Job States and Statuses
+* View Job Details
+  + Explain SQL
+  + Explain Job
+  + Job Overview
+  + Job SQL
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -1220,38 +1220,38 @@ Dremio offers multiple payment options for users to upgrade their organization a
 
 Note that your organization can be moved to a commit-based contract after upgrading to PAYG.
 
-## Upgrade[​](#upgrade "Direct link to Upgrade")
+## Upgrade
 
 At any point during your free trial of Dremio, an organization can be upgraded by entering your credit card details. If the free trial concludes, your organization will become partially inaccessible for 30 days. During this time, you can still log in to upgrade your account, but if you do not upgrade your account before then, your organization and all of its contents may be deleted.
 
-## Pay-as-you-go Billing Cycles[​](#pay-as-you-go-billing-cycles "Direct link to Pay-as-you-go Billing Cycles")
+## Pay-as-you-go Billing Cycles
 
 Your billing cycle starts from the day of your organization's upgrade and ends one month later. At the conclusion of the billing period, we will immediately attempt to charge your card for the outstanding balance.
 
 If for any reason payment fails (or is only partially successful), we will attempt the charge again. If these subsequent attempts fail, your organization will become partially inaccessible. You can still log in but only to update your payment method. If a new payment method is not provided before the end of this billing period, your organization and all of its contents may be deleted.
 
-## Organizations[​](#organizations "Direct link to Organizations")
+## Organizations
 
 A Dremio organization can have one or more projects. Usage across projects is aggregated for billing purposes, meaning that when the PAYG bill is paid for an organization, the balance is paid for all projects. Only users who are members of the ADMIN role within the organization can manage billing details within the Dremio console.
 
-## Find Your Organization ID[​](#find-your-organization-id "Direct link to Find Your Organization ID")
+## Find Your Organization ID
 
 The ID of your organization can be helpful during communication with Dremio Sales or Support. To find your organization's ID:
 
 1. In the Dremio console, click ![Settings](/images/icons/settings.png "Settings") in the side navigation bar and select **Organization settings** to open the Organization settings page.
 2. On the General Information tab, copy your organization's ID.
 
-## Delete Your Organization[​](#delete-your-organization "Direct link to Delete Your Organization")
+## Delete Your Organization
 
 Please contact Dremio's Support team if you would like to have your organization deleted.
 
 Was this page helpful?
 
-* [Upgrade](#upgrade)
-* [Pay-as-you-go Billing Cycles](#pay-as-you-go-billing-cycles)
-* [Organizations](#organizations)
-* [Find Your Organization ID](#find-your-organization-id)
-* [Delete Your Organization](#delete-your-organization)
+* Upgrade
+* Pay-as-you-go Billing Cycles
+* Organizations
+* Find Your Organization ID
+* Delete Your Organization
 
 <div style="page-break-after: always;"></div>
 
@@ -1263,11 +1263,11 @@ On this page
 
 You configure model providers for your organization for AI features when deploying Dremio. After you configure at least one model provider, you must set a default model provider and optionally set an allowlist of available models. Dremio uses this default provider for all Dremio's AI Agent interactions, whereas the allowlist models can be used by anyone writing AI functions. By default CALL MODEL is granted to all users for all new model providers so if the default changes users can continue to use the AI Agent without interruption.
 
-## Dremio-Provided LLM[​](#dremio-provided-llm "Direct link to Dremio-Provided LLM")
+## Dremio-Provided LLM
 
 Dremio provides all organizations with an out-of-the-box model provider so that all users can begin engaging with the AI Agent and AI functions without any other configuration required. Once you have added your own model provider and set it as the new default, the Dremio-Provided LLM will no longer be used. If you delete all other model providers, then the Dremio-Provided LLM will revert to the organization's default model provider. This model provider cannot be deleted.
 
-## Supported Model Providers[​](#supported-model-providers "Direct link to Supported Model Providers")
+## Supported Model Providers
 
 Dremio supports configuration of the following model providers and models. Dremio recommends using enterprise-grade reasoning models for the best performance and experience.
 
@@ -1279,9 +1279,9 @@ Dremio supports configuration of the following model providers and models. Dremi
 | **AWS Bedrock** | * specify Model ID(s) * [AWS Bedrock Supported Models](https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html) | * Access Key * IAM Role |
 | **Azure OpenAI** | * specify Deployment Name(s) * [Azure Supported Models](https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure?tabs=global-standard-aoai%2Cstandard-chat-completions%2Cglobal-standard&pivots=azure-openai#azure-openai-in-azure-ai-foundry-models) | Combination of  1. Resource Name 2. Directory ID 3. Application ID 4. Client Secret Value |
 
-## Rate Limiting and Quotas[​](#rate-limiting-and-quotas "Direct link to Rate Limiting and Quotas")
+## Rate Limiting and Quotas
 
-### AWS Bedrock Rate Limits[​](#aws-bedrock-rate-limits "Direct link to AWS Bedrock Rate Limits")
+### AWS Bedrock Rate Limits
 
 When using AWS Bedrock model providers, you may encounter rate limiting errors such as "429 Too Many Tokens (Rate Limit Exceeded)". This is particularly common with new AWS accounts that start with lower or fixed quotas.
 
@@ -1295,11 +1295,11 @@ If you experience rate limiting issues, you can contact AWS Support and request 
 
 For more information about AWS Bedrock quotas and limits, see the [AWS Bedrock User Guide](https://docs.aws.amazon.com/bedrock/latest/userguide/quotas.html).
 
-## Default Model Provider[​](#default-model-provider "Direct link to Default Model Provider")
+## Default Model Provider
 
 To delete the model provider, you must assign a new default unless you are deleting the last available model provider that you have configured. To update the default model provider to a new one, you must have MODIFY privilege on both the current default and the new proposed default model provider.
 
-## Add Model Provider[​](#add-model-provider "Direct link to Add Model Provider")
+## Add Model Provider
 
 To add a model provider in the Dremio console:
 
@@ -1310,12 +1310,12 @@ To add a model provider in the Dremio console:
 
 Was this page helpful?
 
-* [Dremio-Provided LLM](#dremio-provided-llm)
-* [Supported Model Providers](#supported-model-providers)
-* [Rate Limiting and Quotas](#rate-limiting-and-quotas)
-  + [AWS Bedrock Rate Limits](#aws-bedrock-rate-limits)
-* [Default Model Provider](#default-model-provider)
-* [Add Model Provider](#add-model-provider)
+* Dremio-Provided LLM
+* Supported Model Providers
+* Rate Limiting and Quotas
+  + AWS Bedrock Rate Limits
+* Default Model Provider
+* Add Model Provider
 
 <div style="page-break-after: always;"></div>
 
@@ -1335,11 +1335,11 @@ Dremio's Open Catalog is built on Apache Polaris, providing a standards-based, o
 
 By leveraging the Iceberg REST standard, the Open Catalog acts as a universal catalog layer that query engines can communicate with using a common language. This allows organizations to build flexible data architectures where multiple engines can work together, each accessing and managing the same Iceberg tables through Dremio's centralized catalog.
 
-## Apache Spark[​](#apache-spark "Direct link to Apache Spark")
+## Apache Spark
 
 Apache Spark is a unified analytics engine for large-scale data processing, widely used for ETL, batch processing, and data engineering workflows.
 
-### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+### Prerequisites
 
 This example uses Spark 3.5.3 with Iceberg 1.9.1. For other versions, ensure compatibility between Spark, Scala, and Iceberg runtime versions. Additional prerequisites include:
 
@@ -1353,7 +1353,7 @@ This example uses Spark 3.5.3 with Iceberg 1.9.1. For other versions, ensure com
 * If authenticating with an identity provider (IDP), your IDP or other external token provider must be configured as a trusted OAuth [external token provider](/dremio-cloud/security/authentication/app-authentication/external-token) in Dremio.
 * You must have an OAuth2 client registered in your IDP configured to issue tokens that Dremio accepts (matching audience and scopes) and with a client ID and client secret provided by your IDP.
 
-### Authenticate with a PAT[​](#authenticate-with-a-pat "Direct link to Authenticate with a PAT")
+### Authenticate with a PAT
 
 You can authenticate your Apache Spark session with a Dremio personal access token using the following script. Replace `<personal_access_token>` with your Dremio personal access token and replace `<catalog_name>` with your catalog name.
 
@@ -1393,7 +1393,7 @@ note
 
 In this configuration, `polaris` is the catalog identifier used within Spark. This identifier is mapped to your actual Dremio catalog via the `spark.sql.catalog.polaris.warehouse` property.
 
-### Authenticate with an IDP[​](#authenticate-with-an-idp "Direct link to Authenticate with an IDP")
+### Authenticate with an IDP
 
 You can authenticate your Apache Spark session using an [external token provider](/dremio-cloud/security/authentication/app-authentication/external-token) that has been integrated with Dremio.
 
@@ -1442,7 +1442,7 @@ docker run -it \
   --conf spark.sql.catalog.polaris.rest.auth.oauth2.token-exchange.subject-token-type=urn:ietf:params:oauth:token-type:jwt
 ```
 
-### Usage Examples[​](#usage-examples "Direct link to Usage Examples")
+### Usage Examples
 
 With these configurations, `polaris` is the catalog identifier used within Spark. This identifier is mapped to your actual Dremio catalog via the `spark.sql.catalog.polaris.warehouse` property. Once Spark is running and connected to your Dremio catalog:
 
@@ -1469,17 +1469,17 @@ spark.sql("""
 """)
 ```
 
-## Trino[​](#trino "Direct link to Trino")
+## Trino
 
 Trino is a distributed SQL query engine designed for fast analytic queries against data sources of all sizes. It excels at interactive SQL analysis, ad hoc queries, and joining data across multiple sources.
 
-### Prerequisites[​](#prerequisites-1 "Direct link to Prerequisites")
+### Prerequisites
 
 * Docker installed and running.
 * A valid Dremio personal access token – See [Personal Access Tokens](/dremio-cloud/security/authentication/personal-access-token/) for instructions to generate a personal access token.
 * Your Dremio catalog name – The default catalog in each project has the same name as the project.
 
-### Configuration[​](#configuration "Direct link to Configuration")
+### Configuration
 
 To connect Trino to Dremio using Docker, follow these steps:
 
@@ -1561,7 +1561,7 @@ To connect Trino to Dremio using Docker, follow these steps:
    trino> show catalogs;
    ```
 
-### Usage Examples[​](#usage-examples-1 "Direct link to Usage Examples")
+### Usage Examples
 
 Once Trino is running and connected to your Dremio catalog:
 
@@ -1588,18 +1588,18 @@ trino> CREATE TABLE polaris.demo_namespace.test_table (
 );
 ```
 
-### Limitations[​](#limitations "Direct link to Limitations")
+### Limitations
 
 * **Case sensitivity:** Namespace and table names must be in lowercase. Trino will not list or access tables in namespaces that begin with an uppercase character.
 * **View compatibility:** Trino cannot read views created in Dremio due to SQL dialect incompatibility. Returns error: "Cannot read unsupported dialect 'DremioSQL'."
 
-## Apache Flink[​](#apache-flink "Direct link to Apache Flink")
+## Apache Flink
 
 Apache Flink is a distributed stream processing framework designed for stateful computations over bounded and unbounded data streams, enabling real-time data pipelines and event-driven applications.
 
 To connect Apache Flink to Dremio using Docker Compose, follow these steps:
 
-### Prerequisites[​](#prerequisites-2 "Direct link to Prerequisites")
+### Prerequisites
 
 You'll need to download the required JAR files and organize them in a project directory structure.
 
@@ -1721,7 +1721,7 @@ You'll need to download the required JAR files and organize them in a project di
    Flink SQL> show catalogs;
    ```
 
-### Usage Examples[​](#usage-examples-2 "Direct link to Usage Examples")
+### Usage Examples
 
 Once Apache Flink is running and connected to your Dremio catalog:
 
@@ -1748,26 +1748,26 @@ Flink SQL> CREATE TABLE polaris.demo_namespace.test_table (
 );
 ```
 
-### Limitations[​](#limitations-1 "Direct link to Limitations")
+### Limitations
 
 * **Reserved keywords:** Column names that are reserved keywords, such as `value`, `timestamp`, and `date`, must be enclosed in backticks when creating or querying tables.
 
 Was this page helpful?
 
-* [Apache Spark](#apache-spark)
-  + [Prerequisites](#prerequisites)
-  + [Authenticate with a PAT](#authenticate-with-a-pat)
-  + [Authenticate with an IDP](#authenticate-with-an-idp)
-  + [Usage Examples](#usage-examples)
-* [Trino](#trino)
-  + [Prerequisites](#prerequisites-1)
-  + [Configuration](#configuration)
-  + [Usage Examples](#usage-examples-1)
-  + [Limitations](#limitations)
-* [Apache Flink](#apache-flink)
-  + [Prerequisites](#prerequisites-2)
-  + [Usage Examples](#usage-examples-2)
-  + [Limitations](#limitations-1)
+* Apache Spark
+  + Prerequisites
+  + Authenticate with a PAT
+  + Authenticate with an IDP
+  + Usage Examples
+* Trino
+  + Prerequisites
+  + Configuration
+  + Usage Examples
+  + Limitations
+* Apache Flink
+  + Prerequisites
+  + Usage Examples
+  + Limitations
 
 <div style="page-break-after: always;"></div>
 
@@ -1783,7 +1783,7 @@ There are multiple forms of billable Dremio usage within an [organization](/drem
 * Large-language model (LLM) tokens are billed when you use Dremio's AI features via the Dremio-Provided LLM.
 * Storage usage is billed in terabyte-months and only applies to projects that use Dremio-hosted storage. If your projects use an object storage bucket in your account with a cloud provider as the catalog store, storage fees do not apply.
 
-## How DCUs are Calculated[​](#how-dcus-are-calculated "Direct link to How DCUs are Calculated")
+## How DCUs are Calculated
 
 The number of DCUs consumed by an engine depends on two factors:
 
@@ -1796,9 +1796,9 @@ Uptime is measured in seconds and has a 60-second minimum.
 
 The DCU consumption rate for each engine size supported in Dremio is listed in [Manage Engines](/dremio-cloud/admin/engines/).
 
-### DCU Examples[​](#dcu-examples "Direct link to DCU Examples")
+### DCU Examples
 
-#### Example 1[​](#example-1 "Direct link to Example 1")
+#### Example 1
 
 An organization has two Dremio Cloud engines defined: Engine A and Engine B, where Engine A is a 2XSmall engine, and Engine B is a Medium engine.
 
@@ -1811,7 +1811,7 @@ The total usage for Engine A for this hour is `(80/60) * (16 DCUs/hour) = 21.33 
 
 The total usage for Engine B for this hour is `(250/60) * (128 DCUs/hour) = 533.33 DCUs`.
 
-#### Example 2[​](#example-2 "Direct link to Example 2")
+#### Example 2
 
 An organization has one Dremio Cloud engine defined: Engine A, where Engine A is a Medium engine.
 
@@ -1822,13 +1822,13 @@ Suppose that between 8 a.m. and 9 a.m. one day:
 
 Engine A accumulated a total of 90 minutes of engine uptime, so the total usage for Engine A for this hour is `(90/60) * (128 DCUs/hour) = 192 DCUs`.
 
-## How AI Usage Is Calculated[​](#how-ai-usage-is-calculated "Direct link to How AI Usage Is Calculated")
+## How AI Usage Is Calculated
 
 If you use the Dremio-Provided LLM, you pay directly for the cost of both the input and output tokens used. If you connect to another LLM via your own model provider, you are not currently charged for this usage.
 
-### AI Examples[​](#ai-examples "Direct link to AI Examples")
+### AI Examples
 
-#### Example 1[​](#example-1-1 "Direct link to Example 1")
+#### Example 1
 
 Say that you use an external model provider as well as the Dremio-Provided LLM to use Dremio's AI features, resulting in a usage footprint like the below:
 
@@ -1846,13 +1846,13 @@ In this scenario, you would be billed for $0.45 of AI feature usage.
 
 In order to simplify the billing experience for AI features Dremio may explore the addition of an AI specific credit, similar to DCUs, in the future.
 
-## How Storage Usage Is Calculated[​](#how-storage-usage-is-calculated "Direct link to How Storage Usage Is Calculated")
+## How Storage Usage Is Calculated
 
 Storage is calculated through the collection of periodic snapshots of the Dremio-hosted bucket. These snapshots throughout a billing period are averaged through the billing period to calculate a number of billable terabyte-months.
 
-### Storage Usage Examples[​](#storage-usage-examples "Direct link to Storage Usage Examples")
+### Storage Usage Examples
 
-#### Example 1[​](#example-1-2 "Direct link to Example 1")
+#### Example 1
 
 Suppose an organization has one Dremio project in a region where the price of a terabyte-month is $23.00, and that in a given month this project:
 
@@ -1860,7 +1860,7 @@ Suppose an organization has one Dremio project in a region where the price of a 
 
 Then the total amount charged for the storage would be (1) \* ($23.00) = $23.00
 
-#### Example 2[​](#example-2-1 "Direct link to Example 2")
+#### Example 2
 
 Suppose your organization has a project in a region where the price of a terabyte-month is $23.00, and that in a given period this project:
 
@@ -1871,12 +1871,12 @@ On average throughout the month, the project was storing 1.5Tb of data. So the b
 
 Was this page helpful?
 
-* [How DCUs are Calculated](#how-dcus-are-calculated)
-  + [DCU Examples](#dcu-examples)
-* [How AI Usage Is Calculated](#how-ai-usage-is-calculated)
-  + [AI Examples](#ai-examples)
-* [How Storage Usage Is Calculated](#how-storage-usage-is-calculated)
-  + [Storage Usage Examples](#storage-usage-examples)
+* How DCUs are Calculated
+  + DCU Examples
+* How AI Usage Is Calculated
+  + AI Examples
+* How Storage Usage Is Calculated
+  + Storage Usage Examples
 
 <div style="page-break-after: always;"></div>
 
@@ -1919,7 +1919,7 @@ On this page
 
 Visual profiles and raw profiles are available for jobs that have run queries.
 
-## Visual Profiles[​](#visual-profiles "Direct link to Visual Profiles")
+## Visual Profiles
 
 You can view the operations in visual profiles to diagnose performance or cost issues and to see the results of changes that you make, either to queries themselves or their environment, to improve performance or reduce costs.
 
@@ -1927,13 +1927,13 @@ A query profile details the plan that Dremio devised for running a query and sho
 
 Data processing begins with the reading of datasets at the bottom of the tree structure, and data is sequentially processed up the tree. A query plan can have many branches, and each branch is processed separately until a join or other operation connects it to the rest of the tree.
 
-### Phases[​](#phases "Direct link to Phases")
+### Phases
 
 A query plan is composed of query phases (also called major fragments), and each phase defines a series of operations that are running in parallel. A query phase is depicted by the same colored boxes that are grouped together in a visual profile.
 
 Within the query phases are multiple, single-threaded instances (also called minor fragments) running in parallel. Each thread is processing a different set of data through the same series of operations, and this data is exchanged from one phase to another. The number of threads for each operator can be found in the Details section (right panel) of a visual profile.
 
-### Use Visual Profiles[​](#use-visual-profiles "Direct link to Use Visual Profiles")
+### Use Visual Profiles
 
 To navigate to the visual profile for a job:
 
@@ -1953,9 +1953,9 @@ The main components of a visual profile are shown below:
 | 4 | The zoom controls the size of the tree graph so it's easier for you to view. |
 | 5 | The right panel shows the details and statistics about the selected operator. Clicking the Collapse This button hides a panel from view. hides the right panel from view. |
 
-### Use Cases[​](#use-cases "Direct link to Use Cases")
+### Use Cases
 
-#### Improve the Performance of Queries[​](#improve-the-performance-of-queries "Direct link to Improve the Performance of Queries")
+#### Improve the Performance of Queries
 
 You may notice that a query is taking more time than expected and want to know if something can be done to reduce the execution time. By viewing its visual profile, you can, for example, quickly find the operators with the highest processing times.
 
@@ -1965,13 +1965,13 @@ You might decide to try making simple adjustments to cause Dremio to choose a di
 * Changing join logic to avoid expanding joins (which return more rows than either of the inputs) or nested-loop joins
 * Creating a Reflection to avoid some of processing-intensive work done by the query
 
-#### Reduce Query-Execution Costs[​](#reduce-query-execution-costs "Direct link to Reduce Query-Execution Costs")
+#### Reduce Query-Execution Costs
 
 If you are an administrator, you may be interested in tuning the system as a whole to support higher concurrency and lower resource usage across the system, because you want to identify the most expensive queries in the system and then see what can be done to lower the cost of these queries. Such an investigation is often important even if individual users are happy with the performance of their own queries.
 
 On the Jobs page, you can use the columns to find the queries with the highest cost, greatest number of rows scanned, and more. You can then study the visual profiles for these queries, identifying system or data problems, and mismatches between how data is stored and how these queries retrieve it. You can try repartitioning data, modifying data types, sorting, creating views, creating Reflections, and other changes.
 
-## Raw Profiles[​](#raw-profiles "Direct link to Raw Profiles")
+## Raw Profiles
 
 Click **Raw Profile** to open a raw profile of the job in a separate dialog, which includes a job summary, state durations, threads, resource allocation, operators, visualized plan, acceleration, and other details.
 
@@ -1983,9 +1983,9 @@ To navigate to a raw profile:
 2. On the Jobs page, click a job that you would like to see the raw profile for.
 3. At the top of the next page, click the Raw Profile tab to open a raw profile of the job in a separate dialog. The associated raw profile dialog shows a variety of information for review.
 
-### Views[​](#views "Direct link to Views")
+### Views
 
-Within the Raw Profile dialog, you can analyze the [Job Metrics](#job-metrics) based on the following views:
+Within the Raw Profile dialog, you can analyze the Job Metrics based on the following views:
 
 | View | Description |
 | --- | --- |
@@ -1995,20 +1995,20 @@ Within the Raw Profile dialog, you can analyze the [Job Metrics](#job-metrics) b
 | Acceleration | Shows Reflection outcome, canonicalized user query alternatives, Reflection details, and job metrics.  * Multiple substitutions – See if the substitutions are excessive. * System activity – See if `sys.project.reflections`, `sys.project.materializations`, and `sys.project.refreshes` are excessive. * Comparisons – Compare cumulative cost (found in Best Cost Replacement Plan) against Logical Planning, which is in the Planning view.  This view is useful for determining whether exceptions or matches are occurring. The following considerations determines the acceleration process:  * Considered, Matched, Chosen – The query is accelerated. * Considered, Matched, Not Chosen – The query is not accelerated because either a costing issue or an exception during substitution occurred. * Considered, Not Matched, Not Chosen – The query is not accelerated because the Reflection does not have the data to accelerate. |
 | Error | (If applicable) Shows information about an error. The Failure Node is always the coordinator node and the server name inside the error message is the actual affected node. |
 
-### Job Metrics[​](#job-metrics "Direct link to Job Metrics")
+### Job Metrics
 
 Each view displays the following metrics:
 
-* **[Job Summary](#job-summary)**
-* **[Time in UTC](#time-in-utc)**
-* **[State Durations](#state-durations)**
-* **[Context](#context)**
-* **[Threads](#threads)**
-* **[Resource Allocation](#resource-allocation)**
-* **[Nodes](#nodes)**
-* **[Operators](#operators)**
+* **Job Summary**
+* **Time in UTC**
+* **State Durations**
+* **Context**
+* **Threads**
+* **Resource Allocation**
+* **Nodes**
+* **Operators**
 
-#### Job Summary[​](#job-summary "Direct link to Job Summary")
+#### Job Summary
 
 The job summary information includes:
 
@@ -2023,11 +2023,11 @@ The job summary information includes:
 * Matched Reflections
 * Chosen Reflections
 
-#### Time in UTC[​](#time-in-utc "Direct link to Time in UTC")
+#### Time in UTC
 
 The Time in UTC section lists the job's start and end time, in UTC format.
 
-#### State Durations[​](#state-durations "Direct link to State Durations")
+#### State Durations
 
 The State Durations section lists the length of time (in milliseconds) for each of the job states:
 
@@ -2042,11 +2042,11 @@ The State Durations section lists the length of time (in milliseconds) for each 
 
 For descriptions of the job states, see [Job States and Statuses](/dremio-cloud/admin/monitor/jobs/#job-states-and-statuses).
 
-#### Context[​](#context "Direct link to Context")
+#### Context
 
 If you are querying an Iceberg catalog object, the Context section lists the Iceberg catalog and branch that is referenced in the query. Otherwise, the Context section is not populated. Read [Iceberg Catalogs in Dremio](/dremio-cloud/developer/data-formats/iceberg#iceberg-catalogs-in-dremio) for more information.
 
-#### Threads[​](#threads "Direct link to Threads")
+#### Threads
 
 The Threads section provides an overview table and a major fragment block for each major fragment. Each row in the Overview table provides the number of minor fragments that Dremio parallelized from each major fragment, as well as aggregate time and memory metrics for the minor fragments.
 
@@ -2060,7 +2060,7 @@ In particular, the following metrics are useful:
 * Blocked on Upstream – Represents the phase before it is ready to give work though the cloud phase is not ready.
 * Phase Metrics – Displays memory used per node (Phases can run in parallel).
 
-#### Resource Allocation[​](#resource-allocation "Direct link to Resource Allocation")
+#### Resource Allocation
 
 The Resource Allocation section shows the following details for managed resources and workloads:
 
@@ -2070,11 +2070,11 @@ The Resource Allocation section shows the following details for managed resource
 * Query Cost
 * Query Type
 
-#### Nodes[​](#nodes "Direct link to Nodes")
+#### Nodes
 
 The Nodes section includes host name, resource waiting time, and peak memory.
 
-#### Operators[​](#operators "Direct link to Operators")
+#### Operators
 
 The Operators section shows aggregate metrics for each operator within a major fragment that performed relational operations during query execution.
 
@@ -2121,13 +2121,13 @@ Operator blocks also contain three drop-down menus: Operator Metrics, Operator D
 
 Was this page helpful?
 
-* [Visual Profiles](#visual-profiles)
-  + [Phases](#phases)
-  + [Use Visual Profiles](#use-visual-profiles)
-  + [Use Cases](#use-cases)
-* [Raw Profiles](#raw-profiles)
-  + [Views](#views)
-  + [Job Metrics](#job-metrics)
+* Visual Profiles
+  + Phases
+  + Use Visual Profiles
+  + Use Cases
+* Raw Profiles
+  + Views
+  + Job Metrics
 
 <div style="page-break-after: always;"></div>
 
@@ -2143,7 +2143,7 @@ Results cache is client-agnostic, meaning a query executed in the Dremio console
 
 Results cache also supports seamless coordinator scale-out, allowing newly added coordinators to benefit immediately from previously cached results.
 
-## Cases Supported By Results Cache[​](#cases-supported-by-results-cache "Direct link to Cases Supported By Results Cache")
+## Cases Supported By Results Cache
 
 Query result are cached in the following cases:
 
@@ -2154,7 +2154,7 @@ Query result are cached in the following cases:
 * The result set size, when stored in Arrow format, is less than or equal to 20 MB.
 * The query is not executed in Dremio console as a preview.
 
-## View Whether Queries Used Results Cache[​](#view-whether-queries-used-results-cache "Direct link to View Whether Queries Used Results Cache")
+## View Whether Queries Used Results Cache
 
 You can view the list of jobs on the Jobs page to determine if queries from data consumers were accelerated by the results cache.
 
@@ -2165,25 +2165,25 @@ To find whether a query was accelerated by a results cache:
 
 ![Results cache on the Job Overview page](/images/cloud/jobs-details-results-cache.png "Results cache")
 
-## Storage[​](#storage "Direct link to Storage")
+## Storage
 
 Cached results are stored in the project store alongside all project-specific data, such as metadata and Reflections. Executors write cache entries as Arrow data files and read them when processing `SELECT` queries that result in a cache hit. Coordinators are responsible for managing the deletion of expired cache files.
 
-## Deletion[​](#deletion "Direct link to Deletion")
+## Deletion
 
 A background task running on one of the Dremio coordinators handles cache expiration. This task runs every hour to mark cache entries that have not been accessed in the past 24 hours as expired and subsequently deletes them along with their associated cache files.
 
-## Considerations and Limitations[​](#considerations-and-limitations "Direct link to Considerations and Limitations")
+## Considerations and Limitations
 
 SQL queries executed through the Dremio console or a REST client that access the cache will rewrite the cached query results to the job results store to enable pagination.
 
 Was this page helpful?
 
-* [Cases Supported By Results Cache](#cases-supported-by-results-cache)
-* [View Whether Queries Used Results Cache](#view-whether-queries-used-results-cache)
-* [Storage](#storage)
-* [Deletion](#deletion)
-* [Considerations and Limitations](#considerations-and-limitations)
+* Cases Supported By Results Cache
+* View Whether Queries Used Results Cache
+* Storage
+* Deletion
+* Considerations and Limitations
 
 <div style="page-break-after: always;"></div>
 
@@ -2195,7 +2195,7 @@ On this page
 
 This topic covers how to manage resources and workloads by routing queries to particular engines through rules.
 
-## Overview[​](#overview "Direct link to Overview")
+## Overview
 
 You can manage Dremio workloads via routing rules, which are evaluated at runtime (before query planning) to decide which [query engine](/dremio-cloud/admin/engines/) to use for a given query. In projects with only one engine, all queries share the same execution resources and route to the same single engine. However, when multiple engines are provisioned, rules determine the engine to be used.
 
@@ -2209,13 +2209,13 @@ The following diagram shows a series of rules that are evaluated when a job gets
 
 ![](/images/cloud/rules-diagram.png)
 
-## Rules[​](#rules "Direct link to Rules")
+## Rules
 
 You can use Dremio SQL syntax to specify rules to target particular jobs.
 
 The following are the types of rules that can be created along with examples.
 
-### User[​](#user "Direct link to User")
+### User
 
 Create a rule that identifies the user that triggers the job.
 
@@ -2225,7 +2225,7 @@ Create rule that identifies user
 USER in ('JRyan','PDirk','CPhillips')
 ```
 
-### Group Membership[​](#group-membership "Direct link to Group Membership")
+### Group Membership
 
 Create a rule that identifies if the user that triggers the job is part of a particular group.
 
@@ -2236,7 +2236,7 @@ is_member('MarketingOps') OR
 is_member('Engineering')
 ```
 
-### Job Type[​](#job-type "Direct link to Job Type")
+### Job Type
 
 Create a rule depending on the type of job. The types of jobs can be identified by the following categories:
 
@@ -2258,7 +2258,7 @@ Create rule based on type of job
 query_type() IN ('JDBC', 'ODBC', 'UI Run', 'Flight')
 ```
 
-### Query Label[​](#query-label "Direct link to Query Label")
+### Query Label
 
 Labels enable rules that route queries running named commands to specific engines. Dremio supports the following query labels:
 
@@ -2283,7 +2283,7 @@ Create a routing rule for queries running the DML commands INSERT, UPDATE, DELET
 query_label() IN ('DML')
 ```
 
-### Query Attributes[​](#query-attributes "Direct link to Query Attributes")
+### Query Attributes
 
 Query attributes enable routing rules that direct queries to specific engines based on their characteristics.
 
@@ -2317,7 +2317,7 @@ Create a routing rule for queries with `DREMIO_MCP` and `AI_FUNCTION`
 query_has_attribute('DREMIO_MCP') AND query_has_attribute('AI_FUNCTIONS')
 ```
 
-### Tag[​](#tag "Direct link to Tag")
+### Tag
 
 Create a rule that routes jobs based on a routing tag.
 
@@ -2327,7 +2327,7 @@ Create rule that routes jobs based on routing tag
 tag() = 'ProductionDashboardQueue'
 ```
 
-### Date and Time[​](#date-and-time "Direct link to Date and Time")
+### Date and Time
 
 Create a rule that routes a job based on the time it was triggered. Use Dremio SQL Functions.
 
@@ -2338,7 +2338,7 @@ EXTRACT(HOUR FROM CURRENT_TIME)
 BETWEEN 9 AND 18
 ```
 
-### Combined Conditions[​](#combined-conditions "Direct link to Combined Conditions")
+### Combined Conditions
 
 Create rules based on multiple conditions.
 
@@ -2356,7 +2356,7 @@ AND EXTRACT(HOUR FROM CURRENT_TIME)
 BETWEEN 9 AND 18
 ```
 
-### Default Rules[​](#default-rules "Direct link to Default Rules")
+### Default Rules
 
 Each Dremio [project](/dremio-cloud/admin/projects/) has its own set of rules. When a project is created, Dremio automatically creates rules for the default and preview engines. You can edit these rules as needed.
 
@@ -2366,20 +2366,20 @@ Each Dremio [project](/dremio-cloud/admin/projects/) has its own set of rules. W
 | 2 | Reflections | query\_type() = 'Reflections' | default |
 | 3 | All Other Queries | All other queries | default |
 
-## View All Rules[​](#view-all-rules "Direct link to View All Rules")
+## View All Rules
 
 To view all rules:
 
 1. Click the Project Settings ![This is the icon that represents the Project Settings.](/images/icons/project-settings.png "Icon represents the Project Settings.") icon in the side navigation bar.
 2. Select **Engine Routing** in the project settings sidebar to see the list of engine routing rules.
 
-## Add a Rule[​](#add-a-rule "Direct link to Add a Rule")
+## Add a Rule
 
 To add a rule:
 
 1. On the Engine Routing page, click the **Add Rule** button at the top-right corner of the screen.
 2. In the **New Rule** dialog, for **Rule Name**, enter a name.
-3. For **Conditions**, enter the routing condition. See [Rules](#rules) for supported conditions.
+3. For **Conditions**, enter the routing condition. See Rules for supported conditions.
 4. For **Action**, complete one of the following options:
 
    a. If you want to route the jobs that meet the conditions to a particular engine, select the **Route to engine** option. Then use the engine selector to choose the engine.
@@ -2387,13 +2387,13 @@ To add a rule:
    b. If you want to reject the jobs that meet the conditions, select the **Reject** option.
 5. Click **Add**.
 
-## Edit a Rule[​](#edit-a-rule "Direct link to Edit a Rule")
+## Edit a Rule
 
 To edit a rule:
 
 1. On the Engine Routing page, hover over the rule and click the Edit Rule ![This is the icon that represents the Edit Rule settings.](/images/icons/edit.png "Icon represents the Edit Rule settings.") icon that appears next to the rule.
 2. In the **Edit Rule** dialog, for **Rule Name**, enter a name.
-3. For **Conditions**, enter the routing condition. See [Rules](#rules) for supported conditions.
+3. For **Conditions**, enter the routing condition. See Rules for supported conditions.
 4. For **Action**, complete one of the following options:
 
    a. If you want to route the jobs that meet the conditions to a particular engine, select the **Route to engine** option. Then use the engine selector to choose the engine.
@@ -2401,7 +2401,7 @@ To edit a rule:
    b. If you want to reject the jobs that meet the conditions, select the **Reject** option.
 5. Click **Save**.
 
-## Delete a Rule[​](#delete-a-rule "Direct link to Delete a Rule")
+## Delete a Rule
 
 To delete a rule:
 
@@ -2413,23 +2413,23 @@ You must have at least one rule per project to route queries to a particular eng
 
 2. In the **Delete Rule** dialog, click **Delete** to confirm.
 
-## Set and Reset Engines[​](#set-and-reset-engines "Direct link to Set and Reset Engines")
+## Set and Reset Engines
 
 The [`SET ENGINE`](/dremio-cloud/sql/commands/set-engine) SQL command is used to specify the exact execution engine to run subsequent queries in the current session. When using `SET ENGINE`, WLM rules and direct routing connection properties are bypassed, and queries are routed directly to the specified queue. The [`RESET ENGINE`](/dremio-cloud/sql/commands/reset-engine) command clears the session-level engine override, reverting query routing to follow the Workload Management (WLM) rules or any direct routing connection property if set.
 
-## SET TAG[​](#set--tag "Direct link to SET TAG")
+## SET TAG
 
 The [`SET TAG`](/dremio-cloud/sql/commands/set-tag) SQL command is used to specify routing tag for subsequent queries in the current session. If a `ROUTING_TAG` connection property is already set for the session, `SET TAG` will override it. When using `SET TAG`, you must have a previously defined Workload Management (WLM) routing rule that routes queries based on that routing tag. The [`RESET TAG`](/dremio-cloud/sql/commands/reset-tag) command clears the session-level routing tag override, reverting query routing to follow the Workload Management (WLM) rules or any direct routing connection property if set.
 
-## Connection Tagging and Direct Routing Configuration[​](#connection-tagging-and-direct-routing-configuration "Direct link to Connection Tagging and Direct Routing Configuration")
+## Connection Tagging and Direct Routing Configuration
 
 Routing tags are configured by setting the `ROUTING_TAG = <Tag Name>` parameter for a given session to the desired tag name.
 
-### JDBC Session Configuration[​](#jdbc-session-configuration "Direct link to JDBC Session Configuration")
+### JDBC Session Configuration
 
 To configure JDBC sessions add the `ROUTING_TAG` parameter to the JDBC connection URL. For example: `jdbc:dremio:direct=localhost;ROUTING_TAG='TagA'`.
 
-### ODBC Session Configuration[​](#odbc-session-configuration "Direct link to ODBC Session Configuration")
+### ODBC Session Configuration
 
 Configure ODBC sessions as follows:
 
@@ -2442,13 +2442,13 @@ Add the `ROUTING_TAG` parameter to the `AdvancedProperties` parameter in the ODB
 1. Add the `ROUTING_TAG` parameter to the `AdvancedProperties` parameter in the system `odbc.ini` file located at `/Library/ODBC/odbc.ini`. After adding the parameter, an example Advanced Properties configuration might be: `AdvancedProperties=CastAnyToVarchar=true;HandshakeTimeout=5;QueryTimeout=180;TimestampTZDisplayTimezone=utc;NumberOfPrefetchBuffers=5;ROUTING_TAG='TagA';`
 2. Add the `ROUTING_TAG` parameter to the `AdvancedProperties` parameter in the user's DSN located at `~/Library/ODBC/odbc.ini`
 
-## Best Practices for Workload Management[​](#best-practices-for-workload-management "Direct link to Best Practices for Workload Management")
+## Best Practices for Workload Management
 
 Because every query workload is different, engine sizing often depends on several factors, such as the complexity of queries, number of concurrent users, data sources, dataset size, file and table formats, and specific business requirements for latency and cost. Workload management (WLM) ensures reliable query performance by choosing adequately sized engines for each workload type, configuring engines, and implementing query routing rules to segregate and route query workload types to appropriate engines.
 
 This section describes best practices for adding and using Dremio engines, as well as configuring WLM to achieve reliable query performance in Dremio. This section also includes tips for migrating from self-managed Dremio Software to fully managed Dremio and information about using the system table `sys.project.history.jobs`, which stores metadata for historical jobs executed in a project, to assess the efficacy of WLM settings and make adjustments.
 
-### Set Up Engines[​](#set-up-engines "Direct link to Set Up Engines")
+### Set Up Engines
 
 As a fully managed offering, Dremio is the best deployment model for Dremio in production because it allows you to achieve high levels of reliability and durability for your queries and maximize resource efficiency with engine autoscaling and does not require you to manually create and manage engines.
 
@@ -2462,9 +2462,9 @@ Dremio recommends the following engine setup configurations:
 * Maximum concurrency is the maximum number of jobs that Dremio can execute concurrently on an engine replica. Dremio provides an out-of-the-box value for maximum concurrency based on engine size, but we recommend testing with typical queries directed to specific engines to determine the best maximum concurrency values for your query workloads.
 * Dremio offers autoscaling to meet the demands of dynamic workloads with engine replicas. It is vital to assess and configure each engine's autoscaling parameters based on your organization's budget constraints and latency requirements for each workload type. You can choose the minimum and maximum number of replicas for each engine and specify any advanced configuration as needed. For example, dashboard workloads must meet stringent low-latency requirements and are prioritized for performance rather than cost. Engines added and assigned to execute the dashboard workloads may therefore be configured to autoscale using replicas. On the other hand, an engine for ad hoc workloads may have budget constraints and therefore be configured to autoscale with a maximum of one replica.
 
-### Route Workloads[​](#route-workloads "Direct link to Route Workloads")
+### Route Workloads
 
-Queries are routed to engines according to routing rules. You may use Dremio's out-of-the-box routing rules that route queries to the preview engines that are established by default, but Dremio recommends creating custom routing rules based on your workloads and business requirements. Custom rules can include factors such as user, group membership, job type, date and time, query label, and tag. Read [Rules](#rules) for examples.
+Queries are routed to engines according to routing rules. You may use Dremio's out-of-the-box routing rules that route queries to the preview engines that are established by default, but Dremio recommends creating custom routing rules based on your workloads and business requirements. Custom rules can include factors such as user, group membership, job type, date and time, query label, and tag. Read Rules for examples.
 
 The following table lists example routing rules based on query\_type, query\_label, and tags:
 
@@ -2477,41 +2477,41 @@ The following table lists example routing rules based on query\_type, query\_lab
 | 5 | Lakehouse Queries | `query_label() IN ('COPY','DML','CTAS', 'OPTIMIZATION')` | Lakehouse |
 | 6 | All Other Queries | All other queries | Preview |
 
-### Use the `sys.project.history.jobs` System Table[ ​](#use-the-sysprojecthistoryjobs-system-table "Direct link to use-the-sysprojecthistoryjobs-system-table")
+### Use the `sys.project.history.jobs` System Table
 
 The [`sys.project.history.jobs`](/dremio-cloud/sql/system-tables/jobs-historical) system table contains metadata for recent jobs executed in a project, including time statistics, cost, and other relevant information. You can use the data in the `sys.project.history.jobs` system table to evaluate the effectiveness of WLM settings and make adjustments based on job metadata.
 
-### Use Job Analyzer[​](#use-job-analyzer "Direct link to Use Job Analyzer")
+### Use Job Analyzer
 
 Job Analyzer is a package of useful query and view definitions that you may create over the `sys.projects.history.jobs` system table and use to analyze job metadata. Job Analyzer is available in a [public GitHub repository](https://github.com/dremio/professional-services/tree/main/tools/dremio-cloud-job-analyzer).
 
 Was this page helpful?
 
-* [Overview](#overview)
-* [Rules](#rules)
-  + [User](#user)
-  + [Group Membership](#group-membership)
-  + [Job Type](#job-type)
-  + [Query Label](#query-label)
-  + [Query Attributes](#query-attributes)
-  + [Tag](#tag)
-  + [Date and Time](#date-and-time)
-  + [Combined Conditions](#combined-conditions)
-  + [Default Rules](#default-rules)
-* [View All Rules](#view-all-rules)
-* [Add a Rule](#add-a-rule)
-* [Edit a Rule](#edit-a-rule)
-* [Delete a Rule](#delete-a-rule)
-* [Set and Reset Engines](#set-and-reset-engines)
-* [SET TAG](#set--tag)
-* [Connection Tagging and Direct Routing Configuration](#connection-tagging-and-direct-routing-configuration)
-  + [JDBC Session Configuration](#jdbc-session-configuration)
-  + [ODBC Session Configuration](#odbc-session-configuration)
-* [Best Practices for Workload Management](#best-practices-for-workload-management)
-  + [Set Up Engines](#set-up-engines)
-  + [Route Workloads](#route-workloads)
-  + [Use the `sys.project.history.jobs` System Table](#use-the-sysprojecthistoryjobs-system-table)
-  + [Use Job Analyzer](#use-job-analyzer)
+* Overview
+* Rules
+  + User
+  + Group Membership
+  + Job Type
+  + Query Label
+  + Query Attributes
+  + Tag
+  + Date and Time
+  + Combined Conditions
+  + Default Rules
+* View All Rules
+* Add a Rule
+* Edit a Rule
+* Delete a Rule
+* Set and Reset Engines
+* SET TAG
+* Connection Tagging and Direct Routing Configuration
+  + JDBC Session Configuration
+  + ODBC Session Configuration
+* Best Practices for Workload Management
+  + Set Up Engines
+  + Route Workloads
+  + Use the `sys.project.history.jobs` System Table
+  + Use Job Analyzer
 
 <div style="page-break-after: always;"></div>
 
@@ -2527,7 +2527,7 @@ note
 
 For non-duplicating joins, Dremio can accelerate queries that reference only some of the joins in a Reflection, eliminating the need to create separate Reflections for every table combination.
 
-## Reflection Recommendations[​](#reflection-recommendations "Direct link to Reflection Recommendations")
+## Reflection Recommendations
 
 When [Autonomous Reflections](/dremio-cloud/admin/performance/autonomous-reflections) are not enabled, Dremio automatically provides recommendations to add and remove Reflections based on query patterns to optimize performance for queries on Iceberg tables, UniForm table, Parquet datasets, and any views built on these datasets.
 
@@ -2548,7 +2548,7 @@ Reflections created using usage-based recommendations are only used when fully s
 
 To generate recommendations for default raw and aggregation Reflections, you can obtain the job IDs by looking them up on the [Jobs page](/dremio-cloud/admin/monitor/jobs). Then, use either the [`SYS.RECOMMEND_REFLECTIONS`](/dremio-cloud/sql/table-functions/recommend-reflections) table function or the [Recommendations API](/dremio-cloud/api/reflection/recommendations) to submit job IDs to accelerate specific SQL queries.
 
-## Raw Reflections[​](#raw-reflections "Direct link to Raw Reflections")
+## Raw Reflections
 
 Retain the same number of records as its anchor while allowing a subset of columns. It enhances query performance by materializing complex views, transforming data from non-performant sources into the Iceberg table format optimized for large-scale analytics, and utilizing partitioning and sorting for faster access. By precomputing and storing data in an optimized format, raw Reflections significantly reduce query latency and improve overall efficiency.
 
@@ -2564,14 +2564,14 @@ note
 
 For creating Reflections on views and tables with row-access and column-masking policies, see [Use Reflections on Datasets with Policies](/dremio-cloud/manage-govern/row-column-policies#use-reflections-on-datasets-with-policies).
 
-### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+### Prerequisites
 
 * If you want to accelerate queries on unoptimized data or data in slow storage, create a view that is itself created from a table in a non-columnar format or on slow-scan storage. You can then create your raw Reflection from that view.
 * If you want to accelerate "needle-in-a-haystack" queries, create a view that includes a predicate to include only the rows that you want to scan. You can then create your raw Reflection from that view.
 * If you want to accelerate queries that perform expensive transformations, create a view that performs those transformations. You can then create your raw Reflection from that view.
 * If you want to accelerate queries that perform joins, create a view that performs the joins. You can then create your raw Reflection from that view.
 
-### Create Default Raw Reflections[​](#create-default-raw-reflections "Direct link to Create Default Raw Reflections")
+### Create Default Raw Reflections
 
 In the **Basic** view of the Reflections editor, you can create a raw Reflection that includes all of the fields that are in a table or view. Creating a basic raw Reflection ensures that Dremio never runs user queries against the underlying table or view when the raw Reflection is enabled.
 
@@ -2585,13 +2585,13 @@ To create a raw Reflection in the **Basic** view of the Reflections editor:
    ![](/images/enabling-raw-reflections.png)
 5. Click **Save**.
 
-#### Restrictions of the **Basic** View[​](#restrictions-of-the-basic-view "Direct link to restrictions-of-the-basic-view")
+#### Restrictions of the **Basic** View
 
 * You cannot select fields to sort or create horizontal partitions on.
 * The name of the Reflection that you create is restricted to "Raw Reflection".
 * You can create only one raw Reflection. If you want to create multiple raw Reflections at a time, use the **Advanced** view.
 
-### Create Customized Raw Reflections[​](#create-customized-raw-reflections "Direct link to Create Customized Raw Reflections")
+### Create Customized Raw Reflections
 
 In the **Advanced** view of the Reflections editor, you can create one or more raw Reflections that include all or a selection of the fields that are in the anchor or supported anchor. You can also choose sort fields and fields for partitioning horizontally.
 
@@ -2638,7 +2638,7 @@ To create a raw Reflection in the **Advanced** view of the Reflections editor:
    * Select **Minimize Number Of Files** when you want to improve the read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 8. Click **Save** when you are finished.
 
-### Edit Raw Reflections[​](#edit-raw-reflections "Direct link to Edit Raw Reflections")
+### Edit Raw Reflections
 
 You can edit an existing raw Reflection. You might want to do so if you are iteratively designing and testing a raw Reflection, if the definition of the view that the Reflection was created from was changed, or if the schema of the underlying table was changed.
 
@@ -2677,11 +2677,11 @@ To edit a raw Reflection in the **Advanced** view of the Reflections editor:
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 9. Click **Save** when you are finished.
 
-## Aggregation Reflections[​](#aggregation-reflections "Direct link to Aggregation Reflections")
+## Aggregation Reflections
 
 Accelerate BI-style queries that involve aggregations (`GROUP BY` queries) by precomputing results (like `SUM`, `COUNT`, `AVG`, `GROUP BY`) across selected dimensions and measures. By precomputing expensive computations, they significantly improve query performance at runtime. These Reflections are ideal for analytical workloads with frequent aggregations on large datasets.
 
-### Create Default Aggregation Reflections[​](#create-default-aggregation-reflections "Direct link to Create Default Aggregation Reflections")
+### Create Default Aggregation Reflections
 
 You can use the **Basic** view of the Reflections editor to create one aggregation Reflection that includes fields, from the anchor or supported anchor, that are recommended for use as dimensions or measures. You can add or remove dimensions and measures, too.
 
@@ -2696,13 +2696,13 @@ To create an aggregation Reflection in the **Basic** view of the Reflections edi
    ![](/images/enabling-aggregation-reflections.png)
 6. Click **Save**.
 
-#### Restrictions[​](#restrictions "Direct link to Restrictions")
+#### Restrictions
 
 * You can create only one aggregation Reflection in the **Basic** view. If you want to create multiple aggregations Reflections at a time, use the **Advanced** view.
 * You cannot select fields for sorting or horizontally partitioning.
 * The name of the Reflection is restricted to "Aggregation Reflection".
 
-### Create Customized Aggregation Reflections[​](#create-customized-aggregation-reflections "Direct link to Create Customized Aggregation Reflections")
+### Create Customized Aggregation Reflections
 
 You can use the **Advanced** view of the Reflections editor to create one or more aggregation Reflections that select which fields in the anchor or supporting anchor to use as dimensions and measures. For each field that you use as a measure, you can use one or more of these SQL functions: `APPROX_DISTINCT_COUNT`, `COUNT`, `MAX`, and `MIN`. You can also choose sort fields and fields for partitioning horizontally.
 
@@ -2748,7 +2748,7 @@ To create an aggregation Reflection in the **Advanced** view of the Reflections 
    * Select **Minimize Number Of Files** when you want to improve the read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 8. Click **Save** when you are finished.
 
-### Edit Aggregation Reflections[​](#edit-aggregation-reflections "Direct link to Edit Aggregation Reflections")
+### Edit Aggregation Reflections
 
 You might want to edit an aggregation Reflection if you are iteratively designing and testing an aggregation Reflection, if the definition of the view that the Reflection was created from was changed, if the schema of the underlying table was changed, or if you want to revise one or more aggregations defined in the Reflection.
 
@@ -2756,7 +2756,7 @@ If you created an aggregation Reflection in the **Basic** view of the Reflection
 
 Dremio runs the job or jobs to recreate the Reflection after you click **Save**.
 
-#### Use the Basic View[​](#use-the-basic-view "Direct link to Use the Basic View")
+#### Use the Basic View
 
 To edit an aggregation Reflection in the **Basic** view of the Reflections editor:
 
@@ -2766,7 +2766,7 @@ To edit an aggregation Reflection in the **Basic** view of the Reflections edito
 4. In the Aggregation Reflection section of the editor, modify or accept the recommendation for **Dimension** and **Measure** columns.
 5. Click **Save**.
 
-#### Use the Advanced View[​](#use-the-advanced-view "Direct link to Use the Advanced View")
+#### Use the Advanced View
 
 To edit an aggregation Reflection in the **Advanced** view of the Reflections editor:
 
@@ -2803,11 +2803,11 @@ To edit an aggregation Reflection in the **Advanced** view of the Reflections ed
    * Select **Minimize Number Of Files** when you want to improve the read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 9. Click **Save** when you are finished.
 
-## External Reflections[​](#external-reflections "Direct link to External Reflections")
+## External Reflections
 
 Reference precomputed tables in external data sources instead of materializing Reflections within Dremio, eliminating refresh overhead and storage costs. You can use an external Reflection by defining a view in Dremio that matches the precomputed table and mapping the view to the external data source. The data in the precomputed table is not refreshed by Dremio. When querying the view, Dremio’s query planner leverages the external Reflection to generate optimal execution plans, improving query performance without additional storage consumption in Dremio.
 
-### Create External Reflections[​](#create-external-reflections "Direct link to Create External Reflections")
+### Create External Reflections
 
 To create an external Reflection:
 
@@ -2860,14 +2860,14 @@ To do that, you follow these steps:
 
 The external Reflection lets Dremio's query planner know that there is a table in `mySource` that matches the Dremio view `myWorkplace.sales_by_region` and that can be used to satisfy queries against the view. When Dremio users query `myWorkspace.sales_by_region`, Dremio routes the query to the data source `mySource`, which runs the query against `mySource.sales_by_region`.
 
-### Edit External Reflections[​](#edit-external-reflections "Direct link to Edit External Reflections")
+### Edit External Reflections
 
 If you have modified the DDL of a derived table in your data source, follow these steps in Dremio to update the corresponding external Reflection:
 
 1. [Replace the view with one that has a definition that matches the definition of the derived table](/dremio-cloud/sql/commands/create-view). When you do so, the external Reflection is dropped.
 2. [Define a new external Reflection that maps the view to the derived table.](/dremio-cloud/sql/commands/alter-table)
 
-## Test Reflections[​](#test-reflections "Direct link to Test Reflections")
+## Test Reflections
 
 You can test whether the Reflections that you created are used to satisfy a query without actually running the query. This practice can be helpful when the tables are very large and you want to avoid processing large queries unnecessarily.
 
@@ -2878,7 +2878,7 @@ To test whether one or more Reflections are used by a query:
 3. Click **Run**.
 4. When the query has finished, click the **Run** link found directly above the query results to view the job details. Any Reflections used will be shown on the page.
 
-## View Whether Queries Used Reflections[​](#view-whether-queries-used-reflections "Direct link to View Whether Queries Used Reflections")
+## View Whether Queries Used Reflections
 
 You can view the list of jobs on the Jobs page to find out whether queries were accelerated by Reflections. The Jobs page lists the jobs that ran queries, both queries from your data consumers and queries run within the Dremio user interface.
 
@@ -2888,7 +2888,7 @@ To find whether a query used a Reflection:
 2. Look for ![This is the icon that indicates a Reflection was used.](/images/icons/reflections.png "Reflections icon") next to the job to indicate that one or more Reflections were used.
 3. View the job summary by clicking the row that represents the job that ran the query. The job summary appears in the pane to the right of the list of jobs.
 
-### Relationship between Reflections and Jobs[​](#relationship-between-reflections-and-jobs "Direct link to Relationship between Reflections and Jobs")
+### Relationship between Reflections and Jobs
 
 The relationship between a job and a Reflection can be one of the following types:
 
@@ -2896,7 +2896,7 @@ The relationship between a job and a Reflection can be one of the following type
 * MATCHED – A Reflection could have been used to accelerate the query, but Dremio determined that it would not provide any benefits or another Reflection was determined to be a better choice.
 * CHOSEN – A Reflection is used to accelerate the query. Note that multiple Reflections can be used to accelerate queries.
 
-## Disable Reflections[​](#disable-reflections "Direct link to Disable Reflections")
+## Disable Reflections
 
 Disabled Reflections become unavailable for use by queries and will not be refreshed manually or according to their schedule.
 
@@ -2918,7 +2918,7 @@ To disable a Reflection:
    * If there are two or more aggregation Reflections for the table or view, in the **Advanced** view, click the toggle switch for the individual aggregation Reflection that you want to disable.
 4. Click **Save**. The changes take effect immediately.
 
-## Delete Reflections[​](#delete-reflections "Direct link to Delete Reflections")
+## Delete Reflections
 
 You can delete Reflections individually, or all of the Reflections on a table or view. When you delete a Reflection, its definition, data, and metadata are entirely deleted.
 
@@ -2954,32 +2954,32 @@ ALTER DATASET <DATASET_PATH> DROP Reflection <REFLECTION_NAME>
 * `DATASET_PATH`: The path of the view on which the external Reflection is based.
 * `REFLECTION_NAME`: The name of the external Reflection.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Data Reflections Deep Dive](https://university.dremio.com/course/data-reflections-deep-dive) – Enroll in this Dremio University course to learn more about Reflections.
 * [Operational Excellence](/dremio-cloud/help-support/well-architected-framework/operational-excellence/) - Follow best practices in Dremio's Well-Architected Framework for creating and managing Reflections.
 
 Was this page helpful?
 
-* [Reflection Recommendations](#reflection-recommendations)
-* [Raw Reflections](#raw-reflections)
-  + [Prerequisites](#prerequisites)
-  + [Create Default Raw Reflections](#create-default-raw-reflections)
-  + [Create Customized Raw Reflections](#create-customized-raw-reflections)
-  + [Edit Raw Reflections](#edit-raw-reflections)
-* [Aggregation Reflections](#aggregation-reflections)
-  + [Create Default Aggregation Reflections](#create-default-aggregation-reflections)
-  + [Create Customized Aggregation Reflections](#create-customized-aggregation-reflections)
-  + [Edit Aggregation Reflections](#edit-aggregation-reflections)
-* [External Reflections](#external-reflections)
-  + [Create External Reflections](#create-external-reflections)
-  + [Edit External Reflections](#edit-external-reflections)
-* [Test Reflections](#test-reflections)
-* [View Whether Queries Used Reflections](#view-whether-queries-used-reflections)
-  + [Relationship between Reflections and Jobs](#relationship-between-reflections-and-jobs)
-* [Disable Reflections](#disable-reflections)
-* [Delete Reflections](#delete-reflections)
-* [Related Topics](#related-topics)
+* Reflection Recommendations
+* Raw Reflections
+  + Prerequisites
+  + Create Default Raw Reflections
+  + Create Customized Raw Reflections
+  + Edit Raw Reflections
+* Aggregation Reflections
+  + Create Default Aggregation Reflections
+  + Create Customized Aggregation Reflections
+  + Edit Aggregation Reflections
+* External Reflections
+  + Create External Reflections
+  + Edit External Reflections
+* Test Reflections
+* View Whether Queries Used Reflections
+  + Relationship between Reflections and Jobs
+* Disable Reflections
+* Delete Reflections
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -2991,7 +2991,7 @@ On this page
 
 To enable secure access between Dremio and your AWS environment, you must create an AWS Identity and Access Management (IAM) role with specific permissions and a trust relationship that allows Dremio’s AWS account to assume that role. The IAM policy and trust configuration are detailed bellow.
 
-## Create Your IAM Role[​](#create-your-iam-role "Direct link to Create Your IAM Role")
+## Create Your IAM Role
 
 You will create an IAM Role in your AWS account that grants Dremio the permissions it needs to access your S3 bucket.
 
@@ -3038,7 +3038,7 @@ The second statement allows Dremio to work with the data in your bucket.
 * **PutObject / GetObject / DeleteObject** – Allow Dremio to read, write, and delete data within the bucket.
 * **ListBucket** – Allow Dremio to enumerate objects in the bucket.
 
-## Define the Trust Relationship[​](#define-the-trust-relationship "Direct link to Define the Trust Relationship")
+## Define the Trust Relationship
 
 The trust relationship determines which AWS account (in this case, Dremio’s) is permitted to assume your IAM role.
 
@@ -3069,7 +3069,7 @@ Trust Relationship
 * **AssumeRole** - Allows Dremio to assume the provided role.
 * **TagSession** - Allows Dremio to pass identifying tags during role assumption, enabling improved tracking and auditing across accounts.
 
-## Validate Role Configuration[​](#validate-role-configuration "Direct link to Validate Role Configuration")
+## Validate Role Configuration
 
 1. In the AWS Console, navigate to **IAM → Roles → [Your Role Name]**.
 2. Confirm that:
@@ -3079,7 +3079,7 @@ Trust Relationship
    * Both `sts:AssumeRole` and `sts:TagSession` actions are present.
 3. If Dremio provided an AWS account ID or specific region endpoint, ensure these match your configuration.
 
-## Provide Role ARN to Dremio[​](#provide-role-arn-to-dremio "Direct link to Provide Role ARN to Dremio")
+## Provide Role ARN to Dremio
 
 Once your role is created and validated:
 
@@ -3088,7 +3088,7 @@ Once your role is created and validated:
 
 This allows Dremio to assume the role securely and begin reading/writing data to your S3 bucket.
 
-## (Optional) Enable PrivateLink Connectivity[​](#optional-enable-privatelink-connectivity "Direct link to (Optional) Enable PrivateLink Connectivity")
+## (Optional) Enable PrivateLink Connectivity
 
 To enhance security and keep data traffic within AWS’s private network, Dremio supports integration via [AWS PrivateLink](/dremio-cloud/security/privatelink) with DNS-based endpoint resolution.
 
@@ -3100,11 +3100,11 @@ To enhance security and keep data traffic within AWS’s private network, Dremio
 
 Was this page helpful?
 
-* [Create Your IAM Role](#create-your-iam-role)
-* [Define the Trust Relationship](#define-the-trust-relationship)
-* [Validate Role Configuration](#validate-role-configuration)
-* [Provide Role ARN to Dremio](#provide-role-arn-to-dremio)
-* [(Optional) Enable PrivateLink Connectivity](#optional-enable-privatelink-connectivity)
+* Create Your IAM Role
+* Define the Trust Relationship
+* Validate Role Configuration
+* Provide Role ARN to Dremio
+* (Optional) Enable PrivateLink Connectivity
 
 <div style="page-break-after: always;"></div>
 
@@ -3114,13 +3114,13 @@ Original URL: https://docs.dremio.com/dremio-cloud/admin/performance/autonomous-
 
 On this page
 
-Dremio automatically creates and manages [Reflections](#what-is-a-reflection) based on query patterns to optimize performance for queries on Iceberg tables, UniForm tables, Parquet datasets, and any views built on these datasets. With Autonomous Reflections, management and maintenance are fully automated, reducing manual effort and ensuring queries run efficiently. This eliminates the need for manual performance tuning while maintaining query correctness.
+Dremio automatically creates and manages Reflections based on query patterns to optimize performance for queries on Iceberg tables, UniForm tables, Parquet datasets, and any views built on these datasets. With Autonomous Reflections, management and maintenance are fully automated, reducing manual effort and ensuring queries run efficiently. This eliminates the need for manual performance tuning while maintaining query correctness.
 
 note
 
 For data sources and formats not supported by Autonomous Reflections, you can create [manual Reflections](/dremio-cloud/admin/performance/manual-reflections) to optimize query performance.
 
-## What Is a Reflection?[​](#what-is-a-reflection "Direct link to What Is a Reflection?")
+## What Is a Reflection?
 
 A Reflection is a precomputed and optimized copy of a query result, designed to speed up query performance. It is derived from an existing table or view, known as its anchor.
 
@@ -3130,13 +3130,13 @@ When Dremio receives a query, it first determines whether any Reflections have a
 
 Dremio then compares the cost of the plan to the cost of executing the query directly against the tables, and selects the plan with the lower cost. Finally, Dremio executes the selected query plan. Typically, plans that use one or more Reflections are less expensive than plans that run against raw data.
 
-## How Workloads Are Autonomously Accelerated[​](#how-workloads-are-autonomously-accelerated "Direct link to How Workloads Are Autonomously Accelerated")
+## How Workloads Are Autonomously Accelerated
 
 Dremio autonomously creates Reflections to accelerate queries on existing views, queries with joins written directly on base tables (not referencing any views), and queries that summarize data, typically submitted by AI Agents and BI dashboards.
 
 Reflections are automatically generated based on query patterns without user intervention. Dremio continuously collects metadata from user queries, and the Autonomous Algorithm runs daily at midnight UTC to analyze recent query patterns from the last 7 days and create Autonomous Reflections that accelerate frequent and expensive queries.
 
-### Query Qualification[​](#query-qualification "Direct link to Query Qualification")
+### Query Qualification
 
 Only queries meeting the following criteria are considered:
 
@@ -3145,11 +3145,11 @@ Only queries meeting the following criteria are considered:
 
 Dremio may create system-managed views to anchor raw or aggregation Reflections that cannot be modified or referenced by users. Admins can drop these views, which also deletes the associated Reflection.
 
-### Reflection Limits[​](#reflection-limits "Direct link to Reflection Limits")
+### Reflection Limits
 
 Dremio can create up to 100 Reflections total, with a maximum of 10 new Reflections created per day. The actual number depends on query patterns.
 
-## How Autonomous Reflections Are Maintained[​](#how-autonomous-reflections-are-maintained "Direct link to How Autonomous Reflections Are Maintained")
+## How Autonomous Reflections Are Maintained
 
 Autonomous Reflections refresh automatically when source data changes:
 
@@ -3159,11 +3159,11 @@ Autonomous Reflections refresh automatically when source data changes:
 
 **Refresh Engine:** When a project is created, Dremio automatically provisions a Small internal refresh engine dedicated to executing Autonomous Reflection refresh jobs. This ensures Reflections are always accurate and up-to-date without manual refresh. The engine automatically shuts down after 30 seconds of idle time to optimize resource usage and costs.
 
-## Usage and Data Freshness[​](#usage-and-data-freshness "Direct link to Usage and Data Freshness")
+## Usage and Data Freshness
 
 Dremio only uses Reflections in query plans when they refresh with the most recent data in tables on which they are based. If a Reflection is not yet refreshed, queries automatically fall back to the raw data source, ensuring query correctness is never compromised.
 
-### Monitor Reflections[​](#monitor-reflections "Direct link to Monitor Reflections")
+### Monitor Reflections
 
 To view Autonomous Reflections created for your project and their metadata (including status, score, footprint, and queries accelerated), see [View Reflection Details](/dremio-cloud/admin/performance/manual-reflections/reflection-details).
 
@@ -3172,36 +3172,36 @@ To view the history of changes to Autonomous Reflections in the last 30 days:
 1. Go to **Project Settings** > **Reflections**.
 2. Click **History Log**.
 
-## Remove Reflections[​](#remove-reflections "Direct link to Remove Reflections")
+## Remove Reflections
 
 Autonomous Reflections can be removed in two ways:
 
 1. **Automatic Removal** – When a Autonomous Reflection's score falls below the threshold, it is disabled for 7 days before being automatically dropped. Admins can view disabled Autonomous Reflections in the history log.
 2. **Manual Removal** – Admins can manually drop Autonomous Reflections at any time. Autonomous Reflections cannot be modified by users. If an admin manually drops a Autonomous Reflection three times, Dremio will not recreate it for 90 days.
 
-## Disable Reflections[​](#disable-reflections "Direct link to Disable Reflections")
+## Disable Reflections
 
 Every project created in Dremio is automatically accelerated with Autonomous Reflections. To disable Autonomous Reflections for a project:
 
 1. Go to **Project Settings** > **Preferences**.
 2. Toggle the **Autonomous Reflections** setting to off.
 
-## Related Topics[​](#related-topics "Direct link to Related Topics")
+## Related Topics
 
 * [Data Product Fundamentals](https://university.dremio.com/course/data-product-fundamentals) – Enroll in this Dremio University course to learn more about Autonomous Reflections.
 
 Was this page helpful?
 
-* [What Is a Reflection?](#what-is-a-reflection)
-* [How Workloads Are Autonomously Accelerated](#how-workloads-are-autonomously-accelerated)
-  + [Query Qualification](#query-qualification)
-  + [Reflection Limits](#reflection-limits)
-* [How Autonomous Reflections Are Maintained](#how-autonomous-reflections-are-maintained)
-* [Usage and Data Freshness](#usage-and-data-freshness)
-  + [Monitor Reflections](#monitor-reflections)
-* [Remove Reflections](#remove-reflections)
-* [Disable Reflections](#disable-reflections)
-* [Related Topics](#related-topics)
+* What Is a Reflection?
+* How Workloads Are Autonomously Accelerated
+  + Query Qualification
+  + Reflection Limits
+* How Autonomous Reflections Are Maintained
+* Usage and Data Freshness
+  + Monitor Reflections
+* Remove Reflections
+* Disable Reflections
+* Related Topics
 
 <div style="page-break-after: always;"></div>
 
@@ -3222,34 +3222,34 @@ For any particular Reflection, the Reflections page presents information that an
 
 | Question | Column with the answer |
 | --- | --- |
-| What is the status of this Reflection? | [Name](#name) |
-| Is this a raw or aggregation Reflection? | [Type](#type) |
-| Which table or view is this Reflection defined on? | [Dataset](#dataset) |
-| How valuable is this Reflection? | [Reflection Score](#reflection-score) |
-| How Reflection was created and managed? | [Mode](#mode) |
-| How can I see a list of the jobs that created and refreshed this Reflection? | [Refresh Job History](#refresh-job-history) |
-| How many times has the query planner chosen this Reflection? | [Acceleration Count](#acceleration-count) |
-| How many times has the query planner considered using this Reflection? | [Considered Count](#considered-count) |
-| How many times did the query planner match a query to this Reflection? | [Matched Count](#matched-count) |
-| How do I find out how effective this Reflection is? | [Acceleration Count](#acceleration-count) |
-| When was this Reflection last refreshed? | [Last Refresh From Table](#last-refresh-from-table) |
-| Is this Reflection being refreshed now? | [Refresh Status](#refresh-status) |
-| What type of refreshes are used for this Reflection? | [Refresh Method](#refresh-method) |
-| Are refreshes scheduled for this Reflection, or do they need to be triggered manually? | [Refresh Status](#refresh-status) |
-| How much time did the most recent refresh of this Reflection take? | [Last Refresh Duration](#last-refresh-duration) |
-| How many records are in this Reflection? | [Record Count](#record-count) |
-| How much storage is this Reflection taking up? | [Current Footprint](#current-footprint) |
-| When does this Reflection expire? | [Available Until](#available-until) |
+| What is the status of this Reflection? | Name |
+| Is this a raw or aggregation Reflection? | Type |
+| Which table or view is this Reflection defined on? | Dataset |
+| How valuable is this Reflection? | Reflection Score |
+| How Reflection was created and managed? | Mode |
+| How can I see a list of the jobs that created and refreshed this Reflection? | Refresh Job History |
+| How many times has the query planner chosen this Reflection? | Acceleration Count |
+| How many times has the query planner considered using this Reflection? | Considered Count |
+| How many times did the query planner match a query to this Reflection? | Matched Count |
+| How do I find out how effective this Reflection is? | Acceleration Count |
+| When was this Reflection last refreshed? | Last Refresh From Table |
+| Is this Reflection being refreshed now? | Refresh Status |
+| What type of refreshes are used for this Reflection? | Refresh Method |
+| Are refreshes scheduled for this Reflection, or do they need to be triggered manually? | Refresh Status |
+| How much time did the most recent refresh of this Reflection take? | Last Refresh Duration |
+| How many records are in this Reflection? | Record Count |
+| How much storage is this Reflection taking up? | Current Footprint |
+| When does this Reflection expire? | Available Until |
 
-## Columns[​](#columns "Direct link to Columns")
+## Columns
 
-### Acceleration Count[​](#acceleration-count "Direct link to Acceleration Count")
+### Acceleration Count
 
 Shows the number of times within the last 30 days that the query planner considered using a Reflection defined on a dataset referenced by a query, determined the Reflection could be used to satisfy the query, and chose to use the Reflection to satisfy the query.
 
 If this count is low relative to the numbers in the **Considered Count** and **Matched Count**, the Reflection is not effective in reducing the execution times of queries on the dataset.
 
-### Available Until[​](#available-until "Direct link to Available Until")
+### Available Until
 
 Shows the date and time when this Reflection expires, based on the refresh policy of the queried dataset.
 
@@ -3260,14 +3260,14 @@ If a Reflection is set to expire soon and you want to continue using it, you can
 
 For the steps, see [Set the Reflection Expiration Policy](/dremio-cloud/admin/performance/manual-reflections/reflection-refresh#set-the-reflection-expiration-policy).
 
-### Mode[​](#mode "Direct link to Mode")
+### Mode
 
 Shows how Reflection was created and managed.
 
 * **autonomous**: Created and managed by Dremio
 * **manual**: Created and managed by user
 
-### Considered Count[​](#considered-count "Direct link to Considered Count")
+### Considered Count
 
 Shows the number of queries, within the last 30 days, that referenced the dataset that a Reflection is defined on. Whenever a query references a dataset on which a Reflection is defined, the query planner considers whether to use the Reflection to help satisfy the query.
 
@@ -3279,39 +3279,39 @@ Reflections with high considered counts and no match counts are contributing to 
 
 Reflections with a considered count of 0 should be removed. They are merely taking up storage and, during refreshes, resources on compute engines.
 
-### Current Footprint[​](#current-footprint "Direct link to Current Footprint")
+### Current Footprint
 
 Shows the current size, in kilobytes, of a Reflection.
 
-### Dataset[​](#dataset "Direct link to Dataset")
+### Dataset
 
 Shows the name of the table or view that a Reflection is defined on.
 
-### Last Refresh Duration[​](#last-refresh-duration "Direct link to Last Refresh Duration")
+### Last Refresh Duration
 
 Shows the length of time required for the most recent refresh of a Reflection.
 
-### Last Refresh From Table[​](#last-refresh-from-table "Direct link to Last Refresh From Table")
+### Last Refresh From Table
 
 Shows the date and time that the Reflection data was last refreshed. If the refresh is running, failing, or disabled, the value is `12/31/1969 23:59:59`.
 
-### Matched Count[​](#matched-count "Direct link to Matched Count")
+### Matched Count
 
 Shows the number of times, within the last 30 days, that the query planner both considered a Reflection for satisfying a query and determined that the Reflection would in fact satisfy the query. However, the query planner might have decided to use a different Reflection that also matched the query. For example, a different query plan that did not include the Reflection might have had a lower cost.
 
-This number does not show how many times the query planner used the Reflection to satisfy the query. For that number, see [Acceleration Count](#acceleration-count).
+This number does not show how many times the query planner used the Reflection to satisfy the query. For that number, see Acceleration Count.
 
 If the matched count is high and the accelerating count is low, the query planner is more often deciding to use a different Reflection that also matches a query. In this case, consider deleting the Reflection.
 
-### Name[​](#name "Direct link to Name")
+### Name
 
 Shows the name of the Reflection and its status. The tooltip on the icon represents a combination of the status of the Reflection (which you can filter on through the values in the **Acceleration Status** field above the list) and the value in the **Refresh Status** column.
 
-### Record Count[​](#record-count "Direct link to Record Count")
+### Record Count
 
 Shows the number of records in the Reflection.
 
-### Reflection Score[​](#reflection-score "Direct link to Reflection Score")
+### Reflection Score
 
 Shows the score for a Reflection on a scale of 0 (worst) to 100 (best). The score indicates the value that the Reflection provides to your workloads based on the jobs that have been executed in the last 7 days. Reflection scores are calculated once each day. Factors considered in the score include the number of jobs accelerated by the Reflection and the expected improvement in query run times due to the Reflection.
 
@@ -3326,11 +3326,11 @@ note
 
 If a Reflection's score is listed as **-**, the score needs to be recalculated due to an error or an upgraded instance.
 
-### Refresh Job History[​](#refresh-job-history "Direct link to Refresh Job History")
+### Refresh Job History
 
 Opens a list of all of the jobs that created and refreshed a Reflection.
 
-### Refresh Method[​](#refresh-method "Direct link to Refresh Method")
+### Refresh Method
 
 Shows which type of refresh was last used for a Reflection.
 
@@ -3343,7 +3343,7 @@ Shows which type of refresh was last used for a Reflection.
 
 For more information, see [Refresh Reflections](/dremio-cloud/admin/performance/manual-reflections/reflection-refresh).
 
-### Refresh Status[​](#refresh-status "Direct link to Refresh Status")
+### Refresh Status
 
 Shows one of these values:
 
@@ -3356,34 +3356,34 @@ Shows one of these values:
 
 For more information, see [Refresh Reflections](/dremio-cloud/admin/performance/manual-reflections/reflection-refresh).
 
-### Total Footprint[​](#total-footprint "Direct link to Total Footprint")
+### Total Footprint
 
 Shows the current size, in kilobytes, of all of the existing materializations of the Reflection. More than one materialization of a Reflection can exist at the same time, so that refreshes do not interrupt running queries that are being satisfied by the Reflection.
 
-### Type[​](#type "Direct link to Type")
+### Type
 
 Shows whether the Reflection is a raw or aggregation Reflection.
 
 Was this page helpful?
 
-* [Columns](#columns)
-  + [Acceleration Count](#acceleration-count)
-  + [Available Until](#available-until)
-  + [Mode](#mode)
-  + [Considered Count](#considered-count)
-  + [Current Footprint](#current-footprint)
-  + [Dataset](#dataset)
-  + [Last Refresh Duration](#last-refresh-duration)
-  + [Last Refresh From Table](#last-refresh-from-table)
-  + [Matched Count](#matched-count)
-  + [Name](#name)
-  + [Record Count](#record-count)
-  + [Reflection Score](#reflection-score)
-  + [Refresh Job History](#refresh-job-history)
-  + [Refresh Method](#refresh-method)
-  + [Refresh Status](#refresh-status)
-  + [Total Footprint](#total-footprint)
-  + [Type](#type)
+* Columns
+  + Acceleration Count
+  + Available Until
+  + Mode
+  + Considered Count
+  + Current Footprint
+  + Dataset
+  + Last Refresh Duration
+  + Last Refresh From Table
+  + Matched Count
+  + Name
+  + Record Count
+  + Reflection Score
+  + Refresh Job History
+  + Refresh Method
+  + Refresh Status
+  + Total Footprint
+  + Type
 
 <div style="page-break-after: always;"></div>
 
@@ -3402,11 +3402,11 @@ note
 
 Dremio does not refresh the data that external Reflections are mapped to.
 
-## Types of Reflection Refresh[​](#types-of-reflection-refresh "Direct link to Types of Reflection Refresh")
+## Types of Reflection Refresh
 
 How Reflections are refreshed depend on the format of the base table.
 
-### Apache Iceberg Tables, Filesystem Sources, AWS Glue Sources, and Hive Sources[​](#apache-iceberg-tables-filesystem-sources-aws-glue-sources-and-hive-sources "Direct link to Apache Iceberg Tables, Filesystem Sources, AWS Glue Sources, and Hive Sources")
+### Apache Iceberg Tables, Filesystem Sources, AWS Glue Sources, and Hive Sources
 
 There are two methods that can be used to refresh Reflections that are defined either on Iceberg tables or on these types of datasets in filesystem, AWS Glue, and Hive sources:
 
@@ -3415,22 +3415,22 @@ There are two methods that can be used to refresh Reflections that are defined e
 
 Iceberg tables in all supported file-system sources (Amazon S3, Azure Storage, Google Cloud Storage, and HDFS) and non-file-system sources (AWS Glue, Hive, and Nessie) can be refreshed with either of these methods.
 
-* [Incremental refreshes](#incremental-refreshes)
-* [Full refreshes](#full-refreshes)
+* Incremental refreshes
+* Full refreshes
 
-#### Incremental Refreshes[​](#incremental-refreshes "Direct link to Incremental Refreshes")
+#### Incremental Refreshes
 
 There are two types of incremental refreshes:
 
-* [Incremental refreshes when changes to an anchor table are only append operations](#incremental-refreshes-when-changes-to-an-anchor-table-are-only-append-operations)
-* [Incremental refreshes when changes to an anchor table include non-append operations](#incremental-refreshes-when-changes-to-an-anchor-table-include-non-append-operations)
+* Incremental refreshes when changes to an anchor table are only append operations
+* Incremental refreshes when changes to an anchor table include non-append operations
 
 note
 
-* Whether an incremental refresh can be performed depends [on the outcome of an algorithm](#algorithm-for-determining-whether-an-incremental-or-a-full-refresh-is-used).
-* The initial refresh of a Reflection is always a [full refresh](#full-refreshes).
+* Whether an incremental refresh can be performed depends on the outcome of an algorithm.
+* The initial refresh of a Reflection is always a full refresh.
 
-#### Incremental Refreshes When Changes to an Anchor Table Are Only Append Operations[​](#incremental-refreshes-when-changes-to-an-anchor-table-are-only-append-operations "Direct link to Incremental Refreshes When Changes to an Anchor Table Are Only Append Operations")
+#### Incremental Refreshes When Changes to an Anchor Table Are Only Append Operations
 
 note
 
@@ -3448,7 +3448,7 @@ This type of incremental refresh is used only when the changes to the anchor tab
   + If just one of the anchor tables has changed since the last refresh, an incremental refresh can be performed. It is based on the differences between the current snapshot of the one changed anchor table and the snapshot at the time of the last refresh.
   + If two or more tables have been refreshed since the last refresh, then a full refresh is used to refresh the Reflection.
 
-#### Incremental Refreshes When Changes to an Anchor Table Include Non-append Operations[​](#incremental-refreshes-when-changes-to-an-anchor-table-include-non-append-operations "Direct link to Incremental Refreshes When Changes to an Anchor Table Include Non-append Operations")
+#### Incremental Refreshes When Changes to an Anchor Table Include Non-append Operations
 
 For Iceberg tables, this type of incremental refresh is used when the changes are DML operations that delete or modify the data (UPDATE, DELETE, etc.) made either through the Copy-on-Write (COW) or the Merge-on-Read (MOR) storage mechanism. For more information about COW and MOR, see [Row-Level Changes on the Lakehouse: Copy-On-Write vs. Merge-On-Read in Apache Iceberg](https://www.dremio.com/blog/row-level-changes-on-the-lakehouse-copy-on-write-vs-merge-on-read-in-apache-iceberg/).
 
@@ -3479,16 +3479,16 @@ For information about partitioning Reflections and applying partition transforms
 
 For information about partitioning Reflections in ways that are compatible with the partitioning of anchor tables, see [Partition Reflections to Allow for Partition-Based Incremental Refreshes](/dremio-cloud/help-support/well-architected-framework/operational-excellence/#partition-reflections-to-allow-for-partition-based-incremental-refreshes).
 
-#### Full Refreshes[​](#full-refreshes "Direct link to Full Refreshes")
+#### Full Refreshes
 
 In a full refresh, a Reflection is dropped, recreated, and loaded.
 
 note
 
-* Whether a full refresh is performed depends [on the outcome of an algorithm](#algorithm-for-determining-whether-an-incremental-or-a-full-refresh-is-used).
+* Whether a full refresh is performed depends on the outcome of an algorithm.
 * The initial refresh of a Reflection is always a full refresh.
 
-#### Algorithm for Determining Whether an Incremental or a Full Refresh Is Used[​](#algorithm-for-determining-whether-an-incremental-or-a-full-refresh-is-used "Direct link to Algorithm for Determining Whether an Incremental or a Full Refresh Is Used")
+#### Algorithm for Determining Whether an Incremental or a Full Refresh Is Used
 
 The following algorithm determines which refresh method is used:
 
@@ -3507,11 +3507,11 @@ Because this algorithm is used to determine which type of refresh to perform, yo
 
 However, no data is read in the `REFRESH REFLECTION` job for Reflections that are dependent only on Iceberg, Parquet, Avro, non-transactional ORC datasets, or other Reflections and that have no new data since the last refresh based on the table snapshots. Instead, a "no-op" Reflection refresh is planned and a materialization is created, eliminating redundancy and minimizing the cost of a full or incremental Reflection refresh.
 
-### Delta Lake tables[​](#delta-lake-tables "Direct link to Delta Lake tables")
+### Delta Lake tables
 
 Only full refreshes are supported. In a full refresh, the Reflection being refreshed is dropped, recreated, and loaded.
 
-### All Other Tables[​](#all-other-tables "Direct link to All Other Tables")
+### All Other Tables
 
 * **Incremental refreshes**
 
@@ -3537,7 +3537,7 @@ Only full refreshes are supported. In a full refresh, the Reflection being refre
   + A Reflection is created on a table that was promoted from a file, rather than from a folder, or is created on a view that is based on such a table.
   + A Reflection is created from a view that uses nested group-bys, joins, unions, or window functions.
 
-## Specify the Reflection Refresh Policy[​](#specify-the-reflection-refresh-policy "Direct link to Specify the Reflection Refresh Policy")
+## Specify the Reflection Refresh Policy
 
 In the settings for a data source, you specify the refresh policy for refreshes of all Reflections that are on the tables in that data source. The default policy is period-based, with one hour between each refresh. If you select a schedule policy, the default is every day at 8:00 a.m. (UTC).
 
@@ -3559,7 +3559,7 @@ To edit the refresh policy on a table:
 3. Select **Reflection Refresh** in the dataset settings sidebar.
 4. When you are done making your selections, click **Save**. Your changes go into effect immediately.
 
-### Types of Refresh Policies[​](#types-of-refresh-policies "Direct link to Types of Refresh Policies")
+### Types of Refresh Policies
 
 Datasets and sources can set Reflections to refresh according to the following policy types:
 
@@ -3570,13 +3570,13 @@ Datasets and sources can set Reflections to refresh according to the following p
 | Schedule | Reflections refresh at a specific time on the specified days of the week, in UTC. The default is every day at 8:00 a.m. (UTC). |
 | Auto refresh when Iceberg table data changes | Reflections automatically refresh for underlying Iceberg tables whenever new updates occur. Reflections under this policy type are known as Live Reflections. Live Reflections are also updated based on the minimum refresh frequency defined by the source-level policy. This refresh policy is only available for data sources that support the Iceberg table format. |
 
-## Set the Reflection Expiration Policy[​](#set-the-reflection-expiration-policy "Direct link to Set the Reflection Expiration Policy")
+## Set the Reflection Expiration Policy
 
 Rather than delete a Reflection manually, you can specify how long you want Dremio to retain the Reflection before deleting it automatically.
 
 note
 
-Dremio does not allow expiration policies to be set on external Reflections or Reflections that automatically refresh when Iceberg data changes according to the [refresh policy](#types-of-refresh-policies).
+Dremio does not allow expiration policies to be set on external Reflections or Reflections that automatically refresh when Iceberg data changes according to the refresh policy.
 
 To set the expiration policy for all Reflections derived from tables in a data source:
 
@@ -3596,7 +3596,7 @@ The table must be based on more than one file.
 3. Select **Reflection Refresh** in the dataset settings sidebar.
 4. After making your changes, click **Save**. The changes take effect on the next refresh.
 
-## View the Reflection Refresh History[​](#view-the-reflection-refresh-history "Direct link to View the Reflection Refresh History")
+## View the Reflection Refresh History
 
 You can find out whether a refresh job for a Reflection has run, and how many times refresh jobs for a Reflection have been run.
 
@@ -3630,7 +3630,7 @@ To find out which type of refresh was performed:
 3. Click the **Planning** tab.
 4. Scroll down to the **Refresh Decision** section.
 
-## Retry a Reflection Refresh Policy[​](#retry-a-reflection-refresh-policy "Direct link to Retry a Reflection Refresh Policy")
+## Retry a Reflection Refresh Policy
 
 When a Reflection refresh job fails, Dremio retries the refresh according to a uniform policy. This policy is designed to balance resource consumption with the need to keep Reflection data up to date. It prioritizes newly failed Reflections to reduce excessive retries on persistent failures and helps ensure that Reflection data does not become overly stale.
 
@@ -3651,9 +3651,9 @@ To configure a different maximum number of retry attempts for Reflection refresh
 4. In the field next to **Maximum attempts for Reflection job failures**, specify the maximum number of retries.
 5. Click **Save**. The change goes into effect immediately.
 
-Dremio applies the retry policy after a refresh failure for all [types of Reflection refreshes](#types-of-reflection-refresh), no matter whether the refresh was [triggered](#trigger-reflection-refreshes) or set by [a refresh policy](#specify-the-reflection-refresh-policy).
+Dremio applies the retry policy after a refresh failure for all types of Reflection refreshes, no matter whether the refresh was triggered or set by a refresh policy.
 
-## Trigger Reflection Refreshes[​](#trigger-reflection-refreshes "Direct link to Trigger Reflection Refreshes")
+## Trigger Reflection Refreshes
 
 You can click a button to start the refresh of all of the Reflections that are defined on a table or on views derived from that table.
 
@@ -3697,7 +3697,7 @@ Table1(R1) Table2(R2)
 * Refreshing Reflection R2 through the API also refreshes R3 and R5.
 * Refreshing Reflection R1 through the API also refreshes R3 and R5.
 
-## Obtain Reflection IDs[​](#obtain-reflection-ids "Direct link to Obtain Reflection IDs")
+## Obtain Reflection IDs
 
 You will need one or more Reflection IDs for some of the Reflection hints. Reflection IDs can be found in three places: the Acceleration section of the raw profile of the job that ran a query using the Reflection, the [`SYS.PROJECT.REFLECTIONS`](/dremio-cloud/sql/system-tables/reflections) system table, and the Reflection summary objects that you retrieve with the Reflection API.
 
@@ -3738,17 +3738,17 @@ To find the ID of a Reflection by using REST APIs:
 
 Was this page helpful?
 
-* [Types of Reflection Refresh](#types-of-reflection-refresh)
-  + [Apache Iceberg Tables, Filesystem Sources, AWS Glue Sources, and Hive Sources](#apache-iceberg-tables-filesystem-sources-aws-glue-sources-and-hive-sources)
-  + [Delta Lake tables](#delta-lake-tables)
-  + [All Other Tables](#all-other-tables)
-* [Specify the Reflection Refresh Policy](#specify-the-reflection-refresh-policy)
-  + [Types of Refresh Policies](#types-of-refresh-policies)
-* [Set the Reflection Expiration Policy](#set-the-reflection-expiration-policy)
-* [View the Reflection Refresh History](#view-the-reflection-refresh-history)
-* [Retry a Reflection Refresh Policy](#retry-a-reflection-refresh-policy)
-* [Trigger Reflection Refreshes](#trigger-reflection-refreshes)
-* [Obtain Reflection IDs](#obtain-reflection-ids)
+* Types of Reflection Refresh
+  + Apache Iceberg Tables, Filesystem Sources, AWS Glue Sources, and Hive Sources
+  + Delta Lake tables
+  + All Other Tables
+* Specify the Reflection Refresh Policy
+  + Types of Refresh Policies
+* Set the Reflection Expiration Policy
+* View the Reflection Refresh History
+* Retry a Reflection Refresh Policy
+* Trigger Reflection Refreshes
+* Obtain Reflection IDs
 
 <div style="page-break-after: always;"></div>
 

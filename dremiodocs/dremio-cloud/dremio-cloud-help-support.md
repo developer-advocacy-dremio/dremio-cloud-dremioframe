@@ -22,7 +22,7 @@ For each organization, Dremio imposes limits on the use of its resources. The fo
 
 Please contact Dremio to discuss if extra capacity is required.
 
-## Organization[​](#organization "Direct link to Organization")
+## Organization
 
 | Item | Enterprise Trial | Enterprise Paid |
 | --- | --- | --- |
@@ -36,7 +36,7 @@ Please contact Dremio to discuss if extra capacity is required.
 | Layers of nested roles | 10 | 10 |
 | Direct custom role members | 5 | 1,000 |
 
-## Projects[​](#projects "Direct link to Projects")
+## Projects
 
 | Item | Enterprise Trial | Enterprise Paid |
 | --- | --- | --- |
@@ -48,7 +48,7 @@ Please contact Dremio to discuss if extra capacity is required.
 | Number of scripts per user | 1,000 | 1,000 |
 | ACLs update rate per minute | 600 | 600 |
 
-## Engines[​](#engines "Direct link to Engines")
+## Engines
 
 | Item | Enterprise Trial | Enterprise Paid |
 | --- | --- | --- |
@@ -57,7 +57,7 @@ Please contact Dremio to discuss if extra capacity is required.
 | Query concurrency | The query concurrency limits are determined by the replica sizes as described in [Engines](/dremio-cloud/admin/engines/). | The query concurrency limits are determined by the replica sizes as described in [Engines](/dremio-cloud/admin/engines). |
 | Query runtime max limit | Min 30 seconds | Min 30 seconds |
 
-## Datasets[​](#datasets "Direct link to Datasets")
+## Datasets
 
 | Item | Enterprise Trial | Enterprise Paid |
 | --- | --- | --- |
@@ -68,21 +68,21 @@ Please contact Dremio to discuss if extra capacity is required.
 | Number of JSON files | 300,000 | 300,000 |
 | Row width | 16 MB | 16 MB |
 
-## Reflections[​](#reflections "Direct link to Reflections")
+## Reflections
 
 | Item | Enterprise Trial | Enterprise Paid |
 | --- | --- | --- |
 | Maximum number of Reflections (including enabled and disabled Reflections) | 500 | 500 |
 | Autonomous Reflections | 100 | 100 |
 
-## Arrow Flight SQL (ADBC, ODBC, and JDBC)[​](#arrow-flight-sql-adbc-odbc-and-jdbc "Direct link to Arrow Flight SQL (ADBC, ODBC, and JDBC)")
+## Arrow Flight SQL (ADBC, ODBC, and JDBC)
 
 | Item | Enterprise Trial | Enterprise Paid |
 | --- | --- | --- |
 | Max returned data volume | 10GB | 10GB |
 | Flight Service Data Pipeline Drain Timeout | 50 seconds | 50 seconds |
 
-## Rate Limits[​](#rate-limits "Direct link to Rate Limits")
+## Rate Limits
 
 Rate limits are enforced on a single IP address and apply across all organizations and projects.
 
@@ -100,13 +100,13 @@ Rate limits are enforced on a single IP address and apply across all organizatio
 
 Was this page helpful?
 
-* [Organization](#organization)
-* [Projects](#projects)
-* [Engines](#engines)
-* [Datasets](#datasets)
-* [Reflections](#reflections)
-* [Arrow Flight SQL (ADBC, ODBC, and JDBC)](#arrow-flight-sql-adbc-odbc-and-jdbc)
-* [Rate Limits](#rate-limits)
+* Organization
+* Projects
+* Engines
+* Datasets
+* Reflections
+* Arrow Flight SQL (ADBC, ODBC, and JDBC)
+* Rate Limits
 
 <div style="page-break-after: always;"></div>
 
@@ -118,7 +118,7 @@ On this page
 
 Keyboard shortcuts for functions supported by Dremio are available for macOS, Windows, and Linux.
 
-## SQL Editor[​](#sql-editor "Direct link to SQL Editor")
+## SQL Editor
 
 While using the SQL editor on the SQL Runner page or Datasets page, you can use shortcuts for commonly used actions, as shown in the following table:
 
@@ -136,7 +136,7 @@ While using the SQL editor on the SQL Runner page or Datasets page, you can use 
 
 Was this page helpful?
 
-* [SQL Editor](#sql-editor)
+* SQL Editor
 
 <div style="page-break-after: always;"></div>
 
@@ -150,7 +150,7 @@ Dremio’s well-architected framework is a resource for anyone who is designing 
 
 The Well-Architected Framework is considered complementary to the [Dremio Shared Responsibility Model](/assets/files/Dremio-Cloud-Shared-Responsibility-Model-15f76b24f0b48153532ca15b25d831c4.pdf). The Shared Responsibility Model lays out Dremio's responsibilities and your responsibilities for maintaining and operating an optimal Dremio environment, while the Well-Architected Framework provides details for carrying out your responsibilities.
 
-## Key Pillars of Dremio’s Well-Architected Framework[​](#key-pillars-of-dremios-well-architected-framework "Direct link to Key Pillars of Dremio’s Well-Architected Framework")
+## Key Pillars of Dremio’s Well-Architected Framework
 
 Dremio’s well-architected framework follows five common pillars from cloud providers AWS, Microsoft, and Google and a sixth Dremio-specific pillar:
 
@@ -167,7 +167,7 @@ Dremio's well-architected framework covers best practices related to configurati
 
 Was this page helpful?
 
-* [Key Pillars of Dremio’s Well-Architected Framework](#key-pillars-of-dremios-well-architected-framework)
+* Key Pillars of Dremio’s Well-Architected Framework
 
 <div style="page-break-after: always;"></div>
 
@@ -179,23 +179,23 @@ On this page
 
 The security pillar is essential to ensuring that your data is secured properly when using Dremio to query your data lakehouse. The security components are especially important to architect and design your data platform. After your workloads are in production, you must continue to review your security components to ensure compliance and eliminate threats.
 
-## Principles[​](#principles "Direct link to Principles")
+## Principles
 
-### Leverage Industry-Standard Identity Providers and Authorization Systems[​](#leverage-industry-standard-identity-providers-and-authorization-systems "Direct link to Leverage Industry-Standard Identity Providers and Authorization Systems")
+### Leverage Industry-Standard Identity Providers and Authorization Systems
 
 Dremio integrates with leading social and enterprise identity providers and data authorization systems. For robust enterprise integration with corporate policies, it is essential to leverage those third-party systems. We recommend systems that use multi-factor authentication methods and are connected to single sign-on (SSO) platforms.
 
-### Design for Least-Privilege Access to Objects[​](#design-for-least-privilege-access-to-objects "Direct link to Design for Least-Privilege Access to Objects")
+### Design for Least-Privilege Access to Objects
 
 When providing self-service access to your data lakehouse via Dremio’s [AI semantic layer](/dremio-cloud/help-support/well-architected-framework/self-serve-semantic-layer), access should only be granted to the data that is required for the role accessing the data.
 
-## Best Practices[​](#best-practices "Direct link to Best Practices")
+## Best Practices
 
-### Protect Access Credentials[​](#protect-access-credentials "Direct link to Protect Access Credentials")
+### Protect Access Credentials
 
 Where possible, leverage identity providers such as [Microsoft Entra ID](/dremio-cloud/security/authentication/idp/microsoft-entra-id) and [Okta](/dremio-cloud/security/authentication/idp/okta) in conjunction with [System for Cross-domain Identity Management (SCIM)](/dremio-cloud/security/authentication/idp/#scim) where applicable to ensure that you never need to share passwords with Dremio. SSO with Microsoft Entra ID or Okta is also recommended where possible.
 
-### Leverage Role Based Access Controls[​](#leverage-role-based-access-controls "Direct link to Leverage Role Based Access Controls")
+### Leverage Role Based Access Controls
 
 Access to each catalog, folder, view, and table can be managed and regulated by [roles](/dremio-cloud/security/roles). Roles are used to organize privileges at scale rather than managing privileges for each individual user. You can create roles to manage privileges for users with different job functions in your organization, such as “Analyst” and “Security\_Admin” roles. Users who are members of a role gain all of the privileges granted to the role. Roles can also be nested. For example, the users in the "UK" role can automatically be members of the "EMEA” role.
 
@@ -203,12 +203,12 @@ Access control protects the integrity of your data and simplifies the data archi
 
 Was this page helpful?
 
-* [Principles](#principles)
-  + [Leverage Industry-Standard Identity Providers and Authorization Systems](#leverage-industry-standard-identity-providers-and-authorization-systems)
-  + [Design for Least-Privilege Access to Objects](#design-for-least-privilege-access-to-objects)
-* [Best Practices](#best-practices)
-  + [Protect Access Credentials](#protect-access-credentials)
-  + [Leverage Role Based Access Controls](#leverage-role-based-access-controls)
+* Principles
+  + Leverage Industry-Standard Identity Providers and Authorization Systems
+  + Design for Least-Privilege Access to Objects
+* Best Practices
+  + Protect Access Credentials
+  + Leverage Role Based Access Controls
 
 <div style="page-break-after: always;"></div>
 
@@ -220,23 +220,23 @@ On this page
 
 The reliability pillar focuses on ensuring your system is up and running and can be quickly and efficiently restored in case of unexpected downtime.
 
-## Principles[​](#principles "Direct link to Principles")
+## Principles
 
-### Set Engine Routing Rules and Engine Settings[​](#set-engine-routing-rules-and-engine-settings "Direct link to Set Engine Routing Rules and Engine Settings")
+### Set Engine Routing Rules and Engine Settings
 
 Dremio’s engine routing rules and engine settings are powerful and protect the system from being overloaded by queries that exceed currently available resources.
 
-### Monitor and Measure Platform Activity[​](#monitor-and-measure-platform-activity "Direct link to Monitor and Measure Platform Activity")
+### Monitor and Measure Platform Activity
 
 To ensure the reliability of your Dremio project, you must regularly monitor and measure its activity.
 
-## Best Practices[​](#best-practices "Direct link to Best Practices")
+## Best Practices
 
-### Initialize Engine Routing and Engine Settings[​](#initialize-engine-routing-and-engine-settings "Direct link to Initialize Engine Routing and Engine Settings")
+### Initialize Engine Routing and Engine Settings
 
 It is important to set up engine routing rules and engines with sensible concurrency, replica, and time limits. It's better to spin replicas at sensible concurrency limits rather than risk a large number of rogue queries bringing down the engine.
 
-### Use the Monitor Page in the Dremio Console[​](#use-the-monitor-page-in-the-dremio-console "Direct link to Use the Monitor Page in the Dremio Console")
+### Use the Monitor Page in the Dremio Console
 
 As an administrator using the Dremio console, you can effectively monitor catalog usage and jobs within your projects. The [Monitor page](/dremio-cloud/admin/monitor/) provides detailed visualizations and metrics that allow you to track usage patterns, resource consumption, and user impact.
 
@@ -246,19 +246,19 @@ In the Jobs tab, you can access comprehensive metrics on job performance, includ
 
 We recommend that administrators frequently review the Monitor page, including daily consumption patterns and the weekly and monthly aggregate. Monitoring insights like the most queried datasets over time can help administrators optimize performance, adapt a Reflection strategy, and leverage the jobs-per-engine distribution to improve workload management and resource allocation.
 
-### Perform Impact Analysis if Security Rules Change[​](#perform-impact-analysis-if-security-rules-change "Direct link to Perform Impact Analysis if Security Rules Change")
+### Perform Impact Analysis if Security Rules Change
 
 Dremio’s control plane interacts with your own virtual private clouds for query execution. If you make changes to your security rules after they are initially set and working correctly with Dremio, perform impact analysis to make sure that your connectivity with Dremio remains unaffected.
 
 Was this page helpful?
 
-* [Principles](#principles)
-  + [Set Engine Routing Rules and Engine Settings](#set-engine-routing-rules-and-engine-settings)
-  + [Monitor and Measure Platform Activity](#monitor-and-measure-platform-activity)
-* [Best Practices](#best-practices)
-  + [Initialize Engine Routing and Engine Settings](#initialize-engine-routing-and-engine-settings)
-  + [Use the Monitor Page in the Dremio Console](#use-the-monitor-page-in-the-dremio-console)
-  + [Perform Impact Analysis if Security Rules Change](#perform-impact-analysis-if-security-rules-change)
+* Principles
+  + Set Engine Routing Rules and Engine Settings
+  + Monitor and Measure Platform Activity
+* Best Practices
+  + Initialize Engine Routing and Engine Settings
+  + Use the Monitor Page in the Dremio Console
+  + Perform Impact Analysis if Security Rules Change
 
 <div style="page-break-after: always;"></div>
 
@@ -270,17 +270,17 @@ On this page
 
 Although it's important to get the best performance possible with Dremio, it's also important to optimize costs associated with managing the Dremio platform.
 
-## Principles[​](#principles "Direct link to Principles")
+## Principles
 
-### Minimize Running Executor Nodes[​](#minimize-running-executor-nodes "Direct link to Minimize Running Executor Nodes")
+### Minimize Running Executor Nodes
 
 Dremio can scale to many hundreds of nodes, but any given engine should have only as many nodes as are required to satisfy the current load and meet service-level agreements.
 
-### Dynamically Scale Executor Nodes Up and Down[​](#dynamically-scale-executor-nodes-up-and-down "Direct link to Dynamically Scale Executor Nodes Up and Down")
+### Dynamically Scale Executor Nodes Up and Down
 
 When running Dremio engines, designers can leverage concurrency per replica and minimum and maximum number of replicas to dynamically expand and contract capacity based on load.
 
-### Eliminate Unnecessary Data Processing[​](#eliminate-unnecessary-data-processing "Direct link to Eliminate Unnecessary Data Processing")
+### Eliminate Unnecessary Data Processing
 
 As described in the [best practices for Pillar 2: Performance Efficiency](/dremio-cloud/help-support/well-architected-framework/performance-efficiency#leverage-reflections-to-improve-performance), creating too many Reflections, especially those that perform similar work to other Reflections or provide little added benefit in terms of query performance, can incur unnecessary costs because Reflections need system resources to rebuild. For this reason, consider removing any unnecessary Reflections.
 
@@ -288,19 +288,19 @@ To avoid the need to process data that is not required for a query to succeed, u
 
 Also, optimize source data files by merging smaller files or splitting larger files whenever possible.
 
-## Best Practices[​](#best-practices "Direct link to Best Practices")
+## Best Practices
 
-### Size Engines to the Minimum Replicas Required[​](#size-engines-to-the-minimum-replicas-required "Direct link to Size Engines to the Minimum Replicas Required")
+### Size Engines to the Minimum Replicas Required
 
 To avoid accruing unnecessary cost, reduce the number of active replicas in your engines to the minimum (typically 1, but 0 when the engine is not in use on weekends or non-business hours). A minimum replica count of 0 delays the first query of the day due to engine startup, which you can mitigate with an external script that executes a dummy SQL statement prior to normal daily use.
 
-### Remove Unused Reflections[​](#remove-unused-reflections "Direct link to Remove Unused Reflections")
+### Remove Unused Reflections
 
 Analyze the results in Dremio `sys.project.jobs_recent` system table along with the results for the system tables [`sys.project.reflections`](/dremio-cloud/sql/system-tables/reflections) and [`sys.project.materializations`](/dremio-cloud/sql/system-tables/materializations) to get information about the frequency at which each Reflection present in Dremio is leveraged. You can further analyze Reflections that are not being leveraged to determine if any are still being refreshed, and if they are, how many times they have been refreshed in the reporting period and how many hours of cluster execution time they have been consuming.
 
 Checking for and removing unused Reflections is good practice because it can reduce clutter in the Reflection configuration and often free up many hours of cluster execution cycles that can be used for more critical workloads.
 
-### Optimize Metadata Refresh Frequency[​](#optimize-metadata-refresh-frequency "Direct link to Optimize Metadata Refresh Frequency")
+### Optimize Metadata Refresh Frequency
 
 Ensure metadata-refresh frequencies are set appropriately based on what you know about the frequency that metadata is changing in the data source.
 
@@ -316,14 +316,14 @@ If you set the metadata refresh schedule for a long timeframe and you do not hav
 
 Was this page helpful?
 
-* [Principles](#principles)
-  + [Minimize Running Executor Nodes](#minimize-running-executor-nodes)
-  + [Dynamically Scale Executor Nodes Up and Down](#dynamically-scale-executor-nodes-up-and-down)
-  + [Eliminate Unnecessary Data Processing](#eliminate-unnecessary-data-processing)
-* [Best Practices](#best-practices)
-  + [Size Engines to the Minimum Replicas Required](#size-engines-to-the-minimum-replicas-required)
-  + [Remove Unused Reflections](#remove-unused-reflections)
-  + [Optimize Metadata Refresh Frequency](#optimize-metadata-refresh-frequency)
+* Principles
+  + Minimize Running Executor Nodes
+  + Dynamically Scale Executor Nodes Up and Down
+  + Eliminate Unnecessary Data Processing
+* Best Practices
+  + Size Engines to the Minimum Replicas Required
+  + Remove Unused Reflections
+  + Optimize Metadata Refresh Frequency
 
 <div style="page-break-after: always;"></div>
 
@@ -335,35 +335,35 @@ On this page
 
 Following a regular schedule of maintenance tasks is key to keeping your Dremio project operating at peak performance and efficiency. The operational excellence pillar describes the tasks required to maintain an operationally healthy Dremio project.
 
-## Principles[​](#principles "Direct link to Principles")
+## Principles
 
-### Regularly Evaluate Engine Resources[​](#regularly-evaluate-engine-resources "Direct link to Regularly Evaluate Engine Resources")
+### Regularly Evaluate Engine Resources
 
 As workloads expand and grow on your Dremio project, it is important to evaluate engine usage to ensure that you have correctly sized engines and the right number of replicas.
 
-### Regularly Evaluate Query Performance[​](#regularly-evaluate-query-performance "Direct link to Regularly Evaluate Query Performance")
+### Regularly Evaluate Query Performance
 
 Regular query performance reviews help you identify challenges and mitigate them before they become a problem. For example, if you find an unacceptably large number of queries waiting on engine or replica starts, you can adjust the minimum, maximum, and last replica auto-stop settings. If you see an unacceptable number of query execution failures, you can adjust concurrency limits per replica more appropriately or revisit the semantic layer and introduce Reflections to improve performance.
 
-### Clean Up Tables with Vacuum[​](#clean-up-tables-with-vacuum "Direct link to Clean Up Tables with Vacuum")
+### Clean Up Tables with Vacuum
 
 Open Catalog automates Iceberg maintenance operations like compaction and vacuum, which maximizes query performance, minimizes storage costs, and eliminates the need to run manual data maintenance.
 
-### Optimize Tables[​](#optimize-tables "Direct link to Optimize Tables")
+### Optimize Tables
 
 When operating on Iceberg tables and using Open Catalog, you can schedule [optimization](/dremio-cloud/developer/data-formats/iceberg#optimization) jobs to help you manage the accumulation of data files that occurs through data manipulation language (DML) operations. Regular maintenance ensures optimal query performance on these tables.
 
-### Regularly Monitor Live Metrics for Dremio[​](#regularly-monitor-live-metrics-for-dremio "Direct link to Regularly Monitor Live Metrics for Dremio")
+### Regularly Monitor Live Metrics for Dremio
 
 To ensure smooth operations in Dremio, collect metrics and take action when appropriate. Read [Monitor](/dremio-cloud/admin/monitor/) for more details.
 
-## Best Practices[​](#best-practices "Direct link to Best Practices")
+## Best Practices
 
-### Optimize Workload Management Rules[​](#optimize-workload-management-rules "Direct link to Optimize Workload Management Rules")
+### Optimize Workload Management Rules
 
 Because workloads and volumes of queries change over time, you should periodically reevaluate workload management engine routing rules and engines and adjust for optimal size, concurrency, and replica limits.
 
-### Configure Engines[​](#configure-engines "Direct link to Configure Engines")
+### Configure Engines
 
 When possible, leverage engines to segregate workloads. Configuring engine and usage offers the following benefits:
 
@@ -383,27 +383,27 @@ We recommend separate engines for the following types of workloads:
 
 In multi-tenant environments like multiple departments or geographic locations where chargeback models can be implemented for resource usage, we recommend having a separate set of engines per tenant.
 
-### Optimize Query Performance[​](#optimize-query-performance "Direct link to Optimize Query Performance")
+### Optimize Query Performance
 
 When developing the semantic layer, it is best to create the views in each of the three layers according to best practices without using Reflections, then test queries of the application layer views to gauge baseline performance.
 
 For queries that appear to be running sub-optimally, we recommend analyzing the query profile to determine whether any bottlenecks can be removed to improve performance. If performance issues persist, place Reflections where they will have the most benefit. A well-architected semantic layer allows you to place Reflections at strategic locations in the semantic layer such that large volumes of queries benefit from the fewest number of Reflections, such as in the business layer where a view is constructed by joining several other views.
 
-### Design Reflections for Expensive Query Patterns[​](#design-reflections-for-expensive-query-patterns "Direct link to Design Reflections for Expensive Query Patterns")
+### Design Reflections for Expensive Query Patterns
 
 1. Review query history (jobs) to determine the most expensive and most-frequent queries being submitted.
 2. Look in the job profiles for these queries. Tables and views referenced by multiple queries that perform expensive scans, joins, and aggregations are good candidates for Reflections.
 3. Examine the SQL for the selected queries that reference the same table or view to find patterns that can help you define a Reflection on that table or view that satisfies as many of those queries as possible.
 
-### Avoid the “More Is Always Better” Approach[​](#avoid-the-more-is-always-better-approach "Direct link to Avoid the “More Is Always Better” Approach")
+### Avoid the “More Is Always Better” Approach
 
 Creating more Reflections than are necessary to support your data consumers can lead to the use of more resources than might be optimal for your environment, both in terms of system resources and the time and attention devoted to working with them.
 
-### Establish Criteria for When to create Reflections[​](#establish-criteria-for-when-to-create-reflections "Direct link to Establish Criteria for When to create Reflections")
+### Establish Criteria for When to create Reflections
 
 Create them only when data consumers are experiencing slow query responses, or when reports are not meeting established SLAs.
 
-### Create Reflections Without Duplicating the Work of Other Reflections[​](#create-reflections-without-duplicating-the-work-of-other-reflections "Direct link to Create Reflections Without Duplicating the Work of Other Reflections")
+### Create Reflections Without Duplicating the Work of Other Reflections
 
 Dremio recommends that, when you create tables and views, you create them in layers:
 
@@ -412,11 +412,11 @@ Dremio recommends that, when you create tables and views, you create them in lay
 * In the third layer, users create views that perform joins and other expensive operations. This layer is where the intensive work on data is performed. These users then create Reflections (raw, aggregation, or both) from their views.
 * In the fourth layer, users can create lightweight views for dashboards, reports, and visualization tools. They can also create aggregation Reflections, as needed.
 
-### Establish a Routine for Checking How often Reflections Are Used[​](#establish-a-routine-for-checking-how-often-reflections-are-used "Direct link to Establish a Routine for Checking How often Reflections Are Used")
+### Establish a Routine for Checking How often Reflections Are Used
 
 At regular intervals, check for Reflections that are no longer being used by the query planner and evaluate whether they should be removed. Query patterns can change over time, and frequently-used Reflections can gradually become less relevant.
 
-### Use Supporting Anchors[​](#use-supporting-anchors "Direct link to Use Supporting Anchors")
+### Use Supporting Anchors
 
 Anchors for Reflections are views that data consumers have access to from their business-intelligence tools. As you develop a better understanding of query patterns, you might want to support those patterns by creating Reflections from views that perform expensive joins, transformations, filters, calculations, or a combination of those operations. You would probably not want data consumers to be able to access those views directly in situations where the query optimizer did not use any of the Reflections created from those views. Repeated and concurrent queries on such views could put severe strain on system resources.
 
@@ -462,7 +462,7 @@ The result is that, even though the data consumers do not have access to the sup
 
 If the query optimizer should determine that a query cannot be satisfied by any of the Reflections, it is possible, if no other views can satisfy it, for the query to run directly against the tables, as is always the case with any query.
 
-### Horizontally Partition Reflections that Have Many Rows[​](#horizontally-partition-reflections-that-have-many-rows "Direct link to Horizontally Partition Reflections that Have Many Rows")
+### Horizontally Partition Reflections that Have Many Rows
 
 If you select a field for partitioning in a data Reflection, Dremio physically groups records together into a common directory on the file system. For example, if you partition by the field Country, in which the values are two-letter abbreviations for the names of countries, such as US, UK, DE, and CA, Dremio stores the data for each country in a separate directory named US, UK, DE, CA, and so on. This optimization allows Dremio to scan a subset of the directories based on the query, which is an optimization called partition pruning.
 
@@ -493,7 +493,7 @@ Value | Type of Partition Transform | Description || IDENTITY | identity(<column
 | BUCKET | bucket(<integer>, <column\_name>) | Partitions data into the number of partitions specified by an integer. For example, if the integer value N is specified, the data is partitioned into N, or (0 to (N-1)), partitions. The partition in which an individual row is stored is determined by hashing the column value and then calculating `<hash_value> mod N`. If the result is 0, the row is placed in partition 0; if the result is 1, the row is placed in partition 1; and so on.  The column can use the DECIMAL, INT, BIGINT, VARCHAR, VARBINARY, DATE, or TIMESTAMP data type. |
 | TRUNCATE | truncate(<integer>, <column\_name>) | If the specified column uses the string data type, truncates strings to a maximum of the number of characters specified by an integer. For example, suppose the specified transform is truncate(1, stateUS). A value of `CA` is truncated to `C`, and the row is placed in partition C. A value of `CO` is also truncated to `C`, and the row is also placed in partition C.   If the specified column uses the integer or long data type, truncates column values in the following way: For any `truncate(L, col)`, truncates the column value to the biggest multiple of L that is smaller than the column value. For example, suppose the specified transform is `truncate(10, intColumn)`. A value of 1 is truncated to 0 and the row is placed in the partition 0. A value of 247 is truncated to 240 and the row is placed in partition 240. If the transform is `truncate(3, intColumn)`, a value of 13 is truncated to 12 and the row is placed in partition 12. A value of 255 is not truncated, because it is divisble by 3, and the row is placed in partition 255.  The column can use the DECIMAL, INT, BIGINT, VARCHAR, or VARBINARY data type.  **Note:** The truncate transform does not change column values. It uses column values to calculate the correct partitions in which to place rows. |
 
-### Partition Reflections to Allow for Partition-Based Incremental Refreshes[​](#partition-reflections-to-allow-for-partition-based-incremental-refreshes "Direct link to Partition Reflections to Allow for Partition-Based Incremental Refreshes")
+### Partition Reflections to Allow for Partition-Based Incremental Refreshes
 
 Incremental refreshes of data in Reflections are much faster than full refreshes. Partition-based incremental refreshes are based on Iceberg metadata that is used to identify modified partitions and to restrict the scope of the refresh to only those partitions. For more information about partition-based incremental refreshes, see Types of Refresh for Reflections on Apache Iceberg Tables, Filesystem Sources, Glue Sources, and Hive Sources in [Refresh Reflections](/dremio-cloud/admin/performance/manual-reflections/reflection-refresh).
 
@@ -516,7 +516,7 @@ note
   + If the partition column uses any other data type, the truncation lengths must be identical.
 * If a base table uses the Bucket partition transform, partition-based incremental refreshes are not possible.
 
-#### Partition Aggregation Reflections on Timestamp Data in Very Large Base Tables[​](#partition-aggregation-reflections-on-timestamp-data-in-very-large-base-tables "Direct link to Partition Aggregation Reflections on Timestamp Data in Very Large Base Tables")
+#### Partition Aggregation Reflections on Timestamp Data in Very Large Base Tables
 
 Suppose you want to define an aggregation Reflection on a base table that has billions of rows. The base table includes a column that either uses the TIMESTAMP data type or includes a timestamp as a string, and the base table is partitioned on that column.
 
@@ -525,7 +525,7 @@ In your aggregation Reflection, you plan to aggregate on timestamp data that is 
 * By defining a view on the base table, and then defining the aggregation Reflection on that view
 * By using the advanced Reflection editor to define the aggregation Reflection on the base table
 
-##### Define an Aggregation Reflection on a View[​](#define-an-aggregation-reflection-on-a-view "Direct link to Define an Aggregation Reflection on a View")
+##### Define an Aggregation Reflection on a View
 
 If the timestamp column in the base table uses the TIMESTAMP data type, use one of the functions in this table to define the corresponding column in the view. You can partition the aggregation Reflection on the view column and use the partition transform that corresponds to the function.
 
@@ -546,7 +546,7 @@ If the timestamp column in the base table uses the STRING data type, use one of 
 | SUBSTR(<base\_table\_column>, 0, X) | TRUNCATE(<view\_col>, X) |
 | SUBSTRING(<base\_table\_column>, 0, X) | TRUNCATE(<view\_col>, X) |
 
-##### Define an Aggregation Reflection on a Base Table[​](#define-an-aggregation-reflection-on-a-base-table "Direct link to Define an Aggregation Reflection on a Base Table")
+##### Define an Aggregation Reflection on a Base Table
 
 When creating or editing the aggregation Reflection in the Advanced View, as described in [Manual Reflections](/dremio-cloud/admin/performance/manual-reflections/), follow these steps:
 
@@ -559,11 +559,11 @@ When creating or editing the aggregation Reflection in the Advanced View, as des
 
 ![Selecting the granularity.](/images/date-granularity-2.png "Selecting the granularity.")
 
-### Use Dimmensions with Low Cardinality[​](#use-dimmensions-with-low-cardinality "Direct link to Use Dimmensions with Low Cardinality")
+### Use Dimmensions with Low Cardinality
 
 Use dimensions that have relatively low cardinality in a table or view. The higher the cardinality of a dimension, the less benefit an aggregation Reflection has on query performance. Lower cardinality aggregation Reflections require less time to scan.
 
-### Create One Aggregation Reflection for Each Important Subset of Dimensions[​](#create-one-aggregation-reflection-for-each-important-subset-of-dimensions "Direct link to Create One Aggregation Reflection for Each Important Subset of Dimensions")
+### Create One Aggregation Reflection for Each Important Subset of Dimensions
 
 * For a single table or view, create one aggregation Reflection for each important subset of dimensions in your queries, rather than one aggregation Reflection that includes all dimensions. Multiple small aggregation Reflections (versus one large one) are good for isolated pockets of query patterns on the same table or view that do not overlap. If your query patterns overlap, use fewer larger aggregation Reflections.
 
@@ -576,7 +576,7 @@ Use dimensions that have relatively low cardinality in a table or view. The high
 
     The more Reflections you create, the more time the query optimizer requires to plan the execution of queries. Therefore, creating more aggregation Reflections than you need can slow down query performance, even if your aggregation Reflections are low-cardinality.
 
-### Sort Reflections on High-Cardinality Fields[​](#sort-reflections-on-high-cardinality-fields "Direct link to Sort Reflections on High-Cardinality Fields")
+### Sort Reflections on High-Cardinality Fields
 
 The sort option is useful for optimizing queries that use filters or range predicates, especially on fields with high cardinality. If sorting is enabled, during query execution, Dremio skips over large blocks of records based on filters on sorted fields.
 
@@ -586,7 +586,7 @@ Sorting on more than one field in a single data Reflection typically does not im
 
 For workloads that need sorting on more than one field, consider creating multiple Reflections, each being sorted on a single field.
 
-### Create Reflections from Joins that are Based on Joins from Multiple Queries[​](#create-reflections-from-joins-that-are-based-on-joins-from-multiple-queries "Direct link to Create Reflections from Joins that are Based on Joins from Multiple Queries")
+### Create Reflections from Joins that are Based on Joins from Multiple Queries
 
 Joins between tables, views, or both tend to be expensive. You can reduce the costs of joins by performing them only when building and refreshing Reflections.
 
@@ -613,7 +613,7 @@ Create a Reflection to accelerate three queries
 SELECT a.col1 , a.col2, a.col3, b.col1, b.col2, b.col3, c.col1, c.col2 FROM a join b on (a.col4 = b.col4) join c on (c.col5=a.col5)
 ```
 
-### Time Reflection Refreshes to Occur After Metadata Refreshes of Tables[​](#time-reflection-refreshes-to-occur-after-metadata-refreshes-of-tables "Direct link to Time Reflection Refreshes to Occur After Metadata Refreshes of Tables")
+### Time Reflection Refreshes to Occur After Metadata Refreshes of Tables
 
 Time your refresh Reflections to occur only after the metadata for their underlying tables is refreshed. Otherwise, Reflection refreshes do not include data from any files that were added to a table since the last metadata refresh, if any files were added.
 
@@ -621,41 +621,41 @@ For example, suppose a data source that is promoted to a table consists of 10,00
 
 Now, one thousand files are added to the table. Before the next metadata refresh, the Reflections are refreshed twice, yet the refreshes do not add data from those one thousand files. Only on the third refresh of the Reflections does data from those files get added to the Reflections.
 
-### Rotation Personal Access Tokens[​](#rotation-personal-access-tokens "Direct link to Rotation Personal Access Tokens")
+### Rotation Personal Access Tokens
 
 When Dremio [personal access tokens (PATs)](/dremio-cloud/security/authentication/personal-access-token/) are used in custom applications, consider scripting an automated periodic refresh to avoid job failures when the PATs expire.
 
-### Monitor Dremio Projects[​](#monitor-dremio-projects "Direct link to Monitor Dremio Projects")
+### Monitor Dremio Projects
 
 It's important to set up a good monitoring solution to maximize your investment in Dremio and identify and resolve issues related to Dremio projects before they have a broader impact on workload. Your monitoring solution should ensure overall cluster health and performance.
 
 Was this page helpful?
 
-* [Principles](#principles)
-  + [Regularly Evaluate Engine Resources](#regularly-evaluate-engine-resources)
-  + [Regularly Evaluate Query Performance](#regularly-evaluate-query-performance)
-  + [Clean Up Tables with Vacuum](#clean-up-tables-with-vacuum)
-  + [Optimize Tables](#optimize-tables)
-  + [Regularly Monitor Live Metrics for Dremio](#regularly-monitor-live-metrics-for-dremio)
-* [Best Practices](#best-practices)
-  + [Optimize Workload Management Rules](#optimize-workload-management-rules)
-  + [Configure Engines](#configure-engines)
-  + [Optimize Query Performance](#optimize-query-performance)
-  + [Design Reflections for Expensive Query Patterns](#design-reflections-for-expensive-query-patterns)
-  + [Avoid the “More Is Always Better” Approach](#avoid-the-more-is-always-better-approach)
-  + [Establish Criteria for When to create Reflections](#establish-criteria-for-when-to-create-reflections)
-  + [Create Reflections Without Duplicating the Work of Other Reflections](#create-reflections-without-duplicating-the-work-of-other-reflections)
-  + [Establish a Routine for Checking How often Reflections Are Used](#establish-a-routine-for-checking-how-often-reflections-are-used)
-  + [Use Supporting Anchors](#use-supporting-anchors)
-  + [Horizontally Partition Reflections that Have Many Rows](#horizontally-partition-reflections-that-have-many-rows)
-  + [Partition Reflections to Allow for Partition-Based Incremental Refreshes](#partition-reflections-to-allow-for-partition-based-incremental-refreshes)
-  + [Use Dimmensions with Low Cardinality](#use-dimmensions-with-low-cardinality)
-  + [Create One Aggregation Reflection for Each Important Subset of Dimensions](#create-one-aggregation-reflection-for-each-important-subset-of-dimensions)
-  + [Sort Reflections on High-Cardinality Fields](#sort-reflections-on-high-cardinality-fields)
-  + [Create Reflections from Joins that are Based on Joins from Multiple Queries](#create-reflections-from-joins-that-are-based-on-joins-from-multiple-queries)
-  + [Time Reflection Refreshes to Occur After Metadata Refreshes of Tables](#time-reflection-refreshes-to-occur-after-metadata-refreshes-of-tables)
-  + [Rotation Personal Access Tokens](#rotation-personal-access-tokens)
-  + [Monitor Dremio Projects](#monitor-dremio-projects)
+* Principles
+  + Regularly Evaluate Engine Resources
+  + Regularly Evaluate Query Performance
+  + Clean Up Tables with Vacuum
+  + Optimize Tables
+  + Regularly Monitor Live Metrics for Dremio
+* Best Practices
+  + Optimize Workload Management Rules
+  + Configure Engines
+  + Optimize Query Performance
+  + Design Reflections for Expensive Query Patterns
+  + Avoid the “More Is Always Better” Approach
+  + Establish Criteria for When to create Reflections
+  + Create Reflections Without Duplicating the Work of Other Reflections
+  + Establish a Routine for Checking How often Reflections Are Used
+  + Use Supporting Anchors
+  + Horizontally Partition Reflections that Have Many Rows
+  + Partition Reflections to Allow for Partition-Based Incremental Refreshes
+  + Use Dimmensions with Low Cardinality
+  + Create One Aggregation Reflection for Each Important Subset of Dimensions
+  + Sort Reflections on High-Cardinality Fields
+  + Create Reflections from Joins that are Based on Joins from Multiple Queries
+  + Time Reflection Refreshes to Occur After Metadata Refreshes of Tables
+  + Rotation Personal Access Tokens
+  + Monitor Dremio Projects
 
 <div style="page-break-after: always;"></div>
 
@@ -667,7 +667,7 @@ On this page
 
 Dremio is a powerful massively parallel processing (MPP) platform that can process terabyte-scale datasets. To get the best performance from your Dremio environment, follow these design principles and best practices for implementation.
 
-## Dimensions of Performance Optimization[​](#dimensions-of-performance-optimization "Direct link to Dimensions of Performance Optimization")
+## Dimensions of Performance Optimization
 
 When optimizing Dremio, several factors can affect workload and project performance. Queries submitted to Dremio must be planned on the control plane before being routed for execution. The resource requirements and degree of optimization of individual queries can vary widely. Those queries can be rewritten and optimized on their own without regard to a larger engine.
 
@@ -677,23 +677,23 @@ These dimensions of performance optimization can be simplified in the following 
 
 ![Decision tree diagram that shows common performance optimization scenarios for Dremio.](/images/cloud/optimization-decision-tree.png "Dremio performance optimization scenarios")
 
-## Principles[​](#principles "Direct link to Principles")
+## Principles
 
-### Perform Regular Maintenance[​](#perform-regular-maintenance "Direct link to Perform Regular Maintenance")
+### Perform Regular Maintenance
 
 Conduct regular maintenance to ensure that your project is set up for optimal performance and can handle more data, queries, and workloads. Regular maintenance will establish a solid baseline from which you can design and optimize. Dremio can be set up to automatically optimize and vacuum tables in your Open catalog.
 
-### Optimize Queries for Efficiency[​](#optimize-queries-for-efficiency "Direct link to Optimize Queries for Efficiency")
+### Optimize Queries for Efficiency
 
 Before worrying about scaling out your engines, it is important to optimize your semantic layer and queries to be as efficient as possible. For example, if there are partition columns, you should use them. Create sorted or partitioned Reflections. Follow standard SQL writing best practices such as applying functions to values rather than columns in where clauses.
 
-### Optimize Engines[​](#optimize-engines "Direct link to Optimize Engines")
+### Optimize Engines
 
 Dremio provides several facilities to allow workload isolation and ensure your queries do not overload the engines. Multiple engines are used to keep some queries from affecting others and concurrency rules are used to buffer queries to prevent overloading any one particular engine.
 
-## Best Practices[​](#best-practices "Direct link to Best Practices")
+## Best Practices
 
-### Design Semantic Layer for Workload Performance[​](#design-semantic-layer-for-workload-performance "Direct link to Design Semantic Layer for Workload Performance")
+### Design Semantic Layer for Workload Performance
 
 Dremio’s enterprise-scale semantic layer clearly defines the boundary between your physically stored tables and your logical, governed, and self-service views. The semantic layer seamlessly allows data engineers and semantic data modelers to create views based on tables without having to make copies of the physical data.
 
@@ -703,7 +703,7 @@ With Dremio, you can create layers of views that allow you to present data to bu
 
 Leveraging Dremio’s layering best practices promotes a more-performant, low-maintenance solution that can provide agility to development teams and business users as well as better control over data.
 
-### Improve the Performance of Poor-Performing Queries[​](#improve-the-performance-of-poor-performing-queries "Direct link to Improve the Performance of Poor-Performing Queries")
+### Improve the Performance of Poor-Performing Queries
 
 Run `SELECT * FROM sys.project.jobs_recent` to analyze the query history and determine which queries are performing sub-optimally. This allows you to consider a number of factors, including the overall execution time of a query. Identify the 10 longest-running queries to understand why they are taking so long. For example, is it the time taken to read data from the source, lacking CPU cycles, query spilling to disk, query queued at the start, or another issue? Did the query take a long time to plan?
 
@@ -719,7 +719,7 @@ Sometimes, query performance is inconsistent. A query may complete execution in 
 
 For Reflection jobs that require excessive memory, we recommend two Reflection refresh engines of different sizes, routing the Reflections that require excessive memory to the larger engine. This is typically needed for Reflections on views that depend on the largest datasets and can be done with the [ALTER TABLE ROUTE REFLECTIONS](/dremio-cloud/sql/commands/alter-table/) command.
 
-### Read Dremio Profiles to Pinpoint Bottlenecks[​](#read-dremio-profiles-to-pinpoint-bottlenecks "Direct link to Read Dremio Profiles to Pinpoint Bottlenecks")
+### Read Dremio Profiles to Pinpoint Bottlenecks
 
 Dremio job profiles contain a lot of fine-grained information about how a query was planned, how the phases of execution were constructed, how the query was actually executed, and the decisions made about whether to use Reflections to accelerate the query.
 
@@ -734,11 +734,11 @@ note
 
 Read [Reading Dremio Job Profiles](https://www.dremio.com/wp-content/uploads/2024/01/Reading-Dremio-Job-Profiles.pdf) for details about job profile analysis techniques. This white paper was developed based on Dremio Software, but the content applies equally to Dremio.
 
-### Engine Routing and Workload Management[​](#engine-routing-and-workload-management "Direct link to Engine Routing and Workload Management")
+### Engine Routing and Workload Management
 
 Since the workloads and volumes of queries change over time, reevaluate engine routing settings, engine sizes, engine replicas, and concurrency per replica and adjust as needed to rebalance the proportion of queries that execute concurrently on a replica of an engine.
 
-### Right-Size Engines and Executors[​](#right-size-engines-and-executors "Direct link to Right-Size Engines and Executors")
+### Right-Size Engines and Executors
 
 Analyze the query history to determine whether a change in the number of executors in your engines is necessary.
 
@@ -752,7 +752,7 @@ You can alleviate these issues by adding replicas to the engine and reducing con
 
 A good reason to create a new engine is when a new workload is introduced to your Dremio project, perhaps by a new department within an organization, and the queries cause the existing engine setup to degrade in performance. Creating a new engine to isolate the new workload, most likely by creating rules to route queries from users in that organization to the new engine, is a useful way of segregating workloads.
 
-### Leverage Reflections to Improve Performance[​](#leverage-reflections-to-improve-performance "Direct link to Leverage Reflections to Improve Performance")
+### Leverage Reflections to Improve Performance
 
 When developing use cases in Dremio’s semantic layer, it’s often best to build out the use case iteratively without any Reflections to begin with. Then, as you complete iterations, run the queries and analyze the data in the query history to deduce which queries take the longest to execute and whether any common factors among a set of slow queries are contributing to the slowness.
 
@@ -772,25 +772,25 @@ Failing to make use of Dremio Reflections means you could be missing out on sign
 
 Where possible, organize your queries by pattern. The idea is to create as few Reflections as possible to service as many queries as possible, so finding points in the semantic tree through which many queries go can help you accelerate a larger number of queries. The more Reflections you have that may be able to accelerate the same query patterns, the longer the planner takes to evaluate which Reflection is best suited for accelerating the query being planned.
 
-### Optimize Metadata Refresh Performance[​](#optimize-metadata-refresh-performance "Direct link to Optimize Metadata Refresh Performance")
+### Optimize Metadata Refresh Performance
 
 Add a dedicated metadata refresh engine to your Dremio project. This ensures that all metadata refresh activities for Parquet, Optimized Row Columnar (ORC), and Avro datasets that are serviced by executors are completed in isolation from any other workloads and prevents problems with metadata refresh workloads taking CPU cycles and memory away from business-critical workloads. This gives the refreshes have the best chance of finishing in a timely manner.
 
 Was this page helpful?
 
-* [Dimensions of Performance Optimization](#dimensions-of-performance-optimization)
-* [Principles](#principles)
-  + [Perform Regular Maintenance](#perform-regular-maintenance)
-  + [Optimize Queries for Efficiency](#optimize-queries-for-efficiency)
-  + [Optimize Engines](#optimize-engines)
-* [Best Practices](#best-practices)
-  + [Design Semantic Layer for Workload Performance](#design-semantic-layer-for-workload-performance)
-  + [Improve the Performance of Poor-Performing Queries](#improve-the-performance-of-poor-performing-queries)
-  + [Read Dremio Profiles to Pinpoint Bottlenecks](#read-dremio-profiles-to-pinpoint-bottlenecks)
-  + [Engine Routing and Workload Management](#engine-routing-and-workload-management)
-  + [Right-Size Engines and Executors](#right-size-engines-and-executors)
-  + [Leverage Reflections to Improve Performance](#leverage-reflections-to-improve-performance)
-  + [Optimize Metadata Refresh Performance](#optimize-metadata-refresh-performance)
+* Dimensions of Performance Optimization
+* Principles
+  + Perform Regular Maintenance
+  + Optimize Queries for Efficiency
+  + Optimize Engines
+* Best Practices
+  + Design Semantic Layer for Workload Performance
+  + Improve the Performance of Poor-Performing Queries
+  + Read Dremio Profiles to Pinpoint Bottlenecks
+  + Engine Routing and Workload Management
+  + Right-Size Engines and Executors
+  + Leverage Reflections to Improve Performance
+  + Optimize Metadata Refresh Performance
 
 <div style="page-break-after: always;"></div>
 
@@ -802,25 +802,25 @@ On this page
 
 Dremio has a unique capability in its AI Semantic Layer, which is where the magic happens in mapping the physical structure of the underlying data storage to how the data is consumed via SQL queries. When you optimally design and maintain the semantic layer, data is more discoverable, writing queries is more straightforward, and performance is optimized.
 
-## Principles[​](#principles "Direct link to Principles")
+## Principles
 
-### Layer Views[​](#layer-views "Direct link to Layer Views")
+### Layer Views
 
 Layering your views allows you to balance security, performance, and usability. Layered views help you expose the data in your physical tables to external consumption tools in the format the tools require, with proper security and performance. A well-architected semantic layer consists of three layers to organize your views: preparation, business, and application. Each layer serves a purpose in transforming data for consumption by external tools.
 
-### Annotate Datasets to Enhance Discovery and Understanding[​](#annotate-datasets-to-enhance-discovery-and-understanding "Direct link to Annotate Datasets to Enhance Discovery and Understanding")
+### Annotate Datasets to Enhance Discovery and Understanding
 
 You can label and document datasets within Dremio to make data more discoverable and verifiable and allow you to apply governance.
 
-## Best Practices[​](#best-practices "Direct link to Best Practices")
+## Best Practices
 
-### Use the Preparation Layer to Map 1-1 to Tables[​](#use-the-preparation-layer-to-map-1-1-to-tables "Direct link to Use the Preparation Layer to Map 1-1 to Tables")
+### Use the Preparation Layer to Map 1-1 to Tables
 
 The preparation layer is closest to the data source. This layer is used to organize and expose only the required datasets from the source rather than all datasets the source contains. In the preparation layer, each view is mapped to the table that it is derived from in the data source, and there are no joins to other views.
 
 Typically, a data engineer is responsible for preparing the data in the preparation layer. The data engineer should apply column aliasing so that all downstream views can use the normalized column names. Casting column data types should also be done in the preparation layer so that all higher-level views can leverage the correct type and conversion is done only once. Data should be cleansed in the preparation layer for central management and to ensure that all downstream views use clean data. Derived columns based on existing columns should be configured in the preparation layer so that all future layers can use the new columns.
 
-### Use the Business Layer to Logically Join Datasets[​](#use-the-business-layer-to-logically-join-datasets "Direct link to Use the Business Layer to Logically Join Datasets")
+### Use the Business Layer to Logically Join Datasets
 
 The business layer provides a holistic view of all data across your catalog or folder. It is the first layer where joins among and between sources should occur. All views in the business layer must be built by either querying resources in the preparation layer or querying other resources in the same business layer.
 
@@ -833,7 +833,7 @@ You can create many sub-layers inside the business layer, each consisting of vie
 
 Use the business layer to improve productivity for analytics initiatives and minimize the risk of duplicative efforts in your organization by reducing the cost of service delivery to lines of business, providing a self-service model for data engineers to quickly provision datasets, and enabling data consumers to quickly use and share datasets.
 
-### Use the Application Layer to Arrange Datasets for Consumption[​](#use-the-application-layer-to-arrange-datasets-for-consumption "Direct link to Use the Application Layer to Arrange Datasets for Consumption")
+### Use the Application Layer to Arrange Datasets for Consumption
 
 Application layer views are arranged for the needs of data consumers and organizational departments. Typically, data consumers like analysts and data scientists use the views from the business layer and work directly in the application layer to create and modify views in their own dashboards.
 
@@ -841,11 +841,11 @@ If the application layer provides self-service access to Dremio’s AI Semantic 
 
 If the application layer is not for self-service but for particular applications, the views in the application layer should be built on top of those self-service views in the application layer, adding any application-specific logic. Application logic should be row filters as needed by the application. Columns can be left as-is, and the list of columns the application selects are reduced in the SQL query.
 
-### Leverage Labels to Enhance Searchability[​](#leverage-labels-to-enhance-searchability "Direct link to Leverage Labels to Enhance Searchability")
+### Leverage Labels to Enhance Searchability
 
 Use Dremio’s [label](/dremio-cloud/manage-govern/wikis-labels) functionality to create and assign labels to tables and views to group related objects and enhance the discoverability of data across your organization. You can search for sets of tables and views based on a label or click on a label in the Dremio console to start a search based on it. Objects can have multiple labels so that they can belong to different logical groups.
 
-### Create Wiki Content to Describe Datasets[​](#create-wiki-content-to-describe-datasets "Direct link to Create Wiki Content to Describe Datasets")
+### Create Wiki Content to Describe Datasets
 
 Use Dremio’s [wiki](/dremio-cloud/manage-govern/wikis-labels) functionality to add descriptions for catalogs, sources, folders, tables, and views. Wikis enhance understanding of data inside your organization. Wikis allow you to provide context for datasets, such as descriptions for each column, and content that helps users get started with the data, such as usage examples, notes, and points of contact for questions or issues.
 
@@ -855,15 +855,15 @@ To help eliminate the need for labor-intensive manual classification and catalog
 
 Was this page helpful?
 
-* [Principles](#principles)
-  + [Layer Views](#layer-views)
-  + [Annotate Datasets to Enhance Discovery and Understanding](#annotate-datasets-to-enhance-discovery-and-understanding)
-* [Best Practices](#best-practices)
-  + [Use the Preparation Layer to Map 1-1 to Tables](#use-the-preparation-layer-to-map-1-1-to-tables)
-  + [Use the Business Layer to Logically Join Datasets](#use-the-business-layer-to-logically-join-datasets)
-  + [Use the Application Layer to Arrange Datasets for Consumption](#use-the-application-layer-to-arrange-datasets-for-consumption)
-  + [Leverage Labels to Enhance Searchability](#leverage-labels-to-enhance-searchability)
-  + [Create Wiki Content to Describe Datasets](#create-wiki-content-to-describe-datasets)
+* Principles
+  + Layer Views
+  + Annotate Datasets to Enhance Discovery and Understanding
+* Best Practices
+  + Use the Preparation Layer to Map 1-1 to Tables
+  + Use the Business Layer to Logically Join Datasets
+  + Use the Application Layer to Arrange Datasets for Consumption
+  + Leverage Labels to Enhance Searchability
+  + Create Wiki Content to Describe Datasets
 
 <div style="page-break-after: always;"></div>
 

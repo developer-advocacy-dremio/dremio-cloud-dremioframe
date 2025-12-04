@@ -3575,7 +3575,7 @@ SELECT CBRT(99.5) -- 4.633839922986558
 
 ### CEIL
 
-Alias for [CEILING](#ceiling).
+Alias for CEILING.
 
 ### CEILING
 
@@ -3602,7 +3602,7 @@ SELECT CEIL(0) -- 0
 
 ### CHAR
 
-Alias for [CHR](#chr).
+Alias for CHR.
 
 ### CHAR_LENGTH
 
@@ -4551,7 +4551,7 @@ SELECT EXTRACT(HOUR FROM CAST('2019-08-12 01:10:30' AS TIMESTAMP)) -- 1
 
 ### IFNULL
 
-Alias for [COALESCE](#coalesce) or [NVL](#nvl).
+Alias for COALESCE or NVL.
 
 ### ILIKE
 
@@ -5358,7 +5358,7 @@ SELECT NULLIF(user_id, customer_id)
 
 ### NVL
 
-Returns the first non-null expression. Alias for [COALESCE](#coalesce).
+Returns the first non-null expression. Alias for COALESCE.
 
 #### Syntax
 
@@ -5467,7 +5467,7 @@ select position('no' in 'banana') -- 0
 
 ### POW
 
-Alias for [POWER](#power).
+Alias for POWER.
 
 ### POWER
 
@@ -5535,7 +5535,7 @@ select radians(45) -- 0.7853981633974483
 
 ### RAND
 
-Alias for [RANDOM](#random).
+Alias for RANDOM.
 
 ### RANK
 
@@ -5602,7 +5602,7 @@ SELECT REGEXP_LIKE('the data lakehouse', '.*?\\Qlake\\E.*?') -- True
 
 ### REGEXP_MATCH
 
-Alias for [REGEXP_MATCHES](#regexp_matches) or [REGEXP_LIKE](#regexp_like).
+Alias for REGEXP_MATCHES or REGEXP_LIKE.
 
 ### REGEXP_REPLACE
 
@@ -5829,11 +5829,11 @@ SELECT RTRIM('dremio ') -- dremio
 
 ### SEARCH
 
-Not a direct function. Use [LOCATE](#locate) or [POSITION](#position).
+Not a direct function. Use LOCATE or POSITION.
 
 ### SEC
 
-Alias for [SECOND](#second).
+Alias for SECOND.
 
 ### SECOND
 
@@ -6515,7 +6515,7 @@ SELECT TRIM(both 'pan' from 'pancake pan') -- cake
 
 ### TRUNC
 
-Alias for [TRUNCATE](#truncate) (numeric) or [DATE_TRUNC](#date_trunc) (date).
+Alias for TRUNCATE (numeric) or DATE_TRUNC (date).
 
 ### TRUNCATE
 
@@ -6608,7 +6608,7 @@ SELECT VAR_SAMP(passenger_count) FROM Samples."samples.dremio.com"."NYC-taxi-tri
 
 ### VARIANCE
 
-Alias for [VAR_SAMP](#var_samp).
+Alias for VAR_SAMP.
 
 ### WEEK
 

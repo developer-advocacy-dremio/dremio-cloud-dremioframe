@@ -14,7 +14,7 @@ On this page
 
 In Dremio, queries can be accelerated with Reflections and results cache.
 
-## Reflections[​](#reflections "Direct link to Reflections")
+## Reflections
 
 A Reflection is a precomputed and optimized copy of source data or a query result, designed to speed up query performance. It is derived from an existing table or view, known as its anchor. Reflections can be:
 
@@ -29,7 +29,7 @@ When Dremio receives a query, it determines first whether any Reflections have a
 
 Dremio then compares the cost of the plan to the cost of executing the query directly against the tables, and selects the plan with the lower cost. Finally, Dremio executes the selected query plan. Typically, plans that use one or more Reflections are less expensive than plans that run against raw data.
 
-### Types[​](#types "Direct link to Types")
+### Types
 
 There are different types of Reflections tailored to specific workloads:
 
@@ -38,7 +38,7 @@ There are different types of Reflections tailored to specific workloads:
 * **External Reflections**: reference precomputed tables in external data sources instead of materializing Reflections within Dremio, eliminating refresh overhead and storage costs. You can use an external Reflection by defining a view in Dremio that matches the precomputed table and map the view to the external data source. The data in the precomputed table is not refreshed by Dremio. When querying the view, Dremio’s query planner leverages the external Reflection to generate optimal execution plans, improving query performance without additional storage consumption in Dremio.
 * **Starflake Reflections**: optimize multi-table joins by leveraging precomputed relationships between fact and dimension tables. When joins do not duplicate rows, Dremio can accelerate queries using Reflections even if they include only a subset of the joins in Reflections, reducing the need for multiple Reflections on different combinations of tables.
 
-### Reflections Features and Data Format Compatibility Matrix[​](#reflections-features-and-data-format-compatibility-matrix "Direct link to Reflections Features and Data Format Compatibility Matrix")
+### Reflections Features and Data Format Compatibility Matrix
 
 The following table outlines the availability of key Reflections features across supported data formats, including version-specific enhancements such as Autonomous Reflections, Live Reflections, and Intelligent Incremental Refresh.
 
@@ -50,7 +50,7 @@ The following table outlines the availability of key Reflections features across
 | Delta | No | No | Yes | No | No | No |
 | Federated Sources | No | No | Yes | No | No | No |
 
-## Results Cache[​](#results-cache "Direct link to Results Cache")
+## Results Cache
 
 Results cache improves query performance by reusing results from previous executions of the same deterministic query, provided that the underlying dataset remains unchanged and the previous execution was by the same user. The results cache feature works out of the box, requires no configuration, and automatically caches and reuses results. Regardless of whether a query uses results cache, it always returns the same results.
 
@@ -58,7 +58,7 @@ Results cache is client-agnostic, meaning a query executed in the Dremio console
 
 Results cache also supports seamless coordinator scale-out, allowing newly added coordinators to benefit immediately from previously cached results.
 
-### Cases Supported By Results Cache[​](#cases-supported-by-results-cache "Direct link to Cases Supported By Results Cache")
+### Cases Supported By Results Cache
 
 Query result are cached in the following cases:
 
@@ -69,7 +69,7 @@ Query result are cached in the following cases:
 * The result set size, when stored in Arrow format, is less than or equal to 20 MB.
 * The query is not executed in Dremio console as a preview.
 
-### Viewing Whether Queries Used Results Cache[​](#viewing-whether-queries-used-results-cache "Direct link to Viewing Whether Queries Used Results Cache")
+### Viewing Whether Queries Used Results Cache
 
 You can view the list of jobs on the Jobs page to determine if queries from data consumers were accelerated by the results cache.
 
@@ -80,19 +80,19 @@ To find whether a query was accelerated by a results cache:
 
 ![](/images/cloud/jobs-details-results-cache.png)
 
-### Storage[​](#storage "Direct link to Storage")
+### Storage
 
 Cached results are stored in the distributed storage, configured in dremio.conf. Executors write cache entries as Arrow data files and read them when processing `SELECT` queries that result in a cache hit. Coordinators are responsible for managing the deletion of expired cache files.
 
-### Deletion[​](#deletion "Direct link to Deletion")
+### Deletion
 
 A background task running on one of the Dremio coordinators handles cache expiration. This task runs every hour to mark cache entries that have not been accessed in the past 24 hours as expired and subsequently deletes them along with their associated cache files.
 
-### Considerations and Limitations[​](#considerations-and-limitations "Direct link to Considerations and Limitations")
+### Considerations and Limitations
 
 SQL queries executed through the Dremio console or a REST client that access the cache will rewrite the cached query results to the job results store to enable pagination. This behavior will be enhanced in future releases.
 
-## Additional Resources[​](#additional-resources "Direct link to Additional Resources")
+## Additional Resources
 
 Find out more about Reflections by enrolling in the [Data Product Fundamentals course in Dremio University](https://university.dremio.com/course/data-product-fundamentals).
 
@@ -104,16 +104,16 @@ DbVisualizer](/current/client-applications/dbvisualizer-legacy)[Next
 
 Autonomous Reflections](/current/acceleration/autonomous-reflections)
 
-* [Reflections](#reflections)
-  + [Types](#types)
-  + [Reflections Features and Data Format Compatibility Matrix](#reflections-features-and-data-format-compatibility-matrix)
-* [Results Cache](#results-cache)
-  + [Cases Supported By Results Cache](#cases-supported-by-results-cache)
-  + [Viewing Whether Queries Used Results Cache](#viewing-whether-queries-used-results-cache)
-  + [Storage](#storage)
-  + [Deletion](#deletion)
-  + [Considerations and Limitations](#considerations-and-limitations)
-* [Additional Resources](#additional-resources)
+* Reflections
+  + Types
+  + Reflections Features and Data Format Compatibility Matrix
+* Results Cache
+  + Cases Supported By Results Cache
+  + Viewing Whether Queries Used Results Cache
+  + Storage
+  + Deletion
+  + Considerations and Limitations
+* Additional Resources
 
 ---
 
@@ -132,7 +132,7 @@ Autonomous Reflections refresh automatically when source data changes on:
 * **Iceberg tables**: when the table is modified through Dremio or other engines. Dremio polls tables every 10 seconds.
 * **Parquet datasets**: when metadata is updated in Dremio.
 
-## Enable Autonomous Reflections[​](#enable-autonomous-reflections "Direct link to Enable Autonomous Reflections")
+## Enable Autonomous Reflections
 
 To enable Autonomous Reflections, follow these steps:
 
@@ -142,7 +142,7 @@ To enable Autonomous Reflections, follow these steps:
 
 Once enabled, Dremio will automatically create and manage Reflections based on query workload analysis from the last seven days.
 
-## Set the Refresh Engine and Routing Rule for Autonomous Reflections[​](#set-the-refresh-engine-and-routing-rule-for-autonomous-reflections "Direct link to Set the Refresh Engine and Routing Rule for Autonomous Reflections")
+## Set the Refresh Engine and Routing Rule for Autonomous Reflections
 
 Dremio recommends configuring a dedicated refresh engine with at least two nodes to isolate refresh jobs associated with Autonomous Reflections. This isolation ensures that resource-intensive refresh jobs do not impact user workloads, preserving both query performance and refresh efficiency.
 
@@ -152,7 +152,7 @@ To replace the current refresh engine or queue for Autonomous Reflections, move 
 
 If the assigned refresh engine reaches its capacity, Dremio Autonomous Reflections will pause. Users are then notified through the Dremio console, prompting them to scale up the refresh engine if necessary.
 
-## Behavior[​](#behavior "Direct link to Behavior")
+## Behavior
 
 Dremio creates up to 100 Reflections, with a maximum of 10 per day.
 The actual number of Reflections depends on query patterns, as well as the configuration and utilization of the Dremio engine assigned to execute Reflection refreshes.
@@ -160,18 +160,18 @@ The actual number of Reflections depends on query patterns, as well as the confi
 When Dremio determines that a Reflection has a low score, it is not immediately dropped. Instead:
 
 * The Reflection is disabled for 7 days before it is dropped.
-* Admins can then view disabled Reflections through the [Autonomous Reflection History Log](#view-history-log-for-autonomous-reflections).
+* Admins can then view disabled Reflections through the Autonomous Reflection History Log.
 
 For [Aggregation Reflections](/current/acceleration/#types), Dremio creates system-managed views that cannot be modified or referenced by other views. Admin users can drop these views, but doing also deletes the associated Reflection.
 
 If you disable the Autonomous Reflections feature, existing Reflections will continue to function normally, but Dremio will not add new Reflections or drop ineffective ones.
 
-## Limits[​](#limits "Direct link to Limits")
+## Limits
 
 * Autonomous Reflections are only used when fully synchronized with their source data to ensure up-to-date query results.
 * Autonomous Reflections cannot be modified and can only be dropped by Admins. When a Reflection is manually dropped, Dremio will not recreate it for the next 90 days.
 
-## View History Log for Autonomous Reflections[​](#view-history-log-for-autonomous-reflections "Direct link to View History Log for Autonomous Reflections")
+## View History Log for Autonomous Reflections
 
 To view the history of changes to Autonomous Reflections in the last 30 days, follow these steps:
 
@@ -186,11 +186,11 @@ Accelerate Queries](/current/acceleration/)[Next
 
 Manually Manage Reflections](/current/acceleration/manual-reflections/)
 
-* [Enable Autonomous Reflections](#enable-autonomous-reflections)
-* [Set the Refresh Engine and Routing Rule for Autonomous Reflections](#set-the-refresh-engine-and-routing-rule-for-autonomous-reflections)
-* [Behavior](#behavior)
-* [Limits](#limits)
-* [View History Log for Autonomous Reflections](#view-history-log-for-autonomous-reflections)
+* Enable Autonomous Reflections
+* Set the Refresh Engine and Routing Rule for Autonomous Reflections
+* Behavior
+* Limits
+* View History Log for Autonomous Reflections
 
 ---
 
@@ -219,7 +219,7 @@ The Reflection creation job is listed as a single job on the Jobs page, as shown
 
 Dremio creates all Reflections as Apache Iceberg tables, and the metadata for the Reflection is generated at the same time.
 
-### Reflection Recommendations[​](#reflection-recommendations "Direct link to Reflection Recommendations")
+### Reflection Recommendations
 
 When [Autonomous Reflections](/current/acceleration/autonomous-reflections) are not enabled, Dremio automatically provides recommendations to add and remove Reflections based on query patterns to optimize performance for queries on Iceberg tables, Parquet datasets, and views based on them.
 Recommendations to add Reflections are sorted by overall effectiveness, with the most effective recommendations shown on top. Effectiveness relates to metrics such as the estimated number of accelerated jobs, potential increase in query execution speedup, and potential time saved during querying. These are rough estimates based on past data that can give you insight into the potential benefits of each recommendation.
@@ -236,11 +236,11 @@ Reflections created using these recommendations refresh automatically when sourc
 
 Reflections created using usage based recommendations are only used when fully synchronized with their source data to ensure up-to-date query results.
 
-#### Manually Requesting Recommendations for Specific Jobs[​](#manually-requesting-recommendations-for-specific-jobs "Direct link to Manually Requesting Recommendations for Specific Jobs")
+#### Manually Requesting Recommendations for Specific Jobs
 
 You can generate recommendations for default raw and aggregation Reflections by submitting job IDs to accelerate specific SQL queries using either the `SYS.RECOMMEND_REFLECTIONS` table function or the [Recommendations API](/current/reference/api/reflections/reflection-recommendations). Obtain the job IDs by looking them up on the [Jobs page](/current/admin/monitoring/jobs/).
 
-#### Running the SYS.RECOMMEND\_REFLECTIONS Table Function[​](#running-the-sysrecommend_reflections-table-function "Direct link to Running the SYS.RECOMMEND_REFLECTIONS Table Function")
+#### Running the SYS.RECOMMEND\_REFLECTIONS Table Function
 
 The `SYS.RECOMMEND_REFLECTIONS` table function returns a table of one or more recommendations.
 
@@ -252,13 +252,13 @@ SELECT * FROM TABLE(SYS.RECOMMEND_REFLECTIONS(ARRAY['<jobId>', '<jobId>']))
 
 The `SYS.RECOMMEND_REFLECTIONS` function's argument must be an array literal.
 
-#### Parameters[​](#parameters "Direct link to Parameters")
+#### Parameters
 
 The `SYS.RECOMMEND_REFLECTIONS` table function has one parameter: an array that contains the job IDs for the SQL queries that you want to accelerate.
 
 You can list up to 100 job IDs in each `SYS.RECOMMEND_REFLECTIONS` query. You must have permission to view every job you list in the query.
 
-#### Output[​](#output "Direct link to Output")
+#### Output
 
 The output for `SYS.RECOMMEND_REFLECTIONS` queries is a table that includes the following columns:
 
@@ -271,7 +271,7 @@ The output for `SYS.RECOMMEND_REFLECTIONS` queries is a table that includes the 
 | average\_improvement\_factor | double | The likely average multiplicative rate of improvement for each query if you implement the recommended Reflection. For example, if the average\_improvement\_factor value is 2.34, implementing the recommended Reflection is likely to speed up each query by 2.34 times, on average. |
 | average\_improvement\_ms | double | The likely average improvement, in milliseconds, for each query if you implement the recommended Reflection. For example, if the average\_improvement\_ms value is 5400, implementing the recommended Reflection is likely to save an average of 5400 milliseconds for each query that uses the Reflection. |
 
-#### Example Query and Output[​](#example-query-and-output "Direct link to Example Query and Output")
+#### Example Query and Output
 
 To request a recommendation, you must have the job ID for at least one SQL query that you want to accelerate. For example, suppose this is the SQL query:
 
@@ -285,7 +285,7 @@ ON "p_partkey" = "l_partkey"
 GROUP BY "p_brand"
 ```
 
-##### Obtaining Recommendations[​](#obtaining-recommendations "Direct link to Obtaining Recommendations")
+##### Obtaining Recommendations
 
 1. Retrieve the job ID for the query.
 2. Run the `SYS.RECOMMEND_REFLECTIONS` query with the job ID. In the following example, the job ID is `844c0023-6272-8b16-aef3-aea289acadb1`:
@@ -304,7 +304,7 @@ Example Results
 | --- | --- | --- | --- | --- | --- |
 | CREATE VIEW "recommended\_view"."Dataset\_9d74a03b-747a-42a2-a5ca-7f9c6f77b55d" AS SELECT "part"."P\_BRAND" AS "F0[P\_BRAND]", "part"."P\_SIZE" AS "F1[P\_SIZE]", "part"."P\_PARTKEY" AS "extra#0", "part"."P\_NAME" AS "extra#1", "part"."P\_MFGR" AS "extra#2", "part"."P\_TYPE" AS "extra#4", "part"."P\_CONTAINER" AS "extra#6", "part"."P\_RETAILPRICE" AS "extra#7", "part"."P\_COMMENT" AS "extra#8", "lineitem"."L\_ORDERKEY" AS "extra#9", "lineitem"."L\_PARTKEY" AS "extra#10", "lineitem"."L\_SUPPKEY" AS "extra#11", "lineitem"."L\_LINENUMBER" AS "extra#12", "lineitem"."L\_QUANTITY" AS "extra#13", "lineitem"."L\_EXTENDEDPRICE" AS "extra#14", "lineitem"."L\_DISCOUNT" AS "extra#15", "lineitem"."L\_TAX" AS "extra#16", "lineitem"."L\_RETURNFLAG" AS "extra#17", "lineitem"."L\_LINESTATUS" AS "extra#18", "lineitem"."L\_SHIPDATE" AS "extra#19", "lineitem"."L\_COMMITDATE" AS "extra#20", "lineitem"."L\_RECEIPTDATE" AS "extra#21", "lineitem"."L\_SHIPINSTRUCT" AS "extra#22", "lineitem"."L\_SHIPMODE" AS "extra#23", "lineitem"."L\_COMMENT" AS "extra#24" FROM "s3"."bucket1"."tpch"."sf10"."parquet"."lineitem" INNER JOIN "s3"."bucket1"."tpch"."sf10"."parquet"."part" ON "part"."P\_PARTKEY" = "lineitem"."L\_PARTKEY" | ALTER DATASET "recommended\_view"."Dataset\_9d74a03b-747a-42a2-a5ca-7f9c6f77b55d" CREATE AGGREGATE Reflection "agg\_0e07a376-7f8e-4c68-b2ce-6f6e819bebe6" USING DIMENSIONS ("F0[P\_BRAND]") MEASURES ("F1[P\_SIZE]" (MAX)) | "6j6c34cf-9drf-b07a-5ab7-abea69a66d00", "1a3c67c0-aab0-f9fb-97b4-af374b520100", "1a3c67c0-db35-3645-9ef1-2a84e4d0ce00" | 50.00 | 10.00 | 7196 |
 
-##### Using the Recommendation[​](#using-the-recommendation "Direct link to Using the Recommendation")
+##### Using the Recommendation
 
 1. If a recommendation is for an aggregation Reflection:
 
@@ -313,7 +313,7 @@ Example Results
 2. Run the query listed in the `reflection_sql` column to create the recommended Reflection and wait for the Reflection to finish refreshing.
 3. When the Reflection refresh is complete, run the SQL query to observe the acceleration due to the added Reflection.
 
-#### Limitations[​](#limitations "Direct link to Limitations")
+#### Limitations
 
 The `SYS.RECOMMEND_REFLECTIONS`table function has the following limitations:
 
@@ -321,11 +321,11 @@ The `SYS.RECOMMEND_REFLECTIONS`table function has the following limitations:
 * An SQL query can contain only inner joins. Outer joins that are part of a view definition are also supported. Other types of joins are not supported.
 * An SQL query cannot contain [Window functions](/current/reference/sql/sql-functions/WINDOW).
 
-### Sending Requests to the Recommendations API[​](#sending-requests-to-the-recommendations-api "Direct link to Sending Requests to the Recommendations API")
+### Sending Requests to the Recommendations API
 
 You can use the [Recommendations API](/current/reference/api/reflections/reflection-recommendations) to submit the job IDs of jobs that ran SQL queries and receive recommendations for Reflections that can accelerate those queries.
 
-## Locations of the Reflections Editor[​](#locations-of-the-reflections-editor "Direct link to Locations of the Reflections Editor")
+## Locations of the Reflections Editor
 
 You use the Reflections editor to create, edit, and remove raw and aggregation Reflections.
 
@@ -340,7 +340,7 @@ You can also open the Reflections editor from an existing Reflection that is lis
 2. Click the gear in the sidebar, and then select Reflections in the sidebar of the Settings page.
 3. Click the name of the Reflection. The Acceleration window is opened. The editor appears in this window.
 
-## Creating Raw Reflections[​](#creating-raw-reflections "Direct link to Creating Raw Reflections")
+## Creating Raw Reflections
 
 You can use the Reflections editor to create two types of raw Reflection:
 
@@ -354,18 +354,18 @@ note
 
 For creating Reflections on views and tables with row-access and column-masking policies, see [Using Reflections on Datasets with Policies](/current/data-products/govern/row-column-policies-udf#using-reflections-on-datasets-with-policies).
 
-### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+### Prerequisites
 
 * If you want to accelerate queries on unoptimized data or data in slow storage, create a view that is itself created from a table in a non-columnar format or on slow-scan storage. You can then create your raw Reflection from that view.
 * If you want to accelerate "needle-in-a-haystack" queries, create a view that includes a predicate to include only the rows that you want to scan. You can then create your raw Reflection from that view.
 * If you want to accelerate queries that perform expensive transformations, create a view that performs those transformations. You can then create your raw Reflection from that view.
 * If you want to accelerate queries that perform joins, create a view that performs the joins. You can then create your raw Reflection from that view.
 
-### Creating Default Raw Reflections[​](#creating-default-raw-reflections "Direct link to Creating Default Raw Reflections")
+### Creating Default Raw Reflections
 
 In the **Basic** view of the Reflections editor, you can create a raw Reflection that includes all of the fields that are in a table or view. Creating a basic raw Reflection ensures that Dremio never runs user queries against the underlying table or view when the raw Reflection is enabled.
 
-#### Restrictions of the **Basic** View[​](#restrictions-of-the-basic-view "Direct link to restrictions-of-the-basic-view")
+#### Restrictions of the **Basic** View
 
 * You cannot select fields to sort or create horizontal partitions on.
 * The name of the Reflection that you create is restricted to "Raw Reflection".
@@ -375,7 +375,7 @@ To create a raw Reflection in the **Basic** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the toggle switch on the left side of the **Raw Reflections** bar.
 
@@ -387,9 +387,9 @@ tip
 
 You can also create raw Reflections using [SQL commands](/current/reference/sql/commands/acceleration).
 
-For tips on what to do now after your raw Reflection is created and enabled, see [What to Do Next](#what-to-do-next).
+For tips on what to do now after your raw Reflection is created and enabled, see What to Do Next.
 
-### Creating Customized Raw Reflections[​](#creating-customized-raw-reflections "Direct link to Creating Customized Raw Reflections")
+### Creating Customized Raw Reflections
 
 In the **Advanced** view of the Reflections editor, you can create one or more raw Reflections that include all or a selection of the fields that are in the anchor or supported anchor. You can also choose sort fields and fields for partitioning horizontally.
 
@@ -404,7 +404,7 @@ To create a raw Reflection in the **Advanced** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. If the **Advanced** view is not already displayed, click the **Advanced View** button in the top-right corner of the editor.
 2. Click the toggle switch in the table labeled **Raw Reflection** to enable the raw Reflection.
@@ -441,7 +441,7 @@ Ignore the **Distribution** column. Selecting fields in it has no effect on the 
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-### What to Do Next[​](#what-to-do-next "Direct link to What to Do Next")
+### What to Do Next
 
 After you create a raw Reflection that is enabled, test whether the query optimizer is making queries use it. See [Testing Reflections](/current/reflections/manual-reflections/#testing-reflections) for the steps.
 
@@ -452,7 +452,7 @@ When you are sure that the Reflection is being used, follow one of these steps:
 
 See [Refreshing Reflections](/current/acceleration/manual-reflections/refreshing-reflections/).
 
-## Creating Aggregation Reflections[​](#creating-aggregation-reflections "Direct link to Creating Aggregation Reflections")
+## Creating Aggregation Reflections
 
 Aggregation Reflections are summarized representations of data. Most BI tools generate aggregation and GROUP BY queries. Aggregation Reflections optimize these kinds of query patterns.
 
@@ -473,23 +473,23 @@ When you create aggregation Reflections, keep in mind these best practices:
 
 Dremio recommends that you also follow the best practices listed in [Best Practices for Creating Raw and Aggregation Reflections](/current/help-support/well-architected-framework/performance/) when you create customized aggregation Reflections.
 
-### Creating Default Aggregation Reflections[​](#creating-default-aggregation-reflections "Direct link to Creating Default Aggregation Reflections")
+### Creating Default Aggregation Reflections
 
 You can use the **Basic** view of the Reflections editor to create one aggregation Reflection that includes fields, from the anchor or supported anchor, that are recommended for use as dimensions or measures. You can add or remove dimensions and measures, too.
 
-#### Restrictions[​](#restrictions "Direct link to Restrictions")
+#### Restrictions
 
 * You can create only one aggregation Reflection in the **Basic** view. If you want to create multiple aggregations Reflections at a time, use the **Advanced** view.
 * You cannot select fields for sorting or horizontally partitioning.
 * The name of the Reflection is restricted to "Aggregation Reflection".
 
-#### Procedure[​](#procedure "Direct link to Procedure")
+#### Procedure
 
 To create an aggregation Reflection in the **Basic** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 In the **Aggregations Reflections** section of the editor, click **Generate** to get recommended fields to use as dimensions and measures. This will override any previously selected dimensions and measures. If you wish to proceed, click **Continue** in the confirmation dialog that follows.
 
@@ -506,19 +506,19 @@ tip
 
 You can also create aggregation Reflections using [SQL commands](/current/reference/sql/commands/acceleration).
 
-For tips on what to do now after your aggregation Reflection is created and enabled, see [What to Do Next](#what-to-do-next).
+For tips on what to do now after your aggregation Reflection is created and enabled, see What to Do Next.
 
-### Creating Customized Aggregation Reflections[​](#creating-customized-aggregation-reflections "Direct link to Creating Customized Aggregation Reflections")
+### Creating Customized Aggregation Reflections
 
 You can use the **Advanced** view of the Reflections editor to create one or more aggregation Reflections that select which fields in the anchor or supporting anchor to use as dimensions and measures. For each field that you use as a measure, you can use one or more of these SQL functions: APPROX\_DISTINCT\_COUNT, COUNT, MAX, and MIN. You can also choose sort fields and fields for partitioning horizontally.
 
-#### Procedure[​](#procedure-1 "Direct link to Procedure")
+#### Procedure
 
 To create an aggregation Reflection in the **Advanced** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the **Advanced View** button in the top-right corner of the editor.
 2. Click **Aggregation Reflections**.
@@ -559,7 +559,7 @@ The full list of SQL aggregation functions that Dremio supports is not supported
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-### What to Do Next[​](#what-to-do-next-1 "Direct link to What to Do Next")
+### What to Do Next
 
 After you create an aggregation Reflection that is enabled, test whether the query optimizer is making queries use it. See [Testing Reflections](/current/acceleration/manual-reflections/#testing-reflections) for the steps.
 
@@ -570,7 +570,7 @@ When you are sure that the Reflection is being used, follow one of these steps:
 
 See [Refreshing Reflections](/current/acceleration/manual-reflections/refreshing-reflections/).
 
-## Editing Raw Reflections[​](#editing-raw-reflections "Direct link to Editing Raw Reflections")
+## Editing Raw Reflections
 
 You can edit an existing raw Reflection. You might want to do so if you are iteratively designing and testing a raw Reflection, if the definition of the view that the Reflection was created from was changed, or if the schema of the underlying table was changed.
 
@@ -578,11 +578,11 @@ If you created a raw Reflection in the **Basic** view of the Reflections editor,
 
 Dremio runs the job or jobs to recreate the Reflection after you click **Save**.
 
-### Procedure[​](#procedure-2 "Direct link to Procedure")
+### Procedure
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the **Advanced View** button in the top-right corner of the editor.
 2. In the **Raw Reflections** section of the **Advanced** view, locate the table that shows the definition of your Reflection.
@@ -614,7 +614,7 @@ Ignore the **Distribution** column. Selecting fields in it has no effect on the 
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-## Editing Aggregation Reflections[​](#editing-aggregation-reflections "Direct link to Editing Aggregation Reflections")
+## Editing Aggregation Reflections
 
 You might want to edit an aggregation Reflection if you are iteratively designing and testing an aggregation Reflection, if the definition of the view that the Reflection was created from was changed, if the schema of the underlying table was changed, or if you want to revise one or more aggregations defined in the Reflection.
 
@@ -622,20 +622,20 @@ If you created an aggregation Reflection in the **Basic** view of the Reflection
 
 Dremio runs the job or jobs to recreate the Reflection after you click **Save**.
 
-### Editing Aggregation Reflections in the **Basic** View of the Reflections Editor[​](#editing-aggregation-reflections-in-the-basic-view-of-the-reflections-editor "Direct link to editing-aggregation-reflections-in-the-basic-view-of-the-reflections-editor")
+### Editing Aggregation Reflections in the **Basic** View of the Reflections Editor
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. In the Aggregation Reflection section of the editor, modify or accept the recommendation for dimension fields and measure fields.
 2. Click **Save**.
 
-### Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor[​](#editing-aggregation-reflections-in-the-advanced-view-of-the-reflections-editor "Direct link to editing-aggregation-reflections-in-the-advanced-view-of-the-reflections-editor")
+### Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the **Advanced View** button in the top-right corner of the editor.
 2. Click **Aggregation Reflections**.
@@ -671,7 +671,7 @@ The full list of SQL aggregation functions that Dremio supports is not supported
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-## Creating External Reflections[​](#creating-external-reflections "Direct link to Creating External Reflections")
+## Creating External Reflections
 
 See [External Reflections](/current/acceleration/#types) for a description of what external Reflections are and their benefits.
 
@@ -692,7 +692,7 @@ note
 
 The data types and column names in the external Reflection must match those in the view that the external Reflection is mapped to.
 
-### Example[​](#example "Direct link to Example")
+### Example
 
 Suppose you have a data source named `mySource` that is connected to Dremio. In that data source, there are (among all of your other tables) these two tables:
 
@@ -729,14 +729,14 @@ USING "mySource"."sales_by_region"
 
 The external Reflection lets Dremio's query planner know that there is a table in `mySource` that matches the Dremio view `myWorkplace.sales_by_region` and that can be used to satisfy queries against the view. When Dremio users query `myWorkspace.sales_by_region`, Dremio routes the query to the data source `mySource`, which runs the query against `mySource.sales_by_region`.
 
-## Editing External Reflections[​](#editing-external-reflections "Direct link to Editing External Reflections")
+## Editing External Reflections
 
 If you have modified the DDL of a derived table in your data source, follow these steps in Dremio to update the corresponding external Reflection:
 
 1. [Replace the view with one that has a definition that matches the definition of the derived table](/current/reference/sql/commands/datasets/#creating-views). When you do so, the external Reflection is dropped.
 2. [Define a new external Reflection that maps the view to the derived table.](/current/reference/sql/commands/acceleration/#external-reflections)
 
-## Viewing Whether Queries Used Reflections[​](#viewing-whether-queries-used-reflections "Direct link to Viewing Whether Queries Used Reflections")
+## Viewing Whether Queries Used Reflections
 
 You can view the list of jobs on the Jobs page to find out whether queries were accelerated by Reflections. The Jobs page lists the jobs that ran queries, both queries from your data consumers and queries run within the Dremio user interface.
 
@@ -746,7 +746,7 @@ To find whether a query used a Reflection:
 2. Look for the indicator that one or more Reflections were used. A lightning-bolt icon appears next to the job to indicate that a query was accelerated.
 3. View the job summary by clicking the row that represents the job that ran the query. The job summary appears in the pane to the right of the list of jobs.
 
-### Relationship between Reflections and Jobs[​](#relationship-between-reflections-and-jobs "Direct link to Relationship between Reflections and Jobs")
+### Relationship between Reflections and Jobs
 
 The relationship between a job and a Reflection can be one of the following types:
 
@@ -754,7 +754,7 @@ The relationship between a job and a Reflection can be one of the following type
 * MATCHED: a Reflection could have been used to accelerate the query but Dremio determined that it would not provide any benefits or another Reflection was determined to be a better choice.
 * CHOSEN: a Reflection is used to accelerate the query. Note that multiple Reflections can be used to accelerate queries.
 
-## Testing Reflections[​](#testing-reflections "Direct link to Testing Reflections")
+## Testing Reflections
 
 You can test whether Reflections that you created are used to satisfy a query without actually running the query. This practice can be helpful when the tables are very large and you want to avoid processing large queries unnecessarily.
 
@@ -765,7 +765,7 @@ To test whether one or more Reflections are used by a query:
 3. Click the **Run** button.
 4. When the query has finished, click the **Run** link found directly above the query results to view the job details. Any Reflections used will be shown on the page.
 
-## Setting the Expiration Policy for Reflections[​](#setting-the-expiration-policy-for-reflections "Direct link to Setting the Expiration Policy for Reflections")
+## Setting the Expiration Policy for Reflections
 
 Rather than delete a Reflection manually, you can specify how long you want Dremio to retain the Reflection before deleting it automatically.
 
@@ -791,11 +791,11 @@ The table must be based on more than one file.
 3. In the sidebar of the Dataset Settings window, click **Reflection Refresh**.
 4. After making your changes, click **Save**. The changes take effect on the next refresh.
 
-## Removing Reflections[​](#removing-reflections "Direct link to Removing Reflections")
+## Removing Reflections
 
 You can choose to disable or delete Reflections.
 
-### Disabling Reflections[​](#disabling-reflections "Direct link to Disabling Reflections")
+### Disabling Reflections
 
 Disabled Reflections become unavailable for use by queries and will not be refreshed manually or according to their schedule.
 
@@ -813,7 +813,7 @@ To disable a Reflection:
    * If there are two or more aggregation Reflections for the table or view, in the **Advanced** view click the toggle switch for the individual aggregation Reflection that you want to disable.
 3. Click **Save**. The changes take effect immediately.
 
-### Deleting Reflections[​](#deleting-reflections "Direct link to Deleting Reflections")
+### Deleting Reflections
 
 You can delete Reflections individually, or all of the Reflections on a table or view. When you delete a Reflection, its definition, data, and metadata are entirely deleted.
 
@@ -842,7 +842,7 @@ ALTER DATASET <DATASET_PATH> DROP Reflection <REFLECTION_NAME>
 * DATASET\_PATH: The path of the view on which the external Reflection is based.
 * REFLECTION\_NAME: The name of the external Reflection.
 
-## Additional Resources[​](#additional-resources "Direct link to Additional Resources")
+## Additional Resources
 
 Find out more about Reflections by enrolling in the [Data Reflections Deep Dive course in Dremio University](https://university.dremio.com/course/data-reflections-deep-dive).
 
@@ -854,34 +854,34 @@ Autonomous Reflections](/current/acceleration/autonomous-reflections)[Next
 
 View Whether Queries Used Reflections](/current/acceleration/manual-reflections/info-about-queries)
 
-* [Reflection Recommendations](#reflection-recommendations)
-* [Sending Requests to the Recommendations API](#sending-requests-to-the-recommendations-api)
-* [Locations of the Reflections Editor](#locations-of-the-reflections-editor)
-* [Creating Raw Reflections](#creating-raw-reflections)
-  + [Prerequisites](#prerequisites)
-  + [Creating Default Raw Reflections](#creating-default-raw-reflections)
-  + [Creating Customized Raw Reflections](#creating-customized-raw-reflections)
-  + [What to Do Next](#what-to-do-next)
-* [Creating Aggregation Reflections](#creating-aggregation-reflections)
-  + [Creating Default Aggregation Reflections](#creating-default-aggregation-reflections)
-  + [Creating Customized Aggregation Reflections](#creating-customized-aggregation-reflections)
-  + [What to Do Next](#what-to-do-next-1)
-* [Editing Raw Reflections](#editing-raw-reflections)
-  + [Procedure](#procedure-2)
-* [Editing Aggregation Reflections](#editing-aggregation-reflections)
-  + [Editing Aggregation Reflections in the **Basic** View of the Reflections Editor](#editing-aggregation-reflections-in-the-basic-view-of-the-reflections-editor)
-  + [Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor](#editing-aggregation-reflections-in-the-advanced-view-of-the-reflections-editor)
-* [Creating External Reflections](#creating-external-reflections)
-  + [Example](#example)
-* [Editing External Reflections](#editing-external-reflections)
-* [Viewing Whether Queries Used Reflections](#viewing-whether-queries-used-reflections)
-  + [Relationship between Reflections and Jobs](#relationship-between-reflections-and-jobs)
-* [Testing Reflections](#testing-reflections)
-* [Setting the Expiration Policy for Reflections](#setting-the-expiration-policy-for-reflections)
-* [Removing Reflections](#removing-reflections)
-  + [Disabling Reflections](#disabling-reflections)
-  + [Deleting Reflections](#deleting-reflections)
-* [Additional Resources](#additional-resources)
+* Reflection Recommendations
+* Sending Requests to the Recommendations API
+* Locations of the Reflections Editor
+* Creating Raw Reflections
+  + Prerequisites
+  + Creating Default Raw Reflections
+  + Creating Customized Raw Reflections
+  + What to Do Next
+* Creating Aggregation Reflections
+  + Creating Default Aggregation Reflections
+  + Creating Customized Aggregation Reflections
+  + What to Do Next
+* Editing Raw Reflections
+  + Procedure
+* Editing Aggregation Reflections
+  + Editing Aggregation Reflections in the **Basic** View of the Reflections Editor
+  + Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor
+* Creating External Reflections
+  + Example
+* Editing External Reflections
+* Viewing Whether Queries Used Reflections
+  + Relationship between Reflections and Jobs
+* Testing Reflections
+* Setting the Expiration Policy for Reflections
+* Removing Reflections
+  + Disabling Reflections
+  + Deleting Reflections
+* Additional Resources
 
 ---
 
@@ -910,7 +910,7 @@ The Reflection creation job is listed as a single job on the Jobs page, as shown
 
 Dremio creates all Reflections as Apache Iceberg tables, and the metadata for the Reflection is generated at the same time.
 
-### Reflection Recommendations[​](#reflection-recommendations "Direct link to Reflection Recommendations")
+### Reflection Recommendations
 
 When [Autonomous Reflections](/current/acceleration/autonomous-reflections) are not enabled, Dremio automatically provides recommendations to add and remove Reflections based on query patterns to optimize performance for queries on Iceberg tables, Parquet datasets, and views based on them.
 Recommendations to add Reflections are sorted by overall effectiveness, with the most effective recommendations shown on top. Effectiveness relates to metrics such as the estimated number of accelerated jobs, potential increase in query execution speedup, and potential time saved during querying. These are rough estimates based on past data that can give you insight into the potential benefits of each recommendation.
@@ -927,11 +927,11 @@ Reflections created using these recommendations refresh automatically when sourc
 
 Reflections created using usage based recommendations are only used when fully synchronized with their source data to ensure up-to-date query results.
 
-#### Manually Requesting Recommendations for Specific Jobs[​](#manually-requesting-recommendations-for-specific-jobs "Direct link to Manually Requesting Recommendations for Specific Jobs")
+#### Manually Requesting Recommendations for Specific Jobs
 
 You can generate recommendations for default raw and aggregation Reflections by submitting job IDs to accelerate specific SQL queries using either the `SYS.RECOMMEND_REFLECTIONS` table function or the [Recommendations API](/current/reference/api/reflections/reflection-recommendations). Obtain the job IDs by looking them up on the [Jobs page](/current/admin/monitoring/jobs/).
 
-#### Running the SYS.RECOMMEND\_REFLECTIONS Table Function[​](#running-the-sysrecommend_reflections-table-function "Direct link to Running the SYS.RECOMMEND_REFLECTIONS Table Function")
+#### Running the SYS.RECOMMEND\_REFLECTIONS Table Function
 
 The `SYS.RECOMMEND_REFLECTIONS` table function returns a table of one or more recommendations.
 
@@ -943,13 +943,13 @@ SELECT * FROM TABLE(SYS.RECOMMEND_REFLECTIONS(ARRAY['<jobId>', '<jobId>']))
 
 The `SYS.RECOMMEND_REFLECTIONS` function's argument must be an array literal.
 
-#### Parameters[​](#parameters "Direct link to Parameters")
+#### Parameters
 
 The `SYS.RECOMMEND_REFLECTIONS` table function has one parameter: an array that contains the job IDs for the SQL queries that you want to accelerate.
 
 You can list up to 100 job IDs in each `SYS.RECOMMEND_REFLECTIONS` query. You must have permission to view every job you list in the query.
 
-#### Output[​](#output "Direct link to Output")
+#### Output
 
 The output for `SYS.RECOMMEND_REFLECTIONS` queries is a table that includes the following columns:
 
@@ -962,7 +962,7 @@ The output for `SYS.RECOMMEND_REFLECTIONS` queries is a table that includes the 
 | average\_improvement\_factor | double | The likely average multiplicative rate of improvement for each query if you implement the recommended Reflection. For example, if the average\_improvement\_factor value is 2.34, implementing the recommended Reflection is likely to speed up each query by 2.34 times, on average. |
 | average\_improvement\_ms | double | The likely average improvement, in milliseconds, for each query if you implement the recommended Reflection. For example, if the average\_improvement\_ms value is 5400, implementing the recommended Reflection is likely to save an average of 5400 milliseconds for each query that uses the Reflection. |
 
-#### Example Query and Output[​](#example-query-and-output "Direct link to Example Query and Output")
+#### Example Query and Output
 
 To request a recommendation, you must have the job ID for at least one SQL query that you want to accelerate. For example, suppose this is the SQL query:
 
@@ -976,7 +976,7 @@ ON "p_partkey" = "l_partkey"
 GROUP BY "p_brand"
 ```
 
-##### Obtaining Recommendations[​](#obtaining-recommendations "Direct link to Obtaining Recommendations")
+##### Obtaining Recommendations
 
 1. Retrieve the job ID for the query.
 2. Run the `SYS.RECOMMEND_REFLECTIONS` query with the job ID. In the following example, the job ID is `844c0023-6272-8b16-aef3-aea289acadb1`:
@@ -995,7 +995,7 @@ Example Results
 | --- | --- | --- | --- | --- | --- |
 | CREATE VIEW "recommended\_view"."Dataset\_9d74a03b-747a-42a2-a5ca-7f9c6f77b55d" AS SELECT "part"."P\_BRAND" AS "F0[P\_BRAND]", "part"."P\_SIZE" AS "F1[P\_SIZE]", "part"."P\_PARTKEY" AS "extra#0", "part"."P\_NAME" AS "extra#1", "part"."P\_MFGR" AS "extra#2", "part"."P\_TYPE" AS "extra#4", "part"."P\_CONTAINER" AS "extra#6", "part"."P\_RETAILPRICE" AS "extra#7", "part"."P\_COMMENT" AS "extra#8", "lineitem"."L\_ORDERKEY" AS "extra#9", "lineitem"."L\_PARTKEY" AS "extra#10", "lineitem"."L\_SUPPKEY" AS "extra#11", "lineitem"."L\_LINENUMBER" AS "extra#12", "lineitem"."L\_QUANTITY" AS "extra#13", "lineitem"."L\_EXTENDEDPRICE" AS "extra#14", "lineitem"."L\_DISCOUNT" AS "extra#15", "lineitem"."L\_TAX" AS "extra#16", "lineitem"."L\_RETURNFLAG" AS "extra#17", "lineitem"."L\_LINESTATUS" AS "extra#18", "lineitem"."L\_SHIPDATE" AS "extra#19", "lineitem"."L\_COMMITDATE" AS "extra#20", "lineitem"."L\_RECEIPTDATE" AS "extra#21", "lineitem"."L\_SHIPINSTRUCT" AS "extra#22", "lineitem"."L\_SHIPMODE" AS "extra#23", "lineitem"."L\_COMMENT" AS "extra#24" FROM "s3"."bucket1"."tpch"."sf10"."parquet"."lineitem" INNER JOIN "s3"."bucket1"."tpch"."sf10"."parquet"."part" ON "part"."P\_PARTKEY" = "lineitem"."L\_PARTKEY" | ALTER DATASET "recommended\_view"."Dataset\_9d74a03b-747a-42a2-a5ca-7f9c6f77b55d" CREATE AGGREGATE Reflection "agg\_0e07a376-7f8e-4c68-b2ce-6f6e819bebe6" USING DIMENSIONS ("F0[P\_BRAND]") MEASURES ("F1[P\_SIZE]" (MAX)) | "6j6c34cf-9drf-b07a-5ab7-abea69a66d00", "1a3c67c0-aab0-f9fb-97b4-af374b520100", "1a3c67c0-db35-3645-9ef1-2a84e4d0ce00" | 50.00 | 10.00 | 7196 |
 
-##### Using the Recommendation[​](#using-the-recommendation "Direct link to Using the Recommendation")
+##### Using the Recommendation
 
 1. If a recommendation is for an aggregation Reflection:
 
@@ -1004,7 +1004,7 @@ Example Results
 2. Run the query listed in the `reflection_sql` column to create the recommended Reflection and wait for the Reflection to finish refreshing.
 3. When the Reflection refresh is complete, run the SQL query to observe the acceleration due to the added Reflection.
 
-#### Limitations[​](#limitations "Direct link to Limitations")
+#### Limitations
 
 The `SYS.RECOMMEND_REFLECTIONS`table function has the following limitations:
 
@@ -1012,11 +1012,11 @@ The `SYS.RECOMMEND_REFLECTIONS`table function has the following limitations:
 * An SQL query can contain only inner joins. Outer joins that are part of a view definition are also supported. Other types of joins are not supported.
 * An SQL query cannot contain [Window functions](/current/reference/sql/sql-functions/WINDOW).
 
-### Sending Requests to the Recommendations API[​](#sending-requests-to-the-recommendations-api "Direct link to Sending Requests to the Recommendations API")
+### Sending Requests to the Recommendations API
 
 You can use the [Recommendations API](/current/reference/api/reflections/reflection-recommendations) to submit the job IDs of jobs that ran SQL queries and receive recommendations for Reflections that can accelerate those queries.
 
-## Locations of the Reflections Editor[​](#locations-of-the-reflections-editor "Direct link to Locations of the Reflections Editor")
+## Locations of the Reflections Editor
 
 You use the Reflections editor to create, edit, and remove raw and aggregation Reflections.
 
@@ -1031,7 +1031,7 @@ You can also open the Reflections editor from an existing Reflection that is lis
 2. Click the gear in the sidebar, and then select Reflections in the sidebar of the Settings page.
 3. Click the name of the Reflection. The Acceleration window is opened. The editor appears in this window.
 
-## Creating Raw Reflections[​](#creating-raw-reflections "Direct link to Creating Raw Reflections")
+## Creating Raw Reflections
 
 You can use the Reflections editor to create two types of raw Reflection:
 
@@ -1045,18 +1045,18 @@ note
 
 For creating Reflections on views and tables with row-access and column-masking policies, see [Using Reflections on Datasets with Policies](/current/data-products/govern/row-column-policies-udf#using-reflections-on-datasets-with-policies).
 
-### Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+### Prerequisites
 
 * If you want to accelerate queries on unoptimized data or data in slow storage, create a view that is itself created from a table in a non-columnar format or on slow-scan storage. You can then create your raw Reflection from that view.
 * If you want to accelerate "needle-in-a-haystack" queries, create a view that includes a predicate to include only the rows that you want to scan. You can then create your raw Reflection from that view.
 * If you want to accelerate queries that perform expensive transformations, create a view that performs those transformations. You can then create your raw Reflection from that view.
 * If you want to accelerate queries that perform joins, create a view that performs the joins. You can then create your raw Reflection from that view.
 
-### Creating Default Raw Reflections[​](#creating-default-raw-reflections "Direct link to Creating Default Raw Reflections")
+### Creating Default Raw Reflections
 
 In the **Basic** view of the Reflections editor, you can create a raw Reflection that includes all of the fields that are in a table or view. Creating a basic raw Reflection ensures that Dremio never runs user queries against the underlying table or view when the raw Reflection is enabled.
 
-#### Restrictions of the **Basic** View[​](#restrictions-of-the-basic-view "Direct link to restrictions-of-the-basic-view")
+#### Restrictions of the **Basic** View
 
 * You cannot select fields to sort or create horizontal partitions on.
 * The name of the Reflection that you create is restricted to "Raw Reflection".
@@ -1066,7 +1066,7 @@ To create a raw Reflection in the **Basic** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the toggle switch on the left side of the **Raw Reflections** bar.
 
@@ -1078,9 +1078,9 @@ tip
 
 You can also create raw Reflections using [SQL commands](/current/reference/sql/commands/acceleration).
 
-For tips on what to do now after your raw Reflection is created and enabled, see [What to Do Next](#what-to-do-next).
+For tips on what to do now after your raw Reflection is created and enabled, see What to Do Next.
 
-### Creating Customized Raw Reflections[​](#creating-customized-raw-reflections "Direct link to Creating Customized Raw Reflections")
+### Creating Customized Raw Reflections
 
 In the **Advanced** view of the Reflections editor, you can create one or more raw Reflections that include all or a selection of the fields that are in the anchor or supported anchor. You can also choose sort fields and fields for partitioning horizontally.
 
@@ -1095,7 +1095,7 @@ To create a raw Reflection in the **Advanced** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. If the **Advanced** view is not already displayed, click the **Advanced View** button in the top-right corner of the editor.
 2. Click the toggle switch in the table labeled **Raw Reflection** to enable the raw Reflection.
@@ -1132,7 +1132,7 @@ Ignore the **Distribution** column. Selecting fields in it has no effect on the 
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-### What to Do Next[​](#what-to-do-next "Direct link to What to Do Next")
+### What to Do Next
 
 After you create a raw Reflection that is enabled, test whether the query optimizer is making queries use it. See [Testing Reflections](/current/reflections/manual-reflections/#testing-reflections) for the steps.
 
@@ -1143,7 +1143,7 @@ When you are sure that the Reflection is being used, follow one of these steps:
 
 See [Refreshing Reflections](/current/acceleration/manual-reflections/refreshing-reflections/).
 
-## Creating Aggregation Reflections[​](#creating-aggregation-reflections "Direct link to Creating Aggregation Reflections")
+## Creating Aggregation Reflections
 
 Aggregation Reflections are summarized representations of data. Most BI tools generate aggregation and GROUP BY queries. Aggregation Reflections optimize these kinds of query patterns.
 
@@ -1164,23 +1164,23 @@ When you create aggregation Reflections, keep in mind these best practices:
 
 Dremio recommends that you also follow the best practices listed in [Best Practices for Creating Raw and Aggregation Reflections](/current/help-support/well-architected-framework/performance/) when you create customized aggregation Reflections.
 
-### Creating Default Aggregation Reflections[​](#creating-default-aggregation-reflections "Direct link to Creating Default Aggregation Reflections")
+### Creating Default Aggregation Reflections
 
 You can use the **Basic** view of the Reflections editor to create one aggregation Reflection that includes fields, from the anchor or supported anchor, that are recommended for use as dimensions or measures. You can add or remove dimensions and measures, too.
 
-#### Restrictions[​](#restrictions "Direct link to Restrictions")
+#### Restrictions
 
 * You can create only one aggregation Reflection in the **Basic** view. If you want to create multiple aggregations Reflections at a time, use the **Advanced** view.
 * You cannot select fields for sorting or horizontally partitioning.
 * The name of the Reflection is restricted to "Aggregation Reflection".
 
-#### Procedure[​](#procedure "Direct link to Procedure")
+#### Procedure
 
 To create an aggregation Reflection in the **Basic** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 In the **Aggregations Reflections** section of the editor, click **Generate** to get recommended fields to use as dimensions and measures. This will override any previously selected dimensions and measures. If you wish to proceed, click **Continue** in the confirmation dialog that follows.
 
@@ -1197,19 +1197,19 @@ tip
 
 You can also create aggregation Reflections using [SQL commands](/current/reference/sql/commands/acceleration).
 
-For tips on what to do now after your aggregation Reflection is created and enabled, see [What to Do Next](#what-to-do-next).
+For tips on what to do now after your aggregation Reflection is created and enabled, see What to Do Next.
 
-### Creating Customized Aggregation Reflections[​](#creating-customized-aggregation-reflections "Direct link to Creating Customized Aggregation Reflections")
+### Creating Customized Aggregation Reflections
 
 You can use the **Advanced** view of the Reflections editor to create one or more aggregation Reflections that select which fields in the anchor or supporting anchor to use as dimensions and measures. For each field that you use as a measure, you can use one or more of these SQL functions: APPROX\_DISTINCT\_COUNT, COUNT, MAX, and MIN. You can also choose sort fields and fields for partitioning horizontally.
 
-#### Procedure[​](#procedure-1 "Direct link to Procedure")
+#### Procedure
 
 To create an aggregation Reflection in the **Advanced** view of the Reflections editor:
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the **Advanced View** button in the top-right corner of the editor.
 2. Click **Aggregation Reflections**.
@@ -1250,7 +1250,7 @@ The full list of SQL aggregation functions that Dremio supports is not supported
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-### What to Do Next[​](#what-to-do-next-1 "Direct link to What to Do Next")
+### What to Do Next
 
 After you create an aggregation Reflection that is enabled, test whether the query optimizer is making queries use it. See [Testing Reflections](/current/acceleration/manual-reflections/#testing-reflections) for the steps.
 
@@ -1261,7 +1261,7 @@ When you are sure that the Reflection is being used, follow one of these steps:
 
 See [Refreshing Reflections](/current/acceleration/manual-reflections/refreshing-reflections/).
 
-## Editing Raw Reflections[​](#editing-raw-reflections "Direct link to Editing Raw Reflections")
+## Editing Raw Reflections
 
 You can edit an existing raw Reflection. You might want to do so if you are iteratively designing and testing a raw Reflection, if the definition of the view that the Reflection was created from was changed, or if the schema of the underlying table was changed.
 
@@ -1269,11 +1269,11 @@ If you created a raw Reflection in the **Basic** view of the Reflections editor,
 
 Dremio runs the job or jobs to recreate the Reflection after you click **Save**.
 
-### Procedure[​](#procedure-2 "Direct link to Procedure")
+### Procedure
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the **Advanced View** button in the top-right corner of the editor.
 2. In the **Raw Reflections** section of the **Advanced** view, locate the table that shows the definition of your Reflection.
@@ -1305,7 +1305,7 @@ Ignore the **Distribution** column. Selecting fields in it has no effect on the 
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-## Editing Aggregation Reflections[​](#editing-aggregation-reflections "Direct link to Editing Aggregation Reflections")
+## Editing Aggregation Reflections
 
 You might want to edit an aggregation Reflection if you are iteratively designing and testing an aggregation Reflection, if the definition of the view that the Reflection was created from was changed, if the schema of the underlying table was changed, or if you want to revise one or more aggregations defined in the Reflection.
 
@@ -1313,20 +1313,20 @@ If you created an aggregation Reflection in the **Basic** view of the Reflection
 
 Dremio runs the job or jobs to recreate the Reflection after you click **Save**.
 
-### Editing Aggregation Reflections in the **Basic** View of the Reflections Editor[​](#editing-aggregation-reflections-in-the-basic-view-of-the-reflections-editor "Direct link to editing-aggregation-reflections-in-the-basic-view-of-the-reflections-editor")
+### Editing Aggregation Reflections in the **Basic** View of the Reflections Editor
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. In the Aggregation Reflection section of the editor, modify or accept the recommendation for dimension fields and measure fields.
 2. Click **Save**.
 
-### Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor[​](#editing-aggregation-reflections-in-the-advanced-view-of-the-reflections-editor "Direct link to editing-aggregation-reflections-in-the-advanced-view-of-the-reflections-editor")
+### Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor
 
 1. Open the Reflections editor.
 
-See [Locations of the Reflections Editor](#locations-of-the-reflections-editor) to find out where you can open the editor from.
+See Locations of the Reflections Editor to find out where you can open the editor from.
 
 1. Click the **Advanced View** button in the top-right corner of the editor.
 2. Click **Aggregation Reflections**.
@@ -1362,7 +1362,7 @@ The full list of SQL aggregation functions that Dremio supports is not supported
    * Select **Minimize Number Of Files** when you want to improve read performance of queries against the Reflection. With this option, there tend to be fewer seeks performed for a given query.
 7. Click **Save** when you are finished.
 
-## Creating External Reflections[​](#creating-external-reflections "Direct link to Creating External Reflections")
+## Creating External Reflections
 
 See [External Reflections](/current/acceleration/#types) for a description of what external Reflections are and their benefits.
 
@@ -1383,7 +1383,7 @@ note
 
 The data types and column names in the external Reflection must match those in the view that the external Reflection is mapped to.
 
-### Example[​](#example "Direct link to Example")
+### Example
 
 Suppose you have a data source named `mySource` that is connected to Dremio. In that data source, there are (among all of your other tables) these two tables:
 
@@ -1420,14 +1420,14 @@ USING "mySource"."sales_by_region"
 
 The external Reflection lets Dremio's query planner know that there is a table in `mySource` that matches the Dremio view `myWorkplace.sales_by_region` and that can be used to satisfy queries against the view. When Dremio users query `myWorkspace.sales_by_region`, Dremio routes the query to the data source `mySource`, which runs the query against `mySource.sales_by_region`.
 
-## Editing External Reflections[​](#editing-external-reflections "Direct link to Editing External Reflections")
+## Editing External Reflections
 
 If you have modified the DDL of a derived table in your data source, follow these steps in Dremio to update the corresponding external Reflection:
 
 1. [Replace the view with one that has a definition that matches the definition of the derived table](/current/reference/sql/commands/datasets/#creating-views). When you do so, the external Reflection is dropped.
 2. [Define a new external Reflection that maps the view to the derived table.](/current/reference/sql/commands/acceleration/#external-reflections)
 
-## Viewing Whether Queries Used Reflections[​](#viewing-whether-queries-used-reflections "Direct link to Viewing Whether Queries Used Reflections")
+## Viewing Whether Queries Used Reflections
 
 You can view the list of jobs on the Jobs page to find out whether queries were accelerated by Reflections. The Jobs page lists the jobs that ran queries, both queries from your data consumers and queries run within the Dremio user interface.
 
@@ -1437,7 +1437,7 @@ To find whether a query used a Reflection:
 2. Look for the indicator that one or more Reflections were used. A lightning-bolt icon appears next to the job to indicate that a query was accelerated.
 3. View the job summary by clicking the row that represents the job that ran the query. The job summary appears in the pane to the right of the list of jobs.
 
-### Relationship between Reflections and Jobs[​](#relationship-between-reflections-and-jobs "Direct link to Relationship between Reflections and Jobs")
+### Relationship between Reflections and Jobs
 
 The relationship between a job and a Reflection can be one of the following types:
 
@@ -1445,7 +1445,7 @@ The relationship between a job and a Reflection can be one of the following type
 * MATCHED: a Reflection could have been used to accelerate the query but Dremio determined that it would not provide any benefits or another Reflection was determined to be a better choice.
 * CHOSEN: a Reflection is used to accelerate the query. Note that multiple Reflections can be used to accelerate queries.
 
-## Testing Reflections[​](#testing-reflections "Direct link to Testing Reflections")
+## Testing Reflections
 
 You can test whether Reflections that you created are used to satisfy a query without actually running the query. This practice can be helpful when the tables are very large and you want to avoid processing large queries unnecessarily.
 
@@ -1456,7 +1456,7 @@ To test whether one or more Reflections are used by a query:
 3. Click the **Run** button.
 4. When the query has finished, click the **Run** link found directly above the query results to view the job details. Any Reflections used will be shown on the page.
 
-## Setting the Expiration Policy for Reflections[​](#setting-the-expiration-policy-for-reflections "Direct link to Setting the Expiration Policy for Reflections")
+## Setting the Expiration Policy for Reflections
 
 Rather than delete a Reflection manually, you can specify how long you want Dremio to retain the Reflection before deleting it automatically.
 
@@ -1482,11 +1482,11 @@ The table must be based on more than one file.
 3. In the sidebar of the Dataset Settings window, click **Reflection Refresh**.
 4. After making your changes, click **Save**. The changes take effect on the next refresh.
 
-## Removing Reflections[​](#removing-reflections "Direct link to Removing Reflections")
+## Removing Reflections
 
 You can choose to disable or delete Reflections.
 
-### Disabling Reflections[​](#disabling-reflections "Direct link to Disabling Reflections")
+### Disabling Reflections
 
 Disabled Reflections become unavailable for use by queries and will not be refreshed manually or according to their schedule.
 
@@ -1504,7 +1504,7 @@ To disable a Reflection:
    * If there are two or more aggregation Reflections for the table or view, in the **Advanced** view click the toggle switch for the individual aggregation Reflection that you want to disable.
 3. Click **Save**. The changes take effect immediately.
 
-### Deleting Reflections[​](#deleting-reflections "Direct link to Deleting Reflections")
+### Deleting Reflections
 
 You can delete Reflections individually, or all of the Reflections on a table or view. When you delete a Reflection, its definition, data, and metadata are entirely deleted.
 
@@ -1533,7 +1533,7 @@ ALTER DATASET <DATASET_PATH> DROP Reflection <REFLECTION_NAME>
 * DATASET\_PATH: The path of the view on which the external Reflection is based.
 * REFLECTION\_NAME: The name of the external Reflection.
 
-## Additional Resources[​](#additional-resources "Direct link to Additional Resources")
+## Additional Resources
 
 Find out more about Reflections by enrolling in the [Data Reflections Deep Dive course in Dremio University](https://university.dremio.com/course/data-reflections-deep-dive).
 
@@ -1545,31 +1545,31 @@ Autonomous Reflections](/current/acceleration/autonomous-reflections)[Next
 
 View Whether Queries Used Reflections](/current/acceleration/manual-reflections/info-about-queries)
 
-* [Reflection Recommendations](#reflection-recommendations)
-* [Sending Requests to the Recommendations API](#sending-requests-to-the-recommendations-api)
-* [Locations of the Reflections Editor](#locations-of-the-reflections-editor)
-* [Creating Raw Reflections](#creating-raw-reflections)
-  + [Prerequisites](#prerequisites)
-  + [Creating Default Raw Reflections](#creating-default-raw-reflections)
-  + [Creating Customized Raw Reflections](#creating-customized-raw-reflections)
-  + [What to Do Next](#what-to-do-next)
-* [Creating Aggregation Reflections](#creating-aggregation-reflections)
-  + [Creating Default Aggregation Reflections](#creating-default-aggregation-reflections)
-  + [Creating Customized Aggregation Reflections](#creating-customized-aggregation-reflections)
-  + [What to Do Next](#what-to-do-next-1)
-* [Editing Raw Reflections](#editing-raw-reflections)
-  + [Procedure](#procedure-2)
-* [Editing Aggregation Reflections](#editing-aggregation-reflections)
-  + [Editing Aggregation Reflections in the **Basic** View of the Reflections Editor](#editing-aggregation-reflections-in-the-basic-view-of-the-reflections-editor)
-  + [Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor](#editing-aggregation-reflections-in-the-advanced-view-of-the-reflections-editor)
-* [Creating External Reflections](#creating-external-reflections)
-  + [Example](#example)
-* [Editing External Reflections](#editing-external-reflections)
-* [Viewing Whether Queries Used Reflections](#viewing-whether-queries-used-reflections)
-  + [Relationship between Reflections and Jobs](#relationship-between-reflections-and-jobs)
-* [Testing Reflections](#testing-reflections)
-* [Setting the Expiration Policy for Reflections](#setting-the-expiration-policy-for-reflections)
-* [Removing Reflections](#removing-reflections)
-  + [Disabling Reflections](#disabling-reflections)
-  + [Deleting Reflections](#deleting-reflections)
-* [Additional Resources](#additional-resources)
+* Reflection Recommendations
+* Sending Requests to the Recommendations API
+* Locations of the Reflections Editor
+* Creating Raw Reflections
+  + Prerequisites
+  + Creating Default Raw Reflections
+  + Creating Customized Raw Reflections
+  + What to Do Next
+* Creating Aggregation Reflections
+  + Creating Default Aggregation Reflections
+  + Creating Customized Aggregation Reflections
+  + What to Do Next
+* Editing Raw Reflections
+  + Procedure
+* Editing Aggregation Reflections
+  + Editing Aggregation Reflections in the **Basic** View of the Reflections Editor
+  + Editing Aggregation Reflections in the **Advanced** View of the Reflections Editor
+* Creating External Reflections
+  + Example
+* Editing External Reflections
+* Viewing Whether Queries Used Reflections
+  + Relationship between Reflections and Jobs
+* Testing Reflections
+* Setting the Expiration Policy for Reflections
+* Removing Reflections
+  + Disabling Reflections
+  + Deleting Reflections
+* Additional Resources
