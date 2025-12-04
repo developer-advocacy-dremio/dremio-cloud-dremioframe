@@ -2,159 +2,486 @@
 
 This guide provides detailed instructions on how to connect `dremioframe` to your Dremio environment, whether it's Dremio Cloud or a self-managed Dremio Software instance.
 
+## Overview
+
+DremioFrame supports three connection modes:
+- **`cloud`**: Dremio Cloud (SaaS)
+- **`v26`**: Dremio Software v26+ (with PAT support)
+- **`v25`**: Dremio Software v25 and earlier
+
+The `mode` parameter automatically configures ports, endpoints, and authentication methods. In most cases, the mode is auto-detected, but you can specify it explicitly for clarity.
+
+---
+
 ## 1. Dremio Cloud
 
 Dremio Cloud is the default connection mode. It uses Arrow Flight SQL over TLS.
 
 ### Prerequisites
-- **Personal Access Token (PAT)**: Generate this in your Dremio Cloud User Settings.
-- **Project ID**: The ID of the project you want to query.
+- **Personal Access Token (PAT)**: Generate this in your Dremio Cloud User Settings
+- **Project ID**: The ID of the project you want to query
 
-### Connection Methods
+### Environment Variables
 
-#### Method A: Environment Variables (Recommended)
-Set the following environment variables:
-- `DREMIO_PAT`: Your Personal Access Token.
-- `DREMIO_PROJECT_ID`: Your Project ID.
+Set these in your `.env` file or environment:
+
+```bash
+DREMIO_PAT=your_cloud_personal_access_token
+DREMIO_PROJECT_ID=your_project_id_here
+```
+
+### Connection Examples
+
+#### Using Environment Variables (Recommended)
 
 ```python
 from dremioframe.client import DremioClient
 
-# Client automatically picks up env vars
+# Client automatically picks up env vars and detects Cloud mode
 client = DremioClient()
+
+# Or explicitly specify mode for clarity
+client = DremioClient(mode="cloud")
 ```
 
-#### Method B: Explicit Parameters
-Pass credentials directly to the constructor.
+#### Using Explicit Parameters
 
 ```python
 client = DremioClient(
     pat="your_pat_here",
-    project_id="your_project_id_here"
+    project_id="your_project_id_here",
+    mode="cloud"  # Optional, auto-detected when project_id is provided
 )
 ```
 
-### Flight Configuration
+### Custom Flight Configuration
 
-You can specify a custom Flight endpoint and port if they differ from the main Dremio coordinator (e.g., when using a dedicated Flight executor).
+You can specify a custom Flight endpoint if needed:
 
 ```python
 client = DremioClient(
     pat="my_token",
+    project_id="my_project",
     flight_endpoint="flight.dremio.cloud",
-    flight_port=443
+    flight_port=443,
+    mode="cloud"
 )
 ```
+
+### Default Ports (Cloud)
+- **REST API**: Port 443 (`https://api.dremio.cloud/v0`)
+- **Arrow Flight**: Port 443 (`grpc+tls://data.dremio.cloud:443`)
 
 ---
 
-## 2. Dremio Software (Self-Managed)
+## 2. Dremio Software v26+
 
-To connect to a Dremio Software cluster, you must specify the `hostname` and `port`.
+Dremio Software v26+ supports Personal Access Tokens (PAT) for authentication, similar to Cloud.
 
 ### Prerequisites
-- **Hostname**: The address of your Dremio coordinator (e.g., `dremio.example.com` or `localhost`).
-- **Port**: The Arrow Flight port (default is `32010`).
-- **Credentials**: Either Username/Password OR a Personal Access Token (PAT).
+- **Hostname**: The address of your Dremio coordinator (e.g., `v26.dremio.org` or `localhost`)
+- **Personal Access Token (PAT)** OR **Username/Password**
+- **TLS**: Whether your instance uses TLS/SSL
 
-### Connection Methods
+### Environment Variables
 
-#### Method A: Username & Password
-This uses Basic Authentication.
+Set these in your `.env` file:
+
+```bash
+DREMIO_SOFTWARE_HOST=https://v26.dremio.org
+DREMIO_SOFTWARE_PAT=your_software_personal_access_token
+DREMIO_SOFTWARE_TLS=true
+
+# Optional: Override default ports
+# DREMIO_SOFTWARE_PORT=443
+# DREMIO_SOFTWARE_FLIGHT_PORT=32010
+```
+
+**Note**: `DREMIO_SOFTWARE_HOST` can include the protocol (`https://` or `http://`). If TLS is true and no port is specified in the URL, port 443 is used for REST API.
+
+> **Important**: For Arrow Flight connections in v26+, the client uses Basic Authentication (Username + PAT). If you only provide a PAT, the client will attempt to automatically discover your username from the catalog. If discovery fails, you may need to provide `DREMIO_SOFTWARE_USER` explicitly.
+
+### Connection Examples
+
+#### Using PAT with Environment Variables (Recommended)
+
+```python
+from dremioframe.client import DremioClient
+
+# Auto-detects v26 mode from DREMIO_SOFTWARE_* env vars
+client = DremioClient()
+
+# Or explicitly specify mode
+client = DremioClient(mode="v26")
+```
+
+#### Using PAT with Explicit Parameters
+
+```python
+client = DremioClient(
+    hostname="v26.dremio.org",
+    pat="your_pat_here",
+    tls=True,
+    mode="v26"
+)
+```
+
+#### Using Username/Password
 
 ```python
 client = DremioClient(
     hostname="localhost",
-    port=32010,
     username="admin",
     password="password123",
-    tls=False  # Set to True if your cluster has TLS enabled
+    tls=False,
+    mode="v26"
 )
 ```
 
-#### Method B: Personal Access Token (PAT)
-If you have generated a PAT for your user:
-
-```python
-client = DremioClient(
-    hostname="localhost",
-    port=32010,
-    pat="your_pat_here",
-    tls=False
-)
-```
+### Default Ports (v26)
+- **REST API**: Port 443 (with TLS) or 9047 (without TLS)
+- **Arrow Flight**: Port 32010
+- **Login Endpoint**: `/api/v3/login` or `/apiv3/login`
 
 ### TLS/SSL Configuration
 
-If your Dremio Software cluster uses TLS (Encryption), set `tls=True`.
+If your Dremio Software cluster uses TLS (Encryption), set `tls=True`:
+
+```python
+client = DremioClient(
+    hostname="secure.dremio.com",
+    pat="your_pat",
+    tls=True,
+    mode="v26"
+)
+```
 
 #### Self-Signed Certificates
-If you are using self-signed certificates (common in dev/test environments), you may need to disable certificate verification to avoid SSL errors.
+
+For self-signed certificates (common in dev/test environments):
 
 ```python
 client = DremioClient(
     hostname="localhost",
-    port=32010,
     username="admin",
     password="password123",
     tls=True,
-    disable_certificate_verification=True 
+    disable_certificate_verification=True,
+    mode="v26"
 )
 ```
 
-### Dremio Software Versions (v25 vs v26+)
-
-`dremioframe` automatically handles authentication differences between Dremio Software versions:
--   **v25**: Uses `/apiv2/login`
--   **v26+**: Uses `/apiv3/login`
-
-The client will attempt to detect the correct endpoint automatically.
-
-> **Warning**: Disabling certificate verification is insecure and should not be used in production environments.
+> **Warning**: Disabling certificate verification is insecure and should not be used in production.
 
 ---
 
-## 3. Troubleshooting & Common Errors
+## 3. Dremio Software v25 and Earlier
 
-### `FlightUnavailableError` / Connection Refused
-**Symptoms**: The client hangs or immediately raises an error saying the service is unavailable.
-**Causes**:
-- **Wrong Port**: Ensure you are using the **Arrow Flight Port** (default `32010`), NOT the UI port (`9047`) or the ODBC/JDBC port (`31010`).
-- **Firewall**: Ensure the port is open and accessible from your machine.
-- **Dremio Down**: Check if the Dremio service is running.
+Dremio Software v25 and earlier versions use username/password authentication only (no PAT support).
 
-### `FlightUnauthenticatedError` / Auth Failed
-**Symptoms**: "Invalid credentials" or "Unauthenticated".
-**Causes**:
-- **Expired PAT**: Tokens expire. Generate a new one.
-- **Wrong Project ID**: For Dremio Cloud, ensure the Project ID matches the one associated with your token/user.
-- **Typo**: Double-check username/password.
+### Prerequisites
+- **Hostname**: The address of your Dremio coordinator
+- **Username and Password**: Valid Dremio credentials
 
-### `FlightInternalError` (Certificate Issues)
-**Symptoms**: "Handshake failed", "Certificate verify failed".
-**Causes**:
-- **TLS Mismatch**: You set `tls=True` but the server is `tls=False` (or vice versa).
-- **Self-Signed Cert**: You are connecting to a TLS-enabled server with a self-signed cert but haven't set `disable_certificate_verification=True` or provided the root CA.
+### Environment Variables
 
-### `ArrowInvalid` / Protocol Error
-**Symptoms**: Errors parsing the response.
-**Causes**:
-- **HTTP vs Flight**: You might be trying to connect to the HTTP REST API port (`9047`) using the Arrow Flight client. Make sure `port` is set to the Flight port (`32010` for Software, `443` for Cloud).
+Set these in your `.env` file:
 
-### Dremio Software Specifics
--   **Login Failures**: If you see 404s on login, ensure you are not pointing the `base_url` to a sub-path that doesn't exist. The client handles `/apiv2` vs `/apiv3` automatically, but `hostname` should be just the domain/IP.
--   **Environment Variables**: If you have `DREMIO_PAT` set in your environment, the client will prioritize it over username/password. Unset it or pass `pat=""` to force username/password auth.
--   **"Method Not Allowed"**: If you see this during login, it might be an API version mismatch. `dremioframe` tries multiple endpoints, so check the logs for which one succeeded.
+```bash
+DREMIO_SOFTWARE_HOST=localhost
+DREMIO_SOFTWARE_USER=admin
+DREMIO_SOFTWARE_PASSWORD=password123
+DREMIO_SOFTWARE_TLS=false
 
-## 4. Testing Connectivity
+# Optional: Override default ports
+# DREMIO_SOFTWARE_PORT=9047
+# DREMIO_SOFTWARE_FLIGHT_PORT=32010
+```
 
-You can verify your connection by running a simple catalog list command:
+### Connection Examples
+
+#### Using Environment Variables
 
 ```python
+from dremioframe.client import DremioClient
+
+client = DremioClient(mode="v25")
+```
+
+#### Using Explicit Parameters
+
+```python
+client = DremioClient(
+    hostname="localhost",
+    username="admin",
+    password="password123",
+    tls=False,
+    mode="v25"
+)
+```
+
+### Default Ports (v25)
+- **REST API**: Port 9047 (`http://localhost:9047/api/v3`)
+- **Arrow Flight**: Port 32010
+- **Login Endpoint**: `/apiv2/login`
+
+---
+
+## 4. Port Configuration Reference
+
+Ports are automatically configured based on the `mode`, but can be overridden:
+
+| Mode | REST Port (default) | Flight Port (default) | Protocol |
+|------|---------------------|----------------------|----------|
+| `cloud` | 443 | 443 | HTTPS/gRPC+TLS |
+| `v26` (TLS) | 443 | 32010 | HTTPS/gRPC+TLS |
+| `v26` (no TLS) | 9047 | 32010 | HTTP/gRPC+TCP |
+| `v25` | 9047 | 32010 | HTTP/gRPC+TCP |
+
+### Overriding Ports
+
+```python
+# Custom REST API port
+client = DremioClient(
+    hostname="custom.dremio.com",
+    port=8443,
+    flight_port=31010,
+    mode="v26"
+)
+```
+
+---
+
+## 5. Mode Auto-Detection
+
+The client automatically detects the mode based on:
+
+1. **Cloud mode** is detected when:
+   - `hostname == "data.dremio.cloud"`, OR
+   - `project_id` is provided, OR
+   - `DREMIO_PROJECT_ID` environment variable is set
+
+2. **v26 mode** is detected when:
+   - `DREMIO_SOFTWARE_HOST` or `DREMIO_SOFTWARE_PAT` environment variables are set
+
+3. **Default**: Falls back to `cloud` mode if no indicators are found
+
+### Explicit Mode Selection
+
+For clarity and to avoid ambiguity, you can always specify the mode explicitly:
+
+```python
+# Force v26 mode
+client = DremioClient(
+    hostname="my-dremio.com",
+    pat="...",
+    mode="v26"
+)
+
+# Force cloud mode
+client = DremioClient(
+    pat="...",
+    project_id="...",
+    mode="cloud"
+)
+
+# Force v25 mode
+client = DremioClient(
+    hostname="localhost",
+    username="admin",
+    password="password",
+    mode="v25"
+)
+```
+
+---
+
+## 6. Complete .env File Examples
+
+### For Dremio Cloud
+
+```bash
+# Required
+DREMIO_PAT=dremio_pat_abc123xyz456...
+DREMIO_PROJECT_ID=12345678-1234-1234-1234-123456789abc
+
+# Optional
+# DREMIO_FLIGHT_ENDPOINT=data.dremio.cloud
+# DREMIO_FLIGHT_PORT=443
+```
+
+### For Dremio Software v26+ (with PAT)
+
+```bash
+# Required
+DREMIO_SOFTWARE_HOST=https://v26.dremio.org
+DREMIO_SOFTWARE_PAT=dremio_pat_xyz789...
+DREMIO_SOFTWARE_TLS=true
+
+# Optional
+# DREMIO_SOFTWARE_PORT=443
+# DREMIO_SOFTWARE_FLIGHT_PORT=32010
+```
+
+### For Dremio Software v26+ (with Username/Password)
+
+```bash
+# Required
+DREMIO_SOFTWARE_HOST=localhost
+DREMIO_SOFTWARE_USER=admin
+DREMIO_SOFTWARE_PASSWORD=password123
+DREMIO_SOFTWARE_TLS=false
+
+# Optional
+# DREMIO_SOFTWARE_PORT=9047
+# DREMIO_SOFTWARE_FLIGHT_PORT=32010
+```
+
+### For Dremio Software v25
+
+```bash
+# Required
+DREMIO_SOFTWARE_HOST=localhost
+DREMIO_SOFTWARE_USER=admin
+DREMIO_SOFTWARE_PASSWORD=password123
+DREMIO_SOFTWARE_TLS=false
+
+# Optional
+# DREMIO_SOFTWARE_PORT=9047
+# DREMIO_SOFTWARE_FLIGHT_PORT=32010
+```
+
+---
+
+## 7. Troubleshooting & Common Errors
+
+### `FlightUnavailableError` / Connection Refused
+
+**Symptoms**: The client hangs or raises an error saying the service is unavailable.
+
+**Causes**:
+- **Wrong Port**: Ensure you are using the **Arrow Flight Port** (default `32010` for Software, `443` for Cloud), NOT the UI port (`9047`) or ODBC/JDBC port (`31010`)
+- **Firewall**: Ensure the port is open and accessible
+- **Dremio Down**: Check if the Dremio service is running
+- **Wrong Mode**: Ensure you're using the correct mode (`cloud`, `v26`, or `v25`)
+
+**Solution**:
+```python
+# Verify your mode and ports
+client = DremioClient(
+    hostname="your-host",
+    mode="v26",  # Explicitly set mode
+    flight_port=32010  # Explicitly set Flight port if needed
+)
+```
+
+### `FlightUnauthenticatedError` / Auth Failed
+
+**Symptoms**: "Invalid credentials" or "Unauthenticated".
+
+**Causes**:
+- **Expired PAT**: Tokens expire. Generate a new one
+- **Wrong Project ID**: For Cloud, ensure the Project ID matches
+- **Wrong Mode**: Using Cloud credentials with Software mode or vice versa
+- **Typo**: Double-check credentials
+
+**Solution**:
+```python
+# For Cloud, ensure both PAT and project_id are correct
+client = DremioClient(pat="...", project_id="...", mode="cloud")
+
+# For Software v26+, ensure PAT is valid
+client = DremioClient(hostname="...", pat="...", mode="v26")
+
+# For Software v25, use username/password
+client = DremioClient(hostname="...", username="...", password="...", mode="v25")
+```
+
+### `FlightInternalError` (Certificate Issues)
+
+**Symptoms**: "Handshake failed", "Certificate verify failed".
+
+**Causes**:
+- **TLS Mismatch**: You set `tls=True` but the server uses `tls=False` (or vice versa)
+- **Self-Signed Cert**: Connecting to TLS-enabled server with self-signed certificate
+
+**Solution**:
+```python
+# For self-signed certificates
+client = DremioClient(
+    hostname="localhost",
+    tls=True,
+    disable_certificate_verification=True,
+    mode="v26"
+)
+```
+
+### Environment Variable Conflicts
+
+**Symptoms**: Client connects to wrong environment or uses wrong credentials.
+
+**Causes**:
+- Both `DREMIO_PAT` and `DREMIO_SOFTWARE_PAT` are set
+- Both Cloud and Software environment variables are set
+
+**Solution**:
+```python
+# Explicitly specify mode to avoid ambiguity
+client = DremioClient(mode="v26")  # Forces Software mode
+
+# Or unset conflicting environment variables
+import os
+if "DREMIO_PROJECT_ID" in os.environ:
+    del os.environ["DREMIO_PROJECT_ID"]
+```
+
+---
+
+## 8. Testing Connectivity
+
+Verify your connection with a simple test:
+
+```python
+from dremioframe.client import DremioClient
+
 try:
-    client = DremioClient(...)
-    print("Connected!")
-    print(client.catalog.list_catalog())
+    # Create client (adjust mode as needed)
+    client = DremioClient(mode="v26")
+    
+    # Test catalog access
+    catalog = client.catalog.list_catalog()
+    print(f"✅ Connected successfully! Found {len(catalog)} catalog items.")
+    
+    # Test query execution (requires Arrow Flight)
+    result = client.query("SELECT 1 as test")
+    print(f"✅ Query execution successful!")
+    print(result)
+    
 except Exception as e:
-    print(f"Connection failed: {e}")
+    print(f"❌ Connection failed: {e}")
+    import traceback
+    traceback.print_exc()
+```
+
+### Quick Diagnostic Script
+
+```python
+from dremioframe.client import DremioClient
+import os
+
+print("Environment Variables:")
+print(f"  DREMIO_PAT: {'SET' if os.getenv('DREMIO_PAT') else 'NOT SET'}")
+print(f"  DREMIO_PROJECT_ID: {'SET' if os.getenv('DREMIO_PROJECT_ID') else 'NOT SET'}")
+print(f"  DREMIO_SOFTWARE_HOST: {os.getenv('DREMIO_SOFTWARE_HOST', 'NOT SET')}")
+print(f"  DREMIO_SOFTWARE_PAT: {'SET' if os.getenv('DREMIO_SOFTWARE_PAT') else 'NOT SET'}")
+print(f"  DREMIO_SOFTWARE_USER: {os.getenv('DREMIO_SOFTWARE_USER', 'NOT SET')}")
+
+client = DremioClient(mode="v26")  # Adjust mode as needed
+print(f"\nClient Configuration:")
+print(f"  Mode: {client.mode}")
+print(f"  Hostname: {client.hostname}")
+print(f"  REST Port: {client.port}")
+print(f"  Flight Port: {client.flight_port}")
+print(f"  Base URL: {client.base_url}")
+print(f"  Project ID: {client.project_id}")
 ```

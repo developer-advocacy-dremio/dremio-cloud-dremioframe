@@ -244,20 +244,55 @@ class DremioBuilder:
         # Authentication
         options = flight.FlightCallOptions()
         
-        if self.client.pat:
-            # Token Auth (Cloud or Software with PAT)
-            headers = [
-                (b"authorization", f"Bearer {self.client.pat}".encode("utf-8"))
-            ]
-            options = flight.FlightCallOptions(headers=headers)
-        elif self.client.username and self.client.password:
-            # Basic Auth (Software)
-            # client.authenticate_basic_token(user, pass) returns (call_options, token)
-            auth_result = client.authenticate_basic_token(self.client.username, self.client.password)
-            if isinstance(auth_result, tuple):
-                options = auth_result[0]
+        if self.client.mode == "cloud":
+            # Cloud: Bearer Token Auth
+            if self.client.pat:
+                headers = [
+                    (b"authorization", f"Bearer {self.client.pat}".encode("utf-8"))
+                ]
+                options = flight.FlightCallOptions(headers=headers)
             else:
-                options = auth_result
+                raise ValueError("PAT is required for Dremio Cloud connection")
+                
+        elif self.client.mode in ["v26", "v25"]:
+            # Software: Basic Auth (Username + Password/PAT)
+            username = self.client.username
+            password = self.client.password or self.client.pat
+            
+            if not username or not password:
+                raise ValueError("Username and Password (or PAT) are required for Dremio Software connection")
+                
+            # Authenticate to get session token/header
+            # authenticate_basic_token returns (header_key, header_value) pair
+            try:
+                auth_result = client.authenticate_basic_token(username, password)
+                
+                if isinstance(auth_result, tuple):
+                    # It returns a pair of bytes (key, value)
+                    headers = [auth_result]
+                    options = flight.FlightCallOptions(headers=headers)
+                else:
+                    # Fallback if behavior differs (e.g. just token bytes)
+                    # But diagnostic script confirmed it returns (key, value)
+                    options = auth_result
+            except Exception as e:
+                raise RuntimeError(f"Authentication failed for user '{username}': {e}")
+        
+        else:
+            # Fallback for legacy/unspecified mode (assume Cloud behavior if PAT exists)
+            if self.client.pat:
+                headers = [
+                    (b"authorization", f"Bearer {self.client.pat}".encode("utf-8"))
+                ]
+                options = flight.FlightCallOptions(headers=headers)
+            elif self.client.username and self.client.password:
+                 # Basic Auth fallback
+                auth_result = client.authenticate_basic_token(self.client.username, self.client.password)
+                if isinstance(auth_result, tuple):
+                    headers = [auth_result]
+                    options = flight.FlightCallOptions(headers=headers)
+                else:
+                    options = auth_result
         
         if self.client.disable_certificate_verification:
             # This is usually set at client creation or context, but PyArrow Flight handles it via URI or args.

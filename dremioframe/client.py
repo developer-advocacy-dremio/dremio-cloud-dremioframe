@@ -8,35 +8,98 @@ from .utils import get_env_var
 
 class DremioClient:
     def __init__(self, pat: str = None, project_id: str = None, base_url: str = None,
-                 hostname: str = "data.dremio.cloud", port: int = 443,
+                 hostname: str = "data.dremio.cloud", port: int = None,
                  username: str = None, password: str = None, tls: bool = True,
                  disable_certificate_verification: bool = False,
-                 flight_port: int = None, flight_endpoint: str = None):
+                 flight_port: int = None, flight_endpoint: str = None,
+                 mode: str = "cloud"):
+        """
+        Initialize Dremio Client.
         
-        self.pat = pat or os.getenv("DREMIO_PAT")
-        self.project_id = project_id or os.getenv("DREMIO_PROJECT_ID")
+        Args:
+            pat: Personal Access Token (for Cloud or Software v26+)
+            project_id: Project ID (Cloud only, set to None for Software)
+            base_url: Custom base URL (auto-detected if not provided)
+            hostname: Dremio hostname
+            port: REST API port (auto-detected based on mode if not provided)
+            username: Username for authentication (Software with user/pass)
+            password: Password for authentication (Software with user/pass)
+            tls: Enable TLS/SSL
+            disable_certificate_verification: Disable SSL certificate verification
+            flight_port: Arrow Flight port (auto-detected based on mode if not provided)
+            flight_endpoint: Arrow Flight endpoint (defaults to hostname if not provided)
+            mode: Connection mode - 'cloud' (default), 'v26', or 'v25'
+                  - 'cloud': Dremio Cloud (default)
+                  - 'v26': Dremio Software v26+ with PAT support
+                  - 'v25': Dremio Software v25 and earlier
+        """
+        
+        self.mode = mode.lower()
+        
+        # Get credentials based on mode
+        # Mode determines which environment variables to prioritize
+        if self.mode == "cloud":
+            # Cloud mode: use DREMIO_PAT and DREMIO_PROJECT_ID
+            self.pat = pat or os.getenv("DREMIO_PAT")
+            self.project_id = project_id or os.getenv("DREMIO_PROJECT_ID")
+        elif self.mode in ["v26", "v25"]:
+            # Software mode: use DREMIO_SOFTWARE_* variables
+            self.pat = pat or os.getenv("DREMIO_SOFTWARE_PAT")
+            self.project_id = None  # Explicitly None for Software
+            # Override hostname from env if not provided
+            if hostname == "data.dremio.cloud":  # Default wasn't changed
+                env_host = os.getenv("DREMIO_SOFTWARE_HOST")
+                if env_host:
+                    # Extract hostname from URL if needed
+                    hostname = env_host.replace("https://", "").replace("http://", "")
+                    if ":" in hostname:
+                        hostname = hostname.split(":")[0]
+        else:
+            raise ValueError(f"Invalid mode: {mode}. Must be 'cloud', 'v26', or 'v25'")
         
         # Connection details
         self.hostname = hostname
-        self.port = port
-        self.username = username
+        self._username = username
         self.password = password
         self.tls = tls
         self.disable_certificate_verification = disable_certificate_verification
         
-        # Flight specific config
-        self.flight_port = flight_port
-        self.flight_endpoint = flight_endpoint
-        
-        # Determine Base URL for Catalog API
-        if base_url:
-            self.base_url = base_url
-        elif hostname == "data.dremio.cloud":
-            self.base_url = "https://api.dremio.cloud/v0"
+        # Set smart defaults based on mode
+        if self.mode == "cloud":
+            self.port = port if port is not None else 443
+            self.flight_port = flight_port if flight_port is not None else 443
+            self.flight_endpoint = flight_endpoint or "data.dremio.cloud"
+            if not base_url:
+                self.base_url = "https://api.dremio.cloud/v0"
+            else:
+                self.base_url = base_url
+                
+        elif self.mode == "v26":
+            # Dremio Software v26+ with PAT support
+            # REST API typically on port 443 or 9047
+            # Flight typically on port 32010
+            self.port = port if port is not None else (443 if tls else 9047)
+            self.flight_port = flight_port if flight_port is not None else 32010
+            self.flight_endpoint = flight_endpoint or hostname
+            if not base_url:
+                protocol = "https" if tls else "http"
+                self.base_url = f"{protocol}://{hostname}:{self.port}/api/v3"
+            else:
+                self.base_url = base_url
+                
+        elif self.mode == "v25":
+            # Dremio Software v25 and earlier
+            # REST API on port 9047, Flight on port 32010
+            self.port = port if port is not None else 9047
+            self.flight_port = flight_port if flight_port is not None else 32010
+            self.flight_endpoint = flight_endpoint or hostname
+            if not base_url:
+                protocol = "https" if tls else "http"
+                self.base_url = f"{protocol}://{hostname}:9047/api/v3"
+            else:
+                self.base_url = base_url
         else:
-            # Default Software REST API
-            protocol = "https" if tls else "http"
-            self.base_url = f"{protocol}://{hostname}:9047/api/v3"
+            raise ValueError(f"Invalid mode: {mode}. Must be 'cloud', 'v26', or 'v25'")
 
         # Validation
         if not self.pat and not (self.username and self.password):
@@ -55,12 +118,17 @@ class DremioClient:
                 else:
                     base_root = self.base_url
 
-                # Endpoints to try: /api/v3/login, /apiv2/login
-                login_endpoints = [
-                    f"{self.base_url}/login",       # Standard v3
-                    f"{base_root}/apiv2/login",     # v25
-                    f"{base_root}/apiv3/login"      # v26+ alternative
-                ]
+                # Endpoints to try based on mode
+                if self.mode == "v26":
+                    login_endpoints = [
+                        f"{self.base_url}/login",       # Standard v3
+                        f"{base_root}/apiv3/login"      # v26+ alternative
+                    ]
+                else:  # v25
+                    login_endpoints = [
+                        f"{base_root}/apiv2/login",     # v25
+                        f"{self.base_url}/login"        # Fallback
+                    ]
 
                 token = None
                 for login_url in login_endpoints:
@@ -98,7 +166,53 @@ class DremioClient:
         self._admin = None
         self._udf = None
         self._iceberg = None
-        self._iceberg = None
+        
+        # If mode is v26 and we have PAT but no username, we might need to discover it for Flight
+        if self.mode == "v26" and self.pat and not self.username:
+            # We don't block here, but we'll fetch it when accessed if still None
+            pass
+
+    @property
+    def username(self):
+        if self._username:
+            return self._username
+        
+        # Try to discover username if not set (only for v26/Software modes where it's needed)
+        if self.mode in ["v26", "v25"] and self.pat:
+            try:
+                self._username = self._discover_username()
+            except Exception:
+                pass # Return None if discovery fails
+        
+        return self._username
+
+    @username.setter
+    def username(self, value):
+        self._username = value
+
+    def _discover_username(self):
+        """
+        Attempt to discover the username from the catalog.
+        Useful for v26+ where we might only have a PAT.
+        """
+        try:
+            # We need to use the internal _catalog property or create a temporary one
+            # to avoid circular dependency if Catalog needs client.username (it shouldn't)
+            # But client.catalog property initializes Catalog(self)
+            
+            # Simple REST call to list catalog
+            response = self.session.get(f"{self.base_url}/catalog")
+            if response.status_code == 200:
+                data = response.json()
+                # data is { "data": [ ... ] }
+                items = data.get("data", [])
+                for item in items:
+                    path = item.get("path", [])
+                    if path and path[0].startswith("@"):
+                        return path[0][1:] # Remove @ prefix
+            return None
+        except Exception:
+            return None
 
     @property
     def catalog(self):
