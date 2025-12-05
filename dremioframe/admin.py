@@ -235,6 +235,9 @@ class Admin:
         Args:
             name: Name of the space.
         """
+        if self.client.mode == "cloud":
+            raise NotImplementedError("create_space is not supported in Dremio Cloud. Use create_folder instead.")
+            
         payload = {
             "entityType": "space",
             "name": name

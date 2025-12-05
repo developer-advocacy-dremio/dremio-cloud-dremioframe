@@ -14,6 +14,7 @@ DremioFrame is a Python library that provides a dataframe builder interface for 
 - [Tutorial: ETL Pipeline](docs/getting_started/tutorial_etl.md)
 - [Cookbook / Recipes](docs/getting_started/cookbook.md)
 - [Troubleshooting](docs/getting_started/troubleshooting.md)
+- [API Compatibility Guide](docs/api_compatibility.md)
 
 ### 🛠️ Data Engineering
 - [Dataframe Builder API](docs/data_engineering/builder.md)
@@ -295,4 +296,59 @@ client.admin.create_reflection(dataset_id="...", name="my_ref", type="RAW", disp
 
 # Data Quality Framework
 # dremio-cli dq run tests/dq
+```
+
+## Sample .env
+
+```
+# Dremio Cloud Configuration
+# Required for Dremio Cloud connections
+# DREMIO_PAT: Personal Access Token for Dremio Cloud
+# DREMIO_PROJECT_ID: The Project ID of your Dremio Cloud project
+DREMIO_PAT=your_dremio_cloud_pat_here
+DREMIO_PROJECT_ID=your_dremio_project_id_here
+
+# Optional Dremio Cloud Configuration
+# DREMIO_URL: Custom base URL for Dremio Cloud (defaults to data.dremio.cloud)
+# Note: DREMIO_URL is REQUIRED for running integration tests (tests/test_integration.py)
+# DREMIO_URL=data.dremio.cloud
+
+# Dremio Software Configuration
+# Required for connecting to Dremio Software (v26+ recommended)
+# DREMIO_SOFTWARE_PAT: Personal Access Token for Dremio Software
+# DREMIO_SOFTWARE_HOST: Hostname/URL of your Dremio Software instance (e.g. dremio.example.com)
+#
+# The following variables are specifically used by the test suite (tests/test_integration_software.py)
+# and for legacy authentication (v25 or v26 without PAT):
+# DREMIO_SOFTWARE_PORT: Port for the Dremio Flight/REST service (default: 32010 for Flight)
+# DREMIO_SOFTWARE_USER: Username for Dremio Software
+# DREMIO_SOFTWARE_PASSWORD: Password for Dremio Software
+# DREMIO_SOFTWARE_TLS: Enable TLS/SSL (true/false, default: false)
+#
+# Note: If using Software, comment out Cloud variables above to avoid confusion, though the client 'mode' determines which are used.
+# DREMIO_SOFTWARE_PAT=your_software_pat_here
+# DREMIO_SOFTWARE_HOST=dremio.example.com
+# DREMIO_SOFTWARE_PORT=32010
+# DREMIO_SOFTWARE_USER=your_username
+# DREMIO_SOFTWARE_PASSWORD=your_password
+# DREMIO_SOFTWARE_TLS=false
+# DREMIO_SOFTWARE_TESTING_FOLDER=Space.Folder
+
+# Test Suite Configuration
+# TEST_FOLDER: The namespace (Space) to use for creating temporary test folders and tables.
+# Defaults to "testing" if not set. Ensure this Space exists in Dremio.
+# TEST_FOLDER=testing
+
+# AI Provider Configuration
+# Required for AI features (DremioAgent, SQL generation, etc.)
+# Uncomment the one you wish to use.
+
+# OpenAI (Default)
+# OPENAI_API_KEY=sk-...
+
+# Anthropic (Claude)
+# ANTHROPIC_API_KEY=sk-ant-...
+
+# Google (Gemini)
+# GOOGLE_API_KEY=AIza...
 ```
