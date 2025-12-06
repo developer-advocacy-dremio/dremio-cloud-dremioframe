@@ -81,6 +81,7 @@ nav:
   - AI Agent:
     - Overview: docs/ai/overview.md
     - MCP Server: docs/ai/mcp_server.md
+    - MCP Client: docs/ai/mcp_client.md
     - Observability: docs/ai/observability.md
     - Reflections: docs/ai/reflections.md
     - Governance: docs/ai/governance.md

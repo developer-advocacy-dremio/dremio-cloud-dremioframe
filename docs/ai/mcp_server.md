@@ -2,6 +2,9 @@
 
 The Dremio Agent MCP Server exposes Dremio capabilities via the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), allowing you to use Dremio tools directly within MCP-compliant AI clients like Claude Desktop or IDE extensions.
 
+> [!NOTE]
+> This guide explains how to use DremioFrame as an MCP **Server**. If you want to use external MCP tools *within* the Dremio Agent, see [Using MCP Tools](mcp_client.md).
+
 ## Installation
 
 The MCP server requires the `mcp` optional dependency:

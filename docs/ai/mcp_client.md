@@ -1,4 +1,7 @@
-# MCP Server Integration
+# Using MCP Tools in Dremio Agent
+
+> [!NOTE]
+> This guide explains how to use external MCP tools *within* the Dremio Agent. If you want to use DremioFrame as an MCP **Server** for other clients (like Claude), see [MCP Server](mcp_server.md).
 
 The DremioAgent supports integration with **Model Context Protocol (MCP)** servers, allowing you to extend the agent with custom tools from any MCP-compatible server.
 
