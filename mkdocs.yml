@@ -80,6 +80,7 @@ nav:
     - Recipes: docs/data_quality/recipes.md
   - AI Agent:
     - Overview: docs/ai/overview.md
+    - MCP Server: docs/ai/mcp_server.md
     - Observability: docs/ai/observability.md
     - Reflections: docs/ai/reflections.md
     - Governance: docs/ai/governance.md

@@ -1,6 +1,12 @@
 # Optional Dependencies
 
-DremioFrame is designed to be lightweight, with a core set of dependencies. However, many advanced features require additional packages. You can install these optional dependencies individually or in groups.
+DremioFrame uses optional dependencies to keep the core package lightweight.
+
+## Server
+- **`server`**: `mcp` (Required for running the MCP Server)
+
+## AI
+with a core set of dependencies. However, many advanced features require additional packages. You can install these optional dependencies individually or in groups.
 
 ## Installation Syntax
 

@@ -335,5 +335,53 @@ def generate_api(
         console.print(f"[red]Error generating API call: {e}[/red]")
         raise typer.Exit(code=1)
 
+mcp_app = typer.Typer()
+app.add_typer(mcp_app, name="mcp", help="Manage MCP Server.")
+
+@mcp_app.command("start")
+def start_mcp_server():
+    """Start the MCP server (stdio mode)."""
+    try:
+        from dremioframe.ai.server import serve
+        serve()
+    except ImportError as e:
+        console.print(f"[red]Error: {e}[/red]")
+        raise typer.Exit(code=1)
+    except Exception as e:
+        console.print(f"[red]Server error: {e}[/red]")
+        raise typer.Exit(code=1)
+
+@mcp_app.command("config")
+def mcp_config():
+    """Print the MCP server configuration JSON."""
+    import sys
+    import json
+    
+    # Get python executable path
+    python_path = sys.executable
+    
+    # Construct config
+    config = {
+        "mcpServers": {
+            "dremio-agent": {
+                "command": python_path,
+                "args": [
+                    "-m",
+                    "dremioframe.cli",
+                    "mcp",
+                    "start"
+                ],
+                "env": {
+                    "DREMIO_PAT": "your_pat_here",
+                    "DREMIO_PROJECT_ID": "your_project_id_here",
+                    "DREMIO_SOFTWARE_HOST": "optional_host",
+                    "DREMIO_SOFTWARE_PAT": "optional_pat"
+                }
+            }
+        }
+    }
+    
+    console.print(json.dumps(config, indent=2))
+
 if __name__ == "__main__":
     app()

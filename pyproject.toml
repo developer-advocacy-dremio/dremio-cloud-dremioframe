@@ -1,6 +1,6 @@
 [project]
 name = "dremioframe"
-version = "0.19.0"
+version = "0.20.0"
 description = "A dataframe-like library for Dremio Cloud & Dremio Software"
 authors = [
     {name = "Alex Merced", email = "alexmerced@alexmerced.com"},
@@ -56,6 +56,7 @@ document = ["pdfplumber"]
 notebook = ["tqdm", "ipywidgets"]
 delta = ["deltalake"]
 lineage = ["networkx", "graphviz"]
+server = ["mcp"]
 
 [project.scripts]
 dremio-cli = "dremioframe.cli:app"
