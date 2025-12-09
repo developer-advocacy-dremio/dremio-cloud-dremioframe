@@ -1,7 +1,7 @@
 import pytest
 from dremioframe.client import DremioClient
 from dremioframe.builder import DremioBuilder
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, ANY
 
 def test_client_flight_config():
     client = DremioClient(
@@ -37,4 +37,5 @@ def test_client_flight_config():
             
         # Check if FlightClient was initialized with correct location
         # location = "grpc+tls://flight.dremio.com:12345"
-        mock_flight.assert_called_with("grpc+tls://flight.dremio.com:12345")
+        # It now includes middleware, so we use ANY for kwargs
+        mock_flight.assert_called_with("grpc+tls://flight.dremio.com:12345", middleware=ANY)

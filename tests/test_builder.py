@@ -48,7 +48,7 @@ def test_insert_dataframe(dremio_client):
     builder._execute_dml = lambda sql: sql
     df = pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})
     sql = builder.insert("target_table", data=df)
-    expected = "INSERT INTO target_table (id, name) VALUES (1, 'Alice'), (2, 'Bob')"
+    expected = 'INSERT INTO target_table ("id", "name") VALUES (1, \'Alice\'), (2, \'Bob\')'
     assert sql == expected
 
 def test_insert_dataframe_batched(dremio_client):

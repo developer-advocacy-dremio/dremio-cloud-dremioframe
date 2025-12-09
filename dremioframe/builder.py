@@ -4,6 +4,10 @@ import pandas as pd
 import polars as pl
 import os
 from .quality import DataQuality
+from .flight_sql import encode_set_session_options
+from .middleware import CookieMiddlewareFactory
+
+
 
 class DremioBuilder:
     def __init__(self, client, path: Optional[str] = None, sql: Optional[str] = None):
@@ -228,6 +232,8 @@ class DremioBuilder:
         # Return new builder with this SQL
         return DremioBuilder(self.client, sql=join_sql)
 
+
+
     def collect(self, library: str = "polars", progress_bar: bool = False) -> Union[pl.DataFrame, pd.DataFrame]:
         sql = self._compile_sql()
         return self._execute_flight(sql, library, progress_bar=progress_bar)
@@ -239,7 +245,9 @@ class DremioBuilder:
         protocol = "grpc+tls" if self.client.tls else "grpc+tcp"
         location = f"{protocol}://{hostname}:{port}"
         
-        client = flight.FlightClient(location)
+        # Initialize middleware for session management
+        cookie_middleware = CookieMiddlewareFactory()
+        client = flight.FlightClient(location, middleware=[cookie_middleware])
         
         # Authentication
         options = flight.FlightCallOptions()
@@ -300,15 +308,25 @@ class DremioBuilder:
             # But let's assume the user handles certs via system trust store or explicit path if needed.
             pass
 
-        # For Cloud mode with project_id, add it as a header
-        # Dremio Cloud uses the x-project-id header to route queries to the correct project
+        # For Cloud mode with project_id, set session option using FlightSQL
+        # This is the standard way to set context in Dremio Cloud
         if self.client.mode == "cloud" and self.client.project_id:
-            # Add project_id header to route queries to the specified project
-            headers_list = list(options.headers) if options.headers else []
-            headers_list.append(
-                (b"x-project-id", self.client.project_id.encode("utf-8"))
-            )
-            options = flight.FlightCallOptions(headers=headers_list)
+            try:
+                # Create SetSessionOptions action payload
+                # We use manual protobuf encoding to avoid dependency issues
+                payload = encode_set_session_options({"project_id": self.client.project_id})
+                action = flight.Action("SetSessionOptions", payload)
+                
+                # Execute action to set session context
+                # The server will return a Set-Cookie header which the middleware captures
+                # Subsequent requests will include the cookie and be routed correctly
+                results = list(client.do_action(action, options))
+                
+            except Exception as e:
+                import warnings
+                warnings.warn(f"Failed to set project_id '{self.client.project_id}' via SetSessionOptions: {e}")
+                # We continue anyway, as some environments might not support this action
+                # or might rely on default project context.
 
         info = client.get_flight_info(flight.FlightDescriptor.for_command(sql), options)
         reader = client.do_get(info.endpoints[0].ticket, options)

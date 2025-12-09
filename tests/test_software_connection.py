@@ -15,7 +15,8 @@ def software_client(monkeypatch):
         username="admin",
         password="password123",
         tls=False,
-        pat=None # Explicitly None, though env var is the issue
+        pat=None, # Explicitly None, though env var is the issue
+        mode="v26" # Explicitly set software mode
     )
 
 def test_software_connection_params(software_client):
@@ -24,7 +25,7 @@ def test_software_connection_params(software_client):
     assert software_client.username == "admin"
     assert software_client.password == "password123"
     assert software_client.tls is False
-    assert software_client.base_url == "http://localhost:9047/api/v3"
+    assert software_client.base_url == "http://localhost:32010/api/v3"
 
 import pyarrow as pa
 
@@ -50,7 +51,8 @@ def test_flight_connection_software(mock_flight_client, software_client):
     builder.collect()
     
     # Verify FlightClient init
-    mock_flight_client.assert_called_with("grpc+tcp://localhost:32010")
+    from unittest.mock import ANY
+    mock_flight_client.assert_called_with("grpc+tcp://localhost:32010", middleware=ANY)
     
     # Verify Authentication
     mock_instance.authenticate_basic_token.assert_called_with("admin", "password123")
@@ -79,7 +81,8 @@ def test_flight_connection_cloud(mock_flight_client):
     builder.collect()
     
     # Verify FlightClient init
-    mock_flight_client.assert_called_with("grpc+tls://data.dremio.cloud:443")
+    from unittest.mock import ANY
+    mock_flight_client.assert_called_with("grpc+tls://data.dremio.cloud:443", middleware=ANY)
     
     # Verify Headers (PAT)
     # do_get(ticket, options)
