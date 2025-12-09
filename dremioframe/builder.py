@@ -300,6 +300,16 @@ class DremioBuilder:
             # But let's assume the user handles certs via system trust store or explicit path if needed.
             pass
 
+        # For Cloud mode with project_id, add it as a header
+        # Dremio Cloud uses the x-project-id header to route queries to the correct project
+        if self.client.mode == "cloud" and self.client.project_id:
+            # Add project_id header to route queries to the specified project
+            headers_list = list(options.headers) if options.headers else []
+            headers_list.append(
+                (b"x-project-id", self.client.project_id.encode("utf-8"))
+            )
+            options = flight.FlightCallOptions(headers=headers_list)
+
         info = client.get_flight_info(flight.FlightDescriptor.for_command(sql), options)
         reader = client.do_get(info.endpoints[0].ticket, options)
         

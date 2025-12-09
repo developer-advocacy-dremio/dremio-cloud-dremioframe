@@ -168,6 +168,9 @@ class DremioClient:
         self._udf = None
         self._iceberg = None
         
+        # Flight session cookies for maintaining project_id context
+        self.flight_cookies = {}
+        
         # If mode is v26 and we have PAT but no username, we might need to discover it for Flight
         if self.mode == "v26" and self.pat and not self.username:
             # We don't block here, but we'll fetch it when accessed if still None
