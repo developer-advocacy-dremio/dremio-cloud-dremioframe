@@ -1,5 +1,6 @@
 import os
 import requests
+from typing import Union, Dict, Any
 from .catalog import Catalog
 from .builder import DremioBuilder
 from .admin import Admin
@@ -500,6 +501,150 @@ class DremioClient:
         # Create table and insert data
         self.table(table_name).create(table_name, data=table)
         print(f"Successfully uploaded {file_path} to {table_name}")
+
+    def create_table(self, table_name: str, schema: Union[Dict[str, str], Any] = None, 
+                     data: Any = None, insert_data: bool = True):
+        """
+        Create a new table in Dremio.
+        
+        Args:
+            table_name: The name of the table to create (e.g., "space.folder.table").
+            schema: Either:
+                    - Dict mapping column names to SQL types (e.g., {"id": "INTEGER", "name": "VARCHAR"})
+                    - pandas DataFrame, polars DataFrame, or pyarrow Table (schema will be inferred)
+            data: Optional data to insert after table creation. Only used if schema is a dict.
+                  If schema is a DataFrame/Table, it will be used for both schema and data.
+            insert_data: If True and data is provided, insert the data after creating the table.
+        
+        Returns:
+            Result of the CREATE TABLE operation.
+            
+        Examples:
+            # Create empty table with explicit schema
+            client.create_table("my_space.my_table", {
+                "id": "INTEGER",
+                "name": "VARCHAR",
+                "created_at": "TIMESTAMP"
+            })
+            
+            # Create table from DataFrame (infers schema and optionally inserts data)
+            df = pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})
+            client.create_table("my_space.my_table", schema=df, insert_data=True)
+            
+            # Create empty table from DataFrame schema only
+            client.create_table("my_space.my_table", schema=df, insert_data=False)
+        """
+        import pyarrow as pa
+        import pandas as pd
+        
+        # Case 1: Schema is a dict - create table with explicit column definitions
+        if isinstance(schema, dict):
+            if not schema:
+                raise ValueError("Schema dictionary cannot be empty")
+            
+            # Build CREATE TABLE statement
+            cols_def = ", ".join([f'"{col}" {dtype}' for col, dtype in schema.items()])
+            quoted_name = self._quote_table_name(table_name)
+            create_sql = f"CREATE TABLE {quoted_name} ({cols_def})"
+            
+            # Execute CREATE TABLE
+            result = self.execute(create_sql, format="polars")
+            print(f"Created table {table_name}")
+            
+            # Optionally insert data
+            if data is not None and insert_data:
+                self.table(table_name).insert(table_name, data=data)
+                print(f"Inserted data into {table_name}")
+            
+            return result
+        
+        # Case 2: Schema is a DataFrame or Arrow Table - infer schema
+        elif schema is not None:
+            # Convert to Arrow Table for consistent handling
+            arrow_table = None
+            
+            if isinstance(schema, pd.DataFrame):
+                arrow_table = pa.Table.from_pandas(schema)
+            elif isinstance(schema, pa.Table):
+                arrow_table = schema
+            else:
+                # Try polars DataFrame
+                try:
+                    import polars as pl
+                    if isinstance(schema, pl.DataFrame):
+                        arrow_table = schema.to_arrow()
+                except ImportError:
+                    pass
+            
+            if arrow_table is None:
+                raise ValueError(
+                    "Schema must be a dict, pandas DataFrame, polars DataFrame, or pyarrow Table"
+                )
+            
+            # Infer SQL types from Arrow schema
+            type_mapping = {
+                'int8': 'INTEGER',  # Dremio doesn't support TINYINT
+                'int16': 'INTEGER',  # Use INTEGER instead of SMALLINT for compatibility
+                'int32': 'INTEGER',
+                'int64': 'BIGINT',
+                'uint8': 'INTEGER',  # Dremio doesn't support TINYINT
+                'uint16': 'INTEGER',  # Use INTEGER instead of SMALLINT for compatibility
+                'uint32': 'INTEGER',
+                'uint64': 'BIGINT',
+                'float': 'FLOAT',
+                'double': 'DOUBLE',
+                'bool': 'BOOLEAN',
+                'string': 'VARCHAR',
+                'large_string': 'VARCHAR',
+                'binary': 'VARBINARY',
+                'large_binary': 'VARBINARY',
+                'date32': 'DATE',
+                'date64': 'DATE',
+                'timestamp': 'TIMESTAMP',
+                'time32': 'TIME',
+                'time64': 'TIME',
+                'decimal128': 'DECIMAL',
+                'decimal256': 'DECIMAL',
+            }
+            
+            # Build column definitions from Arrow schema
+            cols_def_list = []
+            for field in arrow_table.schema:
+                arrow_type = str(field.type)
+                # Extract base type (e.g., "timestamp[us]" -> "timestamp")
+                base_type = arrow_type.split('[')[0].split('(')[0]
+                
+                sql_type = type_mapping.get(base_type, 'VARCHAR')
+                cols_def_list.append(f'"{field.name}" {sql_type}')
+            
+            cols_def = ", ".join(cols_def_list)
+            quoted_name = self._quote_table_name(table_name)
+            create_sql = f"CREATE TABLE {quoted_name} ({cols_def})"
+            
+            # Execute CREATE TABLE
+            result = self.execute(create_sql, format="polars")
+            print(f"Created table {table_name} with {len(arrow_table.schema)} columns")
+            
+            # Optionally insert data
+            if insert_data and len(arrow_table) > 0:
+                self.table(table_name).insert(table_name, data=arrow_table)
+                print(f"Inserted {len(arrow_table)} rows into {table_name}")
+            
+            return result
+        
+        else:
+            raise ValueError("Either schema dict or schema DataFrame/Table must be provided")
+    
+    def _quote_table_name(self, table_name: str) -> str:
+        """
+        Quote a table name for SQL (e.g., space.folder.table -> "space"."folder"."table").
+        """
+        if '"' in table_name:
+            return table_name  # Assume already quoted
+        parts = table_name.split(".")
+        quoted_parts = [f'"{p}"' for p in parts]
+        return ".".join(quoted_parts)
+
     @property
     def ingest(self):
         """

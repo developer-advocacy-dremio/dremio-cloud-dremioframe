@@ -712,7 +712,8 @@ class DremioBuilder:
                     values_list.append(f"({', '.join(row_vals)})")
                 
                 values_clause = ", ".join(values_list)
-                insert_sql = f"INSERT INTO {table_name} ({', '.join(data.column_names)}) VALUES {values_clause}"
+                quoted_cols = ', '.join([f'"{col}"' for col in data.column_names])
+                insert_sql = f"INSERT INTO {table_name} ({quoted_cols}) VALUES {values_clause}"
                 results.append(self._execute_dml(insert_sql))
                 
             return results if len(results) > 1 else results[0]

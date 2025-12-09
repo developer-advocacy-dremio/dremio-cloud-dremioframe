@@ -8,6 +8,7 @@ DremioFrame is designed to abstract the complexities of Dremio's REST API and Ar
 The main entry point. It manages authentication and holds references to the `Catalog` and `Builder` factories.
 - **Authentication**: Supports PAT (Cloud/Software) and Username/Password (Software).
 - **API Abstraction**: Handles endpoint differences between Dremio Cloud (`/v0/projects/...`) and Software (`/api/v3/...`) transparently.
+- **Table Creation**: `create_table` method for creating tables with explicit schemas or from DataFrames/Arrow Tables.
 - **Factories**: Access to `catalog`, `admin`, `iceberg`, `udf`, `quality`, `orchestration`, and `airflow` modules.
 
 ### 2. Catalog (`catalog.py`)
