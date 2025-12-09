@@ -73,7 +73,7 @@ client.ingest_api(
 
 ### Local Dataframes (Pandas/Arrow)
 
-If you have data in a Pandas DataFrame or PyArrow Table, you can use `create_table` for a more straightforward approach, or `insert`/`create` for more control.
+If you have data in a Pandas DataFrame or PyArrow Table, the recommended approach for creating new tables is `client.create_table`.
 
 ```python
 import pandas as pd
@@ -81,13 +81,17 @@ import pandas as pd
 # Load local CSV
 df = pd.read_csv("local_data.csv")
 
-# Option 1: Using create_table (recommended for new tables)
+# Option 1: Using create_table (Recommended for new tables)
+# This is the cleanest API for creating tables from local data
 client.create_table("marketing.local_data", schema=df, insert_data=True)
 
 # Option 2: Using builder.create (CTAS approach)
+# Note: The source table in client.table() is ignored when 'data' is provided.
+# This pattern is useful if you are already working with a builder object.
 client.table("marketing.local_data").create("marketing.local_data", data=df)
 
-# Append to existing
+# Option 3: Appending to existing table
+# Use this to add data to an existing table
 client.table("marketing.local_data").insert("marketing.local_data", data=df)
 ```
 

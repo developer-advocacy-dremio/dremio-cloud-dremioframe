@@ -44,6 +44,19 @@ df = pd.DataFrame({
 client.create_table("my_space.scores", schema=df, insert_data=True)
 ```
 
+
+### Upload File as Table
+
+You can upload local files (CSV, JSON, Parquet, Excel, etc.) directly as new tables:
+
+```python
+# Upload a local CSV file
+client.upload_file("data.csv", "my_space.my_data")
+
+# Upload with explicit format
+client.upload_file("data.xlsx", "my_space.excel_data", file_format="excel")
+```
+
 ## Methods
 
 ### `client.create_table()`
