@@ -1,62 +1,76 @@
-# API Ingestion
+# Ingestion Overview
 
-DremioFrame provides a utility to easily ingest data from REST APIs into Dremio tables.
+DremioFrame provides multiple ways to ingest data into Dremio, ranging from simple API calls to complex file system and database integrations.
 
-## Usage
+## 1. API Ingestion
+
+Ingest data directly from REST APIs. This method is built into the main client.
+
+**Method:** `client.ingest_api(...)`
 
 ```python
 client.ingest_api(
     url="https://api.example.com/users",
     table_name="raw_users",
-    mode="replace"
+    mode="replace" # 'replace', 'append', or 'merge'
 )
 ```
 
-## Modes
+[Read more about API Ingestion strategies (Modes, Auth, Batching)](ingestion_patterns.md)
 
-### Replace
-Drops the target table if it exists and creates a new one with the fetched data.
+## 2. File Upload
+
+Upload local files (CSV, JSON, Parquet, Excel, etc.) directly to Dremio as tables.
+
+**Method:** `client.upload_file(...)`
 
 ```python
-client.ingest_api(url="...", table_name="users", mode="replace")
+client.upload_file("data/sales.csv", "space.folder.sales_table")
 ```
 
-### Append (Incremental)
-Appends new records to the existing table. If `pk` (Primary Key) is provided, it queries the target table for the maximum value of `pk` and only inserts records from the API where `pk > max_pk`.
+[Read the full File Upload guide](file_upload.md)
+
+## 3. Ingestion Modules
+
+Advanced ingestion capabilities are grouped under the `client.ingest` namespace.
+
+### DLT (Data Load Tool)
+
+Integration with the `dlt` library for robust pipelines.
+
+**Method:** `client.ingest.dlt(...)`
 
 ```python
-client.ingest_api(
-    url="...", 
-    table_name="users", 
-    mode="append", 
-    pk="id" # Only ingest users with id > max(id) in target
+data = [{"id": 1, "name": "Alice"}]
+client.ingest.dlt(data, "my_dlt_table")
+```
+
+[Read the DLT Integration guide](dlt_integration.md)
+
+### Database Ingestion
+
+Ingest query results from other databases (Postgres, MySQL, etc.) using JDBC/ODBC connectors via `connectorx` or `sqlalchemy`.
+
+**Method:** `client.ingest.database(...)`
+
+```python
+client.ingest.database(
+    connection_string="postgresql://user:pass@localhost/db",
+    query="SELECT * FROM users",
+    table_name="postgres_users"
 )
 ```
 
-### Merge (Upsert)
-Performs a MERGE operation. It writes the API data to a temporary staging table, then merges it into the target table based on the `pk`.
+[Read the Database Ingestion guide](database_ingestion.md)
+
+### File System Ingestion
+
+Ingest multiple files from a local directory or glob pattern.
+
+**Method:** `client.ingest.files(...)`
 
 ```python
-client.ingest_api(
-    url="...", 
-    table_name="users", 
-    mode="merge", 
-    pk="id" # Update existing IDs, insert new IDs
-)
+client.ingest.files("data/*.parquet", "my_dataset")
 ```
 
-## Advanced Options
-
-- **headers**: Dict of HTTP headers (e.g., for authentication).
-- **json_path**: Dot-notation path to extract the list of records from the JSON response (e.g., `data.items`).
-- **batch_size**: Number of records to insert per batch.
-
-```python
-client.ingest_api(
-    url="https://api.example.com/data",
-    table_name="my_table",
-    headers={"Authorization": "Bearer token"},
-    json_path="response.results",
-    batch_size=1000
-)
-```
+[Read the File System Ingestion guide](file_system_ingestion.md)

@@ -67,6 +67,7 @@ client = DremioClient(
 | `DREMIO_SOFTWARE_FLIGHT_PORT` | Arrow Flight port (optional, auto-detected). | `32010` |
 | `DREMIO_SOFTWARE_PASSWORD` | Password for authentication. | - |
 | `DREMIO_SOFTWARE_TLS` | Enable TLS (`true`/`false`). | `false` |
+| `DREMIO_ICEBERG_URI` | Iceberg Catalog REST URI (Required for Software). | `https://catalog.dremio.cloud/api/iceberg` (Cloud default) |
 
 ### Orchestration Backend
 | Variable | Description | Example |
