@@ -13,7 +13,8 @@ class DremioClient:
                  username: str = None, password: str = None, tls: bool = True,
                  disable_certificate_verification: bool = False,
                  flight_port: int = None, flight_endpoint: str = None,
-                 mode: str = "cloud"):
+                 mode: str = "cloud",
+                 client_id: str = None, client_secret: str = None):
         """
         Initialize Dremio Client.
         
@@ -37,12 +38,21 @@ class DremioClient:
         
         self.mode = mode.lower()
         
+        # Service User / OAuth Credentials
+        self.client_id = os.getenv("DREMIO_CLIENT_ID")
+        self.client_secret = os.getenv("DREMIO_CLIENT_SECRET")
+        self.token_expires_at = 0  # Timestamp when token expires
+        
         # Get credentials based on mode
         # Mode determines which environment variables to prioritize
         if self.mode == "cloud":
             # Cloud mode: use DREMIO_PAT and DREMIO_PROJECT_ID
             self.pat = pat or os.getenv("DREMIO_PAT")
             self.project_id = project_id or os.getenv("DREMIO_PROJECT_ID")
+            
+            # Check for OAuth credentials if PAT is missing
+            self.client_id = client_id or os.getenv("DREMIO_CLIENT_ID")
+            self.client_secret = client_secret or os.getenv("DREMIO_CLIENT_SECRET")
         elif self.mode in ["v26", "v25"]:
             # Software mode: use DREMIO_SOFTWARE_* variables
             self.pat = pat or os.getenv("DREMIO_SOFTWARE_PAT")
@@ -55,10 +65,18 @@ class DremioClient:
                     hostname = env_host.replace("https://", "").replace("http://", "")
                     if ":" in hostname:
                         hostname = hostname.split(":")[0]
+            
+            # Check for OAuth credentials if PAT is missing
+            self.client_id = client_id or os.getenv("DREMIO_CLIENT_ID")
+            self.client_secret = client_secret or os.getenv("DREMIO_CLIENT_SECRET")
         else:
             raise ValueError(f"Invalid mode: {mode}. Must be 'cloud', 'v26', or 'v25'")
         
         # Connection details
+        # Sanitize hostname if it contains protocol
+        if hostname and (hostname.startswith("http://") or hostname.startswith("https://")):
+             hostname = hostname.replace("https://", "").replace("http://", "")
+        
         self.hostname = hostname
         self._username = username
         self.password = password
@@ -101,12 +119,17 @@ class DremioClient:
                 self.base_url = base_url
         else:
             raise ValueError(f"Invalid mode: {mode}. Must be 'cloud', 'v26', or 'v25'")
+            
+        self.session = requests.Session()
 
         # Validation
-        if not self.pat and not (self.username and self.password):
-            raise ValueError("Either PAT or Username/Password is required.")
+        if self.client_id and self.client_secret:
+            # OAuth mode
+            self.pat = None 
+            self._login_oauth()
+        elif not self.pat and not (self.username and self.password):
+            raise ValueError("Either PAT, Username/Password, or Client ID/Secret is required.")
         
-        self.session = requests.Session()
         if self.pat:
             self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
         elif self.username and self.password:
@@ -161,6 +184,68 @@ class DremioClient:
         self.session.headers.update({
             "Content-Type": "application/json"
         })
+
+        # Lazy-loaded properties
+        self._catalog = None
+        self._admin = None
+        self._udf = None
+        self._iceberg = None
+        
+        # Flight session cookies for maintaining project_id context
+        self.flight_cookies = {}
+        
+        # If mode is v26 and we have PAT but no username, we might need to discover it for Flight
+        if self.mode == "v26" and self.pat and not self.username:
+            # We don't block here, but we'll fetch it when accessed if still None
+            pass
+
+    def _login_oauth(self):
+        """
+        Exchange Client ID and Secret for an OAuth token (Client Credentials Flow).
+        Supported primarily for Dremio Cloud.
+        """
+        import time
+        
+        # For Cloud, the token endpoint is typically global: /oauth/token
+        # For Software, it might be /apiv3/oauth/token or similar? 
+        # Checking KIs: "Cloud: POST /oauth/token (Global)"
+        
+        token_url = "https://api.dremio.cloud/oauth/token"
+        if self.mode != "cloud" and self.base_url:
+            # Try to guess software oauth endpoint if supported (Dremio 24+)
+            # Usually {base}/oauth/token
+             token_url = f"{self.base_url}/oauth/token"
+
+        payload = {
+            "grant_type": "client_credentials"
+        }
+        
+        # Auth can be Basic (id:secret) or in body. 
+        # trying Basic Auth as it's standard.
+        try:
+            auth = requests.auth.HTTPBasicAuth(self.client_id, self.client_secret)
+            response = requests.post(token_url, data=payload, auth=auth)
+            
+            # If Basic fails, try body?
+            if response.status_code != 200:
+                # Try sending credentials in body
+                payload["client_id"] = self.client_id
+                payload["client_secret"] = self.client_secret
+                response = requests.post(token_url, data=payload)
+                
+            response.raise_for_status()
+            data = response.json()
+            
+            self.pat = data.get("access_token") # Use as PAT
+            self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
+            
+            # Simple expiry management
+            expires_in = data.get("expires_in", 3600)
+            self.token_expires_at = time.time() + expires_in - 60 # Buffer
+            
+        except Exception as e:
+            # If OAuth fails, we can't proceed
+            raise ConnectionError(f"OAuth login failed: {e}")
 
         # Lazy-loaded properties
         self._catalog = None

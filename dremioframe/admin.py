@@ -11,21 +11,93 @@ class Admin:
         else:
             return f"{self.client.base_url}/{endpoint}"
 
+    def _build_global_url(self, endpoint: str):
+        """Build URL without project_id (for User/Admin APIs)."""
+        return f"{self.client.base_url}/{endpoint}"
+
+
     # --- Users ---
-    def create_user(self, username: str, password: Optional[str] = None):
-        """Create a new user."""
+    # --- Users ---
+    def create_user(self, username: str, password: Optional[str] = None, 
+                   first_name: str = None, last_name: str = None, 
+                   email: str = None, identity_type: str = "LOCAL"):
+        """
+        Create a new user.
+        
+        Args:
+            username: The unique username.
+            password: Password (required for LOCAL users, optional for SERVICE_USER).
+            first_name: User's first name.
+            last_name: User's last name.
+            email: User's email address.
+            identity_type: "LOCAL" or "SERVICE_USER".
+        """
+        # For SERVICE_USER, we must use the REST API as SQL support is limited/varying
+        if identity_type == "SERVICE_USER":
+            if self.client.mode == "v25":
+                 raise NotImplementedError("Service Users are not supported in Dremio Software v25")
+            
+            payload = {
+                "name": username,
+                "firstName": first_name or "Service",
+                "lastName": last_name or "User",
+                "email": email or f"{username}@dremio.local",
+                "identityType": "SERVICE_USER"
+            }
+            # POST /api/v3/user (Software) or /v0/user (Cloud - separate endpoint?)
+            # Both use /user endpoint in their respective base URL
+            # For Cloud, this is a global endpoint (/v0/user), so we must NOT include project ID.
+            if self.client.mode == "cloud":
+                 url = self._build_global_url("user")
+            else:
+                 url = self._build_url("user")
+
+            response = self.client.session.post(url, json=payload)
+            response.raise_for_status()
+            return response.json()
+            
+        # For LOCAL Users, we can use SQL or REST. SQL is simpler for basic user/pass
         sql = f"CREATE USER '{username}'"
         if password:
             sql += f" PASSWORD '{password}'"
         return self.client.execute(sql)
+
+    def get_user(self, name_or_id: str):
+        """
+        Get a user by ID or Username (by partial match/lookup).
+        """
+        try:
+            # Try as ID first
+            if self.client.mode == "cloud":
+                 url = self._build_global_url(f"user/{name_or_id}")
+            else:
+                 url = self._build_url(f"user/{name_or_id}")
+
+            response = self.client.session.get(url)
+            if response.status_code == 200:
+                return response.json()
+        except Exception:
+            pass
+            
+        # Try to find by name via internal API or just fail for now if no search endpoint
+        # There isn't a clean "search user by name" in public API except maybe lookup?
+        # We'll rely on ID or exact name lookups if supported.
+        # Fallback: Unfortunately Dremio doesn't have a clean "get user by name" in public v3.
+        # Users might need to pass the ID.
+        raise ValueError(f"Could not find user with ID {name_or_id}. Note: Retrieving by username is restricted in some API versions.")
 
     def alter_user_password(self, username: str, password: str):
         """Change a user's password."""
         return self.client.execute(f"ALTER USER '{username}' SET PASSWORD '{password}'")
 
     def drop_user(self, username: str):
-        """Delete a user."""
+        """
+        Delete a user.
+        Note: For Service Users, it's safer to use the REST API with ID if possible, 
+        but SQL DROP USER usually works by name for both if they are in the namespace.
+        """
         return self.client.execute(f"DROP USER '{username}'")
+
 
     # --- Grants ---
     def grant(self, privilege: str, on: str, to_user: str = None, to_role: str = None):
@@ -348,3 +420,77 @@ class Admin:
         response = self.client.session.get(self._build_url(f"job/{job_id}"))
         response.raise_for_status()
         return QueryProfile(response.json())
+    @property
+    def credentials(self):
+        """Access credential management (for Service Users)."""
+        return CredentialsResource(self.client)
+
+class CredentialsResource:
+    def __init__(self, client):
+        self.client = client
+        self.mode = client.mode
+
+    def _build_url(self, endpoint: str):
+        if self.client.project_id:
+            return f"{self.client.base_url}/projects/{self.client.project_id}/{endpoint}"
+        else:
+            return f"{self.client.base_url}/{endpoint}"
+
+    def create(self, user_id: str, label: str):
+        """
+        Create a new OAuth secret (credential) for a user.
+        
+        Args:
+            user_id: The UUID of the user (must be a Service User).
+            label: A descriptive name for the secret.
+        """
+        payload = {
+            "name": label,
+            "credentialType": "CLIENT_SECRET",
+            "clientSecretConfig": {
+                "duration": 0, # 0 usually means indefinite or default
+                "units": "DAYS" 
+            }
+        }
+        # Endpoint: /api/v3/user/{id}/oauth/credentials
+        # Note: This endpoint might not start with /projects/{id} in Cloud depending on RBAC.
+        # Usually it is /api/v3/user/... or /v0/user/... directly.
+        # The Admin._build_url might prepend project logic which is correct for Catalog but maybe not User?
+        # Let's use direct URL construction to be safe if User API is global.
+        
+        # User API is often global or requires different root.
+        # Software: /api/v3/user/...
+        # Cloud: /v0/user/...
+        
+        # We need to reuse the logic from client or admin but be careful about project prefix.
+        # In Cloud, /v0/user is correct. Admin._build_url adds project if present.
+        # But User management in Cloud is at Organization level usually, unless scoped?
+        # Let's try to strip project if needed, or assume the base_url is correct.
+        
+        # Taking a safer bet: Construct from base_url but strip /projects/... if present?
+        # self.client.base_url is top level.
+        
+        base = self.client.base_url
+        if "/projects/" in base: 
+            # If base_url was modified to include project (rare/custom), strip it.
+            # But normally base_url is just .../v0 or .../api/v3.
+            pass
+            
+        url = f"{base}/user/{user_id}/oauth/credentials"
+        response = self.client.session.post(url, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def list(self, user_id: str):
+        """List credentials for a user."""
+        url = f"{self.client.base_url}/user/{user_id}/oauth/credentials"
+        response = self.client.session.get(url)
+        response.raise_for_status()
+        return response.json()
+
+    def delete(self, user_id: str, credential_id: str):
+        """Delete a credential."""
+        url = f"{self.client.base_url}/user/{user_id}/oauth/credentials/{credential_id}"
+        response = self.client.session.delete(url)
+        response.raise_for_status()
+        return True

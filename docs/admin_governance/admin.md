@@ -39,7 +39,27 @@ Access via `client.admin`.
 # Create a user
 client.admin.create_user("new_user", "password123")
 
-# Change password
+# Create a Service User (Software & Cloud)
+client.admin.create_user(
+    username="service_app_1",
+    identity_type="SERVICE_USER"
+)
+
+# Manage Credentials (Service Users only)
+# Create a client secret
+secret = client.admin.credentials.create(
+    user_id="user-uuid",
+    label="app-secret-1"
+)
+print(f"Secret: {secret['clientSecret']}")
+
+# List credentials
+creds = client.admin.credentials.list("user-uuid")
+
+# Delete credential
+client.admin.credentials.delete("credential-id")
+
+# Change password (Local Users)
 client.admin.alter_user_password("new_user", "new_password456")
 
 # Delete user

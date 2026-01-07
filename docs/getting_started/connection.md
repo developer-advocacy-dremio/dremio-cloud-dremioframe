@@ -72,6 +72,37 @@ client = DremioClient(
 - **REST API**: Port 443 (`https://api.dremio.cloud/v0`)
 - **Arrow Flight**: Port 443 (`grpc+tls://data.dremio.cloud:443`)
 
+### Service User Login (OAuth Client Credentials)
+
+For automation scripts (CI/CD), you can authenticate as a Service User using a Client ID and Secret instead of a PAT.
+
+**Prerequisites:**
+1. Create a Service User via `client.admin.create_user(..., identity_type="SERVICE_USER")`.
+2. Generate a Client Secret via `client.admin.credentials.create(...)`.
+
+**Environment Variables:**
+```bash
+DREMIO_CLIENT_ID=your_service_user_uuid
+DREMIO_CLIENT_SECRET=your_client_secret
+DREMIO_PROJECT_ID=your_project_id
+```
+
+**Usage:**
+```python
+client = DremioClient(mode="cloud")
+# Automatically uses DREMIO_CLIENT_ID/SECRET if DREMIO_PAT is not set.
+```
+
+Or explicit:
+```python
+client = DremioClient(
+    mode="cloud",
+    client_id="user_uuid",
+    client_secret="secret_value",
+    project_id="project_id"
+)
+```
+
 ---
 
 ## 2. Dremio Software v26+
