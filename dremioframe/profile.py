@@ -1,81 +1,47 @@
-from typing import Dict, Any, List
-import pandas as pd
-import json
+import os
+import yaml
+from typing import Dict, Any, Optional
 
-class QueryProfile:
-    def __init__(self, profile_data: Dict[str, Any]):
-        self.data = profile_data
+def load_profiles(path: str = None) -> Dict[str, Any]:
+    """
+    Load profiles from YAML file.
+    Default path: ~/.dremio/profiles.yaml
+    """
+    if path is None:
+        home = os.path.expanduser("~")
+        path = os.path.join(home, ".dremio", "profiles.yaml")
         
-    @property
-    def job_id(self):
-        return self.data.get("jobId", {}).get("id")
+    if not os.path.exists(path):
+        return {}
+        
+    try:
+        with open(path, "r") as f:
+            data = yaml.safe_load(f)
+            return data or {}
+    except Exception as e:
+        print(f"Warning: Failed to load profiles from {path}: {e}")
+        return {}
+
+def get_profile_config(profile_name: str, profiles_data: Dict[str, Any] = None) -> Optional[Dict[str, Any]]:
+    """
+    Get configuration for a specific profile.
+    If profiles_data is not provided, it loads from default location.
+    """
+    if profiles_data is None:
+        profiles_data = load_profiles()
+        
+    # Structure is usually:
+    # profiles:
+    #   profile_name: ...
     
-    @property
-    def start_time(self):
-        return self.data.get("startTime")
-        
-    @property
-    def end_time(self):
-        return self.data.get("endTime")
-        
-    @property
-    def state(self):
-        return self.data.get("state")
+    profiles = profiles_data.get("profiles", {})
+    return profiles.get(profile_name)
 
-    def summary(self):
-        """Print a summary of the query execution."""
-        print(f"Job ID: {self.job_id}")
-        print(f"State: {self.state}")
-        print(f"Start: {self.start_time}")
-        print(f"End: {self.end_time}")
+def get_default_profile__name(profiles_data: Dict[str, Any] = None) -> Optional[str]:
+    """
+    Get the default profile name if specified.
+    """
+    if profiles_data is None:
+        profiles_data = load_profiles()
         
-        # Try to extract planning vs execution time
-        # This depends heavily on the profile JSON structure which is complex and version dependent.
-        # We'll try to find some top level metrics if available.
-        # Often in 'stats' or similar.
-        
-        print("\n--- Phases ---")
-        # This is a simplification. Real profiles have a tree of operators.
-        # We might look for "phases" list.
-        # For now, just dumping top level keys that look interesting.
-        pass
-
-    def visualize(self, save_to: str = None):
-        """
-        Visualize the query execution timeline using Plotly.
-        This requires parsing the operator tree and timing information.
-        """
-        import plotly.express as px
-        
-        # Mock implementation for now as parsing the full profile is complex without a sample.
-        # We will create a dummy Gantt chart based on phases if available, or just a placeholder.
-        
-        # Let's assume we can extract some phases.
-        # If not, we'll just show a single bar for the whole job.
-        
-        data = [
-            dict(Task="Job Execution", Start=self.start_time, Finish=self.end_time, Resource="Job")
-        ]
-        
-        # If we had real phases:
-        # for phase in self.data.get("phases", []):
-        #    data.append(...)
-        
-        df = pd.DataFrame(data)
-        
-        # Convert times to datetime
-        # Dremio times are usually epoch ms
-        if isinstance(self.start_time, int):
-            df["Start"] = pd.to_datetime(df["Start"], unit="ms")
-            df["Finish"] = pd.to_datetime(df["Finish"], unit="ms")
-            
-        fig = px.timeline(df, x_start="Start", x_end="Finish", y="Task", color="Resource", title=f"Query Profile: {self.job_id}")
-        fig.update_yaxes(autorange="reversed")
-        
-        if save_to:
-            if save_to.endswith(".html"):
-                fig.write_html(save_to)
-            else:
-                fig.write_image(save_to)
-        
-        return fig
+    return profiles_data.get("default_profile")

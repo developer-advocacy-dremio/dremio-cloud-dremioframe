@@ -49,6 +49,32 @@ client = DremioClient(
 )
 ```
 
+## Connection Profiles (Recommended)
+
+You can manage credentials using `~/.dremio/profiles.yaml`. This avoids hardcoding secrets in scripts.
+
+### Sample `profiles.yaml`
+
+```yaml
+profiles:
+  dev:
+    type: cloud
+    auth:
+      type: pat
+      token: "your-cloud-pat"
+    project_id: "your-project-id"
+  prod:
+    type: software
+    base_url: "https://dremio.prod.corp"
+    auth:
+      type: username_password
+      username: "admin"
+      password: "password123"
+default_profile: dev
+```
+
+> **Note**: You can generate this file with the `dremio-cli` python library or create it manually.
+
 ## Environment Variables
 
 ### Dremio Cloud Connection

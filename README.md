@@ -146,6 +146,34 @@ pip install "dremioframe[image_export]"
 
 ## Quick Start
 
+
+### Using Profiles (Recommended)
+
+Create `~/.dremio/profiles.yaml`:
+
+```yaml
+profiles:
+  my_profile:
+    type: cloud
+    auth:
+      type: pat
+      token: "your-pat"
+    project_id: "your-project-id"
+default_profile: my_profile
+```
+
+```python
+from dremioframe.client import DremioClient
+
+# Uses the default profile
+client = DremioClient()
+
+# Or specify a profile
+client = DremioClient(profile="my_profile")
+```
+
+> **Note**: You can generate this file with the `dremio-cli` python library or create it manually.
+
 ### Dremio Cloud
 
 ```python

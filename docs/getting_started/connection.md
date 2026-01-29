@@ -13,7 +13,62 @@ The `mode` parameter automatically configures ports, endpoints, and authenticati
 
 ---
 
-## 1. Dremio Cloud
+## 1. Connection Profiles (Recommended)
+
+Managing multiple Dremio environments (e.g., dev, prod, cloud, software) is easiest using a credentials file.
+
+### Location
+Create a file at `~/.dremio/profiles.yaml`.
+
+### Sample Configuration
+```yaml
+profiles:
+  # Dremio Cloud Example
+  cloud_dev:
+    type: cloud
+    auth:
+      type: pat
+      token: "your-cloud-pat"
+    project_id: "your-project-id"
+
+  # Dremio Software v26+ Example (PAT)
+  software_prod:
+    type: software
+    base_url: "https://dremio.company.com"
+    auth:
+      type: pat
+      token: "your-software-pat"
+    ssl: "true"
+
+  # Dremio Software v25 Example (User/Pass)
+  software_legacy:
+    type: software
+    base_url: "http://dremio-old.company.com:9047"
+    auth:
+      type: username_password
+      username: "admin"
+      password: "password123"
+    ssl: "false"
+
+default_profile: cloud_dev
+```
+
+### Usage
+
+```python
+from dremioframe.client import DremioClient
+
+# Uses the 'default_profile' (cloud_dev)
+client = DremioClient()
+
+# Uses a specific profile
+client_prod = DremioClient(profile="software_prod")
+```
+
+> **Note**: You can generate this file with the `dremio-cli` python library or create it manually.
+---
+
+## 2. Dremio Cloud
 
 Dremio Cloud is the default connection mode. It uses Arrow Flight SQL over TLS.
 
@@ -105,7 +160,7 @@ client = DremioClient(
 
 ---
 
-## 2. Dremio Software v26+
+## 3. Dremio Software v26+
 
 Dremio Software v26+ supports Personal Access Tokens (PAT) for authentication, similar to Cloud.
 
@@ -206,7 +261,7 @@ client = DremioClient(
 
 ---
 
-## 3. Dremio Software v25 and Earlier
+## 4. Dremio Software v25 and Earlier
 
 Dremio Software v25 and earlier versions use username/password authentication only (no PAT support).
 

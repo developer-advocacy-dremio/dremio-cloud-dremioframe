@@ -14,7 +14,8 @@ class DremioClient:
                  disable_certificate_verification: bool = False,
                  flight_port: int = None, flight_endpoint: str = None,
                  mode: str = "cloud",
-                 client_id: str = None, client_secret: str = None):
+                 client_id: str = None, client_secret: str = None,
+                 profile: str = None):
         """
         Initialize Dremio Client.
         
@@ -34,28 +35,124 @@ class DremioClient:
                   - 'cloud': Dremio Cloud (default)
                   - 'v26': Dremio Software v26+ with PAT support
                   - 'v25': Dremio Software v25 and earlier
+            profile: Name of profile to use from ~/.dremio/profiles.yaml
         """
+        
+        from .profile import get_profile_config, get_default_profile__name
+        
+        # Profile Logic
+        # 1. Determine profile name (arg > default > None)
+        target_profile = profile or get_default_profile__name()
+        
+        # 2. Load profile config if we have a target profile
+        profile_config = {}
+        if target_profile:
+             profile_config = get_profile_config(target_profile) or {}
+             if not profile_config and profile:
+                 print(f"Warning: Profile '{profile}' specified but not found in profiles.yaml")
+
+        # 3. resolve arguments (Arg > Profile > Env/Default)
+        
+        # Type/Mode map
+        # Profile uses 'type': 'cloud'/'software'
+        # Client uses 'mode': 'cloud'/'v26'/'v25'
+        # If profile says 'software', we default to 'v26' unless specified otherwise?
+        # Actually client defaults 'cloud'.
+        
+        profile_type = profile_config.get("type", "").lower()
+        if profile_type:
+            if profile_type == "cloud":
+                mode = mode if mode != "cloud" else "cloud" # Keep arg if specific, else profile
+            elif profile_type == "software":
+                # If user didn't override mode default 'cloud', switch to 'v26' as generic software default
+                if mode == "cloud":
+                     mode = "v26" 
         
         self.mode = mode.lower()
         
+        # Base URL
+        # Profile might have base_url
+        if not base_url and profile_config.get("base_url"):
+            base_url = profile_config.get("base_url")
+
+        # Auth
+        auth_config = profile_config.get("auth", {})
+        profile_pat = None
+        profile_username = None
+        profile_password = None
+        
+        if auth_config.get("type") == "pat":
+            profile_pat = auth_config.get("token")
+        elif auth_config.get("type") == "username_password":
+            profile_username = auth_config.get("username")
+            profile_password = auth_config.get("password")
+            
+        # SSL
+        # Profile has ssl: 'true'/'false' (string or bool)
+        profile_tls = None
+        if "ssl" in profile_config:
+            val = profile_config["ssl"]
+            if isinstance(val, str):
+                profile_tls = val.lower() == "true"
+            else:
+                profile_tls = bool(val)
+
+        # Apply Priority
+        # PAT
+        self.pat = pat or profile_pat
+        
+        # Project ID
+        self.project_id = project_id or profile_config.get("project_id")
+        
+        # Hostname - extract from base_url if needed later, but here we prioritize arg
+        # If hostname arg is default "data.dremio.cloud" AND we have a base_url in profile,
+        # we might want to derive hostname from base_url if we are in software mode.
+        
+        if hostname == "data.dremio.cloud" and base_url:
+             # Try to extract hostname from base_url
+             # https://dremio.org/api/v3 -> dremio.org
+             try:
+                 from urllib.parse import urlparse
+                 parsed = urlparse(base_url)
+                 hostname = parsed.hostname or hostname
+             except:
+                 pass
+
+        # Username/Password
+        self._username = username or profile_username
+        self.password = password or profile_password
+        
+        # TLS
+        if tls is True and profile_tls is not None:
+             # Arg default is True, so if profile is False, we should probably respect profile?
+             # But we can't distinguish explicit True vs default True easily.
+             # Let's assume if profile specifies it, we use it, unless user explicitly passed tls=False?
+             # For now, let's say Profile overrides default, but Arg overrides Profile. 
+             # Since default is True, we can't know if user passed True. 
+             # Let's just use profile if set, else TLS.
+             self.tls = profile_tls
+        else:
+             self.tls = tls
+
+        
         # Service User / OAuth Credentials
-        self.client_id = os.getenv("DREMIO_CLIENT_ID")
-        self.client_secret = os.getenv("DREMIO_CLIENT_SECRET")
+        self.client_id = client_id or os.getenv("DREMIO_CLIENT_ID")
+        self.client_secret = client_secret or os.getenv("DREMIO_CLIENT_SECRET")
         self.token_expires_at = 0  # Timestamp when token expires
         
         # Get credentials based on mode
         # Mode determines which environment variables to prioritize
         if self.mode == "cloud":
             # Cloud mode: use DREMIO_PAT and DREMIO_PROJECT_ID
-            self.pat = pat or os.getenv("DREMIO_PAT")
-            self.project_id = project_id or os.getenv("DREMIO_PROJECT_ID")
+            self.pat = self.pat or os.getenv("DREMIO_PAT")
+            self.project_id = self.project_id or os.getenv("DREMIO_PROJECT_ID")
             
             # Check for OAuth credentials if PAT is missing
-            self.client_id = client_id or os.getenv("DREMIO_CLIENT_ID")
-            self.client_secret = client_secret or os.getenv("DREMIO_CLIENT_SECRET")
+            self.client_id = self.client_id or os.getenv("DREMIO_CLIENT_ID")
+            self.client_secret = self.client_secret or os.getenv("DREMIO_CLIENT_SECRET")
         elif self.mode in ["v26", "v25"]:
             # Software mode: use DREMIO_SOFTWARE_* variables
-            self.pat = pat or os.getenv("DREMIO_SOFTWARE_PAT")
+            self.pat = self.pat or os.getenv("DREMIO_SOFTWARE_PAT")
             self.project_id = None  # Explicitly None for Software
             # Override hostname from env if not provided
             if hostname == "data.dremio.cloud":  # Default wasn't changed
@@ -67,10 +164,10 @@ class DremioClient:
                         hostname = hostname.split(":")[0]
             
             # Check for OAuth credentials if PAT is missing
-            self.client_id = client_id or os.getenv("DREMIO_CLIENT_ID")
-            self.client_secret = client_secret or os.getenv("DREMIO_CLIENT_SECRET")
+            self.client_id = self.client_id or os.getenv("DREMIO_CLIENT_ID")
+            self.client_secret = self.client_secret or os.getenv("DREMIO_CLIENT_SECRET")
         else:
-            raise ValueError(f"Invalid mode: {mode}. Must be 'cloud', 'v26', or 'v25'")
+            raise ValueError(f"Invalid mode: {self.mode}. Must be 'cloud', 'v26', or 'v25'")
         
         # Connection details
         # Sanitize hostname if it contains protocol
@@ -78,8 +175,8 @@ class DremioClient:
              hostname = hostname.replace("https://", "").replace("http://", "")
         
         self.hostname = hostname
-        self._username = username
-        self.password = password
+        # self._username = username  <-- Redundant/Destructive
+        # self.password = password   <-- Redundant/Destructive
         self.tls = tls
         self.disable_certificate_verification = disable_certificate_verification
         
@@ -123,7 +220,7 @@ class DremioClient:
         self.session = requests.Session()
 
         # Validation
-        if self.client_id and self.client_secret:
+        if self.client_id and self.client_secret and not self.pat:
             # OAuth mode
             self.pat = None 
             self._login_oauth()
