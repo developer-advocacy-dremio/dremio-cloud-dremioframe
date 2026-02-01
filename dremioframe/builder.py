@@ -240,9 +240,11 @@ class DremioBuilder:
 
     def _execute_flight(self, sql: str, library: str, progress_bar: bool = False) -> Union[pl.DataFrame, pd.DataFrame]:
         # Construct Flight Endpoint
+        # Construct Flight Endpoint
         hostname = self.client.flight_endpoint or self.client.hostname
         port = self.client.flight_port or self.client.port
-        protocol = "grpc+tls" if self.client.tls else "grpc+tcp"
+        # Match dremio-simple-query: use 'grpc' instead of 'grpc+tcp'
+        protocol = "grpc+tls" if self.client.tls else "grpc"
         location = f"{protocol}://{hostname}:{port}"
         
         # Initialize middleware for session management
@@ -263,28 +265,47 @@ class DremioBuilder:
                 raise ValueError("PAT is required for Dremio Cloud connection")
                 
         elif self.client.mode in ["v26", "v25"]:
-            # Software: Basic Auth (Username + Password/PAT)
+            # Software: Basic Auth (Username + Password/PAT) OR Bearer Token (OAuth)
             username = self.client.username
             password = self.client.password or self.client.pat
             
-            if not username or not password:
+            if self.client.pat and not username:
+                # Assume OAuth token, try Bearer Auth
+                headers = [
+                    (b"authorization", f"Bearer {self.client.pat}".encode("utf-8"))
+                ]
+                options = flight.FlightCallOptions(headers=headers)
+            elif not username or not password:
                 raise ValueError("Username and Password (or PAT) are required for Dremio Software connection")
-                
-            # Authenticate to get session token/header
-            # authenticate_basic_token returns (header_key, header_value) pair
-            try:
-                auth_result = client.authenticate_basic_token(username, password)
-                
-                if isinstance(auth_result, tuple):
-                    # It returns a pair of bytes (key, value)
-                    headers = [auth_result]
-                    options = flight.FlightCallOptions(headers=headers)
-                else:
-                    # Fallback if behavior differs (e.g. just token bytes)
-                    # But diagnostic script confirmed it returns (key, value)
-                    options = auth_result
-            except Exception as e:
-                raise RuntimeError(f"Authentication failed for user '{username}': {e}")
+            else:
+                # Authenticate to get session token/header
+                # Match dremio-simple-query robust handling
+                try:
+                    auth_result = client.authenticate_basic_token(username, password)
+                    
+                    # PyArrow versions vary. It might return (options, token) or just call_options
+                    if isinstance(auth_result, tuple):
+                        # dremio-simple-query pattern: options, token_pair
+                        _, token_pair = auth_result
+                        raw_token = token_pair.decode("utf-8") if isinstance(token_pair, bytes) else str(token_pair)
+                        
+                        # Strip "Bearer " if present
+                        if raw_token.lower().startswith("bearer "):
+                            token = raw_token[7:]
+                        else:
+                            token = raw_token
+                            
+                        # Reconstruct headers explicitly
+                        headers = [
+                            (b"authorization", f"Bearer {token}".encode("utf-8"))
+                        ]
+                        options = flight.FlightCallOptions(headers=headers)
+                    else:
+                        # Fallback for older/different pyarrow
+                        options = auth_result
+                        
+                except Exception as e:
+                    raise RuntimeError(f"Authentication failed for user '{username}': {e}")
         
         else:
             # Fallback for legacy/unspecified mode (assume Cloud behavior if PAT exists)

@@ -11,21 +11,26 @@ class CookieMiddleware(flight.ClientMiddleware):
     def received_headers(self, headers):
         # Capture Set-Cookie headers
         # headers is a dict-like object mapping keys to lists of values
+        from http.cookies import SimpleCookie
+        
         for key, values in headers.items():
             if key.lower() == 'set-cookie':
-                for v in values:
-                    # Simple parsing of cookie string
-                    parts = v.split(';', 1)
-                    if parts:
-                        kv = parts[0].split('=', 1)
-                        if len(kv) == 2:
-                            self.factory.cookies[kv[0].strip()] = kv[1].strip()
+                for value in values:
+                    # value looks like "key=value; Path=/; ..."
+                    # We use SimpleCookie to parse it easily like dremio-simple-query
+                    try:
+                        cookie = SimpleCookie()
+                        cookie.load(value)
+                        for name, morsel in cookie.items():
+                            self.factory.cookies[name] = morsel.value
+                    except Exception:
+                        pass # Silently fail on cookie parsing
 
     def sending_headers(self):
         # Send Cookie header if we have cookies
         if self.factory.cookies:
             cookie_string = '; '.join([f"{k}={v}" for k, v in self.factory.cookies.items()])
-            return {'cookie': cookie_string}
+            return {'Cookie': cookie_string} # Capitalized 'Cookie' to match standard
         return {}
 
 class CookieMiddlewareFactory(flight.ClientMiddlewareFactory):

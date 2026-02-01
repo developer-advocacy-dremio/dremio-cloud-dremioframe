@@ -15,6 +15,7 @@ class DremioClient:
                  flight_port: int = None, flight_endpoint: str = None,
                  mode: str = "cloud",
                  client_id: str = None, client_secret: str = None,
+                 scope: str = None,
                  profile: str = None):
         """
         Initialize Dremio Client.
@@ -67,6 +68,13 @@ class DremioClient:
                 # If user didn't override mode default 'cloud', switch to 'v26' as generic software default
                 if mode == "cloud":
                      mode = "v26" 
+            elif profile_type == "v25":
+                # Support direct 'v25' type in profile
+                mode = "v25"
+        
+        # Allow profile to explicitly set 'mode' (overrides all if set)
+        if profile_config.get("mode"):
+            mode = profile_config.get("mode") 
         
         self.mode = mode.lower()
         
@@ -140,6 +148,12 @@ class DremioClient:
         self.client_secret = client_secret or os.getenv("DREMIO_CLIENT_SECRET")
         self.token_expires_at = 0  # Timestamp when token expires
         
+        # Scope logic
+        # Default to 'dremio.all' if not provided (standard for Dremio)
+        self.scope = scope
+        if not self.scope:
+             self.scope = profile_config.get("auth", {}).get("scope") or "dremio.all"
+        
         # Get credentials based on mode
         # Mode determines which environment variables to prioritize
         if self.mode == "cloud":
@@ -173,6 +187,10 @@ class DremioClient:
         # Sanitize hostname if it contains protocol
         if hostname and (hostname.startswith("http://") or hostname.startswith("https://")):
              hostname = hostname.replace("https://", "").replace("http://", "")
+             
+        # Strip port if present in hostname
+        if hostname and ":" in hostname:
+            hostname = hostname.split(":")[0]
         
         self.hostname = hostname
         # self._username = username  <-- Redundant/Destructive
@@ -375,6 +393,9 @@ class DremioClient:
             "grant_type": "client_credentials"
         }
         
+        if self.scope:
+            payload["scope"] = self.scope
+            
         # Auth can be Basic (id:secret) or in body. 
         # trying Basic Auth as it's standard.
         try:
@@ -400,6 +421,8 @@ class DremioClient:
             
         except Exception as e:
             # If OAuth fails, we can't proceed
+            if isinstance(e, requests.RequestException) and e.response is not None:
+                pass # print(f"DEBUG: OAuth Error Response: {e.response.text}")
             raise ConnectionError(f"OAuth login failed: {e}")
 
         # Lazy-loaded properties
