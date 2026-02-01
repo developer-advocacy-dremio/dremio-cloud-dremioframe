@@ -224,11 +224,40 @@ class DremioClient:
             # OAuth mode
             self.pat = None 
             self._login_oauth()
+        
+        # Check for 'oauth' auth type from profile (only if explicit pat/user/pass not provided)
+        elif profile_config.get("auth", {}).get("type") == "oauth" and not self.pat:
+             # Extract client_id/secret from auth config if not already set
+             auth = profile_config.get("auth", {})
+             self.client_id = self.client_id or auth.get("client_id")
+             self.client_secret = self.client_secret or auth.get("client_secret")
+             if self.client_id and self.client_secret:
+                 self._login_oauth()
+             else:
+                 raise ValueError("OAuth profile requires client_id and client_secret.")
+
         elif not self.pat and not (self.username and self.password):
             raise ValueError("Either PAT, Username/Password, or Client ID/Secret is required.")
         
         if self.pat:
-            self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
+            # For Dremio Cloud, try to exchange PAT for OAuth token if not already an OAuth token
+            # (Simple heuristic: PATs are usually shorter 4-5 chars? No, they are base64 strings.
+            #  OAuth tokens are JWTs usually (long). 
+            #  But we can just try exchange and fallback.)
+            if self.mode == "cloud":
+                try:
+                    # Only exchange if we suspect it's a PAT (not already a JWT Bearer from _login_oauth)
+                    # _login_oauth sets self.pat to the access_token.
+                    # We can set a flag or just try exchange. 
+                    # If it fails, we fall back to using it as is.
+                    token = self._exchange_pat_for_oauth(self.pat)
+                    # If successful, allow using it as Bearer
+                    self.session.headers.update({"Authorization": f"Bearer {token}"})
+                except Exception:
+                    # Fallback to using PAT directly
+                    self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
+            else:
+                self.session.headers.update({"Authorization": f"Bearer {self.pat}"})
         elif self.username and self.password:
             # For REST API, we need to login to get a token.
             # Dremio Software /apiv3/login (v26+) or /apiv2/login (v25)
@@ -295,6 +324,35 @@ class DremioClient:
         if self.mode == "v26" and self.pat and not self.username:
             # We don't block here, but we'll fetch it when accessed if still None
             pass
+
+    def _exchange_pat_for_oauth(self, pat: str) -> str:
+        """
+        Exchange a Personal Access Token (PAT) for a short-lived OAuth access token.
+        This is the preferred authentication method for Dremio Cloud.
+        """
+        # Determine OAuth endpoint
+        # For Cloud, currently global
+        token_url = "https://api.dremio.cloud/oauth/token"
+        
+        if self.mode != "cloud" and self.base_url:
+            # Attempt to derive for Software if supported
+            token_url = f"{self.base_url}/oauth/token"
+
+        headers = {"Content-Type": "application/json"}
+        payload = {
+            "grant_type": "urn:ietf:params:oauth:grant-type:token-exchange",
+            "subject_token": pat,
+            "subject_token_type": "urn:ietf:params:oauth:token-type:access_token"
+        }
+        
+        try:
+            response = requests.post(token_url, json=payload, headers=headers, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            return data.get("access_token")
+        except Exception:
+            # Raise to trigger fallback in __init__
+            raise
 
     def _login_oauth(self):
         """
