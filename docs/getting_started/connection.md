@@ -31,6 +31,15 @@ profiles:
       token: "your-cloud-pat"
     project_id: "your-project-id"
 
+  # Dremio Cloud Service User (Client Credentials)
+  cloud_oauth:
+    type: cloud
+    auth:
+      type: oauth
+      client_id: "your-client-id"
+      client_secret: "your-client-secret"
+    project_id: "your-project-id"
+
   # Dremio Software v26+ Example (PAT)
   software_prod:
     type: software
@@ -75,6 +84,8 @@ Dremio Cloud is the default connection mode. It uses Arrow Flight SQL over TLS.
 ### Prerequisites
 - **Personal Access Token (PAT)**: Generate this in your Dremio Cloud User Settings
 - **Project ID**: The ID of the project you want to query
+
+> **Security Note**: When using a PAT, DremioFrame automatically exchanges it for a short-lived OAuth token for enhanced security.
 
 ### Environment Variables
 
@@ -146,6 +157,18 @@ DREMIO_PROJECT_ID=your_project_id
 ```python
 client = DremioClient(mode="cloud")
 # Automatically uses DREMIO_CLIENT_ID/SECRET if DREMIO_PAT is not set.
+```
+
+**Using Profiles (Recommended):**
+You can also configure this in `profiles.yaml`:
+```yaml
+cloud_service:
+  type: cloud
+  auth:
+    type: oauth
+    client_id: "your_client_id"
+    client_secret: "your_client_secret"
+  project_id: "your_project_id"
 ```
 
 Or explicit:

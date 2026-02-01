@@ -63,6 +63,13 @@ profiles:
       type: pat
       token: "your-cloud-pat"
     project_id: "your-project-id"
+  dev_oauth:
+    type: cloud
+    auth:
+      type: oauth
+      client_id: "your-client-id"
+      client_secret: "your-client-secret"
+    project_id: "your-project-id"
   prod:
     type: software
     base_url: "https://dremio.prod.corp"
